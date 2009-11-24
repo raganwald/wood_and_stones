@@ -1,3 +1,6 @@
 [submodule "./vendor/plugins/rewrite_rails"]
 	path = ./vendor/plugins/rewrite_rails
 	url = git://github.com/raganwald/rewrite_rails.git
+[submodule "vendor/plugins/shoulda"]
+	path = vendor/plugins/shoulda
+	url = git://github.com/thoughtbot/shoulda.git
