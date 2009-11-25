@@ -7,3 +7,27 @@ Processing AboutController#index (for 0.0.0.0 at 2009-11-25 07:45:57) [GET]
 
 
 Processing AboutController#index (for 0.0.0.0 at 2009-11-25 07:45:57) [GET]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:05:51) [GET]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:05:51) [GET]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:05:51) [GET]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:18:02) [GET]
+Rendering about/index
+Completed in 55ms (View: 39, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:18:02) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:18:02) [GET]
+Rendering about/index
+Completed in 4ms (View: 3, DB: 0) | 200 OK [http://test.host/about]
