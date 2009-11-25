@@ -1,0 +1,2 @@
+module RewriteRails::CallByName
+end
