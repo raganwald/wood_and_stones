@@ -31,3 +31,197 @@ Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
 Processing AboutController#index (for 0.0.0.0 at 2009-11-25 10:18:02) [GET]
 Rendering about/index
 Completed in 4ms (View: 3, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 12:39:52) [GET]
+Rendering about/index
+Completed in 51ms (View: 35, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 12:39:52) [GET]
+Rendering about/index
+Completed in 3ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 12:39:52) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:02:38) [GET]
+Rendering about/index
+Completed in 24ms (View: 8, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:02:38) [GET]
+Rendering about/index
+Completed in 3ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:02:38) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:04:30) [GET]
+Rendering about/index
+Completed in 24ms (View: 8, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:04:30) [GET]
+Rendering about/index
+Completed in 3ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:04:30) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:06:34) [GET]
+Rendering about/index
+Completed in 24ms (View: 7, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:06:34) [GET]
+Rendering about/index
+Completed in 3ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:06:34) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:07:23) [GET]
+Rendering about/index
+Completed in 23ms (View: 7, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:07:23) [GET]
+Rendering about/index
+Completed in 3ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:07:24) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:13:48) [GET]
+Rendering about/index
+Completed in 24ms (View: 7, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:13:48) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+
+
+Processing AboutController#index (for 0.0.0.0 at 2009-11-25 13:13:48) [GET]
+Rendering about/index
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
+  [4;36;1mSQL (1.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mGame Create (1.1ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:29:55', 'begun', '2009-11-25 18:29:55')[0m
+  [4;36;1mGame Create (0.9ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:30:17', 'begun', '2009-11-25 18:30:17')[0m
+  [4;35;1mGame Create (0.9ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:30:17', 'moved', '2009-11-25 18:30:17')[0m
+  [4;36;1mGame Create (1.0ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:32:18', 'begun', '2009-11-25 18:32:18')[0m
+  [4;35;1mGame Create (0.8ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:32:18', 'moved', '2009-11-25 18:32:18')[0m
+  [4;36;1mGame Create (1.0ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:32:36', 'begun', '2009-11-25 18:32:36')[0m
+  [4;35;1mGame Create (0.9ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:32:36', 'moved', '2009-11-25 18:32:36')[0m
+  [4;36;1mGame Create (92.8ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:35:32', 'begun', '2009-11-25 18:35:32')[0m
+  [4;35;1mGame Create (0.9ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:35:32', 'moved', '2009-11-25 18:35:32')[0m
+  [4;36;1mGame Create (0.9ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:35:53', 'begun', '2009-11-25 18:35:53')[0m
+  [4;35;1mGame Create (0.8ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:35:53', 'moved', '2009-11-25 18:35:53')[0m
+  [4;36;1mGame Create (0.9ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:36:15', 'begun', '2009-11-25 18:36:15')[0m
+  [4;35;1mGame Create (0.8ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:36:15', 'begun', '2009-11-25 18:36:15')[0m
+  [4;36;1mGame Create (0.9ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 18:36:15', 'moved', '2009-11-25 18:36:15')[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateGameTable (20091125173704)
+Migrating to CreateBoardTable (20091125195052)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCREATE TABLE "boards" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "prior_board_id" integer, "dimension" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091125195052')[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("boards")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("games")[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:11:28', NULL, 19, '2009-11-25 20:11:28')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:11:28', 'begun', '2009-11-25 20:11:28')[0m
+  [4;36;1mGame Update (0.4ms)[0m   [0;1mUPDATE "games" SET "state" = 'moved', "updated_at" = '2009-11-25 20:11:28' WHERE "id" = 1[0m
+  [4;35;1mBoard Create (0.9ms)[0m   [0mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:11:28', NULL, 19, '2009-11-25 20:11:28')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:11:28', 'begun', '2009-11-25 20:11:28')[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:11:28', NULL, 19, '2009-11-25 20:11:28')[0m
+  [4;36;1mGame Create (0.4ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:11:28', 'begun', '2009-11-25 20:11:28')[0m
+  [4;35;1mGame Update (0.4ms)[0m   [0mUPDATE "games" SET "state" = 'begun', "updated_at" = '2009-11-25 20:11:28' WHERE "id" = 1[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:11:28', NULL, 19, '2009-11-25 20:11:28')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:11:28', 'begun', '2009-11-25 20:11:28')[0m
+  [4;36;1mGame Update (0.4ms)[0m   [0;1mUPDATE "games" SET "state" = 'forked', "updated_at" = '2009-11-25 20:11:28' WHERE "id" = 1[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:14:49', NULL, 19, '2009-11-25 20:14:49')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:14:49', 'begun', '2009-11-25 20:14:49')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:16:53', NULL, 19, '2009-11-25 20:16:53')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:16:53', 'begun', '2009-11-25 20:16:53')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:17:23', NULL, 19, '2009-11-25 20:17:23')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:17:23', 'begun', '2009-11-25 20:17:23')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:18:40', NULL, 19, '2009-11-25 20:18:40')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:18:40', 'begun', '2009-11-25 20:18:40')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:19:28', NULL, 19, '2009-11-25 20:19:28')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:19:28', 'begun', '2009-11-25 20:19:28')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:21:59', NULL, 19, '2009-11-25 20:21:59')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:21:59', 'begun', '2009-11-25 20:21:59')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:25:47', NULL, 19, '2009-11-25 20:25:47')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:25:47', 'started', '2009-11-25 20:25:47')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:26:25', NULL, 19, '2009-11-25 20:26:25')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:26:25', 'started', '2009-11-25 20:26:25')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "prior_board_id", "dimension", "created_at") VALUES('2009-11-25 20:26:49', NULL, 19, '2009-11-25 20:26:49')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "state", "created_at") VALUES('2009-11-25 20:26:49', 'started', '2009-11-25 20:26:49')[0m

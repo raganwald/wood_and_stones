@@ -1,0 +1,3 @@
+class Action::Base < AbstractRecord::Base
+  validates_inclusion_of :player, :in => %w( black white )
+end

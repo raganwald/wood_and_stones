@@ -1,0 +1,2 @@
+class Action::PlaceStone < Action::Base
+end

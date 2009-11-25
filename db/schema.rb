@@ -9,6 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20091125195052) do
+
+  create_table "boards", :force => true do |t|
+    t.integer  "prior_board_id"
+    t.integer  "dimension"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "games", :force => true do |t|
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
