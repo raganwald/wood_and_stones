@@ -1,31 +1,31 @@
 class Board < ActiveRecord::Base
   
-  validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19, 21, 23, 25]
+  validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19]
   
   def self.initial(options = {})
     #TODO: fork everything from common starts
     self.new(options)
   end
   
-  LETTERS = %w(A B C D E F G H J K L M N P Q R S T U V W X Y Z)
+  LETTERS = %w(A B C D E F G H J K L M N O P Q R S T)
   
   def valid_position?(str)
     if position = parse_position(str)
-      position.h >= 0 && position.h < dimension && position.v >= 0 && position.v < dimension
+      position[:h] >= 0 && position[:h] < dimension && position[:v] >= 0 && position[:v] < dimension
     end
   end
   
   private 
   
   def parse_position(str)
-    if md = /^([:alpha:])([123456789]\d*)$/i.match(position)
+    if md = /^([abcdefghjklmnopqrst])(\d*)$/i.match(str)
       letter = md[1].upcase
       horizontal_offset = LETTERS.index(letter)
       vertical_offset = md[2].to_i - 1
-      ObjectStruct.new(
+      {
         :h => horizontal_offset, 
         :v => vertical_offset
-      )
+      }
     end
   end
   
