@@ -7,3 +7,6 @@
 [submodule "vendor/plugins/haml"]
 	path = vendor/plugins/haml
 	url = git://github.com/nex3/haml.git
+[submodule "vendor/plugins/state_machine"]
+	path = vendor/plugins/state_machine
+	url = git://github.com/pluginaweek/state_machine.git
