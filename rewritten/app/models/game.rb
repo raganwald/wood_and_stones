@@ -4,7 +4,6 @@ class Game < ActiveRecord::Base
   belongs_to(:current_board, :class_name => "Board", :foreign_key => "current_board_id")
   validates_presence_of(:current_board)
   validates_associated(:current_board)
-  validates_exclusion_of(:state, :in => (["nascent"]), :message => "This game cannot be saved")
   def initialize(options = {  })
     options ||= {  }
     super()

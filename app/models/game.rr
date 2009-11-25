@@ -7,10 +7,6 @@ class Game < ActiveRecord::Base
   validates_presence_of :current_board
   validates_associated :current_board
   
-  #belongs_to :most_recent_move, :class_name => "Action::Base", :foreign_key => "most_recent_move_id"
-  
-  validates_exclusion_of :state, :in => %w( nascent ), :message => "This game cannot be saved"
-  
   def initialize(options = {})
     options ||= {} # to handle the vagaries of AR's create method
     super()

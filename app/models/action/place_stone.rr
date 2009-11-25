@@ -1,2 +1,10 @@
 class Action::PlaceStone < Action::Base
+  
+  validates_presence_of :before, :on => :create, :message => "can't be blank"
+  validates_presence_of :after, :on => :create, :message => "can't be blank"
+  
+  validates_each :position do |record, attr, value|
+    record.errors.add attr, 'should be of the form A1 and be a valid position on the board' unless record.board.valid_position?(value)
+  end
+  
 end

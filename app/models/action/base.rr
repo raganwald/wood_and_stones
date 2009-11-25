@@ -1,3 +1,23 @@
 class Action::Base < AbstractRecord::Base
+  belongs_to :game
+  belongs_to :before, :class_name => "Board", :foreign_key => "before_id"
+  belongs_to :after, :class_name => "Board", :foreign_key => "after_id"
+  
+  # there must be a player and it must be black or white
+  validates_presence_of :player, :on => :create, :message => "can't be blank"
   validates_inclusion_of :player, :in => %w( black white )
+  
+  #there must be a game and it must be valid
+  validates_presence_of :game, :on => :create, :message => "can't be blank"
+  validates_associated :game, :on => :create
+  
+  #if there is a before, it must be valid and there can only be one such per game
+  validates_associated :before, :on => :create
+  validates_uniqueness_of :before, :scope => :game_id, :allow_nil => true
+  
+  #if there is an after, it must be valid and there can only be one such per game
+  validates_associated :after, :on => :create
+  validates_uniqueness_of :after, :scope => :game_id, :allow_nil => true
+  
+  
 end

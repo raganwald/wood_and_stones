@@ -9,10 +9,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091125195052) do
+ActiveRecord::Schema.define(:version => 20091125210214) do
+
+  create_table "actions", :force => true do |t|
+    t.string   "type"
+    t.string   "position"
+    t.string   "player"
+    t.integer  "before_id"
+    t.integer  "after_id"
+    t.integer  "game_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "boards", :force => true do |t|
-    t.integer  "prior_board_id"
     t.integer  "dimension"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -22,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20091125195052) do
     t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "current_board_id"
   end
 
 end
