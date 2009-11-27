@@ -514,3 +514,209 @@ Completed in 3ms (View: 2, DB: 0) | 200 OK [http://test.host/about]
   [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-25 22:46:21', 19, '2009-11-25 22:46:21')[0m
   [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-25 22:46:21', 13, '2009-11-25 22:46:21')[0m
   [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-25 22:46:21', 19, '2009-11-25 22:46:21')[0m
+  [4;36;1mBoard Create (1.1ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.9ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.9ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;35;1mBoard Create (0.7ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 13, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:57:50', 19, '2009-11-26 21:57:50')[0m
+  [4;36;1mBoard Create (101.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:47', 13, '2009-11-26 21:58:47')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:47', 13, '2009-11-26 21:58:47')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:47', 19, '2009-11-26 21:58:47')[0m
+  [4;35;1mBoard Create (0.9ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:48', 13, '2009-11-26 21:58:48')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:48', 13, '2009-11-26 21:58:48')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:48', 19, '2009-11-26 21:58:48')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:48', 13, '2009-11-26 21:58:48')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:48', 13, '2009-11-26 21:58:48')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:58:48', 19, '2009-11-26 21:58:48')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:59:27', 13, '2009-11-26 21:59:27')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:59:27', 13, '2009-11-26 21:59:27')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 21:59:27', 19, '2009-11-26 21:59:27')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:00:30', 13, '2009-11-26 22:00:30')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:00:30', 13, '2009-11-26 22:00:30')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:00:30', 19, '2009-11-26 22:00:30')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:02:08', 13, '2009-11-26 22:02:08')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:02:08', 13, '2009-11-26 22:02:08')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:02:08', 19, '2009-11-26 22:02:08')[0m
+  [4;36;1mBoard Create (1.3ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:03:54', 13, '2009-11-26 22:03:54')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:03:55', 13, '2009-11-26 22:03:55')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:03:55', 19, '2009-11-26 22:03:55')[0m
+  [4;36;1mBoard Create (1.7ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:04:27', 13, '2009-11-26 22:04:27')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:04:27', 13, '2009-11-26 22:04:27')[0m
+  [4;36;1mBoard Create (0.7ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-26 22:04:27', 19, '2009-11-26 22:04:27')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:36:19', 13, '2009-11-27 14:36:19')[0m
+  [4;35;1mBoard Create (0.6ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:36:19', 13, '2009-11-27 14:36:19')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:36:19', 19, '2009-11-27 14:36:19')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:37:10', 13, '2009-11-27 14:37:10')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:37:10', 13, '2009-11-27 14:37:10')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:37:10', 19, '2009-11-27 14:37:10')[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:38:08', 13, '2009-11-27 14:38:08')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:38:08', 13, '2009-11-27 14:38:08')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:38:08', 19, '2009-11-27 14:38:08')[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:12', 13, '2009-11-27 14:39:12')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:12', 13, '2009-11-27 14:39:12')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:12', 19, '2009-11-27 14:39:12')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:33', 13, '2009-11-27 14:39:33')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:33', 13, '2009-11-27 14:39:33')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:33', 19, '2009-11-27 14:39:33')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:39:34', 13, '2009-11-27 14:39:34')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:39:34', 4, 'started', '2009-11-27 14:39:34')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:40:27', 13, '2009-11-27 14:40:27')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:40:27', 13, '2009-11-27 14:40:27')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:40:27', 19, '2009-11-27 14:40:27')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:40:29', 13, '2009-11-27 14:40:29')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:40:29', 4, 'started', '2009-11-27 14:40:29')[0m
+  [4;36;1mBoard Create (107.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:42:29', 13, '2009-11-27 14:42:29')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:42:29', 13, '2009-11-27 14:42:29')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:42:29', 19, '2009-11-27 14:42:29')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:42:30', 13, '2009-11-27 14:42:30')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:42:30', 4, 'started', '2009-11-27 14:42:30')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:43:56', 13, '2009-11-27 14:43:56')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:43:56', 13, '2009-11-27 14:43:56')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:43:56', 19, '2009-11-27 14:43:56')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:43:57', 13, '2009-11-27 14:43:57')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:43:57', 4, 'started', '2009-11-27 14:43:57')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:15', 13, '2009-11-27 14:44:15')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:15', 13, '2009-11-27 14:44:15')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:15', 19, '2009-11-27 14:44:15')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:16', 13, '2009-11-27 14:44:16')[0m
+  [4;36;1mGame Create (225.1ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:44:16', 4, 'started', '2009-11-27 14:44:16')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:56', 13, '2009-11-27 14:44:56')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:56', 13, '2009-11-27 14:44:56')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:56', 19, '2009-11-27 14:44:56')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:44:57', 13, '2009-11-27 14:44:57')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:44:57', 4, 'started', '2009-11-27 14:44:57')[0m
+  [4;36;1mBoard Create (1.0ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:45:32', 13, '2009-11-27 14:45:32')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:45:32', 13, '2009-11-27 14:45:32')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:45:32', 19, '2009-11-27 14:45:32')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:45:34', 13, '2009-11-27 14:45:34')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:45:34', 4, 'started', '2009-11-27 14:45:34')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:46:04', 13, '2009-11-27 14:46:04')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:46:04', 13, '2009-11-27 14:46:04')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:46:04', 19, '2009-11-27 14:46:04')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:46:05', 13, '2009-11-27 14:46:05')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:46:05', 4, 'started', '2009-11-27 14:46:05')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:17', 13, '2009-11-27 14:47:17')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:17', 13, '2009-11-27 14:47:17')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:17', 19, '2009-11-27 14:47:17')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:18', 13, '2009-11-27 14:47:18')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:47:18', 4, 'started', '2009-11-27 14:47:18')[0m
+  [4;35;1mAction::Base Exists (0.5ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:53', 13, '2009-11-27 14:47:53')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:53', 13, '2009-11-27 14:47:53')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:53', 19, '2009-11-27 14:47:53')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:54', 13, '2009-11-27 14:47:54')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:47:54', 4, 'started', '2009-11-27 14:47:54')[0m
+  [4;35;1mAction::Base Exists (0.5ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 3 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 13, '2009-11-27 14:47:55')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 13, '2009-11-27 14:47:55')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 19, '2009-11-27 14:47:55')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 13, '2009-11-27 14:47:55')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:47:55', 4, 'started', '2009-11-27 14:47:55')[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mAction::Base Exists (0.4ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 2 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 13, '2009-11-27 14:47:55')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 13, '2009-11-27 14:47:55')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 19, '2009-11-27 14:47:55')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:47:55', 13, '2009-11-27 14:47:55')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:47:55', 4, 'started', '2009-11-27 14:47:55')[0m
+  [4;36;1mBoard Create (108.7ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:33', 13, '2009-11-27 14:59:33')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:34', 13, '2009-11-27 14:59:34')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:34', 19, '2009-11-27 14:59:34')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:35', 13, '2009-11-27 14:59:35')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:59:35', 4, 'started', '2009-11-27 14:59:35')[0m
+  [4;35;1mAction::Base Exists (0.5ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 3 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mBoard Create (0.9ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 13, '2009-11-27 14:59:36')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 13, '2009-11-27 14:59:36')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 19, '2009-11-27 14:59:36')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 13, '2009-11-27 14:59:36')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:59:36', 4, 'started', '2009-11-27 14:59:36')[0m
+  [4;36;1mAction::Base Exists (0.5ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mAction::Base Exists (0.4ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 2 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 13, '2009-11-27 14:59:36')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 13, '2009-11-27 14:59:36')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 19, '2009-11-27 14:59:36')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 14:59:36', 13, '2009-11-27 14:59:36')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 14:59:36', 4, 'started', '2009-11-27 14:59:36')[0m
+  [4;35;1mSQL (1.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:00', 13, '2009-11-27 15:00:00')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:00', 13, '2009-11-27 15:00:00')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:00', 19, '2009-11-27 15:00:00')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:01', 13, '2009-11-27 15:00:01')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:00:01', 4, 'started', '2009-11-27 15:00:01')[0m
+  [4;35;1mAction::Base Exists (0.5ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 3 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 13, '2009-11-27 15:00:02')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 13, '2009-11-27 15:00:02')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 19, '2009-11-27 15:00:02')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 13, '2009-11-27 15:00:02')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:00:02', 4, 'started', '2009-11-27 15:00:02')[0m
+  [4;36;1mAction::Base Exists (0.5ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mAction::Base Exists (0.4ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 2 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 13, '2009-11-27 15:00:02')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 13, '2009-11-27 15:00:02')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 19, '2009-11-27 15:00:02')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:00:02', 13, '2009-11-27 15:00:02')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:00:02', 4, 'started', '2009-11-27 15:00:02')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:02', 13, '2009-11-27 15:01:02')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:02', 13, '2009-11-27 15:01:02')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:02', 19, '2009-11-27 15:01:02')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:03', 13, '2009-11-27 15:01:03')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:01:03', 4, 'started', '2009-11-27 15:01:03')[0m
+  [4;35;1mAction::Base Exists (0.5ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 3 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 13, '2009-11-27 15:01:04')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 13, '2009-11-27 15:01:04')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 19, '2009-11-27 15:01:04')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 13, '2009-11-27 15:01:04')[0m
+  [4;35;1mGame Create (0.4ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:01:04', 4, 'started', '2009-11-27 15:01:04')[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mAction::Base Exists (0.4ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 2 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 13, '2009-11-27 15:01:04')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 13, '2009-11-27 15:01:04')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 19, '2009-11-27 15:01:04')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:04', 13, '2009-11-27 15:01:04')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:01:04', 4, 'started', '2009-11-27 15:01:04')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:51', 13, '2009-11-27 15:01:51')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:51', 13, '2009-11-27 15:01:51')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:51', 19, '2009-11-27 15:01:51')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:52', 13, '2009-11-27 15:01:52')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:01:52', 4, 'started', '2009-11-27 15:01:52')[0m
+  [4;35;1mAction::Base Exists (0.5ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 3 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mBoard Create (0.8ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:53', 13, '2009-11-27 15:01:53')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:53', 13, '2009-11-27 15:01:53')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:53', 19, '2009-11-27 15:01:53')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:53', 13, '2009-11-27 15:01:53')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:01:53', 4, 'started', '2009-11-27 15:01:53')[0m
+  [4;36;1mAction::Base Exists (0.4ms)[0m   [0;1mSELECT "actions".id FROM "actions" WHERE ("actions"."before_id" = 1 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;35;1mAction::Base Exists (0.4ms)[0m   [0mSELECT "actions".id FROM "actions" WHERE ("actions"."after_id" = 2 AND "actions".game_id = 1) LIMIT 1[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:54', 13, '2009-11-27 15:01:54')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:54', 13, '2009-11-27 15:01:54')[0m
+  [4;36;1mBoard Create (0.4ms)[0m   [0;1mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:54', 19, '2009-11-27 15:01:54')[0m
+  [4;35;1mBoard Create (0.4ms)[0m   [0mINSERT INTO "boards" ("updated_at", "dimension", "created_at") VALUES('2009-11-27 15:01:54', 13, '2009-11-27 15:01:54')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-11-27 15:01:54', 4, 'started', '2009-11-27 15:01:54')[0m

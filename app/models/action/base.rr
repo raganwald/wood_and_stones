@@ -1,4 +1,7 @@
-class Action::Base < AbstractRecord::Base
+class Action::Base < ActiveRecord::Base
+  
+  set_table_name :actions
+  
   belongs_to :game
   belongs_to :before, :class_name => "Board", :foreign_key => "before_id"
   belongs_to :after, :class_name => "Board", :foreign_key => "after_id"
@@ -13,11 +16,10 @@ class Action::Base < AbstractRecord::Base
   
   #if there is a before, it must be valid and there can only be one such per game
   validates_associated :before, :on => :create
-  validates_uniqueness_of :before, :scope => :game_id, :allow_nil => true
+  validates_uniqueness_of :before_id, :scope => :game_id, :allow_nil => true
   
-  #if there is an after, it must be valid and there can only be one such per game
+  # #if there is an after, it must be valid and there can only be one such per game
   validates_associated :after, :on => :create
-  validates_uniqueness_of :after, :scope => :game_id, :allow_nil => true
-  
+  validates_uniqueness_of :after_id, :scope => :game_id, :allow_nil => true
   
 end

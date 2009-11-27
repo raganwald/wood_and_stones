@@ -2,6 +2,22 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveRecord::TestCase
   
+  context "boards" do
+    
+    context "with a valid dimension" do
+      
+      setup do
+        @board = Board.create(:dimension => 13)
+      end
+      
+      should "be valid" do
+        assert @board.valid?
+      end
+      
+    end
+    
+  end
+  
   context "dimensions and valid positions" do
     
     setup do
