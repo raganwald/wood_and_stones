@@ -6,12 +6,26 @@ class GameTest < ActiveRecord::TestCase
     
     context "a new game" do
       
-      should "require a dimension" do
-        assert_raise(Game::InvalidInitialization) { Game.create }
+      context "with a valid dimension" do
+        
+        setup do
+           assert_nothing_raised(Game::InvalidInitialization) { 
+             @game = Game.create(:dimension => 19) 
+            }
+        end
+        
+        should "be valid" do
+          assert @game.valid?, @game.errors.full_messages.inspect
+        end
+        
+        should "have a valid current_board" do
+          assert @game.current_board.valid?, @game.current_board.errors.full_messages.inspect
+        end
+        
       end
       
-      should "initialize a new game with a new board when given a dimension" do
-        assert_nothing_raised(Game::InvalidInitialization) { Game.create(:dimension => 19) }
+      should "require a dimension" do
+        assert_raise(Game::InvalidInitialization) { Game.create }
       end
       
       should "barf when given an invalid dimension" do

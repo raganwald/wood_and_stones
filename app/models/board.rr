@@ -1,32 +1,157 @@
 class Board < ActiveRecord::Base
   
+  class Occupied < Exception; end
+  
+  class Wtf < Exception; end
+
+  class Grouping
+    
+    attr_accessor :board
+    attr_accessor :offsets
+  
+    def initialize(board, offsets)
+      @board = board
+      @offsets = offsets
+    end
+  
+    def valid?
+      black_groupings, white_groupings = self.class.groupings(@board, @offsets)
+      both_groupings = black_groupings + white_groupings
+      both_groupings.size == 1 && both_groupings.first.size == @offsets.size
+    end
+  
+    def self.groupings(board, offsets = board.stone_offsets.inject(&:+))
+      offsets.inject([[], []]) do |b_and_w, offset|
+        blacks, whites = b_and_w
+        across, down = offset
+        this_stone = board.to_a[across][down]
+        unless this_stone.blank?
+          if this_stone == 'black'
+            groupings_so_far = blacks
+          else
+            groupings_so_far = whites
+          end
+          groupings_adjacent_to_this_stone = board.stone_adjacents(across, down).map { |adjacent_across, adjacent_down|
+            groupings_so_far.detect { it.include?([adjacent_across, adjacent_down]) }
+          }.compact
+          if groupings_adjacent_to_this_stone.size == 0
+            groupings_so_far << [[across, down]] # start a new grouping
+          elsif groupings_adjacent_to_this_stone.size == 1
+            groupings_adjacent_to_this_stone.first << [across, down] # add this stone to the grouping
+          else
+            groupings_so_far = groupings_so_far - groupings_adjacent_to_this_stone + [
+              groupings_adjacent_to_this_stone.inject(&:+) + [[across, down]]
+            ]
+          end
+        end
+        [blacks, whites]
+      end
+    end
+  
+  end
+  
   validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19]
+  
+  before_create :initialize_sgf_hack
   
   def self.initial(options = {})
     #TODO: fork everything from common starts
-    self.new(options)
+    self.create(options)
   end
   
-  LETTERS = %w(A B C D E F G H J K L M N O P Q R S T)
+  LETTERS = %w(A B C D E F G H I J K L M N O P Q R S)
+  
+  SGF_BLACK_PLACEMENT_PROPERTIES = %w(B AB)
+  SGF_WHITE_PLACEMENT_PROPERTIES = %w(W AW)
   
   def valid_position?(str)
-    if position = parse_position(str)
-      position[:h] >= 0 && position[:h] < dimension && position[:v] >= 0 && position[:v] < dimension
+    !!parse_position(str)
+  end
+  
+  def [](str_or_symbol)
+    str = str_or_symbol.to_s.downcase
+    if valid_position?(str)
+      SGF_BLACK_PLACEMENT_PROPERTIES.each { |property|
+        return 'black' if self.sgf_hack.andand.index(";#{property}[#{str}]") || self.sgf_hack.andand.index("]#{property}[#{str}]")
+      }
+      SGF_WHITE_PLACEMENT_PROPERTIES.each { |property|
+        return 'white' if self.sgf_hack.andand.index(";#{property}[#{str}]") || self.sgf_hack.andand.index("]#{property}[#{str}]")
+      }
+      return nil
+    else
+      super(str_or_symbol)
     end
   end
   
-  private 
+  def []=(str_or_symbol,value)
+    # TODO: memoize #to_a and invalidate it here
+    str = str_or_symbol.to_s.downcase
+    if valid_position?(str)
+      (SGF_BLACK_PLACEMENT_PROPERTIES + SGF_WHITE_PLACEMENT_PROPERTIES).each { |property|
+        raise Occupied.new(str) if self.sgf_hack.andand.index(";#{property}[#{str}]") || self.sgf_hack.andand.index("]#{property}[#{str}]")
+      }
+      self.sgf_hack = (self.sgf_hack || '') + if value == 'black'
+        ";B[#{str}]"
+      elsif value == 'white'
+        ";W[#{str}]"
+      else
+        raise Wtf.new("What is a #{value}?")
+      end
+    else
+      super(str_or_symbol)
+    end
+  end
   
-  def parse_position(str)
-    if md = /^([abcdefghjklmnopqrst])(\d*)$/i.match(str)
-      letter = md[1].upcase
-      horizontal_offset = LETTERS.index(letter)
-      vertical_offset = md[2].to_i - 1
-      {
-        :h => horizontal_offset, 
-        :v => vertical_offset
+  def to_a
+    # TODO: memoize and invalidate []=
+    returning( (1..self.dimension).map{[nil] * self.dimension} ) do |arr|
+      ['black', 'white'].zip(self.stone_offsets).each { |colour, list_of_offsets|  
+        list_of_offsets.each { |across, down| 
+          arr[across][down] = colour 
+        }
       }
     end
+  end
+  
+  def stone_offsets
+    returning([[], []]) do |blacks, whites|
+      self.sgf_hack.scan(/([BW])\[([abcdefghijklmnopqrs][abcdefghijklmnopqrs])\]/) do |initial, position|
+        if initial == 'B'
+          blacks << parse_position(position)
+        else
+          whites << parse_position(position)
+        end
+      end
+    end
+  end
+  
+  def adjacent_scalars(offset)
+    if offset == 0
+      [offset + 1]
+    elsif offset == (self.dimension - 1)
+      [offset - 1]
+    else
+      [offset + 1, offset - 1]
+    end
+  end
+  
+  def stone_adjacents(across, down)
+    adjacent_scalars(across).map { [it, down] } + adjacent_scalars(down).map { [across, it] }
+  end
+  
+  def stone_liberties(across, down)
+    stone_adjacents(across, down).select { |adjacent_across, adjacent_down| 
+      self.to_a[adjacent_across][adjacent_down].blank? 
+    }
+  end
+  
+  def parse_position(str)
+    offsets = str.scan(/[abcdefghijklmnopqrst]/i).map { LETTERS.index(its.upcase) }.select { it && it >= 0 && it < dimension  }
+    [offsets.first, offsets.last] if offsets.size == 2
+  end
+  
+  def initialize_sgf_hack
+    self.sgf_hack ||= ''
   end
   
 end

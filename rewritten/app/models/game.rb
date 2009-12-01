@@ -20,7 +20,7 @@ class Game < ActiveRecord::Base
       fork
     else
       if dimension = options[:dimension] then
-        self.current_board = Board.initial(options)
+        self.current_board = Board.create(:dimension => (dimension))
         start
       else
         raise(Game::InvalidInitialization.new("cannot initialize a game without forking or setting a dimension"))
