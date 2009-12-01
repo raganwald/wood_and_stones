@@ -60,12 +60,12 @@ class Board < ActiveRecord::Base
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       SGF_BLACK_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125969652213036__ = self.sgf_hack and __125969652213036__.index(";#{property}[#{str}]")) or (__125969652290304__ = self.sgf_hack and __125969652290304__.index("]#{property}[#{str}]"))) then
+        if ((__125970492677795__ = self.sgf_hack and __125970492677795__.index(";#{property}[#{str}]")) or (__125970492618643__ = self.sgf_hack and __125970492618643__.index("]#{property}[#{str}]"))) then
           return "black"
         end
       end
       SGF_WHITE_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125969652238417__ = self.sgf_hack and __125969652238417__.index(";#{property}[#{str}]")) or (__125969652295769__ = self.sgf_hack and __125969652295769__.index("]#{property}[#{str}]"))) then
+        if ((__125970492675537__ = self.sgf_hack and __125970492675537__.index(";#{property}[#{str}]")) or (__125970492682164__ = self.sgf_hack and __125970492682164__.index("]#{property}[#{str}]"))) then
           return "white"
         end
       end
@@ -78,7 +78,7 @@ class Board < ActiveRecord::Base
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       (SGF_BLACK_PLACEMENT_PROPERTIES + SGF_WHITE_PLACEMENT_PROPERTIES).each do |property|
-        if ((__125969652224778__ = self.sgf_hack and __125969652224778__.index(";#{property}[#{str}]")) or (__125969652256825__ = self.sgf_hack and __125969652256825__.index("]#{property}[#{str}]"))) then
+        if ((__125970492667156__ = self.sgf_hack and __125970492667156__.index(";#{property}[#{str}]")) or (__125970492610088__ = self.sgf_hack and __125970492610088__.index("]#{property}[#{str}]"))) then
           raise(Occupied.new(str))
         end
       end
@@ -102,6 +102,16 @@ class Board < ActiveRecord::Base
       end
       arr
     end.call((1..self.dimension).map { ([nil] * self.dimension) })
+  end
+  def dead_groupings
+    Grouping.groupings(self).map do |groupings_of_one_colour|
+      groupings_of_one_colour.reject do |grouping|
+        grouping.detect { |it| (not self.stone_liberties(*it).empty?) }
+      end
+    end
+  end
+  def dead_stones
+    self.dead_groupings.map { |it| it.inject([], &:+) }
   end
   def stone_offsets
     returning([[], []]) do |blacks, whites|

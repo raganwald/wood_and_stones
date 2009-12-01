@@ -74,14 +74,70 @@ class BoardTest < ActiveRecord::TestCase
     
   end
   
-  context "liberties" do
+  context "dead stones" do
+      
+    setup do
+      @board = Board.create(:dimension => 9)
+    end
     
     context "for an empty board" do
+      
+      should "be empty" do
+        assert_equal [[], []], @board.dead_stones()
+      end
+      
     end
     
-    context "for a board with a few stones" do
+    context "for a board with a single stone of each colour" do
+      
+      setup do
+        @board = Board.create(:dimension => 9) do |b|
+          b['aa'] = 'black'
+          b['bb'] = 'white'
+        end
+      end
+      
+      should "be empty" do
+        assert_equal [[], []], @board.dead_stones()
+      end
+      
     end
     
+    context "for a stone trapped in the corner" do
+      
+      setup do
+        @board = Board.create(:dimension => 9) do |b|
+          b['aa'] = 'black'
+          b['ba'] = 'white'
+          b['ab'] = 'white'
+        end
+      end
+      
+      should "be empty" do
+        assert_equal [[[0,0]], []], @board.dead_stones()
+      end
+      
+    end
+    
+    context "for a couple of stones trapped along an edge" do
+      
+      setup do
+        @board = Board.create(:dimension => 9) do |b|
+          b['aa'] = 'black'
+          b['bb'] = 'black'
+          b['cb'] = 'black'
+          b['da'] = 'black'
+          b['ba'] = 'white'
+          b['ca'] = 'white'
+        end
+      end
+      
+      should "be empty" do
+        assert_equal [[], [[1,0], [2,0]]], @board.dead_stones()
+      end
+      
+    end
+      
   end
   
   context "groupings" do
@@ -110,15 +166,38 @@ class BoardTest < ActiveRecord::TestCase
       should "produce two groupings, one for each stone" do
         assert_equal [
           [ # blacks
-            [ # first grouping
+            [ # only grouping
               [0,0] # only stone
             ]
           ], 
           [ # whites
-            [ # first grouping
+            [ # only grouping
               [1,0] # only stone
             ]
           ]
+        ], Board::Grouping.groupings(@board)
+      end
+      
+    end
+    
+    context "for adjacent stones of the same colour" do
+      
+      setup do
+        @board = Board.create(:dimension => 9) do |b|
+          b['aa'] = 'black'
+          b['ba'] = 'black'
+        end
+      end
+      
+      should "produce one grouping" do
+        assert_equal [
+          [ # blacks
+            [ # only grouping
+              [0,0], # first stone
+              [1,0]  # second stone
+            ]
+          ], 
+          [] # whites
         ], Board::Grouping.groupings(@board)
       end
       

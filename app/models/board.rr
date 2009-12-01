@@ -113,6 +113,18 @@ class Board < ActiveRecord::Base
     end
   end
   
+  def dead_groupings
+    Grouping.groupings(self).map { |groupings_of_one_colour|
+      groupings_of_one_colour.reject { |grouping| 
+        grouping.detect { !self.stone_liberties(*it).empty? } 
+      }
+    }
+  end
+  
+  def dead_stones
+    self.dead_groupings.map { it.inject([], &:+) }
+  end
+  
   def stone_offsets
     returning([[], []]) do |blacks, whites|
       self.sgf_hack.scan(/([BW])\[([abcdefghijklmnopqrs][abcdefghijklmnopqrs])\]/) do |initial, position|
