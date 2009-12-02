@@ -3,49 +3,96 @@ class Board < ActiveRecord::Base
   class Occupied < Exception; end
   
   class Wtf < Exception; end
-
-  class Grouping
+  
+  # intended to extend an array of two offsets across and down
+  module Location
     
     attr_accessor :board
-    attr_accessor :offsets
-  
-    def initialize(board, offsets)
-      @board = board
-      @offsets = offsets
-    end
-  
-    def valid?
-      black_groupings, white_groupings = self.class.groupings(@board, @offsets)
-      both_groupings = black_groupings + white_groupings
-      both_groupings.size == 1 && both_groupings.first.size == @offsets.size
-    end
-  
-    def self.groupings(board, offsets = board.stone_offsets.inject(&:+))
-      offsets.inject([[], []]) do |b_and_w, offset|
-        blacks, whites = b_and_w
-        across, down = offset
-        this_stone = board.to_a[across][down]
-        unless this_stone.blank?
-          if this_stone == 'black'
-            groupings_so_far = blacks
-          else
-            groupings_so_far = whites
-          end
-          groupings_adjacent_to_this_stone = board.stone_adjacents(across, down).map { |adjacent_across, adjacent_down|
-            groupings_so_far.detect { it.include?([adjacent_across, adjacent_down]) }
-          }.compact
-          if groupings_adjacent_to_this_stone.size == 0
-            groupings_so_far << [[across, down]] # start a new grouping
-          elsif groupings_adjacent_to_this_stone.size == 1
-            groupings_adjacent_to_this_stone.first << [across, down] # add this stone to the grouping
-          else
-            groupings_so_far = groupings_so_far - groupings_adjacent_to_this_stone + [
-              groupings_adjacent_to_this_stone.inject(&:+) + [[across, down]]
-            ]
-          end
-        end
-        [blacks, whites]
+    
+    def self.for(board, across, down)
+      returning([across, down]) do
+        it.extend(self)
+        it.board = board
       end
+    end
+    
+    def across
+      self.first
+    end
+    
+    def down
+      self.last
+    end
+    
+    def open?
+      self.board.to_a[self.across, self.down].blank?
+    end
+    
+    def black?
+      self.board.to_a[self.across, self.down] == 'black'
+    end
+    
+    def white?
+      self.board.to_a[self.across, self.down] == 'black'
+    end
+    
+  end
+
+  # intended to extend arrays of locations
+  module Grouping
+  
+    # def valid?
+    #   black_groupings, white_groupings = self.class.groupings(@board, @offsets)
+    #   both_groupings = black_groupings + white_groupings
+    #   both_groupings.size == 1 && both_groupings.first.size == @offsets.size
+    # end
+    
+    attr_accessor :board
+    
+    def self.for(board, *locations)
+      returning(locations) do
+        it.extend(self)
+        it.board = board
+      end
+    end
+    
+    def self.groupings_for_one_colour(board, offsets)
+      offsets.inject([]) do |groupings_so_far, offset|
+        across, down = offset
+        groupings_adjacent_to_this_stone = board.stone_adjacents(across, down).map { |adjacent_across, adjacent_down|
+          groupings_so_far.detect { it.include?([adjacent_across, adjacent_down]) }
+        }.compact
+        if groupings_adjacent_to_this_stone.size == 0
+          # create a new grouping
+          groupings_so_far << self.for( board, Location.for(board, across, down) )
+        elsif groupings_adjacent_to_this_stone.size == 1
+          # add this stone to the grouping
+          groupings_adjacent_to_this_stone.first << [across, down] 
+        else
+          # merge groupings
+          groupings_so_far = groupings_so_far - 
+              groupings_adjacent_to_this_stone + 
+              [
+                self.for(
+                  board,
+                  groupings_adjacent_to_this_stone.inject(&:+) + [Location.for(board, across, down)]
+                )
+              ]
+        end
+        groupings_so_far
+      end
+    end
+    
+    def liberties
+      self.inject([]) { |libs, offsets| libs + self.board.stone_liberties(*offsets) }
+    end
+    
+    def alive?
+      self.detect { !self.board.stone_liberties(*it).empty? } 
+    end
+    
+    def dead?
+      !self.alive?
     end
   
   end
@@ -113,11 +160,17 @@ class Board < ActiveRecord::Base
     end
   end
   
+  def groupings
+    black_offsets, white_offsets = self.stone_offsets
+    [
+      Grouping.groupings_for_one_colour(self, black_offsets),
+      Grouping.groupings_for_one_colour(self, white_offsets)
+    ]
+  end
+  
   def dead_groupings
-    Grouping.groupings(self).map { |groupings_of_one_colour|
-      groupings_of_one_colour.reject { |grouping| 
-        grouping.detect { !self.stone_liberties(*it).empty? } 
-      }
+    self.groupings.map { |groupings_of_one_colour|
+      groupings_of_one_colour.select { its.dead? }
     }
   end
   

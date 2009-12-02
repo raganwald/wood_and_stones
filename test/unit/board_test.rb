@@ -149,7 +149,7 @@ class BoardTest < ActiveRecord::TestCase
       end
       
       should "be empty" do
-        assert_equal [[], []], Board::Grouping.groupings(@board)
+        assert_equal [[], []], @board.groupings
       end
       
     end
@@ -175,7 +175,7 @@ class BoardTest < ActiveRecord::TestCase
               [1,0] # only stone
             ]
           ]
-        ], Board::Grouping.groupings(@board)
+        ], @board.groupings
       end
       
     end
@@ -198,7 +198,7 @@ class BoardTest < ActiveRecord::TestCase
             ]
           ], 
           [] # whites
-        ], Board::Grouping.groupings(@board)
+        ], @board.groupings
       end
       
     end

@@ -3,46 +3,68 @@ class Board < ActiveRecord::Base
   end
   class Wtf < Exception
   end
-  class Grouping
+  module Location
     attr_accessor(:board)
-    attr_accessor(:offsets)
-    def initialize(board, offsets)
-      @board = board
-      @offsets = offsets
+    def self.for(board, across, down)
+      returning([across, down]) do |it|
+        it.extend(self)
+        it.board = board
+      end
     end
-    def valid?
-      black_groupings, white_groupings = self.class.groupings(@board, @offsets)
-      both_groupings = (black_groupings + white_groupings)
-      ((both_groupings.size == 1) and (both_groupings.first.size == @offsets.size))
+    def across
+      self.first
     end
-    def self.groupings(board, offsets = board.stone_offsets.inject(&:+))
-      offsets.inject([[], []]) do |b_and_w, offset|
-        blacks, whites = b_and_w
+    def down
+      self.last
+    end
+    def open?
+      self.board.to_a[self.across, self.down].blank?
+    end
+    def black?
+      (self.board.to_a[self.across, self.down] == "black")
+    end
+    def white?
+      (self.board.to_a[self.across, self.down] == "black")
+    end
+  end
+  module Grouping
+    attr_accessor(:board)
+    def self.for(board, *locations)
+      returning(locations) do |it|
+        it.extend(self)
+        it.board = board
+      end
+    end
+    def self.groupings_for_one_colour(board, offsets)
+      offsets.inject([]) do |groupings_so_far, offset|
         across, down = offset
-        this_stone = board.to_a[across][down]
-        unless this_stone.blank? then
-          if (this_stone == "black") then
-            groupings_so_far = blacks
-          else
-            groupings_so_far = whites
+        groupings_adjacent_to_this_stone = board.stone_adjacents(across, down).map do |adjacent_across, adjacent_down|
+          groupings_so_far.detect do |it|
+            it.include?([adjacent_across, adjacent_down])
           end
-          groupings_adjacent_to_this_stone = board.stone_adjacents(across, down).map do |adjacent_across, adjacent_down|
-            groupings_so_far.detect do |it|
-              it.include?([adjacent_across, adjacent_down])
-            end
-          end.compact
-          if (groupings_adjacent_to_this_stone.size == 0) then
-            (groupings_so_far << [[across, down]])
+        end.compact
+        if (groupings_adjacent_to_this_stone.size == 0) then
+          (groupings_so_far << self.for(board, Location.for(board, across, down)))
+        else
+          if (groupings_adjacent_to_this_stone.size == 1) then
+            (groupings_adjacent_to_this_stone.first << [across, down])
           else
-            if (groupings_adjacent_to_this_stone.size == 1) then
-              (groupings_adjacent_to_this_stone.first << [across, down])
-            else
-              groupings_so_far = ((groupings_so_far - groupings_adjacent_to_this_stone) + [(groupings_adjacent_to_this_stone.inject(&:+) + [[across, down]])])
-            end
+            groupings_so_far = ((groupings_so_far - groupings_adjacent_to_this_stone) + [self.for(board, (groupings_adjacent_to_this_stone.inject(&:+) + [Location.for(board, across, down)]))])
           end
         end
-        [blacks, whites]
+        groupings_so_far
       end
+    end
+    def liberties
+      self.inject([]) do |libs, offsets|
+        (libs + self.board.stone_liberties(*offsets))
+      end
+    end
+    def alive?
+      self.detect { |it| (not self.board.stone_liberties(*it).empty?) }
+    end
+    def dead?
+      (not self.alive?)
     end
   end
   validates_inclusion_of(:dimension, :in => ([9, 11, 13, 15, 17, 19]))
@@ -60,12 +82,12 @@ class Board < ActiveRecord::Base
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       SGF_BLACK_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125970492677795__ = self.sgf_hack and __125970492677795__.index(";#{property}[#{str}]")) or (__125970492618643__ = self.sgf_hack and __125970492618643__.index("]#{property}[#{str}]"))) then
+        if ((__125972535561327__ = self.sgf_hack and __125972535561327__.index(";#{property}[#{str}]")) or (__125972535552425__ = self.sgf_hack and __125972535552425__.index("]#{property}[#{str}]"))) then
           return "black"
         end
       end
       SGF_WHITE_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125970492675537__ = self.sgf_hack and __125970492675537__.index(";#{property}[#{str}]")) or (__125970492682164__ = self.sgf_hack and __125970492682164__.index("]#{property}[#{str}]"))) then
+        if ((__12597253551935__ = self.sgf_hack and __12597253551935__.index(";#{property}[#{str}]")) or (__125972535557188__ = self.sgf_hack and __125972535557188__.index("]#{property}[#{str}]"))) then
           return "white"
         end
       end
@@ -78,7 +100,7 @@ class Board < ActiveRecord::Base
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       (SGF_BLACK_PLACEMENT_PROPERTIES + SGF_WHITE_PLACEMENT_PROPERTIES).each do |property|
-        if ((__125970492667156__ = self.sgf_hack and __125970492667156__.index(";#{property}[#{str}]")) or (__125970492610088__ = self.sgf_hack and __125970492610088__.index("]#{property}[#{str}]"))) then
+        if ((__125972535576546__ = self.sgf_hack and __125972535576546__.index(";#{property}[#{str}]")) or (__12597253555215__ = self.sgf_hack and __12597253555215__.index("]#{property}[#{str}]"))) then
           raise(Occupied.new(str))
         end
       end
@@ -103,11 +125,13 @@ class Board < ActiveRecord::Base
       arr
     end.call((1..self.dimension).map { ([nil] * self.dimension) })
   end
+  def groupings
+    black_offsets, white_offsets = self.stone_offsets
+    [Grouping.groupings_for_one_colour(self, black_offsets), Grouping.groupings_for_one_colour(self, white_offsets)]
+  end
   def dead_groupings
-    Grouping.groupings(self).map do |groupings_of_one_colour|
-      groupings_of_one_colour.reject do |grouping|
-        grouping.detect { |it| (not self.stone_liberties(*it).empty?) }
-      end
+    self.groupings.map do |groupings_of_one_colour|
+      groupings_of_one_colour.select { |its| its.dead? }
     end
   end
   def dead_stones
