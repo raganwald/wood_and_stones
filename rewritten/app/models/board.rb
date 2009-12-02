@@ -18,13 +18,37 @@ class Board < ActiveRecord::Base
       self.last
     end
     def open?
-      self.board.to_a[self.across, self.down].blank?
+      self.board.to_a[self.across][self.down].blank?
     end
     def black?
-      (self.board.to_a[self.across, self.down] == "black")
+      (self.board.to_a[self.across][self.down] == "black")
     end
     def white?
-      (self.board.to_a[self.across, self.down] == "black")
+      (self.board.to_a[self.across][self.down] == "white")
+    end
+    def adjacent_scalars(offset)
+      if (offset == 0) then
+        [(offset + 1)]
+      else
+        if (offset == (board.dimension - 1)) then
+          [(offset - 1)]
+        else
+          [(offset + 1), (offset - 1)]
+        end
+      end
+    end
+    def adjacent_locations
+      (self.adjacent_scalars(self.across).map do |it|
+        Location.for(board, it, self.down)
+      end + self.adjacent_scalars(self.down).map do |it|
+        Location.for(board, self.across, it)
+      end)
+    end
+    def liberties
+      self.adjacent_locations.select { |its| its.open? }
+    end
+    def has_liberty?
+      (not self.liberties.empty?)
     end
   end
   module Grouping
@@ -35,33 +59,29 @@ class Board < ActiveRecord::Base
         it.board = board
       end
     end
-    def self.groupings_for_one_colour(board, offsets)
-      offsets.inject([]) do |groupings_so_far, offset|
-        across, down = offset
-        groupings_adjacent_to_this_stone = board.stone_adjacents(across, down).map do |adjacent_across, adjacent_down|
-          groupings_so_far.detect do |it|
-            it.include?([adjacent_across, adjacent_down])
-          end
+    def self.groupings_for_one_colour(board, stones)
+      stones.inject([]) do |groupings_so_far, stone|
+        raise("I screwed this up") unless stone.kind_of?(Location)
+        groupings_adjacent_to_this_stone = stone.adjacent_locations.map do |adjacent_location|
+          groupings_so_far.detect { |it| it.include?(adjacent_location) }
         end.compact
         if (groupings_adjacent_to_this_stone.size == 0) then
-          (groupings_so_far << self.for(board, Location.for(board, across, down)))
+          (groupings_so_far << self.for(board, stone))
         else
           if (groupings_adjacent_to_this_stone.size == 1) then
-            (groupings_adjacent_to_this_stone.first << [across, down])
+            (groupings_adjacent_to_this_stone.first << stone)
           else
-            groupings_so_far = ((groupings_so_far - groupings_adjacent_to_this_stone) + [self.for(board, (groupings_adjacent_to_this_stone.inject(&:+) + [Location.for(board, across, down)]))])
+            groupings_so_far = ((groupings_so_far - groupings_adjacent_to_this_stone) + [self.for(board, *(groupings_adjacent_to_this_stone.inject(&:+) + [stone]))])
           end
         end
         groupings_so_far
       end
     end
     def liberties
-      self.inject([]) do |libs, offsets|
-        (libs + self.board.stone_liberties(*offsets))
-      end
+      self.map { |its| its.liberties }.inject([], &:+)
     end
     def alive?
-      self.detect { |it| (not self.board.stone_liberties(*it).empty?) }
+      self.any? { |it| it.has_liberty? }
     end
     def dead?
       (not self.alive?)
@@ -82,12 +102,12 @@ class Board < ActiveRecord::Base
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       SGF_BLACK_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125972535561327__ = self.sgf_hack and __125972535561327__.index(";#{property}[#{str}]")) or (__125972535552425__ = self.sgf_hack and __125972535552425__.index("]#{property}[#{str}]"))) then
+        if ((__125973318410454__ = self.sgf_hack and __125973318410454__.index(";#{property}[#{str}]")) or (__125973318481055__ = self.sgf_hack and __125973318481055__.index("]#{property}[#{str}]"))) then
           return "black"
         end
       end
       SGF_WHITE_PLACEMENT_PROPERTIES.each do |property|
-        if ((__12597253551935__ = self.sgf_hack and __12597253551935__.index(";#{property}[#{str}]")) or (__125972535557188__ = self.sgf_hack and __125972535557188__.index("]#{property}[#{str}]"))) then
+        if ((__125973318430020__ = self.sgf_hack and __125973318430020__.index(";#{property}[#{str}]")) or (__125973318476079__ = self.sgf_hack and __125973318476079__.index("]#{property}[#{str}]"))) then
           return "white"
         end
       end
@@ -100,7 +120,7 @@ class Board < ActiveRecord::Base
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       (SGF_BLACK_PLACEMENT_PROPERTIES + SGF_WHITE_PLACEMENT_PROPERTIES).each do |property|
-        if ((__125972535576546__ = self.sgf_hack and __125972535576546__.index(";#{property}[#{str}]")) or (__12597253555215__ = self.sgf_hack and __12597253555215__.index("]#{property}[#{str}]"))) then
+        if ((__125973318412866__ = self.sgf_hack and __125973318412866__.index(";#{property}[#{str}]")) or (__125973318453939__ = self.sgf_hack and __125973318453939__.index("]#{property}[#{str}]"))) then
           raise(Occupied.new(str))
         end
       end
@@ -119,14 +139,14 @@ class Board < ActiveRecord::Base
   end
   def to_a
     lambda do |arr|
-      ["black", "white"].zip(self.stone_offsets).each do |colour, list_of_offsets|
+      ["black", "white"].zip(self.stone_locations).each do |colour, list_of_offsets|
         list_of_offsets.each { |across, down| arr[across][down] = colour }
       end
       arr
     end.call((1..self.dimension).map { ([nil] * self.dimension) })
   end
   def groupings
-    black_offsets, white_offsets = self.stone_offsets
+    black_offsets, white_offsets = self.stone_locations
     [Grouping.groupings_for_one_colour(self, black_offsets), Grouping.groupings_for_one_colour(self, white_offsets)]
   end
   def dead_groupings
@@ -137,7 +157,7 @@ class Board < ActiveRecord::Base
   def dead_stones
     self.dead_groupings.map { |it| it.inject([], &:+) }
   end
-  def stone_offsets
+  def stone_locations
     returning([[], []]) do |blacks, whites|
       self.sgf_hack.scan(/([BW])\[([abcdefghijklmnopqrs][abcdefghijklmnopqrs])\]/) do |initial, position|
         if (initial == "B") then
@@ -148,30 +168,11 @@ class Board < ActiveRecord::Base
       end
     end
   end
-  def adjacent_scalars(offset)
-    if (offset == 0) then
-      [(offset + 1)]
-    else
-      if (offset == (self.dimension - 1)) then
-        [(offset - 1)]
-      else
-        [(offset + 1), (offset - 1)]
-      end
-    end
-  end
-  def stone_adjacents(across, down)
-    (adjacent_scalars(across).map { |it| [it, down] } + adjacent_scalars(down).map { |it| [across, it] })
-  end
-  def stone_liberties(across, down)
-    stone_adjacents(across, down).select do |adjacent_across, adjacent_down|
-      self.to_a[adjacent_across][adjacent_down].blank?
-    end
-  end
   def parse_position(str)
     offsets = str.scan(/[abcdefghijklmnopqrst]/i).map { |its| LETTERS.index(its.upcase) }.select do |it|
       (it and ((it >= 0) and (it < dimension)))
     end
-    [offsets.first, offsets.last] if (offsets.size == 2)
+    Location.for(self, offsets.first, offsets.last) if (offsets.size == 2)
   end
   def initialize_sgf_hack
     self.sgf_hack ||= ""

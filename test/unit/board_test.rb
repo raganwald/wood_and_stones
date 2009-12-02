@@ -18,7 +18,7 @@ class BoardTest < ActiveRecord::TestCase
     
   end
   
-  context "adjacents" do
+  context "Locations" do
     
     setup do
       @board = Board.create(:dimension => 9)
@@ -27,19 +27,19 @@ class BoardTest < ActiveRecord::TestCase
     context "for corners" do
       
       should "be two for the top left corner" do
-        assert_equal 2, @board.stone_adjacents(0,0).size
+        assert_equal 2, Board::Location.for(@board,0,0).adjacent_locations.size
       end
       
       should "be two for the bottom left corner" do
-        assert_equal 2, @board.stone_adjacents(0,8).size
+        assert_equal 2, Board::Location.for(@board,0,8).adjacent_locations.size
       end
       
       should "be two for the top right corner" do
-        assert_equal 2, @board.stone_adjacents(8,0).size
+        assert_equal 2, Board::Location.for(@board,8,0).adjacent_locations.size
       end
       
       should "be two for the bottom right corner" do
-        assert_equal 2, @board.stone_adjacents(8,8).size
+        assert_equal 2, Board::Location.for(@board,8,8).adjacent_locations.size
       end
       
     end
@@ -48,25 +48,25 @@ class BoardTest < ActiveRecord::TestCase
       
       should "be three for the top side" do
         (1..7).each do |across|
-          assert_equal(3, @board.stone_adjacents(across, 0).size)
+          assert_equal(3, Board::Location.for(@board,across, 0).adjacent_locations.size)
         end
       end
       
       should "be three for the bottom side" do
         (1..7).each do |across|
-          assert_equal(3, @board.stone_adjacents(across, 8).size)
+          assert_equal(3, Board::Location.for(@board,across, 8).adjacent_locations.size)
         end
       end
       
       should "be three for the left side" do
         (1..7).each do |down|
-          assert_equal 3, @board.stone_adjacents(0, down).size
+          assert_equal 3, Board::Location.for(@board,0, down).adjacent_locations.size
         end
       end
       
       should "be three for the right side" do
         (1..7).each do |down|
-          assert_equal 3, @board.stone_adjacents(8, down).size
+          assert_equal 3, Board::Location.for(@board,8, down).adjacent_locations.size
         end
       end
       
@@ -113,7 +113,48 @@ class BoardTest < ActiveRecord::TestCase
         end
       end
       
-      should "be empty" do
+      should "have no liberties" do
+        assert Board::Location.for(@board, 0, 0).liberties.empty?
+      end
+      
+      should "not have liberty" do
+        assert !Board::Location.for(@board, 0, 0).has_liberty?
+      end
+      
+      should "belong to a board with three groupings" do
+        assert_equal [
+          [ # blacks
+            [[0,0]]
+          ], 
+          [ # whites
+            [[1,0]], 
+            [[0,1]]
+          ]
+        ], @board.groupings
+      end
+      
+      context "the black stone grouping" do
+        
+        setup do
+          @black_grouping = @board.groupings.first.first
+        end
+        
+        should "be dead" do
+          assert @black_grouping.dead?
+        end
+        
+        should "not have liberties" do
+          assert @black_grouping.liberties.empty?
+        end
+        
+        should "have one stone in the corner" do
+          assert_equal(Board::Location.for(@board, 0, 0), @black_grouping.first)
+          assert_equal(1, @black_grouping.size)
+        end
+        
+      end
+      
+      should "be a dead group" do
         assert_equal [[[0,0]], []], @board.dead_stones()
       end
       
@@ -215,7 +256,7 @@ class BoardTest < ActiveRecord::TestCase
     end
     
     should "produce correct stone offsets" do
-      assert_equal [ [[0, 0]], [[1, 1]]], @board.stone_offsets
+      assert_equal [ [[0, 0]], [[1, 1]]], @board.stone_locations
     end
     
     should "produce an array with exactly one stone of each colour" do
