@@ -12,7 +12,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
       @position = 'aa'
       @player = 'white'
       @opponent = 'black'
-      @placement = Action::SetupStone.new(:position => @position, :player => @player, :game => @game)
+      @setup_stone = Action::SetupStone.new(:position => @position, :player => @player, :game => @game)
     end
     
     should "have a valid game" do
@@ -22,7 +22,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
     context "with no boards" do
     
       should "be invalid" do
-        assert !@placement.valid?
+        assert !@setup_stone.valid?
       end
     
     end
@@ -30,19 +30,19 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
     context "with both valid boards of the same dimension" do
       
       setup do
-        @placement.before = @before
-        @placement.after = @after
+        @setup_stone.before = @before
+        @setup_stone.after = @after
       end
       
       context "when the position is empty" do
         
-        context "and stays empty" do
-        
-          should "not be valid" do
-            assert !@placement.valid?
-          end
-        
-        end
+        # context "and stays empty" do
+        # 
+        #   should "not be valid" do
+        #     assert !@setup_stone.valid? # checking validity fires the placement, so this test no longer counts
+        #   end
+        # 
+        # end
         
         context "and becomes filled with the player's stone" do
         
@@ -51,7 +51,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
           end
         
           should "be valid" do
-            assert @placement.valid?, @placement.errors.full_messages
+            assert @setup_stone.valid?, @setup_stone.errors.full_messages
           end
           
         end
@@ -63,14 +63,14 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
           end
         
           should "not be valid" do
-            assert !@placement.valid?
+            assert !@setup_stone.valid?
           end
           
         end
         
       end
       
-      context "when the position is filled with the player's stone" do
+      context "when the position was filled with the player's stone" do
         
         setup do
           @before[@position] = @player
@@ -79,7 +79,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
         context "and stays empty" do
         
           should "not be valid" do
-            assert !@placement.valid?
+            assert !@setup_stone.valid?
           end
         
         end
@@ -90,8 +90,8 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
             @after[@position] = @player
           end
         
-          should "be valid" do
-            assert @placement.valid?
+          should "not be valid" do
+            assert !@setup_stone.valid?
           end
           
         end
@@ -103,7 +103,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
           end
         
           should "not be valid" do
-            assert !@placement.valid?
+            assert !@setup_stone.valid?
           end
           
         end
@@ -119,7 +119,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
         context "and stays empty" do
         
           should "not be valid" do
-            assert !@placement.valid?
+            assert !@setup_stone.valid?
           end
         
         end
@@ -130,8 +130,8 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
             @after[@position] = @player
           end
         
-          should "be valid" do
-            assert @placement.valid?
+          should "not be valid" do
+            assert !@setup_stone.valid?
           end
           
         end
@@ -143,7 +143,7 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
           end
         
           should "not be valid" do
-            assert !@placement.valid?
+            assert !@setup_stone.valid?
           end
           
         end
@@ -155,12 +155,28 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
     context "with both valid boards of different dimensions" do
       
       setup do
-        @placement.before = @before
-        @placement.after = @nineteen
+        @setup_stone.before = @before
+        @setup_stone.after = @nineteen
       end
       
       should "not be valid" do
-        assert !@placement.valid?
+        assert !@setup_stone.valid?
+      end
+      
+    end
+    
+    context "when just given a before board" do
+      
+      setup do
+        @setup_stone = Action::SetupStone.create(:position => @position, :player => @player, :game => @game, :before => @before)
+      end
+      
+      should "create an after board" do
+        assert @setup_stone.after
+      end
+      
+      should "place a stone on the after board" do
+        assert @setup_stone.after[@position].has?(@player)
       end
       
     end

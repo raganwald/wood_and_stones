@@ -1,14 +1,8 @@
 class Action::Move < Action::PlaceStone
-  before_create(:remove_opponent_dead_stones)
-  validates_each(:position) do |record, attr, value|
-    if record.before then
-      unless record.before[value].blank? then
-        record.errors.add(attr, "should be to an empty position on the board")
-      end
-    end
-  end
+  before_validation_on_create(:remove_opponent_dead_stones)
   private
   def remove_opponent_dead_stones
-    raise("implement me!")
+    stones_to_remove = self.after.dead_stones[(self.player == "black") ? (1) : (0)]
+    stones_to_remove.each(&:remove)
   end
 end

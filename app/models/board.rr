@@ -29,11 +29,23 @@ class Board < ActiveRecord::Base
     end
     
     def black?
-      self.board.to_a[self.across][self.down] == 'black'
+      self.has?('black')
     end
     
     def white?
-      self.board.to_a[self.across][self.down] == 'white'
+      self.has?('white')
+    end
+    
+    def has?(colour)
+      self.board.to_a[self.across][self.down] == colour.to_s.downcase
+    end
+    
+    def have(colour)
+      self.board[LETTERS[self.across] + LETTERS[self.down]] = colour
+    end
+    
+    def remove
+      self.board[LETTERS[self.across] + LETTERS[self.down]] = nil
     end
   
     def adjacent_scalars(offset)
@@ -120,9 +132,38 @@ class Board < ActiveRecord::Base
   
   end
   
-  validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19]
+  class Column
+    
+    attr_accessor :board
+    attr_accessor :across
+    
+    def initialize(board, across)
+      self.board = board
+      self.across = across
+    end
+    
+    def [](down)
+      Location.for(board, self.across, down)
+    end
+    
+    def []=(down, value)
+      returning(Location.for(board, self.across, down)) do |location|
+        if value.nil?
+          location.remove
+        elsif value == 'white' || value == 'black'
+          location.have(value)
+        else
+          raise Wtf.new("WTF is a #{value.inspect}?")
+        end
+      end
+    end
+      
+    
+  end
   
-  before_create :initialize_sgf_hack
+  before_validation_on_create :initialize_sgf_hack
+  
+  validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19]
   
   def self.initial(options = {})
     #TODO: fork everything from common starts
@@ -138,18 +179,21 @@ class Board < ActiveRecord::Base
     !!parse_position(str)
   end
   
-  def [](str_or_symbol)
-    str = str_or_symbol.to_s.downcase
-    if valid_position?(str)
-      SGF_BLACK_PLACEMENT_PROPERTIES.each { |property|
-        return 'black' if self.sgf_hack.andand.index(";#{property}[#{str}]") || self.sgf_hack.andand.index("]#{property}[#{str}]")
-      }
-      SGF_WHITE_PLACEMENT_PROPERTIES.each { |property|
-        return 'white' if self.sgf_hack.andand.index(";#{property}[#{str}]") || self.sgf_hack.andand.index("]#{property}[#{str}]")
-      }
-      return nil
+  # options:
+  #
+  # board[0][0] => Location
+  # board['aa'] => Location
+  # board[:id]  => ActiveRecord default behaviour
+  def [](str_or_symbol_or_offset)
+    if str_or_symbol_or_offset.kind_of?(Integer)
+      return Column.new(self, str_or_symbol_or_offset)
     else
-      super(str_or_symbol)
+      str = str_or_symbol_or_offset.to_s.downcase
+      if valid_position?(str)
+        return parse_position(str)
+      else
+        super(str_or_symbol_or_offset)
+      end
     end
   end
   
@@ -157,13 +201,13 @@ class Board < ActiveRecord::Base
     # TODO: memoize #to_a and invalidate it here
     str = str_or_symbol.to_s.downcase
     if valid_position?(str)
-      (SGF_BLACK_PLACEMENT_PROPERTIES + SGF_WHITE_PLACEMENT_PROPERTIES).each { |property|
-        raise Occupied.new(str) if self.sgf_hack.andand.index(";#{property}[#{str}]") || self.sgf_hack.andand.index("]#{property}[#{str}]")
-      }
-      self.sgf_hack = (self.sgf_hack || '') + if value == 'black'
+      self.sgf_hack = self.sgf_hack.gsub(";B[#{str}]", '').gsub(";W[#{str}]", '')
+      self.sgf_hack = self.sgf_hack + if value == 'black'
         ";B[#{str}]"
       elsif value == 'white'
         ";W[#{str}]"
+      elsif value.nil?
+        ''
       else
         raise Wtf.new("What is a #{value}?")
       end
@@ -219,7 +263,7 @@ class Board < ActiveRecord::Base
   end
   
   def initialize_sgf_hack
-    self.sgf_hack ||= ''
+    self.sgf_hack ||= ((1..self.dimension).map{ [nil] * self.dimension }).inspect
   end
   
 end

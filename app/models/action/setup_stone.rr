@@ -1,6 +1,4 @@
 # A SetupStone is a placement for setting up a position
 class Action::SetupStone < Action::PlaceStone
   
-  # For now, the actual placement is enough
-  
 end

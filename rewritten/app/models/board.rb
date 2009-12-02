@@ -21,10 +21,19 @@ class Board < ActiveRecord::Base
       self.board.to_a[self.across][self.down].blank?
     end
     def black?
-      (self.board.to_a[self.across][self.down] == "black")
+      self.has?("black")
     end
     def white?
-      (self.board.to_a[self.across][self.down] == "white")
+      self.has?("white")
+    end
+    def has?(colour)
+      (self.board.to_a[self.across][self.down] == colour.to_s.downcase)
+    end
+    def have(colour)
+      self.board[(LETTERS[self.across] + LETTERS[self.down])] = colour
+    end
+    def remove
+      self.board[(LETTERS[self.across] + LETTERS[self.down])] = nil
     end
     def adjacent_scalars(offset)
       if (offset == 0) then
@@ -87,8 +96,33 @@ class Board < ActiveRecord::Base
       (not self.alive?)
     end
   end
+  class Column
+    attr_accessor(:board)
+    attr_accessor(:across)
+    def initialize(board, across)
+      self.board = board
+      self.across = across
+    end
+    def [](down)
+      Location.for(board, self.across, down)
+    end
+    def []=(down, value)
+      lambda do |location|
+        if value.nil? then
+          location.remove
+        else
+          if ((value == "white") or (value == "black")) then
+            location.have(value)
+          else
+            raise(Wtf.new("WTF is a #{value.inspect}?"))
+          end
+        end
+        location
+      end.call(Location.for(board, self.across, down))
+    end
+  end
+  before_validation_on_create(:initialize_sgf_hack)
   validates_inclusion_of(:dimension, :in => ([9, 11, 13, 15, 17, 19]))
-  before_create(:initialize_sgf_hack)
   def self.initial(options = {  })
     self.create(options)
   end
@@ -98,39 +132,29 @@ class Board < ActiveRecord::Base
   def valid_position?(str)
     (not (not parse_position(str)))
   end
-  def [](str_or_symbol)
-    str = str_or_symbol.to_s.downcase
-    if valid_position?(str) then
-      SGF_BLACK_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125973318410454__ = self.sgf_hack and __125973318410454__.index(";#{property}[#{str}]")) or (__125973318481055__ = self.sgf_hack and __125973318481055__.index("]#{property}[#{str}]"))) then
-          return "black"
-        end
-      end
-      SGF_WHITE_PLACEMENT_PROPERTIES.each do |property|
-        if ((__125973318430020__ = self.sgf_hack and __125973318430020__.index(";#{property}[#{str}]")) or (__125973318476079__ = self.sgf_hack and __125973318476079__.index("]#{property}[#{str}]"))) then
-          return "white"
-        end
-      end
-      return nil
+  def [](str_or_symbol_or_offset)
+    if str_or_symbol_or_offset.kind_of?(Integer) then
+      return Column.new(self, str_or_symbol_or_offset)
     else
-      super(str_or_symbol)
+      str = str_or_symbol_or_offset.to_s.downcase
+      if valid_position?(str) then
+        return parse_position(str)
+      else
+        super(str_or_symbol_or_offset)
+      end
     end
   end
   def []=(str_or_symbol, value)
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
-      (SGF_BLACK_PLACEMENT_PROPERTIES + SGF_WHITE_PLACEMENT_PROPERTIES).each do |property|
-        if ((__125973318412866__ = self.sgf_hack and __125973318412866__.index(";#{property}[#{str}]")) or (__125973318453939__ = self.sgf_hack and __125973318453939__.index("]#{property}[#{str}]"))) then
-          raise(Occupied.new(str))
-        end
-      end
-      self.sgf_hack = ((self.sgf_hack or "") + if (value == "black") then
+      self.sgf_hack = self.sgf_hack.gsub(";B[#{str}]", "").gsub(";W[#{str}]", "")
+      self.sgf_hack = (self.sgf_hack + if (value == "black") then
         ";B[#{str}]"
       else
         if (value == "white") then
           ";W[#{str}]"
         else
-          raise(Wtf.new("What is a #{value}?"))
+          value.nil? ? ("") : (raise(Wtf.new("What is a #{value}?")))
         end
       end)
     else
@@ -175,6 +199,6 @@ class Board < ActiveRecord::Base
     Location.for(self, offsets.first, offsets.last) if (offsets.size == 2)
   end
   def initialize_sgf_hack
-    self.sgf_hack ||= ""
+    self.sgf_hack ||= (1..self.dimension).map { ([nil] * self.dimension) }.inspect
   end
 end

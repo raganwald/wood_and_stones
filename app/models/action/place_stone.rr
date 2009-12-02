@@ -2,7 +2,7 @@ class Action::PlaceStone < Action::Base
   
   class Occupied < Exception; end
   
-  before_create :check_existence_of_before_board, :clone_before_to_after, :place_stone
+  before_validation_on_create :clone_before_to_after, :place_stone
   
   validates_presence_of :before, :on => :create, :message => "can't be blank"
   validates_presence_of :after, :on => :create, :message => "can't be blank"
@@ -14,35 +14,31 @@ class Action::PlaceStone < Action::Base
       record.errors.add attr, 'should be of the form aa and be a valid position on the board' unless begin
         record.before.valid_position?(value)
       end
+      record.errors.add attr, 'should be to an empty place on the board' unless begin
+        record.before[value].open?
+      end
     end
     if record.after
       record.errors.add attr, 'should result in a stone placed on the board' unless begin
-        record.after[value] == record.player
+        record.after[value].has?(record.player)
       end
     end
   end
   
   validates_each :after do |record, attr, value|
-    record.errors.add attr, "should be the same dimension as :before" unless value.andand.dimension == record.before.andand.dimension
+    record.errors.add attr, "should be the same dimension as :before" unless begin
+      value.andand.dimension == record.before.andand.dimension
+    end
   end
   
   private
   
-  def check_existence_of_before_board
-    not self.before.blank? # you cannot perform the steps unless you have a before board
-  end
-  
   def clone_before_to_after
-    self.after ||= self.before.clone # make a copy of the board
+    self.after ||= self.before.clone if self.before # make a copy of the board
   end
   
   def place_stone
-    self.after[self.position] = self.player # place a stone there if the position is empty
-  end
-  
-  # This method documents how to perform the actual steps
-  def perform_place_stone_steps
-    raise "implemented by subclass"
+    self.after[self.position] = self.player if self.after && self.after[self.position].open? # place a stone there if the position is empty
   end
   
 end
