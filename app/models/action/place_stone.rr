@@ -6,6 +6,7 @@ class Action::PlaceStone < Action::Base
   
   validates_presence_of :before, :on => :create, :message => "can't be blank"
   validates_presence_of :after, :on => :create, :message => "can't be blank"
+  validates_presence_of :position, :on => :create, :message => "can't be blank"
   
   # a valid placement is not exactly the same thing as a valid move
   # validation occurs after the creation of before and after
@@ -18,16 +19,16 @@ class Action::PlaceStone < Action::Base
         record.before[value].open?
       end
     end
-    if record.after
-      record.errors.add attr, 'should result in a stone placed on the board' unless begin
-        record.after[value].has?(record.player)
-      end
-    end
   end
   
   validates_each :after do |record, attr, value|
-    record.errors.add attr, "should be the same dimension as :before" unless begin
-      value.andand.dimension == record.before.andand.dimension
+    if record.after
+      record.errors.add attr, "should be the same dimension as :before" unless begin
+        value.dimension == record.before.andand.dimension
+      end
+      record.errors.add attr, 'should result in a stone placed on the board' unless begin
+        value[record.position].has?(record.player)
+      end
     end
   end
   

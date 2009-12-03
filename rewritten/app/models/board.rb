@@ -3,6 +3,23 @@ class Board < ActiveRecord::Base
   end
   class Wtf < Exception
   end
+  module BlacksAndWhites
+    def self.for(*arr)
+      returning(arr) { arr.extend(self) }
+    end
+    def blacks
+      self.first
+    end
+    def whites
+      self.last
+    end
+    def all
+      (self.first + self.last)
+    end
+    def map
+      BlacksAndWhites.for(yield(blacks), yield(whites))
+    end
+  end
   module Location
     attr_accessor(:board)
     def self.for(board, across, down)
@@ -30,10 +47,10 @@ class Board < ActiveRecord::Base
       (self.board.to_a[self.across][self.down] == colour.to_s.downcase)
     end
     def have(colour)
-      self.board[(LETTERS[self.across] + LETTERS[self.down])] = colour
+      self.board[self.to_s] = colour
     end
     def remove
-      self.board[(LETTERS[self.across] + LETTERS[self.down])] = nil
+      self.board[self.to_s] = nil
     end
     def adjacent_scalars(offset)
       if (offset == 0) then
@@ -58,6 +75,9 @@ class Board < ActiveRecord::Base
     end
     def has_liberty?
       (not self.liberties.empty?)
+    end
+    def to_s
+      (LETTERS[self.across] + LETTERS[self.down]).downcase
     end
   end
   module Grouping
@@ -123,6 +143,12 @@ class Board < ActiveRecord::Base
   end
   before_validation_on_create(:initialize_sgf_hack)
   validates_inclusion_of(:dimension, :in => ([9, 11, 13, 15, 17, 19]))
+  validate do |board|
+    undead = board.dead_stones.all
+    unless undead.empty? then
+      board.errors.add_to_base("The stones at #{undead.to_sentence} are dead")
+    end
+  end
   def self.initial(options = {  })
     self.create(options)
   end
@@ -171,7 +197,7 @@ class Board < ActiveRecord::Base
   end
   def groupings
     black_offsets, white_offsets = self.stone_locations
-    [Grouping.groupings_for_one_colour(self, black_offsets), Grouping.groupings_for_one_colour(self, white_offsets)]
+    BlacksAndWhites.for(Grouping.groupings_for_one_colour(self, black_offsets), Grouping.groupings_for_one_colour(self, white_offsets))
   end
   def dead_groupings
     self.groupings.map do |groupings_of_one_colour|
@@ -182,7 +208,7 @@ class Board < ActiveRecord::Base
     self.dead_groupings.map { |it| it.inject([], &:+) }
   end
   def stone_locations
-    returning([[], []]) do |blacks, whites|
+    returning(BlacksAndWhites.for([], [])) do |blacks, whites|
       self.sgf_hack.scan(/([BW])\[([abcdefghijklmnopqrs][abcdefghijklmnopqrs])\]/) do |initial, position|
         if (initial == "B") then
           (blacks << parse_position(position))

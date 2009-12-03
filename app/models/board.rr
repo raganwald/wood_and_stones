@@ -4,6 +4,34 @@ class Board < ActiveRecord::Base
   
   class Wtf < Exception; end
   
+  # intended for an array of two elements, one of which is an array of black things
+  # and the other is an array of white things
+  module BlacksAndWhites
+    
+    def self.for(*arr)
+      returning(arr) do
+        arr.extend(self)
+      end
+    end
+    
+    def blacks
+      self.first
+    end
+    
+    def whites
+      self.last
+    end
+    
+    def all
+      self.first + self.last
+    end
+    
+    def map
+      BlacksAndWhites.for(yield(blacks), yield(whites))
+    end
+    
+  end
+  
   # intended to extend an array of two offsets across and down
   module Location
     
@@ -41,11 +69,11 @@ class Board < ActiveRecord::Base
     end
     
     def have(colour)
-      self.board[LETTERS[self.across] + LETTERS[self.down]] = colour
+      self.board[self.to_s] = colour
     end
     
     def remove
-      self.board[LETTERS[self.across] + LETTERS[self.down]] = nil
+      self.board[self.to_s] = nil
     end
   
     def adjacent_scalars(offset)
@@ -69,6 +97,10 @@ class Board < ActiveRecord::Base
     
     def has_liberty?
       !self.liberties.empty?
+    end
+    
+    def to_s
+      (LETTERS[self.across] + LETTERS[self.down]).downcase
     end
     
   end
@@ -165,6 +197,11 @@ class Board < ActiveRecord::Base
   
   validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19]
   
+  validate do |board|
+    undead = board.dead_stones.all
+    board.errors.add_to_base("The stones at #{undead.to_sentence} are dead") unless undead.empty?
+  end
+  
   def self.initial(options = {})
     #TODO: fork everything from common starts
     self.create(options)
@@ -229,10 +266,10 @@ class Board < ActiveRecord::Base
   
   def groupings
     black_offsets, white_offsets = self.stone_locations
-    [
+    BlacksAndWhites.for(
       Grouping.groupings_for_one_colour(self, black_offsets),
       Grouping.groupings_for_one_colour(self, white_offsets)
-    ]
+    )
   end
   
   def dead_groupings
@@ -246,7 +283,7 @@ class Board < ActiveRecord::Base
   end
   
   def stone_locations
-    returning([[], []]) do |blacks, whites|
+    returning(BlacksAndWhites.for([], [])) do |blacks, whites|
       self.sgf_hack.scan(/([BW])\[([abcdefghijklmnopqrs][abcdefghijklmnopqrs])\]/) do |initial, position|
         if initial == 'B'
           blacks << parse_position(position)

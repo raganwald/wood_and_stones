@@ -283,10 +283,10 @@ class BoardTest < ActiveRecord::TestCase
     end
     
     should "retrieve empty stones in the four corners" do
-      assert @board['aa'].nil?
-      assert @board['am'].nil?
-      assert @board['ma'].nil?
-      assert @board['mm'].nil?
+      assert @board['aa'].open?
+      assert @board['am'].open?
+      assert @board['ma'].open?
+      assert @board['mm'].open?
     end
     
     should "allow placement of stones in handicap spots" do
@@ -308,32 +308,55 @@ class BoardTest < ActiveRecord::TestCase
       end
     
       should "retrieve empty stones in the four corners" do
-        assert @board['aa'].nil?
-        assert @board['am'].nil?
-        assert @board['ma'].nil?
-        assert @board['mm'].nil?
+        assert @board['aa'].open?
+        assert @board['am'].open?
+        assert @board['ma'].open?
+        assert @board['mm'].open?
       end
     
       should "retrieve the placed stones" do
-        assert @board['dd'] == 'black'
-        assert @board['jd'] == 'white'
-        assert @board['jj'] == 'black'
-        assert @board['dj'] == 'white'
+        assert @board['dd'].black?
+        assert @board['jd'].white?
+        assert @board['jj'].black?
+        assert @board['dj'].white?
       end
       
-      should "reject placement of stones in the handicap spots" do
-        assert_raise(Board::Occupied) do
-          @board['dd'] = 'black'
-        end
-        assert_raise(Board::Occupied) do
-          @board['jd'] = 'white'
-        end
-        assert_raise(Board::Occupied) do
-          @board['jj'] = 'black'
-        end
-        assert_raise(Board::Occupied) do
-          @board['dj'] = 'white'
-        end
+      # commented out (yecch!) to document a change in business rules
+      # boards don't care about placing in occupied spots, actions
+      # care about placing in occupied spots.
+      #
+      # boards only care about the legality of a static position like
+      # playing into suicide.
+      #
+      # should "reject placement of stones in the handicap spots" do
+      #   assert_raise(Board::Occupied) do
+      #     @board['dd'] = 'black'
+      #   end
+      #   assert_raise(Board::Occupied) do
+      #     @board['jd'] = 'white'
+      #   end
+      #   assert_raise(Board::Occupied) do
+      #     @board['jj'] = 'black'
+      #   end
+      #   assert_raise(Board::Occupied) do
+      #     @board['dj'] = 'white'
+      #   end
+      # end
+      
+    end
+    
+    context "when there is a dead stone" do
+      
+      setup do
+        @board['dc'] = 'black'
+        @board['cd'] = 'black'
+        @board['dd'] = 'white'
+        @board['ed'] = 'black'
+        @board['de'] = 'black'
+      end
+      
+      should "not be valid because the white stone is dead" do
+        assert !@board.valid?
       end
       
     end
