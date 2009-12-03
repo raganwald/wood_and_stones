@@ -1,7 +1,7 @@
 class Action::PlaceStone < Action::Base
-  class Occupied < Exception
-  end
-  before_validation_on_create(:clone_before_to_after, :place_stone)
+  before_validation_on_create(:clone_game_board_to_before, :clone_before_to_after, :place_stone)
+  before_validation_on_create(:update_game_current_board)
+  after_create(:save_after_board)
   validates_presence_of(:before, :on => :create, :message => "can't be blank")
   validates_presence_of(:after, :on => :create, :message => "can't be blank")
   validates_presence_of(:position, :on => :create, :message => "can't be blank")
@@ -17,7 +17,7 @@ class Action::PlaceStone < Action::Base
   end
   validates_each(:after) do |record, attr, value|
     if record.after then
-      unless (value.dimension == (__125986555666150__ = record.before and __125986555666150__.dimension)) then
+      unless (value.dimension == (__125987661011862__ = record.before and __125987661011862__.dimension)) then
         record.errors.add(attr, "should be the same dimension as :before")
       end
       unless value[record.position].has?(record.player) then
@@ -26,8 +26,17 @@ class Action::PlaceStone < Action::Base
     end
   end
   private
+  def clone_game_board_to_before
+    self.before ||= (__125987661071212__ = self.game and __125987661071212__.current_board)
+  end
   def clone_before_to_after
-    self.after ||= self.before.clone if self.before
+    self.after ||= (__125987661079678__ = self.before and __125987661079678__.clone)
+  end
+  def update_game_current_board
+    self.game.update_attribute(:current_board, self.after)
+  end
+  def save_after_board
+    self.after.save!
   end
   def place_stone
     if (self.after and self.after[self.position].open?) then

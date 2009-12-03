@@ -19,14 +19,6 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
       assert @game.valid?, @game.errors.full_messages.inspect
     end
   
-    context "with no boards" do
-    
-      should "be invalid" do
-        assert !@setup_stone.valid?
-      end
-    
-    end
-  
     context "with both valid boards of the same dimension" do
       
       setup do
