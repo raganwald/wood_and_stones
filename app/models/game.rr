@@ -8,13 +8,13 @@ class Game < ActiveRecord::Base
   validates_associated :current_board
   
   has_many :actions, :class_name => "Action::Base", :foreign_key => "game_id"
-  has_many :before_boards, :through => :actions, :source => :before
+  has_many :boards, :through => :actions, :source => :after
   
-  validates_each :current_board do |game, attr, value|
-    game.errors.add_to_base "a game cannot repeat itself" if begin
-      game.before_boards.map(&:to_a).include?(value.to_a) # obscura, #uniq! returns nil if there are no repetitions
-    end
-  end
+  # validates_each :current_board do |game, attr, current_board|
+  #   game.errors.add_to_base "a game cannot repeat itself" if begin
+  #     game.boards.map(&:to_a).include?(current_board.to_a)
+  #   end
+  # end
   
   def initialize(options = {})
     options ||= {} # to handle the vagaries of AR's create method

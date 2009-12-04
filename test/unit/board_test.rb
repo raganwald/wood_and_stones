@@ -127,8 +127,8 @@ class BoardTest < ActiveRecord::TestCase
             [[0,0]]
           ], 
           [ # whites
-            [[1,0]], 
-            [[0,1]]
+            [[0,1]], 
+            [[1,0]]
           ]
         ], @board.groupings
       end

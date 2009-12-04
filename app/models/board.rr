@@ -69,11 +69,17 @@ class Board < ActiveRecord::Base
     end
     
     def have(colour)
-      self.board[self.to_s] = colour
+      arr = self.board.to_a
+      arr[self.across][self.down] = colour.to_s.downcase
+      self.board.array_hack = arr.inspect
+      self
     end
     
     def remove
-      self.board[self.to_s] = nil
+      arr = self.board.to_a
+      arr[self.across][self.down] = nil
+      self.board.array_hack = arr.inspect
+      self
     end
   
     def adjacent_scalars(offset)
@@ -193,7 +199,7 @@ class Board < ActiveRecord::Base
     
   end
   
-  before_validation_on_create :initialize_sgf_hack
+  before_validation_on_create :initialize_array_hack
   
   validates_inclusion_of :dimension, :in => [9, 11, 13, 15, 17, 19]
   
@@ -236,32 +242,25 @@ class Board < ActiveRecord::Base
   
   def []=(str_or_symbol,value)
     # TODO: memoize #to_a and invalidate it here
+    initialize_array_hack
     str = str_or_symbol.to_s.downcase
     if valid_position?(str)
-      self.sgf_hack = self.sgf_hack.gsub(";B[#{str}]", '').gsub(";W[#{str}]", '')
-      self.sgf_hack = self.sgf_hack + if value == 'black'
-        ";B[#{str}]"
-      elsif value == 'white'
-        ";W[#{str}]"
-      elsif value.nil?
-        ''
+      arr = self.to_a
+      loc = parse_position(str)
+      if value.nil?
+        loc.remove
       else
-        raise Wtf.new("What is a #{value}?")
+        loc.have(value)
       end
+      loc
     else
       super(str_or_symbol)
     end
   end
   
   def to_a
-    # TODO: memoize and invalidate []=
-    returning( (1..self.dimension).map{[nil] * self.dimension} ) do |arr|
-      ['black', 'white'].zip(self.stone_locations).each { |colour, list_of_offsets|  
-        list_of_offsets.each { |across, down| 
-          arr[across][down] = colour 
-        }
-      }
-    end
+    initialize_array_hack
+    eval(self.array_hack)
   end
   
   def groupings
@@ -283,12 +282,15 @@ class Board < ActiveRecord::Base
   end
   
   def stone_locations
+    #shlemiel the painter goes to work
     returning(BlacksAndWhites.for([], [])) do |blacks, whites|
-      self.sgf_hack.scan(/([BW])\[([abcdefghijklmnopqrs][abcdefghijklmnopqrs])\]/) do |initial, position|
-        if initial == 'B'
-          blacks << parse_position(position)
-        else
-          whites << parse_position(position)
+      (0..(self.dimension - 1)).each do |across|
+        (0..(self.dimension - 1)).each do |down|
+          if self.to_a[across][down] == 'black'
+            blacks << Location.for(self, across, down)
+          elsif self.to_a[across][down] == 'white'
+            whites << Location.for(self, across, down)
+          end
         end
       end
     end
@@ -299,8 +301,10 @@ class Board < ActiveRecord::Base
     Location.for(self, offsets.first, offsets.last) if offsets.size == 2
   end
   
-  def initialize_sgf_hack
-    self.sgf_hack ||= ((1..self.dimension).map{ [nil] * self.dimension }).inspect
+  def initialize_array_hack
+    if self.array_hack.blank?
+      self.array_hack = ((1..self.dimension).map{ [nil] * self.dimension }).inspect
+    end
   end
   
 end

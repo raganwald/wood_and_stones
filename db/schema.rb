@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20091125210214) do
 
   create_table "boards", :force => true do |t|
     t.integer  "dimension"
-    t.string   "sgf_hack",   :default => "", :null => false
+    t.string   "array_hack", :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

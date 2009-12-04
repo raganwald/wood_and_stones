@@ -5,12 +5,7 @@ class Game < ActiveRecord::Base
   validates_presence_of(:current_board)
   validates_associated(:current_board)
   has_many(:actions, :class_name => "Action::Base", :foreign_key => "game_id")
-  has_many(:before_boards, :through => :actions, :source => :before)
-  validates_each(:current_board) do |game, attr, value|
-    if game.before_boards.map(&:to_a).include?(value.to_a) then
-      game.errors.add_to_base("a game cannot repeat itself")
-    end
-  end
+  has_many(:boards, :through => :actions, :source => :after)
   def initialize(options = {  })
     options ||= {  }
     super()

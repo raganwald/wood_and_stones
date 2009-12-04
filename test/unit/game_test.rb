@@ -23,8 +23,8 @@ class GameTest < ActiveRecord::TestCase
         assert @game.valid?
       end
       
-      should "produce a set of five before_boards for the game" do
-        assert_equal(5, @game.before_boards.size)
+      should "produce a set of five boards for the game" do
+        assert_equal(5, @game.boards.size)
       end
       
       context "starting with a capture in ko" do
