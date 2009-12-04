@@ -3,6 +3,12 @@ class Action::Move < Action::PlaceStone
   
   before_validation_on_create :remove_opponent_dead_stones
   
+  validates_each :after do |move, attr, board|
+    move.errors.add_to_base("You cannot recreate a position that has already occurred in this game") if begin
+      move.game.boards.map(&:to_a).include?(board.to_a)
+    end
+  end
+  
   private
   
   def remove_opponent_dead_stones

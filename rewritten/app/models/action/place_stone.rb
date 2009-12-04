@@ -1,6 +1,6 @@
 class Action::PlaceStone < Action::Base
   before_validation_on_create(:clone_game_board_to_before, :clone_before_to_after, :place_stone)
-  before_validation_on_create(:update_game_current_board)
+  before_create(:update_game_current_board)
   after_create(:save_after_board)
   validates_presence_of(:before, :on => :create, :message => "can't be blank")
   validates_presence_of(:after, :on => :create, :message => "can't be blank")
@@ -17,7 +17,7 @@ class Action::PlaceStone < Action::Base
   end
   validates_each(:after) do |record, attr, value|
     if record.after then
-      unless (value.dimension == (__12599473936217__ = record.before and __12599473936217__.dimension)) then
+      unless (value.dimension == (__125994948633746__ = record.before and __125994948633746__.dimension)) then
         record.errors.add(attr, "should be the same dimension as :before")
       end
       unless value[record.position].has?(record.player) then
@@ -27,10 +27,10 @@ class Action::PlaceStone < Action::Base
   end
   private
   def clone_game_board_to_before
-    self.before ||= (__125994739340035__ = self.game and __125994739340035__.current_board)
+    self.before ||= (__125994948698999__ = self.game and __125994948698999__.current_board)
   end
   def clone_before_to_after
-    self.after ||= (__12599473937484__ = self.before and __12599473937484__.clone)
+    self.after ||= (__125994948635160__ = self.before and __125994948635160__.clone)
   end
   def update_game_current_board
     self.game.update_attribute(:current_board, self.after)

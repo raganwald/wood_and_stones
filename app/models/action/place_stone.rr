@@ -2,7 +2,7 @@ class Action::PlaceStone < Action::Base
   
   # these affect validation
   before_validation_on_create :clone_game_board_to_before, :clone_before_to_after, :place_stone
-  before_validation_on_create :update_game_current_board
+  before_create :update_game_current_board
   
   after_create :save_after_board
   
