@@ -1,0 +1,1 @@
+RewriteRails::ExtensionMethods::Fixnum

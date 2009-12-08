@@ -917,3 +917,32 @@ Migrating to CreateActionTable (20091125210214)
   [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("actions")[0m
   [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("boards")[0m
   [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("games")[0m
+  [4;36;1mSQL (3.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateGameTable (20091125173704)
+Migrating to CreateBoardTable (20091125195052)
+Migrating to CreateActionTable (20091125210214)
+Migrating to CreateSecretTable (20091208043646)
+  [4;36;1mSQL (12.7ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCREATE TABLE "secrets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "target_id" integer, "target_type" varchar(255) DEFAULT 'Game', "secret" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091208043646')[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("actions")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("boards")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("games")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("secrets")[0m

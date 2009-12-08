@@ -15222,3 +15222,715 @@ Completed in 5ms (View: 4, DB: 0) | 200 OK [http://test.host/about]
 Processing AboutController#index (for 0.0.0.0 at 2009-12-04 12:59:39) [GET]
 Rendering about/index
 Completed in 4ms (View: 3, DB: 0) | 200 OK [http://test.host/about]
+  [4;36;1mSQL (10.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateGameTable (20091125173704)
+Migrating to CreateBoardTable (20091125195052)
+Migrating to CreateActionTable (20091125210214)
+Migrating to CreateSecretTable (20091208043646)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCREATE TABLE "secrets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "target_id" integer, "target_type" varchar(255) DEFAULT 'Game', "secret" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091208043646')[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mPRAGMA index_list("actions")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("boards")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mPRAGMA index_list("games")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("secrets")[0m
+  [4;36;1mSQL (41.9ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateSecrets (20091208201207)
+Migrating to CreateUsers (20091208200720)
+Migrating to CreateActionTable (20091125210214)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mDROP TABLE "actions"[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091125210214'[0m
+Migrating to CreateBoardTable (20091125195052)
+  [4;35;1mSQL (1.1ms)[0m   [0mDROP TABLE "boards"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091125195052'[0m
+Migrating to CreateGameTable (20091125173704)
+  [4;35;1mSQL (1.5ms)[0m   [0mCREATE TEMPORARY TABLE "altered_games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "state" varchar(255), "created_at" datetime, "updated_at" datetime, "current_board_id" integer) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("games")[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mDROP TABLE "games"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mCREATE TABLE "games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "state" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("altered_games")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDROP TABLE "altered_games"[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mDROP TABLE "games"[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091125173704'[0m
+  [4;35;1mSQL (0.7ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("secrets")[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateGameTable (20091125173704)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCREATE TABLE "games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "state" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0mALTER TABLE "games" ADD "current_board_id" integer[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091125173704')[0m
+Migrating to CreateBoardTable (20091125195052)
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCREATE TABLE "boards" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dimension" integer, "array_hack" varchar(255) DEFAULT '' NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091125195052')[0m
+Migrating to CreateActionTable (20091125210214)
+  [4;36;1mSQL (1.1ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mCREATE TABLE "actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "type" varchar(255), "position" varchar(255), "player" varchar(255), "before_id" integer, "after_id" integer, "game_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091125210214')[0m
+Migrating to CreateUsers (20091208200720)
+  [4;35;1mSQL (1.2ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091208200720')[0m
+Migrating to CreateSecrets (20091208201207)
+  [4;35;1mSQL (0.0ms)[0m   [0mSQLite3::SQLException: table "secrets" already exists: CREATE TABLE "secrets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "target_id" integer, "target_type" varchar(255) DEFAULT 'Game', "secret" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateUsers (20091208200720)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mDROP TABLE "users"[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091208200720'[0m
+Migrating to CreateSecretTable (20091208043646)
+  [4;35;1mSQL (0.7ms)[0m   [0mDROP TABLE "secrets"[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091208043646'[0m
+Migrating to CreateActionTable (20091125210214)
+  [4;35;1mSQL (0.9ms)[0m   [0mDROP TABLE "actions"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091125210214'[0m
+Migrating to CreateBoardTable (20091125195052)
+  [4;35;1mSQL (0.7ms)[0m   [0mDROP TABLE "boards"[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091125195052'[0m
+Migrating to CreateGameTable (20091125173704)
+  [4;35;1mSQL (1.2ms)[0m   [0mCREATE TEMPORARY TABLE "altered_games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "state" varchar(255), "created_at" datetime, "updated_at" datetime, "current_board_id" integer) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("games")[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mDROP TABLE "games"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mCREATE TABLE "games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "state" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("altered_games")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDROP TABLE "altered_games"[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mDROP TABLE "games"[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mDELETE FROM schema_migrations WHERE version = '20091125173704'[0m
+  [4;35;1mSQL (0.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateGameTable (20091125173704)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCREATE TABLE "games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "state" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0mALTER TABLE "games" ADD "current_board_id" integer[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091125173704')[0m
+Migrating to CreateBoardTable (20091125195052)
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCREATE TABLE "boards" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dimension" integer, "array_hack" varchar(255) DEFAULT '' NOT NULL, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091125195052')[0m
+Migrating to CreateActionTable (20091125210214)
+  [4;36;1mSQL (0.9ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mCREATE TABLE "actions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "type" varchar(255), "position" varchar(255), "player" varchar(255), "before_id" integer, "after_id" integer, "game_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091125210214')[0m
+Migrating to CreateSecretTable (20091208043646)
+  [4;35;1mSQL (1.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCREATE TABLE "secrets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "target_id" integer, "target_type" varchar(255) DEFAULT 'Game', "secret" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091208043646')[0m
+Migrating to CreateUsers (20091208200720)
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091208200720')[0m
+Migrating to CreateSecrets (20091208201207)
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSQLite3::SQLException: table "secrets" already exists: CREATE TABLE "secrets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "target_id" integer, "target_type" varchar(255) DEFAULT 'Game', "secret" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (1.0ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:23:43', 'adam@garden.org', '2009-12-08 20:23:43')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:23:43', 'eve@garden.org', '2009-12-08 20:23:43')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:23:50', 9, '2009-12-08 20:23:50')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:23:50', 1, 'started', '2009-12-08 20:23:50')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.7ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:23:50', 'adam@garden.org', '2009-12-08 20:23:50')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:23:50', 'eve@garden.org', '2009-12-08 20:23:50')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:23:50', 9, '2009-12-08 20:23:50')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:23:50', 1, 'started', '2009-12-08 20:23:50')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:48:39', 'adam@garden.org', '2009-12-08 20:48:39')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:48:39', 'eve@garden.org', '2009-12-08 20:48:39')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:48:47', 9, '2009-12-08 20:48:47')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:48:47', 1, 'started', '2009-12-08 20:48:47')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.8ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:48:47', 'adam@garden.org', '2009-12-08 20:48:47')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:48:47', 'eve@garden.org', '2009-12-08 20:48:47')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:48:47', 9, '2009-12-08 20:48:47')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:48:47', 1, 'started', '2009-12-08 20:48:47')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:49:53', 'adam@garden.org', '2009-12-08 20:49:53')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:49:54', 'eve@garden.org', '2009-12-08 20:49:54')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:50:01', 9, '2009-12-08 20:50:01')[0m
+  [4;35;1mGame Create (0.6ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:50:01', 1, 'started', '2009-12-08 20:50:01')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 20:50:01', 1, 1, 'Game', NULL, '2009-12-08 20:50:01')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.8ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:50:01', 'adam@garden.org', '2009-12-08 20:50:01')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:50:01', 'eve@garden.org', '2009-12-08 20:50:01')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:50:01', 9, '2009-12-08 20:50:01')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:50:01', 1, 'started', '2009-12-08 20:50:01')[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 20:50:01', 1, 1, 'Game', NULL, '2009-12-08 20:50:01')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (118.2ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:51:40', 'adam@garden.org', '2009-12-08 20:51:40')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:51:40', 'eve@garden.org', '2009-12-08 20:51:40')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:51:47', 9, '2009-12-08 20:51:47')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:51:47', 1, 'started', '2009-12-08 20:51:47')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 20:51:47', 1, 1, 'Game', NULL, '2009-12-08 20:51:47')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.8ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:51:47', 'adam@garden.org', '2009-12-08 20:51:47')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 20:51:47', 'eve@garden.org', '2009-12-08 20:51:47')[0m
+  [4;35;1mBoard Create (0.6ms)[0m   [0mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 20:51:47', 9, '2009-12-08 20:51:47')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 20:51:48', 1, 'started', '2009-12-08 20:51:48')[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 20:51:48', 1, 1, 'Game', NULL, '2009-12-08 20:51:48')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:04:20', 'adam@garden.org', '2009-12-08 21:04:20')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:04:21', 'eve@garden.org', '2009-12-08 21:04:21')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:04:27', 9, '2009-12-08 21:04:27')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:04:27', 1, 'started', '2009-12-08 21:04:27')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:04:28', 1, 1, 'Game', NULL, '2009-12-08 21:04:28')[0m
+  [4;35;1mUser Load (0.6ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.8ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:04:28', 'adam@garden.org', '2009-12-08 21:04:28')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.8ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:04:28', 'eve@garden.org', '2009-12-08 21:04:28')[0m
+  [4;35;1mBoard Create (0.6ms)[0m   [0mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:04:28', 9, '2009-12-08 21:04:28')[0m
+  [4;36;1mGame Create (0.6ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:04:28', 1, 'started', '2009-12-08 21:04:28')[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:04:28', 1, 1, 'Game', NULL, '2009-12-08 21:04:28')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:04:28', 'adam@garden.org', '2009-12-08 21:04:28')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:04:28', 'eve@garden.org', '2009-12-08 21:04:28')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:04:28', 9, '2009-12-08 21:04:28')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:04:28', 1, 'started', '2009-12-08 21:04:28')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:04:28', 1, 1, 'Game', NULL, '2009-12-08 21:04:28')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:09:18', 'adam@garden.org', '2009-12-08 21:09:18')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:09:18', 'eve@garden.org', '2009-12-08 21:09:18')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:09:25', 9, '2009-12-08 21:09:25')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:09:25', 1, 'started', '2009-12-08 21:09:25')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:09:25', 1, 1, 'Game', NULL, '2009-12-08 21:09:25')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:09:25) [GET]
+  Parameters: {"secret"=>nil}
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.7ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:09:25', 'adam@garden.org', '2009-12-08 21:09:25')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:09:25', 'eve@garden.org', '2009-12-08 21:09:25')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:09:25', 9, '2009-12-08 21:09:25')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:09:25', 1, 'started', '2009-12-08 21:09:25')[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:09:25', 1, 1, 'Game', NULL, '2009-12-08 21:09:25')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:09:25) [GET]
+  Parameters: {"secret"=>nil}
+  [4;36;1mUser Load (0.6ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:09:25', 'adam@garden.org', '2009-12-08 21:09:25')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:09:25', 'eve@garden.org', '2009-12-08 21:09:25')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:09:25', 9, '2009-12-08 21:09:25')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:09:25', 1, 'started', '2009-12-08 21:09:25')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:09:25', 1, 1, 'Game', NULL, '2009-12-08 21:09:25')[0m
+  [4;36;1mUser Load (2.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:10:40', 'adam@garden.org', '2009-12-08 21:10:40')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.6ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:10:40', 'eve@garden.org', '2009-12-08 21:10:40')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:10:46', 9, '2009-12-08 21:10:46')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:10:46', 1, 'started', '2009-12-08 21:10:46')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:10:46', 1, 1, 'Game', NULL, '2009-12-08 21:10:46')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:10:47) [GET]
+  Parameters: {"secret"=>nil}
+Rendering secret/go
+Completed in 38ms (View: 22, DB: 7) | 200 OK [http://test.host/secret/go]
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.7ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:10:47', 'adam@garden.org', '2009-12-08 21:10:47')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:10:47', 'eve@garden.org', '2009-12-08 21:10:47')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:10:47', 9, '2009-12-08 21:10:47')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:10:47', 1, 'started', '2009-12-08 21:10:47')[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:10:47', 1, 1, 'Game', NULL, '2009-12-08 21:10:47')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:10:47) [GET]
+  Parameters: {"secret"=>nil}
+Rendering secret/go
+Completed in 4ms (View: 2, DB: 4) | 200 OK [http://test.host/secret/go]
+  [4;36;1mUser Load (0.7ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:10:47', 'adam@garden.org', '2009-12-08 21:10:47')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:10:47', 'eve@garden.org', '2009-12-08 21:10:47')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:10:47', 9, '2009-12-08 21:10:47')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:10:47', 1, 'started', '2009-12-08 21:10:47')[0m
+  [4;36;1mSecret Create (0.5ms)[0m   [0;1mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:10:47', 1, 1, 'Game', NULL, '2009-12-08 21:10:47')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:27:29', 'adam@garden.org', '2009-12-08 21:27:29')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:27:29', 'eve@garden.org', '2009-12-08 21:27:29')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:27:36', 9, '2009-12-08 21:27:36')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:27:36', 1, 'started', '2009-12-08 21:27:36')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:27:36', 'adam@garden.org', '2009-12-08 21:27:36')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:27:36', 'eve@garden.org', '2009-12-08 21:27:36')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:27:36', 9, '2009-12-08 21:27:36')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:27:36', 1, 'started', '2009-12-08 21:27:36')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.8ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:27:36', 'adam@garden.org', '2009-12-08 21:27:36')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:27:36', 'eve@garden.org', '2009-12-08 21:27:36')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:27:36', 9, '2009-12-08 21:27:36')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:27:37', 1, 'started', '2009-12-08 21:27:37')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:28:13', 'adam@garden.org', '2009-12-08 21:28:13')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:28:13', 'eve@garden.org', '2009-12-08 21:28:13')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:28:19', 9, '2009-12-08 21:28:19')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:28:19', 1, 'started', '2009-12-08 21:28:19')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.8ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:28:20', 'adam@garden.org', '2009-12-08 21:28:20')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:28:20', 'eve@garden.org', '2009-12-08 21:28:20')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:28:20', 9, '2009-12-08 21:28:20')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:28:20', 1, 'started', '2009-12-08 21:28:20')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:28:20', 'adam@garden.org', '2009-12-08 21:28:20')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:28:20', 'eve@garden.org', '2009-12-08 21:28:20')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:28:20', 9, '2009-12-08 21:28:20')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:28:20', 1, 'started', '2009-12-08 21:28:20')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:04', 'adam@garden.org', '2009-12-08 21:31:04')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:05', 'eve@garden.org', '2009-12-08 21:31:05')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:31:11', 9, '2009-12-08 21:31:11')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:31:11', 1, 'started', '2009-12-08 21:31:11')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:11', 'adam@garden.org', '2009-12-08 21:31:11')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:11', 'eve@garden.org', '2009-12-08 21:31:11')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:31:11', 9, '2009-12-08 21:31:11')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:31:11', 1, 'started', '2009-12-08 21:31:11')[0m
+  [4;36;1mUser Load (0.6ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:11', 'adam@garden.org', '2009-12-08 21:31:11')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:11', 'eve@garden.org', '2009-12-08 21:31:11')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:31:12', 9, '2009-12-08 21:31:12')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:31:12', 1, 'started', '2009-12-08 21:31:12')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:51', 'adam@garden.org', '2009-12-08 21:31:51')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:31:52', 'eve@garden.org', '2009-12-08 21:31:52')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:31:58', 9, '2009-12-08 21:31:58')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:31:58', 1, 'started', '2009-12-08 21:31:58')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:34:38', 'adam@garden.org', '2009-12-08 21:34:38')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:34:38', 'eve@garden.org', '2009-12-08 21:34:38')[0m
+  [4;36;1mBoard Create (0.7ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:34:45', 9, '2009-12-08 21:34:45')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:34:45', 1, 'started', '2009-12-08 21:34:45')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:36:42', 'adam@garden.org', '2009-12-08 21:36:42')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:36:42', 'eve@garden.org', '2009-12-08 21:36:42')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:36:49', 9, '2009-12-08 21:36:49')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:36:49', 1, 'started', '2009-12-08 21:36:49')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.6ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.1ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:38:48', 'adam@garden.org', '2009-12-08 21:38:48')[0m
+  [4;35;1mUser Load (0.7ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.5ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.7ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:38:48', 'eve@garden.org', '2009-12-08 21:38:48')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:38:57', 9, '2009-12-08 21:38:57')[0m
+  [4;35;1mGame Create (0.7ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:38:57', 1, 'started', '2009-12-08 21:38:57')[0m
+  [4;36;1mUser Load (0.8ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.3ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:40:01', 'adam@garden.org', '2009-12-08 21:40:01')[0m
+  [4;35;1mUser Load (0.8ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.5ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.6ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:40:01', 'eve@garden.org', '2009-12-08 21:40:01')[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:40:11', 9, '2009-12-08 21:40:11')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:40:11', 1, 'started', '2009-12-08 21:40:11')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" IS NULL) LIMIT 1[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:40:11) [GET]
+  Parameters: {"secret"=>nil}
+Rendering secret/go
+Completed in 42ms (View: 21, DB: 6) | 200 OK [http://test.host/secret/go]
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.7ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.7ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:40:11', 'adam@garden.org', '2009-12-08 21:40:11')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.6ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:40:11', 'eve@garden.org', '2009-12-08 21:40:11')[0m
+  [4;35;1mBoard Create (0.5ms)[0m   [0mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:40:11', 9, '2009-12-08 21:40:11')[0m
+  [4;36;1mGame Create (0.5ms)[0m   [0;1mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:40:11', 1, 'started', '2009-12-08 21:40:11')[0m
+  [4;35;1mSecret Exists (0.5ms)[0m   [0mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" IS NULL) LIMIT 1[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:40:12) [GET]
+  Parameters: {"secret"=>nil}
+Rendering secret/go
+Completed in 5ms (View: 3, DB: 5) | 200 OK [http://test.host/secret/go]
+  [4;36;1mUser Load (0.9ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.1ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:40:12', 'adam@garden.org', '2009-12-08 21:40:12')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.6ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:40:12', 'eve@garden.org', '2009-12-08 21:40:12')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:40:12', 9, '2009-12-08 21:40:12')[0m
+  [4;35;1mGame Create (0.6ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:40:12', 1, 'started', '2009-12-08 21:40:12')[0m
+  [4;36;1mSecret Exists (0.6ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" IS NULL) LIMIT 1[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:41:02', 'adam@garden.org', '2009-12-08 21:41:02')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:41:02', 'eve@garden.org', '2009-12-08 21:41:02')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:41:09', 9, '2009-12-08 21:41:09')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:41:09', 1, 'started', '2009-12-08 21:41:09')[0m
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:44:25', 'adam@garden.org', '2009-12-08 21:44:25')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:44:25', 'eve@garden.org', '2009-12-08 21:44:25')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:44:32', 9, '2009-12-08 21:44:32')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:44:32', 1, 'started', '2009-12-08 21:44:32')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'zW') LIMIT 1[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:44:33', 1, 1, 'Game', 'zW', '2009-12-08 21:44:33')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:44:33) [GET]
+  Parameters: {"secret"=>"zW"}
+Rendering secret/go
+Completed in 39ms (View: 11, DB: 5) | 200 OK [http://test.host/secret/go?secret=zW]
+  [4;36;1mUser Load (0.8ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:44:33', 'adam@garden.org', '2009-12-08 21:44:33')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.7ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:44:33', 'eve@garden.org', '2009-12-08 21:44:33')[0m
+  [4;36;1mBoard Create (0.9ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:44:33', 9, '2009-12-08 21:44:33')[0m
+  [4;35;1mGame Create (0.7ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:44:33', 1, 'started', '2009-12-08 21:44:33')[0m
+  [4;36;1mSecret Exists (0.5ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = '8g') LIMIT 1[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:44:34', 1, 1, 'Game', '8g', '2009-12-08 21:44:34')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:44:34) [GET]
+  Parameters: {"secret"=>"8g"}
+Rendering secret/go
+Completed in 4ms (View: 3, DB: 6) | 200 OK [http://test.host/secret/go?secret=8g]
+  [4;36;1mUser Load (0.8ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:44:34', 'adam@garden.org', '2009-12-08 21:44:34')[0m
+  [4;35;1mUser Load (0.7ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.6ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:44:34', 'eve@garden.org', '2009-12-08 21:44:34')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:44:34', 9, '2009-12-08 21:44:34')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:44:34', 1, 'started', '2009-12-08 21:44:34')[0m
+  [4;36;1mSecret Exists (0.5ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'JJ') LIMIT 1[0m
+  [4;35;1mSecret Create (0.7ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:44:34', 1, 1, 'Game', 'JJ', '2009-12-08 21:44:34')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:48:47', 'adam@garden.org', '2009-12-08 21:48:47')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:48:47', 'eve@garden.org', '2009-12-08 21:48:47')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:48:53', 9, '2009-12-08 21:48:53')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:48:53', 1, 'started', '2009-12-08 21:48:53')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'ZK') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:48:54', 1, 1, 'Game', 'ZK', '2009-12-08 21:48:54')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:48:54) [GET]
+  Parameters: {"secret"=>"ZK"}
+Rendering secret/go
+Completed in 24ms (View: 7, DB: 5) | 200 OK [http://test.host/secret/go?secret=ZK]
+  [4;36;1mUser Load (0.6ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:48:54', 'adam@garden.org', '2009-12-08 21:48:54')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:48:54', 'eve@garden.org', '2009-12-08 21:48:54')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:48:54', 9, '2009-12-08 21:48:54')[0m
+  [4;35;1mGame Create (0.6ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:48:54', 1, 'started', '2009-12-08 21:48:54')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = '3h_') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:48:54', 1, 1, 'Game', '3h_', '2009-12-08 21:48:54')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:48:54) [GET]
+  Parameters: {"secret"=>"3h_"}
+Rendering secret/go
+Completed in 3ms (View: 2, DB: 5) | 200 OK [http://test.host/secret/go?secret=3h_]
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:48:54', 'adam@garden.org', '2009-12-08 21:48:54')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:48:54', 'eve@garden.org', '2009-12-08 21:48:54')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:48:54', 9, '2009-12-08 21:48:54')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:48:54', 1, 'started', '2009-12-08 21:48:54')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = '1Xm') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:48:54', 1, 1, 'Game', '1Xm', '2009-12-08 21:48:54')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:51:53', 'adam@garden.org', '2009-12-08 21:51:53')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.5ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:51:53', 'eve@garden.org', '2009-12-08 21:51:53')[0m
+  [4;36;1mBoard Create (0.6ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:52:00', 9, '2009-12-08 21:52:00')[0m
+  [4;35;1mGame Create (0.8ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:52:00', 1, 'started', '2009-12-08 21:52:00')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = '29C') LIMIT 1[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:52:00', 1, 1, 'Game', '29C', '2009-12-08 21:52:00')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:52:00) [GET]
+  Parameters: {"secret"=>"29C"}
+Rendering secret/go
+Completed in 23ms (View: 7, DB: 5) | 200 OK [http://test.host/secret/go?secret=29C]
+  [4;36;1mUser Load (0.7ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.8ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:52:00', 'adam@garden.org', '2009-12-08 21:52:00')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:52:00', 'eve@garden.org', '2009-12-08 21:52:00')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:52:00', 9, '2009-12-08 21:52:00')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:52:00', 1, 'started', '2009-12-08 21:52:00')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'Xn') LIMIT 1[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:52:00', 1, 1, 'Game', 'Xn', '2009-12-08 21:52:00')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:52:00) [GET]
+  Parameters: {"secret"=>"Xn"}
+Rendering secret/go
+Completed in 4ms (View: 3, DB: 5) | 200 OK [http://test.host/secret/go?secret=Xn]
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:52:00', 'adam@garden.org', '2009-12-08 21:52:00')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:52:00', 'eve@garden.org', '2009-12-08 21:52:00')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:52:00', 9, '2009-12-08 21:52:00')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:52:01', 1, 'started', '2009-12-08 21:52:01')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = '55') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:52:01', 1, 1, 'Game', '55', '2009-12-08 21:52:01')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (116.1ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:05', 'adam@garden.org', '2009-12-08 21:54:05')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:05', 'eve@garden.org', '2009-12-08 21:54:05')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:54:11', 9, '2009-12-08 21:54:11')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:54:11', 1, 'started', '2009-12-08 21:54:11')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = '1hTf4') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:54:12', 1, 1, 'Game', '1hTf4', '2009-12-08 21:54:12')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:54:12) [GET]
+  Parameters: {"secret"=>"1hTf4"}
+Rendering secret/go
+Completed in 24ms (View: 7, DB: 120) | 200 OK [http://test.host/secret/go?secret=1hTf4]
+  [4;36;1mUser Load (0.6ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:12', 'adam@garden.org', '2009-12-08 21:54:12')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:12', 'eve@garden.org', '2009-12-08 21:54:12')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:54:12', 9, '2009-12-08 21:54:12')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:54:12', 1, 'started', '2009-12-08 21:54:12')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'DbfD') LIMIT 1[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:54:12', 1, 1, 'Game', 'DbfD', '2009-12-08 21:54:12')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:54:12) [GET]
+  Parameters: {"secret"=>"DbfD"}
+Rendering secret/go
+Completed in 3ms (View: 2, DB: 5) | 200 OK [http://test.host/secret/go?secret=DbfD]
+  [4;36;1mUser Load (0.5ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:12', 'adam@garden.org', '2009-12-08 21:54:12')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:12', 'eve@garden.org', '2009-12-08 21:54:12')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:54:12', 9, '2009-12-08 21:54:12')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:54:12', 1, 'started', '2009-12-08 21:54:12')[0m
+  [4;36;1mSecret Exists (0.6ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'W2PX') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:54:12', 1, 1, 'Game', 'W2PX', '2009-12-08 21:54:12')[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:34', 'adam@garden.org', '2009-12-08 21:54:34')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:34', 'eve@garden.org', '2009-12-08 21:54:34')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:54:41', 9, '2009-12-08 21:54:41')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:54:41', 1, 'started', '2009-12-08 21:54:41')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'Q0lh') LIMIT 1[0m
+  [4;35;1mSecret Create (0.5ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:54:41', 1, 1, 'Game', 'Q0lh', '2009-12-08 21:54:41')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:54:41) [GET]
+  Parameters: {"secret"=>"Q0lh"}
+Rendering secret/go
+Completed in 23ms (View: 7, DB: 5) | 200 OK [http://test.host/secret/go?secret=Q0lh]
+  [4;36;1mUser Load (0.8ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.5ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (1.0ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:41', 'adam@garden.org', '2009-12-08 21:54:41')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:41', 'eve@garden.org', '2009-12-08 21:54:41')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:54:41', 9, '2009-12-08 21:54:41')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:54:41', 1, 'started', '2009-12-08 21:54:41')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'ytKd') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:54:41', 1, 1, 'Game', 'ytKd', '2009-12-08 21:54:41')[0m
+
+
+Processing SecretController#go (for 0.0.0.0 at 2009-12-08 16:54:41) [GET]
+  Parameters: {"secret"=>"ytKd"}
+Rendering secret/go
+Completed in 3ms (View: 2, DB: 5) | 200 OK [http://test.host/secret/go?secret=ytKd]
+  [4;36;1mUser Load (0.7ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'adam@garden.org') LIMIT 1[0m
+  [4;36;1mUser Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:42', 'adam@garden.org', '2009-12-08 21:54:42')[0m
+  [4;35;1mUser Load (0.4ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;36;1mUser Exists (0.4ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'eve@garden.org') LIMIT 1[0m
+  [4;35;1mUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-08 21:54:42', 'eve@garden.org', '2009-12-08 21:54:42')[0m
+  [4;36;1mBoard Create (0.5ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-08 21:54:42', 9, '2009-12-08 21:54:42')[0m
+  [4;35;1mGame Create (0.5ms)[0m   [0mINSERT INTO "games" ("updated_at", "current_board_id", "state", "created_at") VALUES('2009-12-08 21:54:42', 1, 'started', '2009-12-08 21:54:42')[0m
+  [4;36;1mSecret Exists (0.4ms)[0m   [0;1mSELECT "secrets".id FROM "secrets" WHERE ("secrets"."secret" = 'PKXv') LIMIT 1[0m
+  [4;35;1mSecret Create (0.4ms)[0m   [0mINSERT INTO "secrets" ("updated_at", "target_id", "user_id", "target_type", "secret", "created_at") VALUES('2009-12-08 21:54:42', 1, 1, 'Game', 'PKXv', '2009-12-08 21:54:42')[0m
