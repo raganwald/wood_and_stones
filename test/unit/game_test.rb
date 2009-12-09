@@ -2,6 +2,51 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class GameTest < ActiveRecord::TestCase
   
+  context "handicaps" do
+    
+    setup do
+      @adam = User.find_or_create_by_email('adam@garden.org')
+      @eve = User.find_or_create_by_email('eve@garden.org')
+      @matrix = Board::VALID_SIZES.inject(Hash.new) do |sizes_to_game_sets, dimension|
+        sizes_to_game_sets.merge(
+          dimension => (2..9).inject(Hash.new) do |stones_to_games, handicap|
+            stones_to_games.merge(
+              handicap => Game.create!(
+                :dimension => dimension,
+                :handicap => handicap,
+                :black => @adam,
+                :even => @eve
+              ).current_board
+            )
+          end
+        )
+      end
+    end
+    
+    context "9x9 boards" do
+      
+      setup do
+        @boards = @matrix[9]
+      end
+      
+      context "with a two stone handicap" do
+        
+        setup do
+          @board = @boards[2]
+        end
+        
+        should "have two black stone" do
+          blacks, whites = *@board.stone_locations
+          assert_equal(2, blacks.size)
+          assert_equal(0, whites.size)
+        end
+        
+      end
+      
+    end
+    
+  end
+  
   context "a new game" do
     
     setup do

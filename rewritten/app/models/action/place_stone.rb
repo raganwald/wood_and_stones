@@ -17,7 +17,7 @@ class Action::PlaceStone < Action::Base
   end
   validates_each(:after) do |record, attr, value|
     if record.after then
-      unless (value.dimension == (__126037904985855__ = record.before and __126037904985855__.dimension)) then
+      unless (value.dimension == (__126039275941749__ = record.before and __126039275941749__.dimension)) then
         record.errors.add(attr, "should be the same dimension as :before")
       end
       unless value[record.position].has?(record.player) then
@@ -27,10 +27,10 @@ class Action::PlaceStone < Action::Base
   end
   private
   def clone_game_board_to_before
-    self.before ||= (__126037904920741__ = self.game and __126037904920741__.current_board)
+    self.before ||= (__126039275970326__ = self.game and __126039275970326__.current_board)
   end
   def clone_before_to_after
-    self.after ||= (__126037904969027__ = self.before and __126037904969027__.clone)
+    self.after ||= (__126039275956936__ = self.before and __126039275956936__.clone)
   end
   def update_game_current_board
     self.game.update_attribute(:current_board, self.after)

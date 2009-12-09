@@ -1,4 +1,5 @@
 class Board < ActiveRecord::Base
+  VALID_SIZES = [9, 11, 13, 15, 17, 19]
   class Occupied < Exception
   end
   class Wtf < Exception
@@ -52,6 +53,12 @@ class Board < ActiveRecord::Base
       arr[self.across][self.down] = colour.to_s.downcase
       self.board.array_hack = arr.inspect
       self
+    end
+    def blacken
+      self.have("black")
+    end
+    def whiten
+      self.have("white")
     end
     def remove
       arr = self.board.to_a
@@ -150,15 +157,27 @@ class Board < ActiveRecord::Base
     end
   end
   before_validation_on_create(:initialize_array_hack)
-  validates_inclusion_of(:dimension, :in => ([9, 11, 13, 15, 17, 19]))
+  validates_inclusion_of(:dimension, :in => (VALID_SIZES))
   validate do |board|
     undead = board.dead_stones.all
     unless undead.empty? then
       board.errors.add_to_base("The stones at #{undead.to_sentence} are dead")
     end
   end
-  def self.initial(options = {  })
-    self.create(options)
+  STARS = Board::VALID_SIZES.inject(Hash.new) do |sizes_to_game_sets, dimension|
+    sizes_to_game_sets.merge(dimension => ((offset = (dimension <= 11) ? (3) : (4)
+    top = left = (offset - 1)
+    middle = (dimension / 2)
+    bottom = right = (dimension - offset)
+    { 2 => ([[left, bottom], [right, top]]), 3 => ([[left, bottom], [right, top], [right, bottom]]), 4 => ([[left, bottom], [right, top], [right, bottom], [left, top]]), 5 => ([[left, bottom], [right, top], [right, bottom], [left, top], [middle, middle]]), 6 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle]]), 7 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle], [middle, middle]]), 8 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle], [middle, top], [middle, bottom]]), 9 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle], [middle, top], [middle, bottom], [middle, middle]]) })))
+  end
+  def star_points(number_of_stones)
+    STARS[self.dimension][number_of_stones]
+  end
+  def handicap(number_of_stones)
+    self.star_points(number_of_stones).each do |across, down|
+      self[across][down].blacken
+    end
   end
   LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
   SGF_BLACK_PLACEMENT_PROPERTIES = ["B", "AB"]
