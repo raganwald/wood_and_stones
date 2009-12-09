@@ -9,6 +9,46 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20091208200720) do
+
+  create_table "actions", :force => true do |t|
+    t.string   "type"
+    t.string   "position"
+    t.string   "player"
+    t.integer  "before_id"
+    t.integer  "after_id"
+    t.integer  "game_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "boards", :force => true do |t|
+    t.integer  "dimension"
+    t.string   "array_hack", :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "games", :force => true do |t|
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "current_board_id"
+  end
+
+  create_table "secrets", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "target_id"
+    t.string   "target_type", :default => "Game"
+    t.string   "secret"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

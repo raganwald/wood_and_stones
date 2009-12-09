@@ -23,10 +23,11 @@ class Board < ActiveRecord::Base
   module Location
     attr_accessor(:board)
     def self.for(board, across, down)
-      returning([across, down]) do |it|
+      lambda do |it|
         it.extend(self)
         it.board = board
-      end
+        it
+      end.call([across, down])
     end
     def across
       self.first
@@ -89,10 +90,11 @@ class Board < ActiveRecord::Base
   module Grouping
     attr_accessor(:board)
     def self.for(board, *locations)
-      returning(locations) do |it|
+      lambda do |it|
         it.extend(self)
         it.board = board
-      end
+        it
+      end.call(locations)
     end
     def self.groupings_for_one_colour(board, stones)
       stones.inject([]) do |groupings_so_far, stone|

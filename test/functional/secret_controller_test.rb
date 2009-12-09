@@ -20,7 +20,6 @@ class SecretControllerTest < ActionController::TestCase
     
     should "resolve to a secret" do
       assert_not_nil(@secret.secret)
-      puts @secret.inspect
     end
     
     context "getting that secret" do
@@ -30,7 +29,7 @@ class SecretControllerTest < ActionController::TestCase
       end
     
       should "redirect to the game" do
-        assert_redirected_to :controller => :game, :action => :show
+        assert_redirected_to :controller => :game, :action => :show, :id => @game.id
       end
     
       should "log the user in" do
