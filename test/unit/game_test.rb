@@ -7,7 +7,7 @@ class GameTest < ActiveRecord::TestCase
   def assert_black(across, down, handicap)
     assert @board[across][down].black?, "Expected #{across}-#{down} to be black on a #{@board.dimension} x #{@board.dimension} board with a #{handicap} handicap"
   end
-  
+
   context "handicaps" do
     
     setup do
@@ -21,7 +21,7 @@ class GameTest < ActiveRecord::TestCase
                 :dimension => dimension,
                 :handicap => handicap,
                 :black => @adam,
-                :even => @eve
+                :white => @eve
               ).current_board
             )
           end
@@ -103,10 +103,13 @@ class GameTest < ActiveRecord::TestCase
     
   end
   
+
   context "a new game" do
     
     setup do
-      @game = Game.create(:dimension => 9)
+      @adam = User.find_or_create_by_email('adam@garden.org')
+      @eve = User.find_or_create_by_email('eve@garden.org')
+      @game = Game.create(:dimension => 9, :black => @adam, :white => @eve)
     end
     
     context "that is about to repeat itself" do
@@ -191,7 +194,9 @@ class GameTest < ActiveRecord::TestCase
         
         setup do
            assert_nothing_raised(Game::InvalidInitialization) { 
-             @game = Game.create(:dimension => 19) 
+              @adam = User.find_or_create_by_email('adam@garden.org')
+              @eve = User.find_or_create_by_email('eve@garden.org')
+              @game = Game.create(:dimension => 19, :black => @adam, :white => @eve) 
             }
         end
         

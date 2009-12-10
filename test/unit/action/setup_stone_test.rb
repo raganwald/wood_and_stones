@@ -8,7 +8,9 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
       @before = Board.create(:dimension => 13)
       @after = Board.create(:dimension => 13)
       @nineteen = Board.create(:dimension => 19)
-      @game = Game.create(:dimension => 13)
+      @adam = User.find_or_create_by_email('adam@garden.org')
+      @eve = User.find_or_create_by_email('eve@garden.org')
+      @game = Game.create(:dimension => 13, :black => @adam, :white => @eve)
       @position = 'aa'
       @player = 'white'
       @opponent = 'black'

@@ -6,9 +6,15 @@ class Action::MoveTest < ActiveRecord::TestCase
     
     setup do
       @before = Board.create(:dimension => 9)
-      @game = Game.create(:dimension => 9)
+      @adam = User.find_or_create_by_email('adam@garden.org')
+      @eve = User.find_or_create_by_email('eve@garden.org')
+      @game = Game.create(:dimension => 9, :black => @adam, :white => @eve)
       @player = 'white'
       @opponent = 'black'
+    end
+    
+    should "be a valid game" do
+      assert @game.valid?, @game.errors.full_messages.to_sentence
     end
     
     context "to the top-left corner" do

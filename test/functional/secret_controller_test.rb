@@ -10,7 +10,7 @@ class SecretControllerTest < ActionController::TestCase
       @game = Game.create!(
         :dimension => 9,
         :black => @adam,
-        :even => @eve
+        :white => @eve
       )
       @secret = Secret.create(
         :user => @adam,

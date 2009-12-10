@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091208200720) do
+ActiveRecord::Schema.define(:version => 20091210031039) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(:version => 20091208200720) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "current_board_id"
+    t.integer  "black_id"
+    t.integer  "white_id"
   end
 
   create_table "secrets", :force => true do |t|

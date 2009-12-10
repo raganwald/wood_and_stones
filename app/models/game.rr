@@ -7,12 +7,24 @@ class Game < ActiveRecord::Base
   validates_presence_of :current_board
   validates_associated :current_board
   
+  belongs_to :black, :class_name => "User", :foreign_key => "black_id"
+  validates_presence_of :black
+  
+  belongs_to :white, :class_name => "User", :foreign_key => "white_id"
+  validates_presence_of :white
+  
   has_many :actions, :class_name => "Action::Base", :foreign_key => "game_id"
   has_many :boards, :through => :actions, :source => :after
   
-  def initialize(options = {})
-    options ||= {} # to handle the vagaries of AR's create method
-    super()
+  OPTIONS = [:handicap, :dimension, :fork]
+  
+  def initialize(attributes)
+    attributes ||= Hash.new
+    options = OPTIONS.inject(Hash.new) do |h, attr|
+      (h[attr] = attributes[attr]) and attributes.delete(attr)
+      h
+    end
+    super(attributes)
     if forked = options[:fork]
       self.current_board = if forked.kind_of?(Board)
         forked
