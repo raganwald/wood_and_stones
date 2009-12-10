@@ -2,6 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class GameTest < ActiveRecord::TestCase
   
+  HANDICAP_AMOUNTS = 2..9
+  
   context "handicaps" do
     
     setup do
@@ -9,7 +11,7 @@ class GameTest < ActiveRecord::TestCase
       @eve = User.find_or_create_by_email('eve@garden.org')
       @matrix = Board::VALID_SIZES.inject(Hash.new) do |sizes_to_game_sets, dimension|
         sizes_to_game_sets.merge(
-          dimension => (2..9).inject(Hash.new) do |stones_to_games, handicap|
+          dimension => HANDICAP_AMOUNTS.inject(Hash.new) do |stones_to_games, handicap|
             stones_to_games.merge(
               handicap => Game.create!(
                 :dimension => dimension,
@@ -23,6 +25,18 @@ class GameTest < ActiveRecord::TestCase
       end
     end
     
+    should "result in the correct number of black stones on the board" do
+      Board::VALID_SIZES.each do |dimension|
+        HANDICAP_AMOUNTS.each do |number_of_stones|
+          board = @matrix[dimension][number_of_stones]
+          blacks, whites = *board.stone_locations
+          assert_equal(number_of_stones, blacks.size)
+          assert_equal(0, whites.size)
+        end
+      end
+      
+    end
+    
     context "9x9 boards" do
       
       setup do
@@ -33,12 +47,6 @@ class GameTest < ActiveRecord::TestCase
         
         setup do
           @board = @boards[2]
-        end
-        
-        should "have two black stone" do
-          blacks, whites = *@board.stone_locations
-          assert_equal(2, blacks.size)
-          assert_equal(0, whites.size)
         end
         
       end
