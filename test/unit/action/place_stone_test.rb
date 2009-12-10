@@ -9,15 +9,7 @@ class Action::PlaceStoneTest < ActiveRecord::TestCase
       @after = Board.create(:dimension => 13)
       @nineteen = Board.create(:dimension => 19)
       @game = Game.create(:dimension => 13)
-      @placement = Action::PlaceStone.new(:position => 'A1', :player => 'white', :game => @game)
-    end
-  
-    context "with no boards" do
-    
-      should "be invalid" do
-        assert !@placement.valid?
-      end
-    
+      @placement = Action::PlaceStone.new(:position => 'aa', :player => 'white', :game => @game)
     end
   
     context "with both valid boards of the same dimension" do

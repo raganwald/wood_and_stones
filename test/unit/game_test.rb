@@ -4,12 +4,16 @@ class GameTest < ActiveRecord::TestCase
   
   HANDICAP_AMOUNTS = 2..9
   
+  def assert_black(across, down, handicap)
+    assert @board[across][down].black?, "Expected #{across}-#{down} to be black on a #{@board.dimension} x #{@board.dimension} board with a #{handicap} handicap"
+  end
+  
   context "handicaps" do
     
     setup do
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
-      @matrix = Board::VALID_SIZES.inject(Hash.new) do |sizes_to_game_sets, dimension|
+      @matrix = Board::DIMENSIONS.inject(Hash.new) do |sizes_to_game_sets, dimension|
         sizes_to_game_sets.merge(
           dimension => HANDICAP_AMOUNTS.inject(Hash.new) do |stones_to_games, handicap|
             stones_to_games.merge(
@@ -26,7 +30,7 @@ class GameTest < ActiveRecord::TestCase
     end
     
     should "result in the correct number of black stones on the board" do
-      Board::VALID_SIZES.each do |dimension|
+      Board::DIMENSIONS.each do |dimension|
         HANDICAP_AMOUNTS.each do |number_of_stones|
           board = @matrix[dimension][number_of_stones]
           blacks, whites = *board.stone_locations
@@ -47,6 +51,50 @@ class GameTest < ActiveRecord::TestCase
         
         setup do
           @board = @boards[2]
+        end
+        
+        should "have stones in the lower left and upper right" do
+          assert_black(2, 6, 2)
+          assert_black(6, 2, 2)
+        end
+        
+      end
+      
+      context "with a four stone handicap" do
+        
+        setup do
+          @board = @boards[4]
+        end
+        
+        should "have a stones in all four corners" do
+          assert_black(2, 6, 4)
+          assert_black(6, 2, 4)
+          assert_black(2, 2, 4)
+          assert_black(6, 6, 4)
+        end
+        
+      end
+      
+    end
+    
+    context "19x19 boards" do
+      
+      setup do
+        @boards = @matrix[19]
+      end
+      
+      context "with a five stone handicap" do
+        
+        setup do
+          @board = @boards[5]
+        end
+        
+        should "have stones in the all four corners and the middle" do
+          assert_black(3, 15, 5)
+          assert_black(15, 3, 5)
+          assert_black(3, 3, 5)
+          assert_black(15, 15, 5)
+          assert_black(9, 9, 5)
         end
         
       end

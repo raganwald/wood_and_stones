@@ -1,5 +1,5 @@
 class Board < ActiveRecord::Base
-  VALID_SIZES = [9, 11, 13, 15, 17, 19]
+  DIMENSIONS = [9, 11, 13, 15, 17, 19]
   class Occupied < Exception
   end
   class Wtf < Exception
@@ -46,11 +46,11 @@ class Board < ActiveRecord::Base
       self.has?("white")
     end
     def has?(colour)
-      (self.board.to_a[self.across][self.down] == colour.to_s.downcase)
+      (self.board.to_a[self.across][self.down] == colour)
     end
     def have(colour)
       arr = self.board.to_a
-      arr[self.across][self.down] = colour.to_s.downcase
+      arr[self.across][self.down] = colour
       self.board.array_hack = arr.inspect
       self
     end
@@ -157,14 +157,14 @@ class Board < ActiveRecord::Base
     end
   end
   before_validation_on_create(:initialize_array_hack)
-  validates_inclusion_of(:dimension, :in => (VALID_SIZES))
+  validates_inclusion_of(:dimension, :in => (DIMENSIONS))
   validate do |board|
     undead = board.dead_stones.all
     unless undead.empty? then
       board.errors.add_to_base("The stones at #{undead.to_sentence} are dead")
     end
   end
-  STARS = Board::VALID_SIZES.inject(Hash.new) do |sizes_to_game_sets, dimension|
+  STARS = Board::DIMENSIONS.inject(Hash.new) do |sizes_to_game_sets, dimension|
     sizes_to_game_sets.merge(dimension => ((offset = (dimension <= 11) ? (3) : (4)
     top = left = (offset - 1)
     middle = (dimension / 2)
