@@ -222,28 +222,63 @@ class GameTest < ActiveRecord::TestCase
     
     end
   
-    context "the first person to play" do
+    context "for a game with 'no' handicap" do
       
-      context "for a game with 'no' handicap" do
-        
-        setup { @game = Game.create(:dimension => 19, :black => @adam, :white => @eve) }
-        
+      setup { @game = Game.create(:dimension => 19, :black => @adam, :white => @eve) }
+      
+      context "the first person to play" do
+      
         should "be black" do
           assert_equal Board::BLACK_S, @game.to_play
         end
-        
+      
       end
       
-      context "for a game with two or more stones handicap" do
+      context "the second person to play" do
         
-        setup { @game = Game.create(:dimension => 13, :handicap => 5, :black => @adam, :white => @eve) }
+        setup do
+          @move = Action::Move.create!(:game => @game, :position => 'aa')
+          @game.reload
+        end
         
+        should "follow a move by black" do
+          assert_equal(Board::BLACK_S, @move.player)
+        end
+      
         should "be white" do
           assert_equal Board::WHITE_S, @game.to_play
         end
-        
+      
       end
       
     end
+      
+    context "for a game with two or more stones handicap" do
+      
+      setup do
+        @game = Game.create(:dimension => 13, :handicap => 5, :black => @adam, :white => @eve)
+        @game.reload
+      end
+      
+      context "the first person to play" do
+      
+        should "be white" do
+          assert_equal Board::WHITE_S, @game.to_play
+        end
+      
+      end
+      
+      context "the second person to play" do
+        
+        setup { Action::Move.create(:game => @game, :position => 'aa') }
+      
+        should "be black" do
+          assert_equal Board::BLACK_S, @game.to_play
+        end
+      
+      end
+      
+    end
+
   end
 end

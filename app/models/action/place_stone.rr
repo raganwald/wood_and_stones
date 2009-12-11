@@ -38,18 +38,22 @@ class Action::PlaceStone < Action::Base
   
   def clone_game_board_to_before
     self.before ||= self.game.andand.current_board
+    true
   end
   
   def clone_before_to_after
     self.after ||= self.before.andand.clone
+    true
   end
   
   def update_game_current_board
     self.game.update_attribute(:current_board, self.after)
+    true
   end
   
   def save_after_board
     self.after.save!
+    true
   end
   
   def place_stone
