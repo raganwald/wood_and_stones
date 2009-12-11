@@ -12,8 +12,8 @@ class Action::SetupStoneTest < ActiveRecord::TestCase
       @eve = User.find_or_create_by_email('eve@garden.org')
       @game = Game.create(:dimension => 13, :black => @adam, :white => @eve)
       @position = 'aa'
-      @player = 'white'
-      @opponent = 'black'
+      @player = Board::WHITE_S
+      @opponent = Board::BLACK_S
       @setup_stone = Action::SetupStone.new(:position => @position, :player => @player, :game => @game)
     end
     

@@ -1,5 +1,6 @@
 class Board < ActiveRecord::Base
   DIMENSIONS = [9, 11, 13, 15, 17, 19]
+  BLACK_S, WHITE_S = "black", "white"
   class Occupied < Exception
   end
   class Wtf < Exception
@@ -40,10 +41,10 @@ class Board < ActiveRecord::Base
       self.board.to_a[self.across][self.down].blank?
     end
     def black?
-      self.has?("black")
+      self.has?(BLACK_S)
     end
     def white?
-      self.has?("white")
+      self.has?(WHITE_S)
     end
     def has?(colour)
       (self.board.to_a[self.across][self.down] == colour)
@@ -55,10 +56,10 @@ class Board < ActiveRecord::Base
       self
     end
     def blacken
-      self.have("black")
+      self.have(BLACK_S)
     end
     def whiten
-      self.have("white")
+      self.have(WHITE_S)
     end
     def remove
       arr = self.board.to_a
@@ -146,7 +147,7 @@ class Board < ActiveRecord::Base
         if value.nil? then
           location.remove
         else
-          if ((value == "white") or (value == "black")) then
+          if ((value == WHITE_S) or (value == BLACK_S)) then
             location.have(value)
           else
             raise(Wtf.new("WTF is a #{value.inspect}?"))
@@ -229,10 +230,10 @@ class Board < ActiveRecord::Base
     returning(BlacksAndWhites.for([], [])) do |blacks, whites|
       (0..(self.dimension - 1)).each do |across|
         (0..(self.dimension - 1)).each do |down|
-          if (self.to_a[across][down] == "black") then
+          if (self.to_a[across][down] == BLACK_S) then
             (blacks << Location.for(self, across, down))
           else
-            if (self.to_a[across][down] == "white") then
+            if (self.to_a[across][down] == WHITE_S) then
               (whites << Location.for(self, across, down))
             end
           end

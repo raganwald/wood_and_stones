@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091210031039) do
+ActiveRecord::Schema.define(:version => 20091211144528) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20091210031039) do
     t.integer  "game_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "cardinality"
   end
 
   create_table "boards", :force => true do |t|
@@ -36,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20091210031039) do
     t.integer  "current_board_id"
     t.integer  "black_id"
     t.integer  "white_id"
+    t.string   "to_play"
   end
 
   create_table "secrets", :force => true do |t|

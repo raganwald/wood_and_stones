@@ -92,8 +92,8 @@ class BoardTest < ActiveRecord::TestCase
       
       setup do
         @board = Board.create(:dimension => 9) do |b|
-          b['aa'] = 'black'
-          b['bb'] = 'white'
+          b['aa'] = Board::BLACK_S
+          b['bb'] = Board::WHITE_S
         end
       end
       
@@ -107,9 +107,9 @@ class BoardTest < ActiveRecord::TestCase
       
       setup do
         @board = Board.create(:dimension => 9) do |b|
-          b['aa'] = 'black'
-          b['ba'] = 'white'
-          b['ab'] = 'white'
+          b['aa'] = Board::BLACK_S
+          b['ba'] = Board::WHITE_S
+          b['ab'] = Board::WHITE_S
         end
       end
       
@@ -164,12 +164,12 @@ class BoardTest < ActiveRecord::TestCase
       
       setup do
         @board = Board.create(:dimension => 9) do |b|
-          b['aa'] = 'black'
-          b['bb'] = 'black'
-          b['cb'] = 'black'
-          b['da'] = 'black'
-          b['ba'] = 'white'
-          b['ca'] = 'white'
+          b['aa'] = Board::BLACK_S
+          b['bb'] = Board::BLACK_S
+          b['cb'] = Board::BLACK_S
+          b['da'] = Board::BLACK_S
+          b['ba'] = Board::WHITE_S
+          b['ca'] = Board::WHITE_S
         end
       end
       
@@ -199,8 +199,8 @@ class BoardTest < ActiveRecord::TestCase
       
       setup do
         @board = Board.create(:dimension => 9) do |b|
-          b['aa'] = 'black'
-          b['ba'] = 'white'
+          b['aa'] = Board::BLACK_S
+          b['ba'] = Board::WHITE_S
         end
       end
       
@@ -225,8 +225,8 @@ class BoardTest < ActiveRecord::TestCase
       
       setup do
         @board = Board.create(:dimension => 9) do |b|
-          b['aa'] = 'black'
-          b['ba'] = 'black'
+          b['aa'] = Board::BLACK_S
+          b['ba'] = Board::BLACK_S
         end
       end
       
@@ -250,8 +250,8 @@ class BoardTest < ActiveRecord::TestCase
       
     setup do
       @board = Board.create(:dimension => 9) do |b|
-        b['aa'] = 'black'
-        b['bb'] = 'white'
+        b['aa'] = Board::BLACK_S
+        b['bb'] = Board::WHITE_S
       end
     end
     
@@ -261,8 +261,8 @@ class BoardTest < ActiveRecord::TestCase
     
     should "produce an array with exactly one stone of each colour" do
       arr = [ 
-        ['black', nil, nil, nil, nil, nil, nil, nil, nil], 
-        [nil, 'white', nil, nil, nil, nil, nil, nil, nil], 
+        [Board::BLACK_S, nil, nil, nil, nil, nil, nil, nil, nil], 
+        [nil, Board::WHITE_S, nil, nil, nil, nil, nil, nil, nil], 
         [nil, nil, nil, nil, nil, nil, nil, nil, nil], 
         [nil, nil, nil, nil, nil, nil, nil, nil, nil], 
         [nil, nil, nil, nil, nil, nil, nil, nil, nil], 
@@ -291,20 +291,20 @@ class BoardTest < ActiveRecord::TestCase
     
     should "allow placement of stones in handicap spots" do
       assert_nothing_raised do
-        @board['dd'] = 'black'
-        @board['jd'] = 'white'
-        @board['jj'] = 'black'
-        @board['dj'] = 'white'
+        @board['dd'] = Board::BLACK_S
+        @board['jd'] = Board::WHITE_S
+        @board['jj'] = Board::BLACK_S
+        @board['dj'] = Board::WHITE_S
       end
     end
   
     context "when stones are placed in handicap spots" do
     
       setup do
-        @board['dd'] = 'black'
-        @board['jd'] = 'white'
-        @board['jj'] = 'black'
-        @board['dj'] = 'white'
+        @board['dd'] = Board::BLACK_S
+        @board['jd'] = Board::WHITE_S
+        @board['jj'] = Board::BLACK_S
+        @board['dj'] = Board::WHITE_S
       end
     
       should "retrieve empty stones in the four corners" do
@@ -330,16 +330,16 @@ class BoardTest < ActiveRecord::TestCase
       #
       # should "reject placement of stones in the handicap spots" do
       #   assert_raise(Board::Occupied) do
-      #     @board['dd'] = 'black'
+      #     @board['dd'] = Board::BLACK_S
       #   end
       #   assert_raise(Board::Occupied) do
-      #     @board['jd'] = 'white'
+      #     @board['jd'] = Board::WHITE_S
       #   end
       #   assert_raise(Board::Occupied) do
-      #     @board['jj'] = 'black'
+      #     @board['jj'] = Board::BLACK_S
       #   end
       #   assert_raise(Board::Occupied) do
-      #     @board['dj'] = 'white'
+      #     @board['dj'] = Board::WHITE_S
       #   end
       # end
       
@@ -348,11 +348,11 @@ class BoardTest < ActiveRecord::TestCase
     context "when there is a dead stone" do
       
       setup do
-        @board['dc'] = 'black'
-        @board['cd'] = 'black'
-        @board['dd'] = 'white'
-        @board['ed'] = 'black'
-        @board['de'] = 'black'
+        @board['dc'] = Board::BLACK_S
+        @board['cd'] = Board::BLACK_S
+        @board['dd'] = Board::WHITE_S
+        @board['ed'] = Board::BLACK_S
+        @board['de'] = Board::BLACK_S
       end
       
       should "not be valid because the white stone is dead" do

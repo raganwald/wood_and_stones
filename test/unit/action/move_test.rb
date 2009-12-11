@@ -9,8 +9,8 @@ class Action::MoveTest < ActiveRecord::TestCase
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
       @game = Game.create(:dimension => 9, :black => @adam, :white => @eve)
-      @player = 'white'
-      @opponent = 'black'
+      @player = Board::WHITE_S
+      @opponent = Board::BLACK_S
     end
     
     should "be a valid game" do

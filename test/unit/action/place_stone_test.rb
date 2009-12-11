@@ -11,7 +11,7 @@ class Action::PlaceStoneTest < ActiveRecord::TestCase
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
       @game = Game.create(:dimension => 13, :black => @adam, :white => @eve)
-      @placement = Action::PlaceStone.new(:position => 'aa', :player => 'white', :game => @game)
+      @placement = Action::PlaceStone.new(:position => 'aa', :player => Board::WHITE_S, :game => @game)
     end
   
     context "with both valid boards of the same dimension" do
