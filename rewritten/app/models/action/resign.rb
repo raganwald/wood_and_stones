@@ -1,2 +1,2 @@
-class Action::Resign < Action::Base
+class Action::Resign < Action::Gameplay
 end

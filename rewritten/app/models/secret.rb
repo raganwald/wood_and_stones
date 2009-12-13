@@ -5,11 +5,11 @@ class Secret < ActiveRecord::Base
   validates_presence_of(:secret)
   before_validation_on_create(:assign_secret)
   def assign_secret
-    self.secret = (__126073541171762__ = (1000000 + rand(9999999))
-    if __126073541171762__.kind_of?(Fixnum) then
-      RewriteRails::ExtensionMethods::Fixnum.shortened(__126073541171762__)
+    self.secret = (__126074547718989__ = (1000000 + rand(9999999))
+    if __126074547718989__.kind_of?(Fixnum) then
+      RewriteRails::ExtensionMethods::Fixnum.shortened(__126074547718989__)
     else
-      __126073541171762__.shortened
+      __126074547718989__.shortened
     end)
     true
   end
