@@ -1,0 +1,2 @@
+module Action::PassHelper
+end

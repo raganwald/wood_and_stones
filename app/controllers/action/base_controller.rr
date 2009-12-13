@@ -1,0 +1,16 @@
+class Action::BaseController < ApplicationController
+  
+  before_filter :get_game
+  
+  def get_game
+    params[:game_id].andand { Game.find(it) }.andand do |game|
+      @game = game
+      @colour_to_play = game.to_play
+      @user_to_play = game.send(game.to_play)
+    end or begin
+      render :status => 404
+      return false
+    end
+  end
+  
+end
