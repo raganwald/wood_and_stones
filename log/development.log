@@ -946,3 +946,54 @@ Migrating to CreateSecretTable (20091208043646)
   [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("boards")[0m
   [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("games")[0m
   [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("secrets")[0m
+  [4;36;1mSQL (2.8ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateGameTable (20091125173704)
+Migrating to CreateBoardTable (20091125195052)
+Migrating to CreateActionTable (20091125210214)
+Migrating to CreateSecretTable (20091208043646)
+Migrating to CreateUsers (20091208200720)
+  [4;36;1mSQL (11.1ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091208200720')[0m
+Migrating to AddPlayersToGames (20091210031039)
+  [4;35;1mSQL (0.9ms)[0m   [0mALTER TABLE "games" ADD "black_id" integer[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mALTER TABLE "games" ADD "white_id" integer[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091210031039')[0m
+Migrating to AddToPlayAndPositionColumns (20091211144528)
+  [4;36;1mSQL (1.0ms)[0m   [0;1mALTER TABLE "games" ADD "to_play" varchar(255)[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mALTER TABLE "actions" ADD "cardinality" integer[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091211144528')[0m
+  [4;35;1mSQL (1.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (1.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("actions")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("boards")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("games")[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("secrets")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("users")[0m
+  [4;36;1mUser Load (0.4ms)[0m   [0;1mSELECT * FROM "users" WHERE ("users"."email" = 'a@b.com') LIMIT 1[0m
+  [4;35;1mUser Exists (0.4ms)[0m   [0mSELECT "users".id FROM "users" WHERE ("users"."email" = 'a@b.com') LIMIT 1[0m
+  [4;36;1mUser Create (0.8ms)[0m   [0;1mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-13 04:12:16', 'a@b.com', '2009-12-13 04:12:16')[0m
+  [4;35;1mUser Load (0.5ms)[0m   [0mSELECT * FROM "users" WHERE ("users"."email" = 'b@c.com') LIMIT 1[0m
+  [4;36;1mUser Exists (0.3ms)[0m   [0;1mSELECT "users".id FROM "users" WHERE ("users"."email" = 'b@c.com') LIMIT 1[0m
+  [4;35;1mUser Create (1.0ms)[0m   [0mINSERT INTO "users" ("updated_at", "email", "created_at") VALUES('2009-12-13 04:12:29', 'b@c.com', '2009-12-13 04:12:29')[0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-13 04:13:17', 9, '2009-12-13 04:13:17')[0m
+  [4;35;1mGame Create (0.7ms)[0m   [0mINSERT INTO "games" ("updated_at", "to_play", "current_board_id", "black_id", "white_id", "state", "created_at") VALUES('2009-12-13 04:13:17', 'white', 1, 1, 2, 'started', '2009-12-13 04:13:17')[0m
+  [4;36;1mGame Load (1.5ms)[0m   [0;1mSELECT * FROM "games" WHERE ("games"."id" = 1) [0m
+  [4;35;1mBoard Load (1.1ms)[0m   [0mSELECT * FROM "boards" WHERE ("boards"."id" = 1) [0m
+  [4;36;1mBoard Create (0.8ms)[0m   [0;1mINSERT INTO "boards" ("array_hack", "updated_at", "dimension", "created_at") VALUES('[[nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil], [nil, nil, nil, nil, nil, nil, nil, nil, nil]]', '2009-12-13 04:14:47', 9, '2009-12-13 04:14:47')[0m
+  [4;35;1mGame Create (0.7ms)[0m   [0mINSERT INTO "games" ("updated_at", "to_play", "current_board_id", "black_id", "white_id", "state", "created_at") VALUES('2009-12-13 04:14:47', 'white', 2, 1, 2, 'started', '2009-12-13 04:14:47')[0m
+  [4;36;1mBoard Load (1.4ms)[0m   [0;1mSELECT * FROM "boards" WHERE ("boards"."id" = 2) [0m
+  [4;35;1mBoard Load (1.1ms)[0m   [0mSELECT * FROM "boards" WHERE ("boards"."id" = 2) [0m
+  [4;36;1mBoard Load (1.2ms)[0m   [0;1mSELECT * FROM "boards" WHERE ("boards"."id" = 2) [0m
+  [4;35;1mGame Load (0.4ms)[0m   [0mSELECT "games".* FROM "games" INNER JOIN "actions" ON "games".id = "actions".game_id WHERE (("actions".after_id = 2)) [0m

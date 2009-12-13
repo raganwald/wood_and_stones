@@ -1,0 +1,2 @@
+module Action::MoveHelper
+end

@@ -1,0 +1,35 @@
+class Action::MoveController < ApplicationController
+  
+  before_filter :get_game
+  before_filter :check_authorization, :only => :create
+  
+  def create
+    @move = Action::Move.create(
+      :game => @game,
+      :position => params[:position]
+    )
+    render :status => 403 unless @move.valid?
+  end
+  
+  private
+  
+  def get_game
+    params[:game_id].andand { Game.find(it) }.andand do |game|
+      @game = game
+      @colour_to_play = game.to_play
+      @user_to_play = game.send(game.to_play)
+    end or begin
+      render :status => 404
+      return false
+    end
+  end
+  
+  def check_authorization
+    unless self.current_user == @user_to_play
+      render :status => 401
+      return false
+    end
+    true
+  end
+
+end

@@ -39,6 +39,7 @@ class Game < ActiveRecord::Base
       options[:handicap].to_i.into do |handicap| # nil.to_i == 0!
         if handicap > 1
           self.current_board.handicap(handicap)
+          self.current_board.save!
           self.to_play = Board::WHITE_S
         else
           self.to_play = Board::BLACK_S

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class GameTest < ActiveRecord::TestCase
   
-  HANDICAP_AMOUNTS = 2..9
+  HANDICAP_AMOUNTS =  2..9
   
   def assert_black(across, down, handicap)
     assert @board[across][down].black?, "Expected #{across}-#{down} to be black on a #{@board.dimension} x #{@board.dimension} board with a #{handicap} handicap"
@@ -14,7 +14,7 @@ class GameTest < ActiveRecord::TestCase
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
     end
-=begin
+
     context "handicaps" do
     
       setup do
@@ -22,18 +22,21 @@ class GameTest < ActiveRecord::TestCase
           sizes_to_game_sets.merge(
             dimension => HANDICAP_AMOUNTS.inject(Hash.new) do |stones_to_games, handicap|
               stones_to_games.merge(
-                handicap => Game.create!(
-                  :dimension => dimension,
-                  :handicap => handicap,
-                  :black => @adam,
-                  :white => @eve
+                handicap => returning(
+                  Game.create!(
+                    :dimension => dimension,
+                    :handicap => handicap,
+                    :black => @adam,
+                    :white => @eve
+                  ),
+                  &:reload # force a reload to make sure there's no unsaved changes
                 ).current_board
               )
             end
           )
         end
       end
-    
+ 
       should "result in the correct number of black stones on the board" do
         Board::DIMENSIONS.each do |dimension|
           HANDICAP_AMOUNTS.each do |number_of_stones|
@@ -43,7 +46,6 @@ class GameTest < ActiveRecord::TestCase
             assert_equal(0, whites.size)
           end
         end
-      
       end
     
       context "9x9 boards" do
@@ -105,9 +107,10 @@ class GameTest < ActiveRecord::TestCase
         end
       
       end
+
     
     end
-=end  
+
     context "a new game" do
     
       setup do
@@ -151,6 +154,28 @@ class GameTest < ActiveRecord::TestCase
               [nil,     nil,     nil, nil, nil, nil, nil, nil, nil], 
               [nil,     nil,     nil, nil, nil, nil, nil, nil, nil]
             ], @game.current_board.to_a
+          end
+          
+          context "after the current board is reloaded" do
+            
+            setup do
+              @game.current_board.reload
+            end
+            
+            should "produce the correct board" do
+              assert_equal [
+                ["white", nil,     nil, nil, nil, nil, nil, nil, nil],
+                ["black", "white", nil, nil, nil, nil, nil, nil, nil], 
+                [nil,     "black", nil, nil, nil, nil, nil, nil, nil], 
+                ["black", nil,     nil, nil, nil, nil, nil, nil, nil], 
+                [nil,     nil,     nil, nil, nil, nil, nil, nil, nil],
+                [nil,     nil,     nil, nil, nil, nil, nil, nil, nil], 
+                [nil,     nil,     nil, nil, nil, nil, nil, nil, nil], 
+                [nil,     nil,     nil, nil, nil, nil, nil, nil, nil], 
+                [nil,     nil,     nil, nil, nil, nil, nil, nil, nil]
+              ], @game.current_board.to_a
+            end
+            
           end
 
           should "produce a valid game" do
@@ -279,6 +304,7 @@ class GameTest < ActiveRecord::TestCase
       end
       
     end
+
 
   end
 end
