@@ -32,6 +32,78 @@ class Action::PassTest < ActiveRecord::TestCase
         assert @pass_one.after
         assert_equal(@pass_one.before.to_a, @pass_one.after.to_a)
       end
+        
+      should "not end the game" do
+        assert !@game.ended?
+      end
+      
+      context "followed immediately by another pass" do
+        
+        setup do
+          @pass_two = Action::Pass.create(:game => @game)
+        end
+        
+        should "be valid" do
+          assert @pass_two.valid?, "errors: #{@pass_two.errors.full_messages.to_sentence}, state: #{@game.state}"
+        end
+        
+        should "end the game" do
+          assert @game.ended?
+        end
+        
+        context "followed by a third pass" do
+        
+          setup do
+            @pass_three = Action::Pass.create(:game => @game)
+          end
+        
+          should "not be valid" do
+            assert !@pass_three.valid?
+          end
+        
+          should "not un-end the game" do
+            assert @game.ended?
+          end
+        
+        end
+        
+        # context "followed by another move"
+      
+      end
+      
+      context "followed immediately by a move and then another pass" do
+        
+        setup do
+          Action::Move.create(:game=>@game, :position => 'bb')
+          @pass_two = Action::Pass.create(:game => @game)
+        end
+        
+        should "be valid" do
+          assert @pass_two.valid?
+        end
+        
+        should "not end the game" do
+          assert !@game.ended?
+        end
+        
+        context "followed by a third pass pass" do
+        
+          setup do
+            @pass_three = Action::Pass.create(:game => @game)
+          end
+        
+          should "be valid" do
+            assert @pass_three.valid?
+          end
+        
+          should "end the game" do
+            assert @game.ended?
+          end
+        end
+        
+        # context "followed by another move"
+      
+      end
       
     end
     

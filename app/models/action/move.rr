@@ -1,7 +1,6 @@
 # A move is a placement of a stone that happens when a player places a stone on their turn
-class Action::Move < Action::Base
+class Action::Move < Action::Gameplay
   
-  include Action::PlayerAction
   include Action::PlaceStone
   
   before_validation_on_create :remove_opponent_dead_stones

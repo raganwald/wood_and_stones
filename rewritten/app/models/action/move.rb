@@ -1,5 +1,4 @@
-class Action::Move < Action::Base
-  include(Action::PlayerAction)
+class Action::Move < Action::Gameplay
   include(Action::PlaceStone)
   before_validation_on_create(:remove_opponent_dead_stones)
   validates_each(:after) do |move, attr, board|

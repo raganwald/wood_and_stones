@@ -1,4 +1,5 @@
-# A SetupStone is a placement for setting up a position
+# Places a stone without being gameplay
+
 class Action::SetupStone < Action::Base
   
   include Action::PlaceStone

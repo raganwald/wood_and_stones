@@ -47,9 +47,12 @@ class Game < ActiveRecord::Base
     end
   end
   state_machine do
-    event(:start) { transition(:to => :started) }
-    event(:fork) { transition(:to => :forked) }
-    event(:move) { transition(:from => ([:started, :moved]), :to => :moved) }
-    event(:end) { transition(:from => ([:started, :moved]), :to => :ended) }
+    event(:start) { transition(nil => :started) }
+    event(:fork) { transition(all => :forked) }
+    event(:move) { transition((all - [:ended]) => :moved) }
+    event(:pass) do
+      transition((all - [:ended, :passed]) => :passed, :passed => :ended)
+    end
+    event(:resign) { transition(all => :ended) }
   end
 end

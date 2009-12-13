@@ -3,10 +3,7 @@ module Action::PlaceStone
   def self.included(receiver)
     receiver.instance_eval do |foo|
       # these affect validation
-      before_validation_on_create :clone_game_board_to_before, :clone_before_to_after, :place_stone
-      before_create :update_game_current_board
-        
-      after_create :save_after_board
+      before_validation_on_create :place_stone
         
       validates_presence_of(:before, :on => :create, :message => "can't be blank")
       validates_presence_of(:after, :on => :create, :message => "can't be blank")
@@ -38,26 +35,6 @@ module Action::PlaceStone
   
     end
     
-  end
-  
-  def clone_game_board_to_before
-    self.before ||= self.game.andand.current_board
-    true
-  end
-  
-  def clone_before_to_after
-    self.after ||= self.before.andand.clone
-    true
-  end
-  
-  def update_game_current_board
-    self.game.update_attribute(:current_board, self.after)
-    true
-  end
-  
-  def save_after_board
-    self.after.save!
-    true
   end
   
   def place_stone
