@@ -1,2 +1,3 @@
-class Action::SetupStone < Action::PlaceStone
+class Action::SetupStone < Action::Base
+  include(Action::PlaceStone)
 end

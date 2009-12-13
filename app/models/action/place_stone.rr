@@ -1,40 +1,44 @@
-class Action::PlaceStone < Action::Base
+module Action::PlaceStone
   
-  # these affect validation
-  before_validation_on_create :clone_game_board_to_before, :clone_before_to_after, :place_stone
-  before_create :update_game_current_board
-  
-  after_create :save_after_board
-  
-  validates_presence_of :before, :on => :create, :message => "can't be blank"
-  validates_presence_of :after, :on => :create, :message => "can't be blank"
-  validates_presence_of :position, :on => :create, :message => "can't be blank"
-  
-  # a valid placement is not exactly the same thing as a valid move
-  # validation occurs after the creation of before and after
-  validates_each :position do |record, attr, value|
-    if record.before
-      record.errors.add attr, 'should be of the form aa and be a valid position on the board' unless begin
-        record.before.valid_position?(value)
+  def self.included(receiver)
+    receiver.instance_eval do |foo|
+      # these affect validation
+      before_validation_on_create :clone_game_board_to_before, :clone_before_to_after, :place_stone
+      before_create :update_game_current_board
+        
+      after_create :save_after_board
+        
+      validates_presence_of(:before, :on => :create, :message => "can't be blank")
+      validates_presence_of(:after, :on => :create, :message => "can't be blank")
+      validates_presence_of(:position, :on => :create, :message => "can't be blank")
+        
+      # a valid placement is not exactly the same thing as a valid move
+      # validation occurs after the creation of before and after
+      validates_each :position do |record, attr, value|
+        if record.before
+          record.errors.add attr, 'should be of the form aa and be a valid position on the board' unless begin
+            record.before.valid_position?(value)
+          end
+          record.errors.add attr, 'should be to an empty place on the board' unless begin
+            record.before[value].open?
+          end
+        end
       end
-      record.errors.add attr, 'should be to an empty place on the board' unless begin
-        record.before[value].open?
+        
+      validates_each :after do |record, attr, value|
+        if record.after
+          record.errors.add attr, "should be the same dimension as :before" unless begin
+            value.dimension == record.before.andand.dimension
+          end
+          record.errors.add attr, 'should result in a stone placed on the board' unless begin
+            value[record.position].has?(record.player)
+          end
+        end
       end
+  
     end
+    
   end
-  
-  validates_each :after do |record, attr, value|
-    if record.after
-      record.errors.add attr, "should be the same dimension as :before" unless begin
-        value.dimension == record.before.andand.dimension
-      end
-      record.errors.add attr, 'should result in a stone placed on the board' unless begin
-        value[record.position].has?(record.player)
-      end
-    end
-  end
-  
-  private
   
   def clone_game_board_to_before
     self.before ||= self.game.andand.current_board
