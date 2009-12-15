@@ -5,7 +5,7 @@ class AddToPlayAndPositionColumns < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :actions, :cardinality rescue nil
+    remove_column :actions, :cardinality
     remove_column :games, :to_play
   end
 end

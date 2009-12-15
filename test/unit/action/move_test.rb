@@ -43,18 +43,28 @@ class Action::MoveTest < ActiveRecord::TestCase
       context "when killing another stone" do
         
         setup do
-          @before['ab'] = @opponent
-          @before['bb'] = @player
-          @before['ac'] = @player
-          @move = Action::Move.create(:game => @game, :before => @before, :position => @position, :player => @player)
+          Action::Move.create(:game => @game, :position => 'ad')
+          Action::Move.create(:game => @game, :position => 'ac')
+          Action::Move.create(:game => @game, :position => 'bc')
+          Action::Move.create(:game => @game, :position => 'ab')
+          Action::Move.create(:game => @game, :position => 'bb')
+          Action::Move.create(:game => @game, :position => 'bd')
+          @was_captured_blacks = @game.captured_blacks
+          @move = Action::Move.create(:game => @game, :position => 'aa')
+          @game.reload
         end
         
         should "be a valid move" do
-          assert @move.valid?
+          assert @move.valid?, @move.errors.full_messages.to_sentence
         end
         
         should "kill opponent's stones" do
           assert @move.after['ab'].open?
+          assert @move.after['ac'].open?
+        end
+        
+        should "increment the number of captured stones" do
+          assert_equal(@was_captured_blacks + 2, @game.captured_blacks, @game.inspect)
         end
         
       end
