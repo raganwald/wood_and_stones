@@ -10,8 +10,10 @@ class GameControllerTest < ActionController::TestCase
       @serpent = User.find_or_create_by_email('jake@the-snake.com')
     end
     
-    should "not be any games between these two players" do
+    should "not be any games between any of these players" do
       assert_equal(0, Game.played_by(@adam).played_by(@eve).count)
+      assert_equal(0, Game.played_by(@adam).played_by(@serpent).count)
+      assert_equal(0, Game.played_by(@eve).played_by(@serpent).count)
     end
   
     context "when nobody is signed in" do
@@ -35,9 +37,11 @@ class GameControllerTest < ActionController::TestCase
       end
       
       should "create an email invite for the black player" do
+        # TODO
       end
       
       should "create an email invite for the white player" do
+        # TODO
       end
       
       
@@ -49,19 +53,40 @@ class GameControllerTest < ActionController::TestCase
         login_as @adam
       end
       
-      # context "and the game features the user as black" do
-      # end
-      # 
-      # context "and the game features the user as white" do
-      # end
+      context "and the game features the user" do
+      
+        setup do
+          post :create, :black => @adam.email, :white => @eve.email, :dimension => 19, :handicap => 0
+          @game = Game.played_by(@adam).played_by(@eve).first
+        end
+      
+        should_redirect_to "the page showing a game" do
+          {:method => :show}
+        end
+      
+        should "create a new game" do
+          assert_not_nil @game
+        end
+      
+        should "create new secrets for each player" do
+          assert_not_nil @game.secrets.for_user(@adam).first
+          assert_not_nil @game.secrets.for_user(@eve).first
+        end
+      
+      end
       
       context "and the game does not feature the user" do
         
         setup do
           post :create, :black => @serpent.email, :white => @eve.email, :dimension => 19, :handicap => 0
+          @game = Game.played_by(@serpent).played_by(@eve).first
         end
         
         should_respond_with 401
+      
+        should "not create a new game" do
+          assert_nil @game
+        end
         
       end
       
