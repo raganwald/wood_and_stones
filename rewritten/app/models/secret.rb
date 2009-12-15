@@ -4,12 +4,13 @@ class Secret < ActiveRecord::Base
   validates_uniqueness_of(:secret)
   validates_presence_of(:secret)
   before_validation_on_create(:assign_secret)
+  named_scope(:for_user, lambda { |user| { :conditions => ({ :user_id => (user.id) }) } })
   def assign_secret
-    self.secret = (__126074547718989__ = (1000000 + rand(9999999))
-    if __126074547718989__.kind_of?(Fixnum) then
-      RewriteRails::ExtensionMethods::Fixnum.shortened(__126074547718989__)
+    self.secret = (__126084382858745__ = (1000000 + rand(9999999))
+    if __126084382858745__.kind_of?(Fixnum) then
+      RewriteRails::ExtensionMethods::Fixnum.shortened(__126084382858745__)
     else
-      __126074547718989__.shortened
+      __126084382858745__.shortened
     end)
     true
   end
