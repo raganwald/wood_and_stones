@@ -67,10 +67,24 @@ class GameControllerTest < ActionController::TestCase
         should "create a new game" do
           assert_not_nil @game
         end
+        
+        context "the new secrets for each player" do
       
-        should "create new secrets for each player" do
-          assert_not_nil @game.secrets.for_user(@adam).first
-          assert_not_nil @game.secrets.for_user(@eve).first
+          setup do
+            @adams_secret = @game.secrets.for_user(@adam).first
+            @eves_secret = @game.secrets.for_user(@eve).first
+          end
+          
+          should "exist" do
+            assert_not_nil(@adams_secret)
+            assert_not_nil(@eves_secret)
+          end
+        
+          should "create notifications for each player" do
+            assert_not_nil(@adams_secret.notifications.first)
+            assert_not_nil(@eves_secret.notifications.first)
+          end
+        
         end
       
       end

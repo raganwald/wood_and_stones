@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091215050225) do
+ActiveRecord::Schema.define(:version => 20091216015856) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
@@ -33,14 +33,24 @@ ActiveRecord::Schema.define(:version => 20091215050225) do
 
   create_table "games", :force => true do |t|
     t.string   "state"
-    t.integer  "current_board_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "current_board_id"
     t.integer  "black_id"
     t.integer  "white_id"
     t.string   "to_play"
     t.integer  "captured_whites",  :default => 0
     t.integer  "captured_blacks",  :default => 0
+  end
+
+  create_table "notifications", :force => true do |t|
+    t.string   "type"
+    t.integer  "recipient_id"
+    t.integer  "subject_id"
+    t.string   "subject_type", :default => "Secret"
+    t.datetime "sent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "secrets", :force => true do |t|
