@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(:version => 20091216015856) do
 
   create_table "notifications", :force => true do |t|
     t.string   "type"
-    t.integer  "recipient_id"
+    t.integer  "user_id"
     t.integer  "subject_id"
     t.string   "subject_type", :default => "Secret"
     t.datetime "sent"

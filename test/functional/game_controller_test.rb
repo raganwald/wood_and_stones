@@ -81,8 +81,8 @@ class GameControllerTest < ActionController::TestCase
           end
         
           should "create notifications for each player" do
-            assert_not_nil(@adams_secret.notifications.first)
-            assert_not_nil(@eves_secret.notifications.first)
+            assert_not_nil(@adams_secret.notifications.first, "no notification was created for #{@adam.email}")
+            assert_not_nil(@eves_secret.notifications.first, "no notification was created for #{@eve.email}")
           end
         
         end
