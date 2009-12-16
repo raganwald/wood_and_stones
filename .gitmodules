@@ -10,3 +10,6 @@
 [submodule "vendor/plugins/state_machine"]
 	path = vendor/plugins/state_machine
 	url = git://github.com/pluginaweek/state_machine.git
+[submodule "vendor/plugins/delayed_job"]
+	path = vendor/plugins/delayed_job
+	url = git://github.com/tobi/delayed_job.git

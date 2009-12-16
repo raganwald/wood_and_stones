@@ -1,0 +1,6 @@
+log/*.log
+db/*.sqlite3
+tmp/**/*
+doc/api
+doc/app
+doc/plugins
