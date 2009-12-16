@@ -14,8 +14,6 @@ class GameController < ApplicationController
           :handicap => params[:handicap]
         )
         if @game.valid?
-          Secret.create!(:user => @game.black, :target => @game)
-          Secret.create!(:user => @game.white, :target => @game)
           redirect_to :method => :show
         end
       end

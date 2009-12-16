@@ -7,11 +7,7 @@ class GameController < ApplicationController
     else
       Game.transaction do
         @game = Game.create(:black => (@black), :white => (@white), :dimension => (params[:dimension]), :handicap => (params[:handicap]))
-        if @game.valid? then
-          Secret.create!(:user => (@game.black), :target => (@game))
-          Secret.create!(:user => (@game.white), :target => (@game))
-          redirect_to(:method => :show)
-        end
+        redirect_to(:method => :show) if @game.valid?
       end
     end
   end

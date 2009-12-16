@@ -13,3 +13,6 @@
 [submodule "vendor/plugins/delayed_job"]
 	path = vendor/plugins/delayed_job
 	url = git://github.com/tobi/delayed_job.git
+[submodule "vendor/plugins/mocha"]
+	path = vendor/plugins/mocha
+	url = git://github.com/floehopper/mocha.git

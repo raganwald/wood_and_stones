@@ -5,6 +5,8 @@ class GameControllerTest < ActionController::TestCase
   context "creating a game" do
     
     setup do
+      Game.delete_all
+      Delayed::Job.delete_all
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
       @serpent = User.find_or_create_by_email('jake@the-snake.com')
@@ -36,12 +38,8 @@ class GameControllerTest < ActionController::TestCase
         assert_not_nil @game.secrets.for_user(@eve).first
       end
       
-      should "create an email invite for the black player" do
-        # TODO
-      end
-      
-      should "create an email invite for the white player" do
-        # TODO
+      should "enqueue jobs to invite the players" do
+        assert_equal(2, Delayed::Job.all.size)
       end
       
       
@@ -81,8 +79,7 @@ class GameControllerTest < ActionController::TestCase
           end
         
           should "create notifications for each player" do
-            assert_not_nil(@adams_secret.notifications.first, "no notification was created for #{@adam.email}")
-            assert_not_nil(@eves_secret.notifications.first, "no notification was created for #{@eve.email}")
+            assert_equal(2, Delayed::Job.all.size)
           end
         
         end

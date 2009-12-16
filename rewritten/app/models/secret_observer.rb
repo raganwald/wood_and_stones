@@ -1,5 +1,5 @@
 class SecretObserver < ActiveRecord::Observer
   def after_create(secret)
-    Notification::ShareSecret.create!(:user => (secret.user), :subject => (secret))
+    Delayed::Job.enqueue(Job::SecretNotification.new(secret))
   end
 end
