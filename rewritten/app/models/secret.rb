@@ -7,11 +7,11 @@ class Secret < ActiveRecord::Base
   has_many(:notifications, :as => :subject, :class_name => "Notification::Base")
   named_scope(:for_user, lambda { |user| { :conditions => ({ :user_id => (user.id) }) } })
   def assign_secret
-    self.secret = (__126099222843126__ = (1000000 + rand(9999999))
-    if __126099222843126__.kind_of?(Fixnum) then
-      RewriteRails::ExtensionMethods::Fixnum.shortened(__126099222843126__)
+    self.secret = (__126106401915228__ = (1000000 + rand(9999999))
+    if __126106401915228__.kind_of?(Fixnum) then
+      RewriteRails::ExtensionMethods::Fixnum.shortened(__126106401915228__)
     else
-      __126099222843126__.shortened
+      __126106401915228__.shortened
     end)
     true
   end

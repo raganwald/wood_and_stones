@@ -129,7 +129,7 @@ class GameTest < ActiveRecord::TestCase
         end
 
         should "produce a valid game" do
-          assert @game.valid?
+          assert_valid @game
         end
       
         should "produce a set of five boards for the game" do
@@ -179,7 +179,7 @@ class GameTest < ActiveRecord::TestCase
           end
 
           should "produce a valid game" do
-            assert @game.valid?
+            assert_valid @game
           end
         
           should "leaving an open place" do
@@ -202,7 +202,7 @@ class GameTest < ActiveRecord::TestCase
             end
 
             should "not invalidate the game" do
-              assert @game.valid?
+              assert_valid @game
             end
         
           end
@@ -226,11 +226,11 @@ class GameTest < ActiveRecord::TestCase
           end
         
           should "be valid" do
-            assert @game.valid?, @game.errors.full_messages.inspect
+            assert_valid @game
           end
         
           should "have a valid current_board" do
-            assert @game.current_board.valid?, @game.current_board.errors.full_messages.inspect
+            assert_valid @game.current_board
           end
         
         end

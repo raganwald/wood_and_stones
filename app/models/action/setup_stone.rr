@@ -1,7 +1,0 @@
-# Places a stone without being gameplay
-
-class Action::SetupStone < Action::Base
-  
-  include Action::PlaceStone
-  
-end

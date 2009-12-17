@@ -43,4 +43,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  
+  def assert_valid(obj)
+    assert obj.valid?, "Errors: #{obj.errors.full_messages.to_sentence}"
+  end
 end

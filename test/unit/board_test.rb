@@ -11,7 +11,7 @@ class BoardTest < ActiveRecord::TestCase
       end
       
       should "be valid" do
-        assert @board.valid?
+        assert_valid @board
       end
       
     end

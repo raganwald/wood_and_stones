@@ -15,7 +15,7 @@ class Action::PassTest < ActiveRecord::TestCase
     end
     
     should "be a valid game" do
-      assert @game.valid?, @game.errors.full_messages.to_sentence
+      assert_valid @game
     end
     
     context "a single pass" do
@@ -25,7 +25,7 @@ class Action::PassTest < ActiveRecord::TestCase
       end
         
       should "be a valid" do
-        assert @pass_one.valid?
+        assert_valid @pass_one
       end
       
       should "produce a board with the identical configuration" do
@@ -44,7 +44,7 @@ class Action::PassTest < ActiveRecord::TestCase
         end
         
         should "be valid" do
-          assert @pass_two.valid?, "errors: #{@pass_two.errors.full_messages.to_sentence}, state: #{@game.state}"
+          assert_valid @pass_two
         end
         
         should "end the game" do
@@ -79,7 +79,7 @@ class Action::PassTest < ActiveRecord::TestCase
         end
         
         should "be valid" do
-          assert @pass_two.valid?
+          assert_valid @pass_two
         end
         
         should "not end the game" do
@@ -93,7 +93,7 @@ class Action::PassTest < ActiveRecord::TestCase
           end
         
           should "be valid" do
-            assert @pass_three.valid?
+            assert_valid @pass_three
           end
         
           should "end the game" do

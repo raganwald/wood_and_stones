@@ -14,7 +14,7 @@ class Action::MoveTest < ActiveRecord::TestCase
     end
     
     should "be a valid game" do
-      assert @game.valid?, @game.errors.full_messages.to_sentence
+      assert_valid @game
     end
     
     context "to the top-left corner" do
@@ -30,7 +30,7 @@ class Action::MoveTest < ActiveRecord::TestCase
         end
         
         should "be a valid move" do
-          assert @move.valid?
+          assert_valid @move
         end
         
         should "produce a board with the correct placement" do
@@ -55,7 +55,7 @@ class Action::MoveTest < ActiveRecord::TestCase
         end
         
         should "be a valid move" do
-          assert @move.valid?, @move.errors.full_messages.to_sentence
+          assert_valid @move
         end
         
         should "kill opponent's stones" do

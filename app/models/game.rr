@@ -37,7 +37,7 @@ class Game < ActiveRecord::Base
       elsif forked.respond_to?(:current_board)
         forked.current_board
       else
-        raise Game::InvalidInitialization.new("Don't know what to do with a #{it.inspect}")
+        self.errors.add :before, "cannot initialize a game without forking or setting a dimension"
       end
       fork
     elsif dimension = options[:dimension]
@@ -53,7 +53,7 @@ class Game < ActiveRecord::Base
       end 
       start
     else 
-      raise Game::InvalidInitialization.new("cannot initialize a game without forking or setting a dimension")
+      self.errors.add :before, "cannot initialize a game without forking or setting a dimension"
     end
   end
   
