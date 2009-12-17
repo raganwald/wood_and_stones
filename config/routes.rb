@@ -26,7 +26,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Sample resource route within a namespace:
   #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
+  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/game/products_controller.rb)
   #     admin.resources :products
   #   end
 
@@ -34,6 +34,8 @@ ActionController::Routing::Routes.draw do |map|
   # map.root :controller => "welcome"
 
   # See how all your routes lay out with "rake routes"
+  
+  map.resources :game
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

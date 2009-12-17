@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  layout("iphone")
   include(Authenticatable::ControllerMethods)
   helper(:all)
   protect_from_forgery
