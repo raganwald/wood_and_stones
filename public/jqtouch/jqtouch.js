@@ -23,6 +23,8 @@
 
 */
 
+alert('loaded');
+
 (function($) {
     $.jQTouch = function(options) {
         

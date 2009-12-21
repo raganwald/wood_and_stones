@@ -2,7 +2,7 @@
   .toolbar 
     %h1 New Game
     %a.back{:href=>"#"} Back
-  %form{:action=>url_for(:controller=>:game, :action=>:create), :method=>'POST'}
+  %form#ajax_create.form{:action=>url_for(:controller=>:game, :action=>:create), :method=>'POST'}
     %ul.edit.rounded
       %li
         Between:
