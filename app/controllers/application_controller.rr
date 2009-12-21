@@ -15,8 +15,13 @@ class ApplicationController < ActionController::Base
   
   before_filter :set_instance
   
-  def set_instance(name = self.class.name.demodulize.underscore[/^(.*)_controller$/, 1])
-    (params["#{name}_id"] or params[:id]).andand { set_instance_variable(name, it) }
+  def set_instance(
+    name = self.class.name.demodulize.underscore[/^(.*)_controller$/, 1],
+    model_class = self.class.name[/^(.*)Controller$/, 1].andand { Kernel.const_get(it) }
+  )
+    (params["#{name}_id"] or params[:id]).andand do |it|
+      instance_variable_set('@' + name, model_class.find(it))
+    end
   end
   
 end

@@ -1,0 +1,30 @@
+#new.current
+  .toolbar 
+    %h1 New Game
+    %a.back{:href=>"#"} Back
+  %form{:action=>game_path(), :method=>'POST'}
+    %ul.edit.rounded
+      %li
+        Between:
+        %input#black{:name=>'black', :placeholder=>"Black's email", :type=>'text'}/
+      %li
+        and:
+        %input#white{:name=>'white', :placeholder=>"White's email", :type=>'text'}/
+      %li
+        Size: 
+        %select#dimension
+          - Board::DIMENSIONS.each do |dim|
+            %option{:value=>dim} #{dim}x#{dim}
+      %li
+        Handicap:
+        %select#handicap
+          %option{:value=>0} Black plays first
+          %option{:value=>2} Two stones
+          %option{:value=>3} Three stones
+          %option{:value=>4} Four stones
+          %option{:value=>5} Five stones
+          %option{:value=>6} Six stones
+          %option{:value=>7} Seven stones
+          %option{:value=>8} Eight stones
+          %option{:value=>9} Nine stones
+    %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} New Game

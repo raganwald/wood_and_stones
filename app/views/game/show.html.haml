@@ -1,0 +1,14 @@
+#current_board.current
+  -# TODO: flip to history in another div
+  .toolbar 
+    %h1 Game
+    %a.back{:href=>"#"} Back
+  .board
+    - board = @game.current_board
+    - (0..(board.dimension - 1)).each do |down|
+      .row
+        - (0..(board.dimension - 1)).each do |across|
+          - location = board[across][down]
+          %img{ :src => tile_path(location) }>
+#settings
+  -# list all game settings

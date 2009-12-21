@@ -4,7 +4,20 @@
     %script{:type => 'text/javascript', :src => 'http://www.google.com/jsapi'}
     :javascript 
       google.load("jquery", "1.3.2");
-    %script{:type => 'text/x-javascript', :src => "jqtouch/jqtouch.min.js", :charset => "utf-8"}
-    %style{:type=>"text/css", :media=>"screen"} @import "jqtouch/jqtouch.min.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "themes/jqt/theme.min.css";
+    %script{:type => 'text/x-javascript', :src => "/jqtouch/jqtouch.min.js", :charset => "utf-8"}
+    %style{:type=>"text/css", :media=>"screen"} @import "/jqtouch/jqtouch.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "/themes/jqt/theme.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/application.css";
+    :javascript
+      $.jQTouch({
+          icon: 'jqtouch.png',
+          statusBar: 'black-translucent',
+          preloadImages: [
+              '/themes/jqt/img/chevron_white.png',
+              '/themes/jqt/img/bg_row_select.gif',
+              '/themes/jqt/img/back_button_clicked.png',
+              '/themes/jqt/img/button_clicked.png'
+              ]
+      });
   %body
+    =yield

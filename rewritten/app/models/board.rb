@@ -91,6 +91,27 @@ class Board < ActiveRecord::Base
     def has_liberty?
       (not self.liberties.empty?)
     end
+    def left_edge?
+      (self.across == 0)
+    end
+    def right_edge?
+      (self.across == (self.board.dimension - 1))
+    end
+    def center?
+      ((not self.left_edge?) and (not self.right_edge?))
+    end
+    def top_edge?
+      (self.down == 0)
+    end
+    def bottom_edge?
+      (self.down == (self.board.dimension - 1))
+    end
+    def middle?
+      ((not self.top_edge?) and (not self.bottom_edge?))
+    end
+    def hoshi?
+      self.board.hoshi_points.include?(self)
+    end
     def to_s
       (LETTERS[self.across] + LETTERS[self.down]).downcase
     end
@@ -172,8 +193,18 @@ class Board < ActiveRecord::Base
     bottom = right = (dimension - offset)
     { 2 => ([[left, bottom], [right, top]]), 3 => ([[left, bottom], [right, top], [right, bottom]]), 4 => ([[left, bottom], [right, top], [right, bottom], [left, top]]), 5 => ([[left, bottom], [right, top], [right, bottom], [left, top], [middle, middle]]), 6 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle]]), 7 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle], [middle, middle]]), 8 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle], [middle, top], [middle, bottom]]), 9 => ([[left, bottom], [right, top], [right, bottom], [left, top], [left, middle], [right, middle], [middle, top], [middle, bottom], [middle, middle]]) })))
   end
+  HOSHI = Board::DIMENSIONS.inject(Hash.new) do |board_size_to_number_of_hoshi, dimension|
+    board_size_to_number_of_hoshi.merge(if (dimension < 13) then
+      { dimension => 4 }
+    else
+      (dimension < 17) ? ({ dimension => 5 }) : ({ dimension => 9 })
+    end)
+  end
   def star_points(number_of_stones)
     STARS[self.dimension][number_of_stones]
+  end
+  def hoshi_points
+    @hoshi_points ||= self.star_points(HOSHI[self.dimension])
   end
   def handicap(number_of_stones)
     self.star_points(number_of_stones).each do |across, down|

@@ -14,10 +14,16 @@ class GameController < ApplicationController
           :handicap => params[:handicap]
         )
         if @game.valid?
-          redirect_to :method => :show
+          redirect_to :method => :show, :id => @game.id
         end
       end
     end
+  end
+  
+  def show
+  end
+  
+  def new
   end
   
 end
