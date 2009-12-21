@@ -14,7 +14,7 @@ class GameController < ApplicationController
           :handicap => params[:handicap]
         )
         if @game.valid?
-          redirect_to :method => :show, :id => @game.id
+          redirect_to :action => :show, :id => @game.id
         end
       end
     end
