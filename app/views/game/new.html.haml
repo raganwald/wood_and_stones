@@ -3,6 +3,7 @@
     %h1 New Game
     %a.back{:href=>"#"} Back
   %form#ajax_create.form{:action=>url_for(:controller=>:game, :action=>:create), :method=>'POST'}
+    %input{:type => 'hidden', :name => 'authenticity_token', :value => form_authenticity_token}
     %ul.edit.rounded
       %li
         Between:
@@ -12,12 +13,12 @@
         %input#white{:name=>'white', :placeholder=>"White's email", :type=>'text'}/
       %li
         Size: 
-        %select#dimension
+        %select#dimension{:name=>'dimension'}
           - Board::DIMENSIONS.each do |dim|
             %option{:value=>dim} #{dim}x#{dim}
       %li
         Handicap:
-        %select#handicap
+        %select#handicap{:name=>'handicap'}
           %option{:value=>0} Black plays first
           %option{:value=>2} Two stones
           %option{:value=>3} Three stones
