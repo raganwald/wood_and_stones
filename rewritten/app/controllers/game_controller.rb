@@ -6,8 +6,18 @@ class GameController < ApplicationController
       render(:status => 401)
     else
       Game.transaction do
-        @game = Game.create(:black => (@black), :white => (@white), :dimension => (params[:dimension]), :handicap => (params[:handicap]))
-        redirect_to(:action => :show, :id => (@game.id)) if @game.valid?
+        @game = Game.new(:black => (@black), :white => (@white), :dimension => (params[:dimension]), :handicap => (params[:handicap]))
+        if @game.save then
+          respond_to do |format|
+            format.html { redirect_to(:action => :show, :id => (@game.id)) }
+          end
+        else
+          respond_to do |format|
+            format.js do
+              render(:text => (@game.errors.full_messages.to_sentence), :status => 403)
+            end
+          end
+        end
       end
     end
   end

@@ -8,6 +8,23 @@ class GameTest < ActiveRecord::TestCase
     assert @board[across][down].black?, "Expected #{across}-#{down} to be black on a #{@board.dimension} x #{@board.dimension} board with a #{handicap} handicap"
   end
   
+  context "a game with no real email addresses" do
+    
+    setup do
+      @game = Game.create(:black=>User.find_or_create_by_email(''),:white=>User.find_or_create_by_email(''),:dimension=>9)
+    end
+    
+    should "not have valid users" do
+      assert !@game.black.valid?
+      assert !@game.white.valid?
+    end
+    
+    should "not be valid" do
+      assert !@game.valid?
+    end
+    
+  end
+
   context "given games between adam and eve" do
     
     setup do
@@ -305,6 +322,6 @@ class GameTest < ActiveRecord::TestCase
       
     end
 
-
   end
+
 end

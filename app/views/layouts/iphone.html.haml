@@ -12,6 +12,7 @@
     :javascript
       var jQT = new $.jQTouch({
           icon: 'jqtouch.png',
+          formSelector: '',
           statusBar: 'black-translucent',
           preloadImages: [
               '/themes/jqt/img/chevron_white.png',
@@ -20,5 +21,11 @@
               '/themes/jqt/img/button_clicked.png'
               ]
       });
+      $(document).ready( function () {
+        $('#ajax_create').submit(function () {
+          alert('submit');
+        });
+      });
+
   %body
     = yield

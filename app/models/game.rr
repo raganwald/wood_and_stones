@@ -9,9 +9,11 @@ class Game < ActiveRecord::Base
   
   belongs_to :black, :class_name => "User", :foreign_key => "black_id"
   validates_presence_of :black
+  validates_associated :black
   
   belongs_to :white, :class_name => "User", :foreign_key => "white_id"
   validates_presence_of :white
+  validates_associated :white
   
   has_many :actions, :class_name => "Action::Base", :foreign_key => "game_id"
   has_many :boards, :through => :actions, :source => :after
