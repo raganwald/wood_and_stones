@@ -1,3 +1,9 @@
 .row {
 	height: 30px;
 }
+.message {
+	font-size: 1.5em; 
+	text-align: center; 
+	margin: 160px 0 160px; 
+	font-family: Marker felt;
+}

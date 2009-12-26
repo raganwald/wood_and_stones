@@ -1,3 +1,17 @@
+:javascript
+  $(document).ready( function () {          
+    $('#ajax_create').submit(function (e) {
+      GO.submit(e, 
+        function (data) { 
+          GO.message('Invitations Sent', 'Your invittations have been sent. Check your email for a link to the new game. Thanks!');
+        },
+        function (data) { 
+          GO.message('Invalid Invitation', 'Sorry, you cannot start a new game because: ' + data.responseText);
+        }
+      );
+      return false;
+    });
+  });    
 #new.current
   .toolbar 
     %h1 New Game

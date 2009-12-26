@@ -1,2 +1,19 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+var GO = function () {
+	return {
+		message: function (title, text) {
+      $('#message h1').text(title);
+      $('.message').text(text);
+      jQT.goTo($('#message'), 'flip');
+		},
+		submit: function(e, success, error) {
+		  var $form = (typeof(e)==='string') ? $(e) : $(e.target);
+		  $.ajax({
+		      url: $form.attr('action'),
+		      data: $form.serialize(),
+		      type: $form.attr('method') || "POST",
+		      success: success,
+		      error: error
+		  });
+		}
+	};
+}();
