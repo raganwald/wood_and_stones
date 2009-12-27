@@ -38,6 +38,10 @@ class Action::MoveTest < ActiveRecord::TestCase
           assert @move.after['aa'].has?(@player)
         end
         
+        should "be move one" do
+          assert_equal(1, @move.cardinality)
+        end
+        
       end
       
       context "when killing another stone" do
@@ -65,6 +69,40 @@ class Action::MoveTest < ActiveRecord::TestCase
         
         should "increment the number of captured stones" do
           assert_equal(@was_captured_blacks + 2, @game.captured_blacks, @game.inspect)
+        end
+        
+        should "be move number seven" do
+          assert_equal(7, @move.cardinality)
+        end
+        
+        context "when there's another game going on" do
+          
+          setup do
+            @game2 = Game.create(:dimension => 13, :black => @adam, :white => @eve)
+            Action::Move.create(:game => @game2, :position => 'ad')
+            Action::Move.create(:game => @game2, :position => 'ac')
+            Action::Move.create(:game => @game2, :position => 'bc')
+            Action::Move.create(:game => @game2, :position => 'ab')
+            Action::Move.create(:game => @game2, :position => 'bb')
+            Action::Move.create(:game => @game2, :position => 'bd')
+          end
+          
+          context "the next move" do
+            
+            setup do
+              @move_eight = Action::Move.create(:game => @game, :position => 'ff')
+            end
+        
+            should "be a valid move" do
+              assert_valid @move_eight
+            end
+        
+            should "be move number eight" do
+              assert_equal(8, @move_eight.cardinality)
+            end
+            
+          end
+          
         end
         
       end
