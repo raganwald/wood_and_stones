@@ -10,13 +10,16 @@ class Game < ActiveRecord::Base
   belongs_to(:white, :class_name => "User", :foreign_key => "white_id")
   validates_presence_of(:white)
   validates_associated(:white)
-  has_many(:actions, :class_name => "Action::Base", :foreign_key => "game_id")
+  has_many(:actions, :class_name => "Action::Base", :foreign_key => "game_id", :order => :cardinality)
   has_many(:boards, :through => :actions, :source => :after)
   has_many(:secrets, :as => :target)
   OPTIONS = [:handicap, :dimension, :fork]
   named_scope(:played_by, lambda do |user|
     { :conditions => (["black_id = ? OR white_id = ?", user.id, user.id]) }
   end)
+  def initial_board
+    ((__126196363181378__ = self.actions.first and __126196363181378__.before) or self.current_board)
+  end
   def initialize(attributes)
     attributes ||= Hash.new
     options = OPTIONS.inject(Hash.new) do |h, attr|

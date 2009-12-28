@@ -7,4 +7,7 @@ class Action::MoveController < Action::PlayerActionController
     @move = Action::Move.new(:game => (@game), :position => (params[:position]))
     render(:status => 403) unless @move.valid?
   end
+  def show
+    # do nothing
+  end
 end

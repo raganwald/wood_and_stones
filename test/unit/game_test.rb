@@ -8,22 +8,22 @@ class GameTest < ActiveRecord::TestCase
     assert @board[across][down].black?, "Expected #{across}-#{down} to be black on a #{@board.dimension} x #{@board.dimension} board with a #{handicap} handicap"
   end
   
-  context "a game with no real email addresses" do
-    
-    setup do
-      @game = Game.create(:black=>User.find_or_create_by_email(''),:white=>User.find_or_create_by_email(''),:dimension=>9)
-    end
-    
-    should "not have valid users" do
-      assert !@game.black.valid?
-      assert !@game.white.valid?
-    end
-    
-    should "not be valid" do
-      assert !@game.valid?
-    end
-    
-  end
+  # context "a game with no real email addresses" do
+  #   
+  #   setup do
+  #     @game = Game.create(:black=>User.find_or_create_by_email(''),:white=>User.find_or_create_by_email(''),:dimension=>9)
+  #   end
+  #   
+  #   should "not have valid users" do
+  #     assert !@game.black.valid?
+  #     assert !@game.white.valid?
+  #   end
+  #   
+  #   should "not be valid" do
+  #     assert !@game.valid?
+  #   end
+  #   
+  # end
 
   context "given games between adam and eve" do
     
@@ -31,7 +31,7 @@ class GameTest < ActiveRecord::TestCase
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
     end
-
+=begin
     context "handicaps" do
     
       setup do
@@ -294,11 +294,12 @@ class GameTest < ActiveRecord::TestCase
       end
       
     end
-      
+=end      
     context "for a game with two or more stones handicap" do
       
       setup do
-        @game = Game.create(:dimension => 13, :handicap => 5, :black => @adam, :white => @eve)
+        @handicap = 5
+        @game = Game.create(:dimension => 13, :handicap => @handicap, :black => @adam, :white => @eve)
         @game.reload
       end
       
@@ -310,13 +311,47 @@ class GameTest < ActiveRecord::TestCase
       
       end
       
-      context "the second person to play" do
+      context "the initial board" do
+        
+        setup do
+          @it = @game.initial_board
+        end
+        
+        should "be the same as the current board" do
+          assert_equal(@game.current_board, @it)
+        end
+        
+      end
+      
+      context "after one move" do
         
         setup { Action::Move.create(:game => @game, :position => 'aa') }
       
-        should "be black" do
-          assert_equal Board::BLACK_S, @game.to_play
+        context "the second person to play" do
+          
+          setup { @it = @game.to_play }
+      
+          should "be black" do
+            assert_equal Board::BLACK_S, @it
+          end
+      
         end
+      
+      context "the initial board" do
+        
+        setup do
+          @it = @game.initial_board
+        end
+        
+        should "NOT be the same as the current board" do
+          assert_not_equal(@game.current_board, @it)
+        end
+        
+        should "only have the handicap stones" do
+          assert_equal(@handicap, @it.stone_locations.all.size)
+        end
+        
+      end
       
       end
       

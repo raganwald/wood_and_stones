@@ -15,5 +15,8 @@ class Action::MoveController < Action::PlayerActionController
     )
     render :status => 403 unless @move.valid?
   end
+  
+  def show
+  end
 
 end
