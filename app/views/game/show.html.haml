@@ -1,18 +1,12 @@
 -# game/show.html.haml
-
 :javascript
 
-#current_board.current
+#initial_board.current
   -# TODO: flip to history in another div
   .toolbar 
-    %h1 Game
+    %h1 Game #{@game.id}
     %a.back{:href=>"#"} Back
-  .board
-    - board = @game.current_board
-    - (0..(board.dimension - 1)).each do |down|
-      .row
-        - (0..(board.dimension - 1)).each do |across|
-          - location = board[across][down]
-          %img{ :src => tile_path(location) }>
+  %div.board{ :id => "game_#{@game.id}_move_0" }
+    = render :partial => "board/board", :locals => { :board => @game.initial_board }
 #settings
   -# list all game settings
