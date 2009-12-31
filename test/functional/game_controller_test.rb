@@ -26,7 +26,7 @@ class GameControllerTest < ActionController::TestCase
       end
       
       should_redirect_to "the page showing a game" do
-        {:method => :show}
+        {:action => :show}
       end
       
       should "create a new game" do
@@ -59,7 +59,7 @@ class GameControllerTest < ActionController::TestCase
         end
       
         should_redirect_to "the page showing a game" do
-          {:method => :show}
+          {:action => :show}
         end
       
         should "create a new game" do

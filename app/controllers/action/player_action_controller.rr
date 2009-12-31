@@ -6,7 +6,7 @@ class Action::PlayerActionController < Action::BaseController
   
   def check_player_is_logged_in
     unless self.current_user == @user_to_play
-      render :status => 401
+      render :text => "You cannot make a move unless you are logged in", :status => 401
       return false
     end
     true

@@ -17,11 +17,17 @@ class ApplicationController < ActionController::Base
   
   def set_instance(
     name = self.class.name.demodulize.underscore[/^(.*)_controller$/, 1],
-    model_class = self.class.name[/^(.*)Controller$/, 1].andand { Kernel.const_get(it) }
+    model_class = self.class.name[/^(.*)Controller$/, 1].andand { get_const_for(it) }
   )
     (params["#{name}_id"] or params[:id]).andand do |it|
       instance_variable_set('@' + name, model_class.find(it))
     end
+  end
+  
+  private
+  
+  def get_const_for(modularized_name)
+    modularized_name.split('::').inject(Kernel) { |namespace, name| namespace.const_get(name) }
   end
   
 end
