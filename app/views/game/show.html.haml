@@ -1,19 +1,18 @@
 -# game/show.html.haml
-:javascript
-
-#board_0.current
+-# going to go somewaht naïve and refactor later
+-# :style => (action.cardinality == @game.actions.count ? 'current' : nil)
+#m0
   .toolbar 
     %h1 Game #{@game.id}
     %a.back{:href=>"#"} Back
-  %div.board{ :id => "game_#{@game.id}_move_0" }
+  .board
     = render :partial => "board/board", :locals => { :board => @game.initial_board }
-#board_1
-  .toolbar 
-    %h1 Game #{@game.id}
-    %a.back{:href=>"#"} Back
-#board_2
-  .toolbar 
-    %h1 Game #{@game.id}
-    %a.back{:href=>"#"} Back
+-@game.actions.each do |action|
+  .current{ :id => "m#{action.cardinality}" }
+    .toolbar 
+      %h1 Move #{action.cardinality}
+      %a.back{:href=>"#"} Back
+    .board
+      = render :partial => "board/board", :locals => { :board => action.after }
 #settings
   -# list all game settings

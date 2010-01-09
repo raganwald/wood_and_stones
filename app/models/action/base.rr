@@ -24,4 +24,6 @@ class Action::Base < ActiveRecord::Base
   
   acts_as_list :column => :cardinality, :scope => :game
   
+  named_scope :in_order, :order => :cardinality
+  
 end

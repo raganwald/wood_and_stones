@@ -13,4 +13,14 @@ class Action::BaseController < ApplicationController
     end
   end
   
+  def index
+    params[:game_id].andand { Game.find(it) }.andand do |game|
+      @game = game
+      @actions = game.actions.in_order
+    end or begin
+      render :status => 404
+      return false
+    end
+  end
+  
 end

@@ -12,4 +12,5 @@ class Action::Base < ActiveRecord::Base
   validates_associated(:after, :on => :create)
   validates_uniqueness_of(:after_id, :scope => :game_id, :allow_nil => (true))
   acts_as_list(:column => :cardinality, :scope => :game)
+  named_scope(:in_order, :order => :cardinality)
 end
