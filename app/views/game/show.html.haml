@@ -18,6 +18,11 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
+    %ul.individual
+      %li
+        %a.slideleft{:href=>'#m1'}
+          Next
+          %small 1
   -@game.actions[0..-2].each do |action|
     %div{:id=>"m#{action.cardinality}"}
       .toolbar 
@@ -25,11 +30,27 @@
         %a.back{:href=>"#"} Back
       .board
         = render :partial => "board/board", :locals => { :board => action.after }
+      %ul.individual
+        %li
+          %a.slideright{:href=>"#m#{action.cardinality - 1}"}
+            Prev
+            %small
+              = action.cardinality - 1
+          %a.slideleft{:href=>"#m#{action.cardinality + 1}"}
+            Next
+            %small
+              = action.cardinality + 1
   .current{:id=>"m#{last.cardinality}"}
     .toolbar 
       %h1 Move #{last.cardinality}
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
+    %ul.individual
+      %li
+        %a.slideright{:href=>"#m#{last.cardinality - 1}"}
+          Prev
+          %small
+            = last.cardinality - 1
 #settings
   -# list all game settings
