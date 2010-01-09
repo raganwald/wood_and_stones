@@ -1,18 +1,35 @@
 -# game/show.html.haml
 -# going to go somewaht naïve and refactor later
--# :style => (action.cardinality == @game.actions.count ? 'current' : nil)
-#m0
-  .toolbar 
-    %h1 Game #{@game.id}
-    %a.back{:href=>"#"} Back
-  .board
-    = render :partial => "board/board", :locals => { :board => @game.initial_board }
--@game.actions.each do |action|
-  .current{ :id => "m#{action.cardinality}" }
+-# begin hideaous workaround for JQTouch and HAML: It seems that <div style='current' id='foo'> is treated differently than
+-# <div id=';foo' style='current>, and HAML generates one form when you write .current{ :id=>'foo } and the other when you
+-# write %div{ :style=>'current', :id=>'foo' }
+-last = @game.actions.last
+-if last.nil?
+  .current#m0
     .toolbar 
-      %h1 Move #{action.cardinality}
+      %h1 Beginning
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :board => action.after }
+      = render :partial => "board/board", :locals => { :board => @game.initial_board }
+-else
+  #m0
+    .toolbar 
+      %h1 Beginning
+      %a.back{:href=>"#"} Back
+    .board
+      = render :partial => "board/board", :locals => { :board => @game.initial_board }
+  -@game.actions[0..-2].each do |action|
+    %div{:id=>"m#{action.cardinality}"}
+      .toolbar 
+        %h1 Move #{action.cardinality}
+        %a.back{:href=>"#"} Back
+      .board
+        = render :partial => "board/board", :locals => { :board => action.after }
+  .current{:id=>"m#{last.cardinality}"}
+    .toolbar 
+      %h1 Move #{last.cardinality}
+      %a.back{:href=>"#"} Back
+    .board
+      = render :partial => "board/board", :locals => { :board => last.after }
 #settings
   -# list all game settings
