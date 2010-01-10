@@ -1,6 +1,6 @@
 -# board/_board.html.haml
+- image_path_arr = image_paths(board)
 - (0..(board.dimension - 1)).each do |down|
   .row
     - (0..(board.dimension - 1)).each do |across|
-      - location = board[across][down]
-      %img{ :src => tile_path(location) }>
+      %img{ :src => image_path_arr[across][down] }>

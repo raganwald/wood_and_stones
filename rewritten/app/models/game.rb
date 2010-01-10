@@ -18,7 +18,7 @@ class Game < ActiveRecord::Base
     { :conditions => (["black_id = ? OR white_id = ?", user.id, user.id]) }
   end)
   def initial_board
-    ((__1263098247320__ = self.actions.first and __1263098247320__.before) or self.current_board)
+    ((__126314890890633__ = self.actions.first and __126314890890633__.before) or self.current_board)
   end
   def initialize(attributes)
     attributes ||= Hash.new

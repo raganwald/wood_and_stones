@@ -6,4 +6,9 @@ class Action::BaseController < ApplicationController
     @user_to_play = game.send(game.to_play))) or (render(:status => 404)
     return false))
   end
+  def index
+    ((game = (it = params[:game_id] and Game.find(it)) and (@game = game
+    @actions = game.actions.in_order)) or (render(:status => 404)
+    return false))
+  end
 end
