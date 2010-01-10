@@ -18,6 +18,33 @@ class BoardTest < ActiveRecord::TestCase
     
   end
   
+  context "Templates" do
+    
+    context "for a 9x9 board" do
+      
+      setup do
+        @template = Board::TEMPLATES[9]
+      end
+      
+      should "have a correct top left corner" do
+        assert_equal(:topleft, @template[0][0])
+      end
+      
+      should "have a correct right edge" do
+        assert_equal(:right, @template[8][3])
+      end
+      
+      should "have the correct dimensions" do
+        assert_equal(9, @template.size)
+        (0..8).each do |col|
+          assert_equal(9, @template[col].size)
+        end
+      end
+      
+    end
+    
+  end
+
   context "Locations" do
     
     setup do

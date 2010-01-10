@@ -211,6 +211,22 @@ class Board < ActiveRecord::Base
       self[across][down].blacken
     end
   end
+  TEMPLATES = DIMENSIONS.inject(Hash.new) do |templates, dim|
+    templates.merge(dim => (lambda do |arr|
+      (1..(dim - 2)).each do |num|
+        arr[0][num] = :left
+        arr[num][0] = :top
+        arr[num][-1] = :bottom
+        arr[-1][num] = :right
+      end
+      arr[0][0] = :topleft
+      arr[0][-1] = :bottomleft
+      arr[-1][0] = :topright
+      arr[-1][-1] = :bottomright
+      STARS[dim][HOSHI[dim]].each { |across, down| arr[across][down] = :star }
+      arr
+    end.call((1..dim).map { ([:blank] * dim) })))
+  end
   LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
   SGF_BLACK_PLACEMENT_PROPERTIES = ["B", "AB"]
   SGF_WHITE_PLACEMENT_PROPERTIES = ["W", "AW"]
