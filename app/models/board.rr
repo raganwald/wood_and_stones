@@ -305,6 +305,15 @@ class Board < ActiveRecord::Base
     end
   end
   
+  LETTERS = %w(A B C D E F G H I J K L M N O P Q R S)
+  
+  SGF_BLACK_PLACEMENT_PROPERTIES = %w(B AB)
+  SGF_WHITE_PLACEMENT_PROPERTIES = %w(W AW)
+  
+  def valid_position?(str)
+    !!parse_position(str)
+  end
+  
   TEMPLATES = DIMENSIONS.inject(Hash.new) do |templates, dim|
     templates.merge(
       dim => returning((1..dim).map{ [:blank] * dim }) do |arr|
@@ -325,13 +334,14 @@ class Board < ActiveRecord::Base
     )
   end
   
-  LETTERS = %w(A B C D E F G H I J K L M N O P Q R S)
-  
-  SGF_BLACK_PLACEMENT_PROPERTIES = %w(B AB)
-  SGF_WHITE_PLACEMENT_PROPERTIES = %w(W AW)
-  
-  def valid_position?(str)
-    !!parse_position(str)
+  def map_array(map)
+    arr = self.to_a
+    template = TEMPLATES[self.dimension]
+    (0..(self.dimension - 1)).map do |across|
+      (0..(self.dimension - 1)).map do |down|
+        map[template[across][down]][arr[across][down]] # or puts "template[across][down] -> #{template[across][down]}, map[template[across][down]] -> #{map[template[across][down]]}"
+      end
+    end
   end
   
   # options:

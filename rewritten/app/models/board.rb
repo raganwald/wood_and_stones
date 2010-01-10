@@ -211,6 +211,12 @@ class Board < ActiveRecord::Base
       self[across][down].blacken
     end
   end
+  LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
+  SGF_BLACK_PLACEMENT_PROPERTIES = ["B", "AB"]
+  SGF_WHITE_PLACEMENT_PROPERTIES = ["W", "AW"]
+  def valid_position?(str)
+    (not (not parse_position(str)))
+  end
   TEMPLATES = DIMENSIONS.inject(Hash.new) do |templates, dim|
     templates.merge(dim => (lambda do |arr|
       (1..(dim - 2)).each do |num|
@@ -227,11 +233,14 @@ class Board < ActiveRecord::Base
       arr
     end.call((1..dim).map { ([:blank] * dim) })))
   end
-  LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
-  SGF_BLACK_PLACEMENT_PROPERTIES = ["B", "AB"]
-  SGF_WHITE_PLACEMENT_PROPERTIES = ["W", "AW"]
-  def valid_position?(str)
-    (not (not parse_position(str)))
+  def map_array(map)
+    arr = self.to_a
+    template = TEMPLATES[self.dimension]
+    (0..(self.dimension - 1)).map do |across|
+      (0..(self.dimension - 1)).map do |down|
+        map[template[across][down]][arr[across][down]]
+      end
+    end
   end
   def [](str_or_symbol_or_offset)
     if str_or_symbol_or_offset.kind_of?(Integer) then

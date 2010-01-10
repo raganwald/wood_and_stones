@@ -40,6 +40,104 @@ class BoardTest < ActiveRecord::TestCase
           assert_equal(9, @template[col].size)
         end
       end
+    
+      context "and Maps" do
+      
+        setup do
+          @board = returning(Board.create!(:dimension => 9)) do |b|
+            b[0][0].blacken
+            b[1][1].whiten
+            b[2][2].blacken
+            b[8][2].whiten
+          end
+          map = {
+            :topleft => {
+              nil => '0nw',
+              'black' => '1nw',
+              'white' => '2nw'
+            },
+            :top => {
+              nil => '0n',
+              'black' => '1n',
+              'white' => '2n'
+            },
+            :topright => {
+              nil => '0ne',
+              'black' => '1ne',
+              'white' => '2ne'
+            },
+            :left => {
+              nil => '0w',
+              'black' => '1w',
+              'white' => '2w'
+            },
+            :right => {
+              nil => '0e',
+              'black' => '1e',
+              'white' => '2e'
+            },
+            :bottomleft => {
+              nil => '0sw',
+              'black' => '1sw',
+              'white' => '2sw'
+            },
+            :bottom => {
+              nil => '0s',
+              'black' => '1s',
+              'white' => '2s'
+            },
+            :bottomright => {
+              nil => '0se',
+              'black' => '1se',
+              'white' => '2se'
+            },
+            :blank => {
+              nil => '0',
+              'black' => '1',
+              'white' => '2'
+            },
+            :star => {
+              nil => '0c',
+              'black' => '1',
+              'white' => '2'
+            }
+          }
+          @mapped_array = @board.map_array(map)
+        end
+        
+        # should "debug" do
+        #   puts Board::TEMPLATES[9].inspect
+        # end
+      
+        should "have the correct top left corner" do
+          assert_equal('1nw', @mapped_array[0][0])
+        end
+        
+        should "have the correct inner spot" do
+          assert_equal('2', @mapped_array[1][1])
+        end
+        
+        should "have the correct blank spot" do
+          assert_equal('0', @mapped_array[1][4])
+        end
+        
+        should "have the correct star spot" do
+          assert_equal('0c', @mapped_array[6][6])
+        end
+        
+        should "have the correct occupied star spot" do
+          assert_equal('1', @mapped_array[2][2])
+        end
+        
+        should "have the correct blank edge" do
+          assert_equal('0s', @mapped_array[2][8])
+        end
+        
+        should "have the correct occupied edge" do
+          assert_equal('2e', @mapped_array[8][2])
+        end
+        
+      end
       
     end
     
