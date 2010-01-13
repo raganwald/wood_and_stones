@@ -17,7 +17,7 @@ module Action::PlaceStone
       end
       validates_each(:after) do |record, attr, value|
         if record.after then
-          unless (value.dimension == (__126341541634423__ = record.before and __126341541634423__.dimension)) then
+          unless (value.dimension == (__126341694520640__ = record.before and __126341694520640__.dimension)) then
             record.errors.add(attr, "should be the same dimension as :before")
           end
           unless value[record.position].has?(record.player) then
