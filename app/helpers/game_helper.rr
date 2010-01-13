@@ -4,7 +4,7 @@ module GameHelper
     File.join('', 'images', 'board', 'temporary', "tile#{file_code}.png")
   end
   
-  IMAGE_MAP = {
+  TILE_IMG_SRC_MAP = {
     :topleft => {
       nil     => full_tile_path('0nw'),
       'black' => full_tile_path('1nw'),
@@ -57,28 +57,65 @@ module GameHelper
     }
   }
   
-  def image_paths(board)
-    board.map_array(IMAGE_MAP)
+  TILE_IMG_CLASS_MAP = {
+    :topleft => {
+      nil     => 'top left empty',
+      'black' => 'top left black occupied',
+      'white' => 'top left white occupied'
+    },
+    :top => {
+      nil     => 'top empty',
+      'black' => 'top black occupied',
+      'white' => 'top white occupied'
+    },
+    :topright => {
+      nil     => 'top right empty',
+      'black' => 'top right black occupied',
+      'white' => 'top right white occupied'
+    },
+    :left => {
+      nil     => 'left empty',
+      'black' => 'left black occupied',
+      'white' => 'left white occupied'
+    },
+    :right => {
+      nil     => 'top right empty',
+      'black' => 'top right black occupied',
+      'white' => 'top right white occupied'
+    },
+    :bottomleft => {
+      nil     => 'bottom left empty',
+      'black' => 'bottom left black occupied',
+      'white' => 'bottom left white occupied'
+    },
+    :bottom => {
+      nil     => 'bottom empty',
+      'black' => 'bottom black occupied',
+      'white' => 'bottom white occupied'
+    },
+    :bottomright => {
+      nil     => 'bottom right empty',
+      'black' => 'bottom right black occupied',
+      'white' => 'bottom right white occupied'
+    },
+    :blank => {
+      nil     => 'empty',
+      'black' => 'black occupied',
+      'white' => 'white occupied'
+    },
+    :star => {
+      nil     => 'star empty',
+      'black' => 'star black occupied',
+      'white' => 'star white occupied'
+    }
+  }
+  
+  def tile_img_src_array(board)
+    board.map_array(TILE_IMG_SRC_MAP)
   end
   
-  # def tile_path(location)
-  #   File.join('', 'images', 'board', 'temporary', "tile#{colour_to_number(location)}#{edging(location)}.png")
-  # end
-  # 
-  # def colour_to_number(location)
-  #   if location.open? && location.hoshi?
-  #     '0c'
-  #   elsif location.open?
-  #     '0'
-  #   elsif location.black?
-  #     '1'
-  #   else
-  #     '2'
-  #   end
-  # end
-  # 
-  # def edging(location)
-  #   "#{location.top_edge? ? 'n' : (location.bottom_edge? ? 's' : '')}#{location.left_edge? ? 'w' : (location.right_edge? ? 'e' : '')}"
-  # end
+  def tile_img_class_array(board)
+    board.map_array(TILE_IMG_CLASS_MAP)
+  end
       
 end
