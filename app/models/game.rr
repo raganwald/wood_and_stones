@@ -30,6 +30,10 @@ class Game < ActiveRecord::Base
     self.actions.first.andand.before or self.current_board
   end
   
+  def user_to_play
+    self.to_play.andand { self.send(it) } unless self.ended?
+  end
+  
   def initialize(attributes)
     attributes ||= Hash.new
     options = OPTIONS.inject(Hash.new) do |h, attr|

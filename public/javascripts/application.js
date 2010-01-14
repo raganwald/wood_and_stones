@@ -14,6 +14,14 @@ var GO = function () {
 		      success: success,
 		      error: error
 		  });
+		},
+		get: function(u, success, error) {
+		  $.ajax({
+		      url: u,
+		      type: "GET",
+		      success: success,
+		      error: error
+		  });
 		}
 	};
 }();
