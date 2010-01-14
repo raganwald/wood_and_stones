@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :game
   
-  map.move 'move/:game_id/:position', :controller => 'action/move', :action => 'create', :method => 'PUT'
+  map.move 'move/:game_id/:position', :controller => 'action/move', :action => 'create', :method => 'POST'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
