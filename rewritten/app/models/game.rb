@@ -18,7 +18,7 @@ class Game < ActiveRecord::Base
     { :conditions => (["black_id = ? OR white_id = ?", user.id, user.id]) }
   end)
   def initial_board
-    ((__126349670240032__ = self.actions.first and __126349670240032__.before) or self.current_board)
+    ((__126358447222711__ = self.actions.first and __126358447222711__.before) or self.current_board)
   end
   def user_to_play
     (it = self.to_play and self.send(it)) unless self.ended?

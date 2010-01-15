@@ -65,7 +65,24 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
+    %ul.individual
+      %li
 -else
+  .current{:id=>"m#{last.cardinality}"}
+    .toolbar 
+      %h1 Move #{last.cardinality}
+      %a.back{:href=>"#"} Back
+    .board
+      = render :partial => "board/board", :locals => { :board => last.after }
+    %ul.individual
+      %li
+-#        %a.slideright{:href=>"#m#{last.cardinality - 1}"}
+-#          Prev
+-#          %small
+-#            = last.cardinality - 1
+-#
+-# The following used ot precede the last move, although it strictly needn't
+-#
   #m0
     .toolbar 
       %h1 Beginning
@@ -95,17 +112,5 @@
             Next
             %small
               = action.cardinality + 1
-  .current{:id=>"m#{last.cardinality}"}
-    .toolbar 
-      %h1 Move #{last.cardinality}
-      %a.back{:href=>"#"} Back
-    .board
-      = render :partial => "board/board", :locals => { :board => last.after }
-    %ul.individual
-      %li
-        %a.slideright{:href=>"#m#{last.cardinality - 1}"}
-          Prev
-          %small
-            = last.cardinality - 1
 #settings
   -# list all game settings
