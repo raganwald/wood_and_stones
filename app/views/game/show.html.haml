@@ -8,58 +8,52 @@
 -last = @game.actions.last
 -user_to_play = @game.user_to_play
 :javascript
-  var enable_empty_places = function (div_num) {
-    $('#m' + div_num + ' .board .empty').bind('click.place_stone',
-      function (data) {
-        var position = this.getAttribute('id');
+  var game_show = function () {
+    return {
+      enable_empty_places: function (div_num) {
+        $('#m' + div_num + ' .board .empty').bind('click.place_stone',
+          function (data) {
+            var position = this.getAttribute('id');
+            $.ajax({
+              url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
+              type: 'POST',
+              success: function (data) {
+                disable_empty_places(div_num );
+                GO.message('success', 'success placing a stone at ' + position);
+              },
+              error: function (data) {
+                GO.message('error', 'unable to place a stone at ' + position + ' because: ' + data.responseText);
+              },
+            });
+          }
+        ).css({
+          'cursor': 'pointer'
+        });
+      },
+      disable_empty_places: function(div_num) {
+        $('#m' + div_num + ' .board .empty').unbind('click.place_stone').css({
+          'cursor': 'default'
+        });
+      },
+      get_moves_up_to: function (current_latest_move) {
         $.ajax({
-          url: '#{move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
-          type: 'POST',
-          success: function (data) {
-            disable_empty_places(div_num );
-            GO.message('success', 'success placing a stone at ' + position);
+          url: '#{get_history_url(:game_id=>@game.id, :before_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
+          type: 'GET',
+          dataType: 'html',
+          success: function (html) {
+            $(html).insertAfter('#m0');
           },
           error: function (data) {
-            GO.message('error', 'unable to place a stone at ' + position + ' because: ' + data.responseText);
+            GO.message('error', 'unable to load the game history before ' + current_latest_move + ' because: ' + data.responseText);
           },
         });
       }
-    ).css({
-      'cursor': 'pointer'
-    });
-  };
-  var disable_empty_places = function(div_num) {
-    $('#m' + div_num + ' .board .empty').unbind('click.place_stone',
-      function (data) {
-        var position = this.getAttribute('id');
-        $.ajax({
-          url: '#{move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
-          type: 'POST',
-          success: function (data) {
-            GO.message('success', 'success placing a stone at ' + position);
-          },
-          error: function (data) {
-            GO.message('error', 'unable to place a stone at ' + position + ' because: ' + data.responseText);
-          },
-        });
-      }
-    ).css({
-      'cursor': 'default'
-    });
-  };
--last_div_num = last.nil? ? 0 : last.cardinality
--if user_to_play && user_to_play == self.current_user
-  :javascript
-    $(document).ready( function () {  
-      enable_empty_places(#{last_div_num});
-    });
--else
-  :javascript
-    $(document).ready( function () {  
-      disable_empty_places(#{last_div_num});
-    });
+    };
+  }();
+#settings
+  -# list all game settings
 -if last.nil?
-  .current#m0
+  .current.move#m0
     .toolbar 
       %h1 Beginning
       %a.back{:href=>"#"} Back
@@ -68,49 +62,21 @@
     %ul.individual
       %li
 -else
-  .current{:id=>"m#{last.cardinality}"}
+  :javascript
+    $(document).ready( function () {  
+      game_show.get_moves_up_to(#{last.cardinality});
+    });
+  .move#m0
+    .toolbar 
+      %h1 Beginning
+      %a.back{:href=>"#"} Back
+    .board
+      = render :partial => "board/board", :locals => { :board => @game.initial_board }
+    %ul.individual
+  .current.move{:id=>"m#{last.cardinality}"}
     .toolbar 
       %h1 Move #{last.cardinality}
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
     %ul.individual
-      %li
--#        %a.slideright{:href=>"#m#{last.cardinality - 1}"}
--#          Prev
--#          %small
--#            = last.cardinality - 1
--#
--# The following used ot precede the last move, although it strictly needn't
--#
-  #m0
-    .toolbar 
-      %h1 Beginning
-      %a.back{:href=>"#"} Back
-    .board
-      = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    %ul.individual
-      %li
-        %a.slideleft{:href=>'#m1'}
-          Next
-          %small 1
-  -@game.actions[0..-2].each do |action|
-    %div{:id=>"m#{action.cardinality}"}
-      .toolbar 
-        %h1 Move #{action.cardinality}
-        %a.back{:href=>"#"} Back
-      .board
-        = render :partial => "board/board", :locals => { :board => action.after }
-      %ul.individual
-        %li
-          %a.slideright{:href=>"#m#{action.cardinality - 1}"}
-            Prev
-            %small
-              = action.cardinality - 1
-        %li
-          %a.slideleft{:href=>"#m#{action.cardinality + 1}"}
-            Next
-            %small
-              = action.cardinality + 1
-#settings
-  -# list all game settings

@@ -1,0 +1,18 @@
+-@actions.each do |action|
+  .move{:id=>"m#{action.cardinality}"}
+    .toolbar 
+      %h1 Move #{action.cardinality}
+      %a.back{:href=>"#"} Back
+    .board
+      = render :partial => "board/board", :locals => { :board => action.after }
+    %ul.individual
+      %li
+        %a.slideright{:href=>"#m#{action.cardinality - 1}"}
+          Prev
+          %small
+            = action.cardinality - 1
+      %li
+        %a.slideleft{:href=>"#m#{action.cardinality + 1}"}
+          Next
+          %small
+            = action.cardinality + 1

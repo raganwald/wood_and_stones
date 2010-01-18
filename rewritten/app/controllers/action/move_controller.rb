@@ -20,8 +20,8 @@ class Action::MoveController < Action::PlayerActionController
         else
           @move = @game.actions.find(:conditions => ({ :cardinality => (@cardinality) }))
           @board = @move.after
-          @previous_cardinality = (__126349668452800__ = @move.lower_item and __126349668452800__.cardinality)
-          @next_cardinality = (__126349668471740__ = @move.higher_item and __126349668471740__.cardinality)
+          @previous_cardinality = (__126384135197819__ = @move.lower_item and __126384135197819__.cardinality)
+          @next_cardinality = (__12638413515431__ = @move.higher_item and __12638413515431__.cardinality)
         end
       else
         render(:status => 404)
