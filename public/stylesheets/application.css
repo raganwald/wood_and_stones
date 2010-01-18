@@ -7,3 +7,6 @@
 	margin: 160px 0 160px; 
 	font-family: Marker felt;
 }
+.invisible {
+	visibility:hidden;
+}

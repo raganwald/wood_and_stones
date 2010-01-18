@@ -7,6 +7,8 @@
 -# write %div{ :style=>'current', :id=>'foo' }
 -last = @game.actions.last
 -user_to_play = @game.user_to_play
+-# TODO: implement wipes for history
+-# NOTE: loading the latest moves should be divorced from setting whether the current move is playable
 :javascript
   var game_show = function () {
     return {
@@ -42,9 +44,28 @@
           dataType: 'html',
           success: function (html) {
             $(html).insertAfter('#m0');
+            $('#m' + current_latest_move + ' .history .prev').removeClass('invisible');
           },
           error: function (data) {
             GO.message('error', 'unable to load the game history before ' + current_latest_move + ' because: ' + data.responseText);
+          },
+        });
+      },
+      get_latest_moves: function () {
+        current_latest_move = $('.move').size() - 1;
+        $.ajax({
+          url: '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
+          type: 'GET',
+          dataType: 'html',
+          success: function (html) {
+            update_moves = $(html);
+            if (update_moves.size() > 0) {
+              update_moves.insertAfter('#m' + current_latest_move);
+              $('#m' + current_latest_move + ' .history .next').removeClass('invisible');
+            }
+          },
+          error: function (data) {
+            GO.message('error', 'unable to load the game history after ' + current_latest_move + ' because: ' + data.responseText);
           },
         });
       }
@@ -72,11 +93,25 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    %ul.individual
+    %ul.individual.history
+      %li.next
+        %a.slideleft{:href=>"#m1"}
+          Next
+          %small 1
   .current.move{:id=>"m#{last.cardinality}"}
     .toolbar 
       %h1 Move #{last.cardinality}
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
-    %ul.individual
+    %ul.individual.history
+      %li.prev.invisible
+        %a.slideright{:href=>"#m#{last.cardinality - 1}"}
+          Prev
+          %small
+            = last.cardinality - 1
+      %li.next.invisible
+        %a.slideleft{:href=>"#m#{last.cardinality + 1}"}
+          Next
+          %small
+            = last.cardinality + 1
