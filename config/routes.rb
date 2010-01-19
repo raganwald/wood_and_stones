@@ -37,8 +37,9 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :game
   
-  map.create_move 'place/:game_id/:position', :controller => 'action/move', :action => 'create', :method => 'POST'
+  map.active_move 'move/active/:game_id', :controller => 'action/move', :action => 'active', :method => 'GET'
   
+  map.create_move 'move/create/:game_id/:position', :controller => 'action/move', :action => 'create', :method => 'POST'
   map.get_history 'move/history/:game_id/:before_move', :controller => 'action/move', :action => 'index', :method => 'GET'
   map.get_updates 'move/updates/:game_id/:after_move', :controller => 'action/move', :action => 'index', :method => 'GET'
 

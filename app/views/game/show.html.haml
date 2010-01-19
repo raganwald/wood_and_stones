@@ -12,8 +12,11 @@
 :javascript
   var game_show = function () {
     return {
-      enable_empty_places: function (div_num) {
-        $('#m' + div_num + ' .board .empty').bind('click.place_stone',
+      move_selector: function (div_num) {
+        return '#m' + div_num + ' .board .empty';
+      },
+      enable_empty_places: function (move_div) {
+        move_div.bind('click.place_stone',
           function (data) {
             var position = this.getAttribute('id');
             $.ajax({
@@ -32,8 +35,8 @@
           'cursor': 'pointer'
         });
       },
-      disable_empty_places: function(div_num) {
-        $('#m' + div_num + ' .board .empty').unbind('click.place_stone').css({
+      disable_empty_places: function(move_div) {
+        move_div.unbind('click.place_stone').css({
           'cursor': 'default'
         });
       },
@@ -48,7 +51,7 @@
           },
           error: function (data) {
             GO.message('error', 'unable to load the game history before ' + current_latest_move + ' because: ' + data.responseText);
-          },
+          }
         });
       },
       get_latest_moves: function () {
@@ -66,13 +69,31 @@
           },
           error: function (data) {
             GO.message('error', 'unable to load the game history after ' + current_latest_move + ' because: ' + data.responseText);
+          }
+        });
+      },
+      get_active_move: function (success_callback) {
+        $.ajax({
+          url: '#{active_move_url(:game_id=>@game.id)}',
+          dataType: 'json',
+          success: function (json) {
+            success_callback(json.move);
           },
+          error: function (data) {
+            GO.message('error', 'unable to get the active move because: ' + data.responseText);
+          }
         });
       }
     };
   }();
 #settings
   -# list all game settings
+:javascript
+  $(document).ready( function () {
+    game_show.get_active_move(function (move_number) {
+      alert('Active move number retrieved: ' + move_number);
+    });
+  });
 -if last.nil?
   .current.move#m0
     .toolbar 

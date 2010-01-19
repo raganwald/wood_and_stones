@@ -1,10 +1,23 @@
 class Action::PlayerActionController < Action::BaseController
   
   before_filter :check_player_is_logged_in, :only => :create
+  before_filter :given_game
   before_filter :all_actions, :for_game, :before_move, :after_move, :only => :index
   
   def index
     render :layout => false if params[:layout].to_s == 'false'
+  end
+  
+  def active
+    respond_to do |format|
+      format.json {
+        if @game.user_to_play == self.current_user
+          render :json => {:move => (@game.actions.last.andand.cardinality or 0)}
+        else
+          render :json => {:move => nil}
+        end
+      }
+    end
   end
   
   private
@@ -15,6 +28,10 @@ class Action::PlayerActionController < Action::BaseController
       return false
     end
     true
+  end
+  
+  def given_game
+    params[:game_id].andand { @game = Game.find(it) }
   end
   
   def all_actions
