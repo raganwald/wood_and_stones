@@ -9,7 +9,7 @@ class Action::PlayerActionController < Action::BaseController
     respond_to do |format|
       format.json do
         if (@game.user_to_play == self.current_user) then
-          render(:json => ({ :move => (((__126393647532940__ = @game.actions.last and __126393647532940__.cardinality) or 0)) }))
+          render(:json => ({ :move => (((__126396046457551__ = @game.actions.last and __126396046457551__.cardinality) or 0)) }))
         else
           render(:json => ({ :move => (nil) }))
         end

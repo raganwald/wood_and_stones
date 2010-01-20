@@ -12,33 +12,38 @@
 :javascript
   var game_show = function () {
     return {
-      move_selector: function (div_num) {
-        return '#m' + div_num + ' .board .empty';
-      },
-      enable_empty_places: function (move_div) {
-        move_div.bind('click.place_stone',
-          function (data) {
-            var position = this.getAttribute('id');
-            $.ajax({
-              url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
-              type: 'POST',
-              success: function (data) {
-                disable_empty_places(div_num );
-                GO.message('success', 'success placing a stone at ' + position);
-              },
-              error: function (data) {
-                GO.message('error', 'unable to place a stone at ' + position + ' because: ' + data.responseText);
-              },
-            });
-          }
-        ).css({
-          'cursor': 'pointer'
-        });
-      },
-      disable_empty_places: function(move_div) {
-        move_div.unbind('click.place_stone').css({
-          'cursor': 'default'
-        });
+      update_active_div: function (move_number) {
+        if (move_number) {
+          var selector = '#m' + move_number + ' .board .empty'
+          $('.active_move').not(selector).unbind('click.place_stone').css({
+            'cursor': 'default'
+          }).removeClass('active_move');
+          $(selector).not('.active_move').bind('click.place_stone',
+            function (data) {
+              var position = this.getAttribute('id');
+              $.ajax({
+                url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
+                type: 'POST',
+                success: function (data) {
+                  game_show.get_latest_moves(function (latest_move_selector) {
+                    game_show.get_active_move(game_show.update_active_div);
+                    jQT.goTo(latest_move_selector, 'flip');
+                  });
+                },
+                error: function (data) {
+                  GO.message('error', 'unable to place a stone at ' + position + ' because: ' + data.responseText);
+                },
+              });
+            }
+          ).css({
+            'cursor': 'pointer'
+          }).addClass('active_move');
+        }
+        else {
+          $('.active_move').unbind('click.place_stone').css({
+            'cursor': 'default'
+          }).removeClass('active_move');
+        }
       },
       get_moves_up_to: function (current_latest_move) {
         $.ajax({
@@ -54,8 +59,8 @@
           }
         });
       },
-      get_latest_moves: function () {
-        current_latest_move = $('.move').size() - 1;
+      get_latest_moves: function (callback) {
+        var current_latest_move = $('.move').size() - 1;
         $.ajax({
           url: '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
           type: 'GET',
@@ -65,6 +70,11 @@
             if (update_moves.size() > 0) {
               update_moves.insertAfter('#m' + current_latest_move);
               $('#m' + current_latest_move + ' .history .next').removeClass('invisible');
+              if (callback) {
+                var newest_move = $('.move').size() - 1;
+                var newest_move_selector = '#m' + newest_move;
+                callback(newest_move_selector);
+              }
             }
           },
           error: function (data) {
@@ -90,9 +100,7 @@
   -# list all game settings
 :javascript
   $(document).ready( function () {
-    game_show.get_active_move(function (move_number) {
-      alert('Active move number retrieved: ' + move_number);
-    });
+    game_show.get_active_move(game_show.update_active_div);
   });
 -if last.nil?
   .current.move#m0
