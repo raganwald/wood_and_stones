@@ -7,100 +7,138 @@
 -# write %div{ :style=>'current', :id=>'foo' }
 -last = @game.actions.last
 -user_to_play = @game.user_to_play
+-update_now_label = 'Update Now'
+-update_available_label = 'Update Available'
 -# TODO: implement wipes for history
 -# NOTE: loading the latest moves should be divorced from setting whether the current move is playable
 :javascript
   var game_show = function () {
-    return {
-      update_active_div: function (move_number) {
-        if (move_number) {
-          var selector = '#m' + move_number + ' .board .empty'
-          $('.active_move').not(selector).unbind('click.place_stone').css({
-            'cursor': 'default'
-          }).removeClass('active_move');
-          $(selector).not('.active_move').bind('click.place_stone',
-            function (data) {
-              var position = this.getAttribute('id');
-              $.ajax({
-                url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
-                type: 'POST',
-                success: function (data) {
-                  game_show.get_latest_moves(function (latest_move_selector) {
-                    game_show.get_active_move(game_show.update_active_div);
-                    jQT.goTo(latest_move_selector, 'flip');
-                  });
-                },
-                error: function (data) {
-                  GO.message('error', 'unable to place a stone at ' + position + ' because: ' + data.responseText);
-                },
-              });
+    var process_server_info = null;
+    var current_latest_move = #{last.nil? ? 0 : last.cardinality};
+    var update_label_selector = '.update_now';
+    var move_selector = function (move_number) {
+      return '#m' + move_number;
+    };
+    var place_stone = function (click_event_data) {
+      var position = this.getAttribute('id');
+      $.ajax({
+        url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
+        type: 'POST',
+        dataType: 'json',
+        success: process_server_info,
+        error: function (error_response) {
+          GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
+        },
+      });
+    };
+    var update_active_div = function (move_number) {
+      if (move_number) {
+        var selector = move_selector(move_number) + ' .board .empty'
+        $('.active_move').not(selector).unbind('click.place_stone').css({
+          'cursor': 'default'
+        }).removeClass('active_move');
+        $(selector).not('.active_move').bind('click.place_stone',
+          place_stone
+        ).css({
+          'cursor': 'pointer'
+        }).addClass('active_move');
+      }
+      else {
+        $('.active_move').unbind('click.place_stone').css({
+          'cursor': 'default'
+        }).removeClass('active_move');
+      }
+    };
+    var get_latest_moves = function (callback) {
+      $.ajax({
+        url: '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
+        type: 'GET',
+        dataType: 'html',
+        success: function (html) {
+          update_moves = $(html);
+          if (update_moves.size() > 0) {
+            update_moves.insertAfter('#m' + current_latest_move);
+            $(move_selector(current_latest_move) + ' .history .next').removeClass('invisible');
+            current_latest_move = current_latest_move + update_moves.size();
+            if (callback) {
+              callback(move_selector(current_latest_move));
             }
-          ).css({
-            'cursor': 'pointer'
-          }).addClass('active_move');
+          }
+        },
+        error: function (error_response) {
+          GO.message('error', 'unable to load the game history after ' + current_latest_move + ' because: ' + error_response.responseText);
+        }
+      });
+    };
+    check_server_info = function (info) {
+      if (info.move_number > current_latest_move) {
+        $(update_label_selector).text(update_now_label);
+      }
+    };
+    process_server_info = function (info) {
+      if (info.move_number > current_latest_move) {
+        var was_current_latest_move = current_latest_move;
+        if (info.active) {
+          get_latest_moves(function (latest_move_selector) {
+            update_active_div(info.move_number);
+            if ($(move_selector(was_current_latest_move)).is('.current')) {
+              jQT.goTo(latest_move_selector, 'flip');
+            }
+          });
         }
         else {
-          $('.active_move').unbind('click.place_stone').css({
-            'cursor': 'default'
-          }).removeClass('active_move');
-        }
-      },
-      get_moves_up_to: function (current_latest_move) {
-        $.ajax({
-          url: '#{get_history_url(:game_id=>@game.id, :before_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
-          type: 'GET',
-          dataType: 'html',
-          success: function (html) {
-            $(html).insertAfter('#m0');
-            $('#m' + current_latest_move + ' .history .prev').removeClass('invisible');
-          },
-          error: function (data) {
-            GO.message('error', 'unable to load the game history before ' + current_latest_move + ' because: ' + data.responseText);
-          }
-        });
-      },
-      get_latest_moves: function (callback) {
-        var current_latest_move = $('.move').size() - 1;
-        $.ajax({
-          url: '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
-          type: 'GET',
-          dataType: 'html',
-          success: function (html) {
-            update_moves = $(html);
-            if (update_moves.size() > 0) {
-              update_moves.insertAfter('#m' + current_latest_move);
-              $('#m' + current_latest_move + ' .history .next').removeClass('invisible');
-              if (callback) {
-                var newest_move = $('.move').size() - 1;
-                var newest_move_selector = '#m' + newest_move;
-                callback(newest_move_selector);
-              }
+          get_latest_moves(function (latest_move_selector) {
+            update_active_div();
+            if ($(move_selector(was_current_latest_move)).is('.current')) {
+              jQT.goTo(latest_move_selector, 'flip');
             }
-          },
-          error: function (data) {
-            GO.message('error', 'unable to load the game history after ' + current_latest_move + ' because: ' + data.responseText);
-          }
-        });
-      },
-      get_active_move: function (success_callback) {
-        $.ajax({
-          url: '#{active_move_url(:game_id=>@game.id)}',
-          dataType: 'json',
-          success: function (json) {
-            success_callback(json.move);
-          },
-          error: function (data) {
-            GO.message('error', 'unable to get the active move because: ' + data.responseText);
-          }
-        });
+          });
+        }
       }
+      else {
+        if (info.active) {
+          update_active_div(current_latest_move);
+        }
+        else {
+          update_active_div();
+        }
+      }
+      $(update_label_selector).text(update_now_label);
+    };
+    var get_history_up_to = function (current_latest_move) {
+      $.ajax({
+        url: '#{get_history_url(:game_id=>@game.id, :before_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
+        type: 'GET',
+        dataType: 'html',
+        success: function (html) {
+          $(html).insertAfter('#m0');
+          $(move_selector(current_latest_move) + ' .history .prev').removeClass('invisible');
+        },
+        error: function (error_response) {
+          GO.message('error', 'unable to load the game history before ' + current_latest_move + ' because: ' + error_response.responseText);
+        }
+      });
+    };
+    var update_now = function () {
+      $.ajax({
+        url: '#{move_info_url(:game_id=>@game.id)}',
+        success: 
+      });
+    };
+    return {
+      get_history_up_to: get_history_up_to,
+      check_server_info: check_server_info
     };
   }();
 #settings
   -# list all game settings
 :javascript
+  document.title = '#{self.current_user ? self.current_user.email : 'guest'}';
   $(document).ready( function () {
-    game_show.get_active_move(game_show.update_active_div);
+    $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
+      { type : 'json', minTimeout: 4000, maxTimeout: 64000 },
+      game_show.check_server_info
+    );
   });
 -if last.nil?
   .current.move#m0
@@ -109,13 +147,23 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    %ul.individual
-      %li
+    %ul.rounded.actions
+      %li.update_now= update_now_label
+    %ul.individual.history
+      %li.prev.invisible
+        %a.slideright{:href=>"#m0"}
+          Prev
+          %small 0
+      %li.next.invisible
+        %a.slideleft{:href=>"#m1"}
+          Next
+          %small 1
 -else
-  :javascript
-    $(document).ready( function () {  
-      game_show.get_moves_up_to(#{last.cardinality});
-    });
+  -#
+    :javascript
+      $(document).ready( function () {  
+        game_show.get_history_up_to(#{last.cardinality});
+      });
   .move#m0
     .toolbar 
       %h1 Beginning
@@ -123,6 +171,10 @@
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
     %ul.individual.history
+      %li.prev.invisible
+        %a.slideright{:href=>"#m0"}
+          Prev
+          %small 0
       %li.next
         %a.slideleft{:href=>"#m1"}
           Next
@@ -133,6 +185,9 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
+    %ul.rounded.actions
+      %li
+        %a.update_now= update_now_label
     %ul.individual.history
       %li.prev.invisible
         %a.slideright{:href=>"#m#{last.cardinality - 1}"}

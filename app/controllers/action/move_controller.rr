@@ -5,7 +5,14 @@ class Action::MoveController < Action::PlayerActionController
       :game => @game,
       :position => params[:position]
     )
-    render :status => 403 unless @move.valid?
+    (render :status => 403 and return) unless @move.valid?
+    self.assemble_info # it has been updated!
+    @info[:move] = @move
+    respond_to do |format|
+      format.json {
+        render :json => @info
+      }
+    end
   end
   
   def valid

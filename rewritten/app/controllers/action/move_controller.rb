@@ -1,7 +1,10 @@
 class Action::MoveController < Action::PlayerActionController
   def create
     @move = Action::Move.create(:game => (@game), :position => (params[:position]))
-    render(:status => 403) unless @move.valid?
+    (render(:status => 403) and return) unless @move.valid?
+    self.assemble_info
+    @info[:move] = @move
+    respond_to { |format| format.json { render(:json => (@info)) } }
   end
   def valid
     @move = Action::Move.new(:game => (@game), :position => (params[:position]))
@@ -20,8 +23,8 @@ class Action::MoveController < Action::PlayerActionController
         else
           @move = @game.actions.find(:conditions => ({ :cardinality => (@cardinality) }))
           @board = @move.after
-          @previous_cardinality = (__126396046211687__ = @move.lower_item and __126396046211687__.cardinality)
-          @next_cardinality = (__126396046284324__ = @move.higher_item and __126396046284324__.cardinality)
+          @previous_cardinality = (__126403549722238__ = @move.lower_item and __126403549722238__.cardinality)
+          @next_cardinality = (__126403549776859__ = @move.higher_item and __126403549776859__.cardinality)
         end
       else
         render(:status => 404)

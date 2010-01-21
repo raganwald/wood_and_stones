@@ -5,20 +5,20 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => action.after }
-    %ul.individual
-      %li
+    %ul.individual.history
+      %li.prev
         %a.slideright{:href=>"#m#{action.cardinality - 1}"}
           Prev
           %small
             = action.cardinality - 1
       -if action.cardinality < action.game.actions.size
-        %li
+        %li.next
           %a.slideleft{:href=>"#m#{action.cardinality + 1}"}
             Next
             %small
               = action.cardinality + 1
       -else
-        %li.invisible
+        %li.next.invisible
           %a.slideleft{:href=>"#m#{action.cardinality + 1}"}
             Next
             %small
