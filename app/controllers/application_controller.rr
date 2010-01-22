@@ -26,24 +26,25 @@ class ApplicationController < ActionController::Base
   
   protected
   
+  def given_game
+    params[:game_id].andand { @game = Game.find(it) }
+  end
+  
   def assemble_info
-    is_active = @game.user_to_play == self.current_user
+    #TODO: Denormalize current move calculation
+    is_active = self.current_user_id.andand { it == @game.user_to_play_id }
     current_move = @game.actions.last.andand.cardinality or 0
-    if self.current_user
-      playing = if self.current_user == @game.black
-          'black'
-        elsif self.current_user == @game.white
-          'white'
-        end
-      email = self.current_user.email
-    else
-      playing = email = nil
+    playing = self.current_user_id.andand do |id|
+      if id == @game.black_id
+        'black'
+      elsif id == @game.white_id
+        'white'
+      end
     end
     @info = {
       :active => is_active,
       :move_number => current_move,
-      :playing => playing,
-      :email => email
+      :playing => playing
     }
   end
   

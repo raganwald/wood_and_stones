@@ -34,6 +34,10 @@ class Game < ActiveRecord::Base
     self.to_play.andand { self.send(it) } unless self.ended?
   end
   
+  def user_to_play_id
+    self.to_play.andand { |colour| self.send("#{colour}_id") } unless self.ended?
+  end
+  
   def initialize(attributes)
     attributes ||= Hash.new
     options = OPTIONS.inject(Hash.new) do |h, attr|

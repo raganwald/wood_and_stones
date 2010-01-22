@@ -6,7 +6,6 @@
 -# <div id=';foo' style='current>, and HAML generates one form when you write .current{ :id=>'foo } and the other when you
 -# write %div{ :style=>'current', :id=>'foo' }
 -last = @game.actions.last
--user_to_play = @game.user_to_play
 -# TODO: implement wipes for history
 -# NOTE: loading the latest moves should be divorced from setting whether the current move is playable
 :javascript
@@ -198,6 +197,9 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
+    .status
+      %span.prev X just played Y
+      %span.now it is your turn to play
     %ul.individual.history
       %li.prev.invisible
         %a.slideright{:href=>"#m#{last.cardinality - 1}"}

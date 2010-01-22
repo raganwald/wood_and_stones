@@ -8,20 +8,14 @@ class ApplicationController < ActionController::Base
     (it = (params["#{name}_id"] or params[:id]) and instance_variable_set(("@" + name), model_class.find(it)))
   end
   protected
+  def given_game
+    (it = params[:game_id] and @game = Game.find(it))
+  end
   def assemble_info
-    is_active = (@game.user_to_play == self.current_user)
-    (current_move = (__126412615159457__ = @game.actions.last and __126412615159457__.cardinality) or 0)
-    if self.current_user then
-      playing = if (self.current_user == @game.black) then
-        "black"
-      else
-        "white" if (self.current_user == @game.white)
-      end
-      email = self.current_user.email
-    else
-      playing = email = nil
-    end
-    @info = { :active => (is_active), :move_number => (current_move), :playing => (playing), :email => (email) }
+    is_active = (it = self.current_user_id and (it == @game.user_to_play_id))
+    (current_move = (__12641885538036__ = @game.actions.last and __12641885538036__.cardinality) or 0)
+    playing = (id = self.current_user_id and (id == @game.black_id) ? ("black") : ("white" if (id == @game.white_id)))
+    @info = { :active => (is_active), :move_number => (current_move), :playing => (playing) }
   end
   private
   def get_const_for(modularized_name)

@@ -4,8 +4,11 @@ module Authenticatable
     def self.included(base)
       base.helper_method(:current_user, :logged_in?, :authorized?, :admin?)
     end
+    def current_user_id
+      session[:user_id]
+    end
     def current_user
-      @current_user ||= (it = session[:user_id] and User.find_by_id(it))
+      @current_user ||= (it = current_user_id and User.find_by_id(it))
     end
     def current_user=(user)
       if user.is_a?(User) then

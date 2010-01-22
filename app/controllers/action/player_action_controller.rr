@@ -1,7 +1,7 @@
 class Action::PlayerActionController < Action::BaseController
   
   before_filter :check_player_is_logged_in, :only => :create
-  before_filter :given_game, :assemble_info
+  before_filter :assemble_info
   before_filter :all_actions, :for_game, :before_move, :after_move, :only => :index
   
   def index
@@ -19,15 +19,11 @@ class Action::PlayerActionController < Action::BaseController
   protected
   
   def check_player_is_logged_in
-    unless self.current_user == @user_to_play
+    unless self.current_user_id == @game.user_to_play_id
       render :text => "You cannot make a move unless you are logged in", :status => 401
       return false
     end
     true
-  end
-  
-  def given_game
-    params[:game_id].andand { @game = Game.find(it) }
   end
   
   def all_actions

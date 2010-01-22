@@ -9,8 +9,12 @@ module Authenticatable
       # base.filter_parameter_logging :password
     end
 
+    def current_user_id
+      session[:user_id]
+    end
+
     def current_user
-      @current_user ||= session[:user_id].andand { User.find_by_id(it) }
+      @current_user ||= current_user_id.andand { User.find_by_id(it) }
     end
 
     def current_user=(user)
