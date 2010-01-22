@@ -21,7 +21,7 @@ class Action::PlayerActionController < Action::BaseController
   end
   def assemble_info
     is_active = (@game.user_to_play == self.current_user)
-    (current_move = (__12640355001492__ = @game.actions.last and __12640355001492__.cardinality) or 0)
+    (current_move = (__126412520931850__ = @game.actions.last and __126412520931850__.cardinality) or 0)
     if self.current_user then
       playing = if (self.current_user == @game.black) then
         "black"
