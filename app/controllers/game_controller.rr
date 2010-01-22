@@ -1,5 +1,7 @@
 class GameController < ApplicationController
   
+  before_filter :assemble_info
+  
   def create
     @black = params[:black].andand { User.find_or_create_by_email(it) }
     @white = params[:white].andand { User.find_or_create_by_email(it) }

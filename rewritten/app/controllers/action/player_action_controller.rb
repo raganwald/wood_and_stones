@@ -19,21 +19,6 @@ class Action::PlayerActionController < Action::BaseController
   def given_game
     (it = params[:game_id] and @game = Game.find(it))
   end
-  def assemble_info
-    is_active = (@game.user_to_play == self.current_user)
-    (current_move = (__126412520931850__ = @game.actions.last and __126412520931850__.cardinality) or 0)
-    if self.current_user then
-      playing = if (self.current_user == @game.black) then
-        "black"
-      else
-        "white" if (self.current_user == @game.white)
-      end
-      email = self.current_user.email
-    else
-      playing = email = nil
-    end
-    @info = { :active => (is_active), :move_number => (current_move), :playing => (playing), :email => (email) }
-  end
   def all_actions
     @actions ||= Action::Gameplay.scoped
   end

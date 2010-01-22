@@ -13,7 +13,7 @@
   var game_show = function () {
     var update_latest_server_info = null;
     var current_latest_move = #{last.nil? ? 0 : last.cardinality};
-    var latest_server_info = {};
+    var latest_server_info = #{@info.to_json};
     var move_selector = function (move_number) {
       return '#m' + move_number;
     };
@@ -71,7 +71,6 @@
     var process_server_info = function () {
       var can_process_server_info = true;
       return function () {
-        document.title = 'processing server info given ' + latest_server_info.move_number + ' and a latest move of ' + current_latest_move;
         if (!can_process_server_info || !latest_server_info.move_number) {
           return null;
         }
@@ -98,12 +97,7 @@
           }
         }
         else {
-          if (latest_server_info.active) {
-            update_active_div(current_latest_move);
-          }
-          else {
-            update_active_div();
-          }
+          update_active_on_current_board();
           can_process_server_info = true;
         }
       }
@@ -132,7 +126,16 @@
         }
       });
     };
+    var update_active_on_current_board = function () {
+      if (latest_server_info.active) {
+        update_active_div(current_latest_move);
+      }
+      else {
+        update_active_div();
+      }
+    };
     return {
+      update_active_on_current_board: update_active_on_current_board,
       process_server_info: process_server_info,
       get_history_up_to: get_history_up_to,
       update_latest_server_info: update_latest_server_info
@@ -143,6 +146,7 @@
 :javascript
   document.title = '#{self.current_user ? self.current_user.email : 'guest'}';
   $(document).ready( function () {
+    game_show.update_active_on_current_board();
     $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
       { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
       game_show.update_latest_server_info
