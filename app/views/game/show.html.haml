@@ -79,6 +79,7 @@
           if (latest_server_info.active) {
             get_latest_moves(function (latest_move_selector) {
               update_active_div(latest_server_info.move_number);
+              update_status_on_current_board();
               can_process_server_info = true;
               if ($(move_selector(was_current_latest_move)).is('.current')) {
                 jQT.goTo(latest_move_selector, 'flip');
@@ -88,6 +89,7 @@
           else {
             get_latest_moves(function (latest_move_selector) {
               update_active_div();
+              update_status_on_current_board();
               can_process_server_info = true;
               if ($(move_selector(was_current_latest_move)).is('.current')) {
                 jQT.goTo(latest_move_selector, 'flip');
@@ -133,7 +135,13 @@
         update_active_div();
       }
     };
+    var update_status_on_current_board = function () {
+      var selector = move_selector(current_latest_move);
+      $('.move .status').not(selector).addClass('invisible');
+      $(selector + ' .status').text('this is the current board');
+    };
     return {
+      update_status_on_current_board: update_status_on_current_board,
       update_active_on_current_board: update_active_on_current_board,
       process_server_info: process_server_info,
       get_history_up_to: get_history_up_to,
@@ -146,6 +154,7 @@
   document.title = '#{self.current_user ? self.current_user.email : 'guest'}';
   $(document).ready( function () {
     game_show.update_active_on_current_board();
+    game_show.update_status_on_current_board();
     $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
       { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
       game_show.update_latest_server_info
@@ -161,34 +170,35 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
+    .status
     %ul.individual.history
       %li.prev.invisible
-        %a.slideright{:href=>"#m0"}
+        %a.slideback{:href=>"#m0"}
           Prev
           %small 0
       %li.next.invisible
-        %a.slideleft{:href=>"#m1"}
+        %a{:href=>"#m1"}
           Next
           %small 1
 -else
-  -#
-    :javascript
-      $(document).ready( function () {  
-        game_show.get_history_up_to(#{last.cardinality});
-      });
+  :javascript
+    $(document).ready( function () {  
+      game_show.get_history_up_to(#{last.cardinality});
+    });
   .move#m0
     .toolbar 
       %h1 Beginning
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
+    .status
     %ul.individual.history
       %li.prev.invisible
-        %a.slideright{:href=>"#m0"}
+        %a.slideback{:href=>"#m0"}
           Prev
           %small 0
       %li.next
-        %a.slideleft{:href=>"#m1"}
+        %a{:href=>"#m1"}
           Next
           %small 1
   .current.move{:id=>"m#{last.cardinality}"}
@@ -198,16 +208,14 @@
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
     .status
-      %span.prev X just played Y
-      %span.now it is your turn to play
     %ul.individual.history
       %li.prev.invisible
-        %a.slideright{:href=>"#m#{last.cardinality - 1}"}
+        %a.slideback{:href=>"#m#{last.cardinality - 1}"}
           Prev
           %small
             = last.cardinality - 1
       %li.next.invisible
-        %a.slideleft{:href=>"#m#{last.cardinality + 1}"}
+        %a{:href=>"#m#{last.cardinality + 1}"}
           Next
           %small
             = last.cardinality + 1

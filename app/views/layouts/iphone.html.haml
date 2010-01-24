@@ -13,6 +13,7 @@
     %style{:type=>"text/css", :media=>"screen"} @import "/themes/jqt/theme.css";
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/application.css";
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/floaty.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/board.css";
     
     :javascript
       var jQT = new $.jQTouch({
@@ -25,7 +26,12 @@
               '/themes/jqt/img/button_clicked.png'
               ]
       });
-
+      $(function(){
+          jQT.addAnimation({
+              name: 'slideback',
+              selector: '.slideback'
+          });
+      });
   %body
     #message
       .toolbar 

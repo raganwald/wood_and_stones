@@ -65,9 +65,9 @@ module ApplicationHelper
       'white' => 'top left white occupied'
     },
     :top => {
-      nil     => 'top empty',
-      'black' => 'top black occupied',
-      'white' => 'top white occupied'
+      nil     => 'top middle empty',
+      'black' => 'top middle black occupied',
+      'white' => 'top middle white occupied'
     },
     :topright => {
       nil     => 'top right empty',
@@ -75,14 +75,14 @@ module ApplicationHelper
       'white' => 'top right white occupied'
     },
     :left => {
-      nil     => 'left empty',
-      'black' => 'left black occupied',
-      'white' => 'left white occupied'
+      nil     => 'left middle empty',
+      'black' => 'left middle black occupied',
+      'white' => 'left middle white occupied'
     },
     :right => {
-      nil     => 'top right empty',
-      'black' => 'top right black occupied',
-      'white' => 'top right white occupied'
+      nil     => 'top middle right empty',
+      'black' => 'top middle right black occupied',
+      'white' => 'top middle right white occupied'
     },
     :bottomleft => {
       nil     => 'bottom left empty',
@@ -90,9 +90,9 @@ module ApplicationHelper
       'white' => 'bottom left white occupied'
     },
     :bottom => {
-      nil     => 'bottom empty',
-      'black' => 'bottom black occupied',
-      'white' => 'bottom white occupied'
+      nil     => 'bottom middle empty',
+      'black' => 'bottom middle black occupied',
+      'white' => 'bottom middle white occupied'
     },
     :bottomright => {
       nil     => 'bottom right empty',
@@ -100,9 +100,9 @@ module ApplicationHelper
       'white' => 'bottom right white occupied'
     },
     :blank => {
-      nil     => 'empty',
-      'black' => 'black occupied',
-      'white' => 'white occupied'
+      nil     => 'interior empty',
+      'black' => 'interior black occupied',
+      'white' => 'interior white occupied'
     },
     :star => {
       nil     => 'star empty',
