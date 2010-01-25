@@ -10,14 +10,15 @@
 -# NOTE: loading the latest moves should be divorced from setting whether the current move is playable
 :javascript
   var game_show = function () {
+    var NULL_SELECTOR = 'not(*)';
+    
     var update_latest_server_info = null;
     var current_latest_move = #{last.nil? ? 0 : last.cardinality};
     var latest_server_info = #{@info.to_json};
     var move_selector = function (move_number) {
       return '#m' + move_number;
     };
-    var place_stone = function (click_event_data) {
-      var position = this.getAttribute('id');
+    var send_move = function (position) {
       $.ajax({
         url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position),
         type: 'POST',
@@ -28,24 +29,28 @@
         },
       });
     };
-    var update_active_div = function (move_number) {
-      if (move_number) {
-        var selector = move_selector(move_number) + ' .board .empty'
-        $('.active_move').not(selector).unbind('click.place_stone').css({
-          'cursor': 'default'
-        }).removeClass('active_move');
-        $(selector).not('.active_move').bind('click.place_stone',
-          place_stone
-        ).css({
-          'cursor': 'pointer'
-        }).addClass('active_move');
+    var place_stone = function (click_event_data) {
+      target = $(click_event_data.currentTarget)
+      if (target.hasClass('empty')) {
+        $('.board.to_move .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
+        target.addClass(latest_server_info.playing);
       }
       else {
-        $('.active_move').unbind('click.place_stone').css({
-          'cursor': 'default'
-        }).removeClass('active_move');
+        alert(target.getAttribute('id')); // error!
       }
     };
+    var update_active_div = function () {
+      var board_to_unbind_selector = '.board.to_move';
+      var places_to_unbind_selector = '.board.to_move .empty';
+      return function (move_number) {
+        var board_to_bind_selector = (move_number ? move_selector(move_number) + ' .board' : NULL_SELECTOR);
+        var places_to_bind_selector = (move_number ? board_to_bind_selector + ' .empty' : NULL_SELECTOR);
+        $(board_to_bind_selector).addClass('to_move');
+        $(places_to_bind_selector).bind('click.place_stone', place_stone);
+        $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click.place_stone').removeClass(latest_server_info.playing);
+        $(board_to_unbind_selector).not(board_to_bind_selector).removeClass('to_move');
+      };
+    }();
     var get_latest_moves = function (callback) {
       $.ajax({
         url: '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_latest_move),
@@ -181,10 +186,11 @@
           Next
           %small 1
 -else
-  :javascript
-    $(document).ready( function () {  
-      game_show.get_history_up_to(#{last.cardinality});
-    });
+  -#
+    :javascript
+      $(document).ready( function () {  
+        game_show.get_history_up_to(#{last.cardinality});
+      });
   .move#m0
     .toolbar 
       %h1 Beginning

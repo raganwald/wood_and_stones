@@ -1,60 +1,63 @@
 .board .top.left.black {
-  background: url('/images/board/temporary/tile1nw.png'); }
+  background: url('/images/board/temporary/tile1nw.png') !important; }
 .board .top.left.white {
-  background: url('/images/board/temporary/tile2nw.png'); }
+  background: url('/images/board/temporary/tile2nw.png') !important; }
 .board .top.left.empty {
   background: url('/images/board/temporary/tile0nw.png'); }
 .board .top.right.black {
-  background: url('/images/board/temporary/tile1ne.png'); }
+  background: url('/images/board/temporary/tile1ne.png') !important; }
 .board .top.right.white {
-  background: url('/images/board/temporary/tile2ne.png'); }
+  background: url('/images/board/temporary/tile2ne.png') !important; }
 .board .top.right.empty {
   background: url('/images/board/temporary/tile0ne.png'); }
 .board .bottom.left.black {
-  background: url('/images/board/temporary/tile1sw.png'); }
+  background: url('/images/board/temporary/tile1sw.png') !important; }
 .board .bottom.left.white {
-  background: url('/images/board/temporary/tile2sw.png'); }
+  background: url('/images/board/temporary/tile2sw.png') !important; }
 .board .bottom.left.empty {
   background: url('/images/board/temporary/tile0sw.png'); }
 .board .bottom.right.black {
-  background: url('/images/board/temporary/tile1se.png'); }
+  background: url('/images/board/temporary/tile1se.png') !important; }
 .board .bottom.right.white {
-  background: url('/images/board/temporary/tile2se.png'); }
+  background: url('/images/board/temporary/tile2se.png') !important; }
 .board .bottom.right.empty {
   background: url('/images/board/temporary/tile0se.png'); }
 .board .top.middle.black {
-  background: url('/images/board/temporary/tile1n.png'); }
+  background: url('/images/board/temporary/tile1n.png') !important; }
 .board .top.middle.white {
-  background: url('/images/board/temporary/tile2n.png'); }
+  background: url('/images/board/temporary/tile2n.png') !important; }
 .board .top.middle.empty {
   background: url('/images/board/temporary/tile0n.png'); }
 .board .left.middle.black {
-  background: url('/images/board/temporary/tile1w.png'); }
+  background: url('/images/board/temporary/tile1w.png') !important; }
 .board .left.middle.white {
-  background: url('/images/board/temporary/tile2w.png'); }
+  background: url('/images/board/temporary/tile2w.png') !important; }
 .board .left.middle.empty {
   background: url('/images/board/temporary/tile0w.png'); }
 .board .bottom.middle.black {
-  background: url('/images/board/temporary/tile1s.png'); }
+  background: url('/images/board/temporary/tile1s.png') !important; }
 .board .bottom.middle.white {
-  background: url('/images/board/temporary/tile2s.png'); }
+  background: url('/images/board/temporary/tile2s.png') !important; }
 .board .bottom.middle.empty {
   background: url('/images/board/temporary/tile0s.png'); }
 .board .right.middle.black {
-  background: url('/images/board/temporary/tile1e.png'); }
+  background: url('/images/board/temporary/tile1e.png') !important; }
 .board .right.middle.white {
-  background: url('/images/board/temporary/tile2e.png'); }
+  background: url('/images/board/temporary/tile2e.png') !important; }
 .board .right.middle.empty {
   background: url('/images/board/temporary/tile0e.png'); }
 .board .interior.black {
-  background: url('/images/board/temporary/tile1.png'); }
+  background: url('/images/board/temporary/tile1.png') !important; }
 .board .interior.white {
-  background: url('/images/board/temporary/tile2.png'); }
+  background: url('/images/board/temporary/tile2.png') !important; }
 .board .interior.empty {
   background: url('/images/board/temporary/tile0.png'); }
 .board .star.black {
-  background: url('/images/board/temporary/tile1.png'); }
+  background: url('/images/board/temporary/tile1.png') !important; }
 .board .star.white {
-  background: url('/images/board/temporary/tile2.png'); }
+  background: url('/images/board/temporary/tile2.png') !important; }
 .board .star.empty {
   background: url('/images/board/temporary/tile0c.png'); }
+
+.board.to_move .empty {
+  cursor: pointer; }

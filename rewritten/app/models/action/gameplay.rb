@@ -11,11 +11,11 @@ class Action::Gameplay < Action::Base
     false
   end
   def clone_game_board_to_before
-    self.before ||= (__126431312926581__ = self.game and __126431312926581__.current_board)
+    self.before ||= (__126443852249061__ = self.game and __126443852249061__.current_board)
     true
   end
   def clone_before_to_after
-    self.after ||= (__126431312939339__ = self.before and __126431312939339__.clone)
+    self.after ||= (__126443852263299__ = self.before and __126443852263299__.clone)
     true
   end
   def update_game_current_board
