@@ -11,9 +11,14 @@ class ApplicationController < ActionController::Base
   def given_game
     (it = params[:game_id] and @game = Game.find(it))
   end
+  def assemble_info_without_move_number
+    is_active = (it = self.current_user_id and (it == @game.user_to_play_id))
+    playing = (id = self.current_user_id and (id == @game.black_id) ? ("black") : ("white" if (id == @game.white_id)))
+    @info = { :active => (is_active), :playing => (playing) }
+  end
   def assemble_info
     is_active = (it = self.current_user_id and (it == @game.user_to_play_id))
-    (current_move = (__126443851975760__ = @game.actions.last and __126443851975760__.cardinality) or 0)
+    current_move = @game.actions.count
     playing = (id = self.current_user_id and (id == @game.black_id) ? ("black") : ("white" if (id == @game.white_id)))
     @info = { :active => (is_active), :move_number => (current_move), :playing => (playing) }
   end

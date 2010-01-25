@@ -30,10 +30,24 @@ class ApplicationController < ActionController::Base
     params[:game_id].andand { @game = Game.find(it) }
   end
   
-  def assemble_info
-    #TODO: Denormalize current move calculation
+  def assemble_info_without_move_number
     is_active = self.current_user_id.andand { it == @game.user_to_play_id }
-    current_move = @game.actions.last.andand.cardinality or 0
+    playing = self.current_user_id.andand do |id|
+      if id == @game.black_id
+        'black'
+      elsif id == @game.white_id
+        'white'
+      end
+    end
+    @info = {
+      :active => is_active,
+      :playing => playing
+    }
+  end
+  
+  def assemble_info
+    is_active = self.current_user_id.andand { it == @game.user_to_play_id }
+    current_move = @game.actions.count
     playing = self.current_user_id.andand do |id|
       if id == @game.black_id
         'black'

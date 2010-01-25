@@ -15,6 +15,7 @@
     var update_latest_server_info = null;
     var current_latest_move = #{last.nil? ? 0 : last.cardinality};
     var latest_server_info = #{@info.to_json};
+    latest_server_info.move_number = current_latest_move;
     var move_selector = function (move_number) {
       return '#m' + move_number;
     };
@@ -29,26 +30,43 @@
         },
       });
     };
-    var place_stone = function (click_event_data) {
-      target = $(click_event_data.currentTarget)
+    var do_stone_move = function (dbl_click_event_data) {
+      target = $(dbl_click_event_data.currentTarget);
       if (target.hasClass('empty')) {
-        $('.board.to_move .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
+        $.ajax({
+          url: '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', target.attr('id')),
+          type: 'POST',
+          dataType: 'json',
+          success: update_latest_server_info,
+          error: function (error_response) {
+            GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
+          },
+        });
+      }
+    };
+    var place_stone = function (click_event_data) {
+      target = $(click_event_data.currentTarget);
+      if (target.hasClass('empty')) {
+        $('.to_move .board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
         target.addClass(latest_server_info.playing);
       }
-      else {
-        alert(target.getAttribute('id')); // error!
+    };
+    var lift_stone = function (click_event_data) {
+      target = $(click_event_data.currentTarget);
+      if (target.hasClass('empty') && target.hasClass(latest_server_info.playing)) {
+        target.removeClass(latest_server_info.playing);
       }
     };
     var update_active_div = function () {
-      var board_to_unbind_selector = '.board.to_move';
-      var places_to_unbind_selector = '.board.to_move .empty';
+      var move_to_unbind_selector = '.move.active';
+      var places_to_unbind_selector = '.move.active .board .empty';
       return function (move_number) {
-        var board_to_bind_selector = (move_number ? move_selector(move_number) + ' .board' : NULL_SELECTOR);
-        var places_to_bind_selector = (move_number ? board_to_bind_selector + ' .empty' : NULL_SELECTOR);
-        $(board_to_bind_selector).addClass('to_move');
-        $(places_to_bind_selector).bind('click.place_stone', place_stone);
-        $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click.place_stone').removeClass(latest_server_info.playing);
-        $(board_to_unbind_selector).not(board_to_bind_selector).removeClass('to_move');
+        var move_to_bind_selector = (move_number ? move_selector(move_number) : NULL_SELECTOR);
+        var places_to_bind_selector = (move_number ? move_to_bind_selector + ' .board .empty' : NULL_SELECTOR);
+        $(move_to_bind_selector).addClass('active');
+        $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(do_stone_move);
+        $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
+        $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
       };
     }();
     var get_latest_moves = function (callback) {
@@ -142,8 +160,8 @@
     };
     var update_status_on_current_board = function () {
       var selector = move_selector(current_latest_move);
-      $('.move .status').not(selector).addClass('invisible');
-      $(selector + ' .status').text('this is the current board');
+      $('.move .info').not(selector).addClass('invisible');
+      $(selector + ' .info').text('this is the current board');
     };
     return {
       update_status_on_current_board: update_status_on_current_board,
@@ -156,7 +174,6 @@
 #settings
   -# list all game settings
 :javascript
-  document.title = '#{self.current_user ? self.current_user.email : 'guest'}';
   $(document).ready( function () {
     game_show.update_active_on_current_board();
     game_show.update_status_on_current_board();
@@ -175,7 +192,8 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    .status
+    %ul.individual.actions
+      %a.send Move
     %ul.individual.history
       %li.prev.invisible
         %a.slideback{:href=>"#m0"}
@@ -185,6 +203,7 @@
         %a{:href=>"#m1"}
           Next
           %small 1
+    .info
 -else
   -#
     :javascript
@@ -197,7 +216,8 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    .status
+    %ul.individual.actions
+      %a.send Move
     %ul.individual.history
       %li.prev.invisible
         %a.slideback{:href=>"#m0"}
@@ -207,13 +227,15 @@
         %a{:href=>"#m1"}
           Next
           %small 1
+    .info
   .current.move{:id=>"m#{last.cardinality}"}
     .toolbar 
       %h1 Move #{last.cardinality}
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => last.after }
-    .status
+    %ul.individual.actions
+      %a.send Move
     %ul.individual.history
       %li.prev.invisible
         %a.slideback{:href=>"#m#{last.cardinality - 1}"}
@@ -225,3 +247,4 @@
           Next
           %small
             = last.cardinality + 1
+    .info

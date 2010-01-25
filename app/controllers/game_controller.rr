@@ -1,6 +1,6 @@
 class GameController < ApplicationController
   
-  before_filter :assemble_info
+  before_filter :assemble_info_without_move_number, :only => :show
   
   def create
     @black = params[:black].andand { User.find_or_create_by_email(it) }

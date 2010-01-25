@@ -5,6 +5,8 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => action.after }
+    %ul.individual.actions
+      %a.send Move
     %ul.individual.history
       %li.prev
         %a.slideback{:href=>"#m#{action.cardinality - 1}"}
@@ -23,3 +25,4 @@
             Next
             %small
               = action.cardinality + 1
+    .info

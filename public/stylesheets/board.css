@@ -59,5 +59,11 @@
 .board .star.empty {
   background: url('/images/board/temporary/tile0c.png'); }
 
-.board.to_move .empty {
+.active .board .empty {
   cursor: pointer; }
+
+.move .actions .send {
+  display: none; }
+
+.move.active .actions .send {
+  display: inline !important; }
