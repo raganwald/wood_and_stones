@@ -1,32 +1,28 @@
 module Action::PlaceStone
   
   def self.included(receiver)
+    
     receiver.instance_eval do |foo|
       # these affect validation
       before_validation_on_create :place_stone
         
-      validates_presence_of(:before, :on => :create, :message => "can't be blank")
-      validates_presence_of(:after, :on => :create, :message => "can't be blank")
       validates_presence_of(:position, :on => :create, :message => "can't be blank")
         
       # a valid placement is not exactly the same thing as a valid move
       # validation occurs after the creation of before and after
       validates_each :position do |record, attr, value|
-        if record.before
+        if record.game.current_board
           record.errors.add attr, 'should be of the form aa and be a valid position on the board' unless begin
-            record.before.valid_position?(value)
+            record.game.current_board.valid_position?(value)
           end
           record.errors.add attr, 'should be to an empty place on the board' unless begin
-            record.before[value].open?
+            record.game.current_board[value].open?
           end
         end
       end
         
       validates_each :after do |record, attr, value|
         if record.after
-          record.errors.add attr, "should be the same dimension as :before" unless begin
-            value.dimension == record.before.andand.dimension
-          end
           record.errors.add attr, 'should result in a stone placed on the board' unless begin
             value[record.position].has?(record.player)
           end
@@ -38,7 +34,11 @@ module Action::PlaceStone
   end
   
   def place_stone
-    self.after[self.position] = self.player if self.after && self.after[self.position].open? # place a stone there if the position is empty
+    if self.after? && self.after[self.position].open?
+      self.after = returning(self.after.dup) do |board|
+        board[self.position] = self.player
+      end
+    end
   end
   
 end

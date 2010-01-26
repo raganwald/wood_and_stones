@@ -3,7 +3,6 @@ class Game < ActiveRecord::Base
   end
   belongs_to(:current_board, :class_name => "Board", :foreign_key => "current_board_id")
   validates_presence_of(:current_board)
-  validates_associated(:current_board)
   belongs_to(:black, :class_name => "User", :foreign_key => "black_id")
   validates_presence_of(:black)
   validates_associated(:black)
@@ -17,8 +16,10 @@ class Game < ActiveRecord::Base
   named_scope(:played_by, lambda do |user|
     { :conditions => (["black_id = ? OR white_id = ?", user.id, user.id]) }
   end)
-  def initial_board
-    ((__126445464450018__ = self.actions.first and __126445464450018__.before) or self.current_board)
+  composed_of(:initial_board, :class_name => "Board", :mapping => ([["initial_board_serialized", "as_str"], ["dimension", "dimension"]]))
+  composed_of(:current_board, :class_name => "Board", :mapping => ([["current_board_serialized", "as_str"], ["dimension", "dimension"]]))
+  validates_each(:initial_board, :current_board) do |record, attribute, value|
+    Board.validate_for(record, attribute)
   end
   def user_to_play
     (it = self.to_play and self.send(it)) unless self.ended?
@@ -46,7 +47,7 @@ class Game < ActiveRecord::Base
       fork
     else
       if dimension = options[:dimension] then
-        self.current_board = Board.create(:dimension => (dimension))
+        self.current_board = Board.new(dimension)
         (handicap = options[:handicap].to_i
         if (handicap > 1) then
           self.current_board.handicap(handicap)
@@ -55,6 +56,7 @@ class Game < ActiveRecord::Base
         else
           self.to_play = Board::BLACK_S
         end)
+        self.initial_board = self.current_board
         start
       else
         self.errors.add(:before, "cannot initialize a game without forking or setting a dimension")

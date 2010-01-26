@@ -1,8 +1,9 @@
 class Action::Gameplay < Action::Base
   include(Action::PlayerAction)
-  before_validation_on_create(:clone_game_board_to_before, :clone_before_to_after, :check_game_state)
+  before_validation_on_create(:copy_game_to_after, :check_game_state)
   before_create(:update_game_current_board)
-  after_create(:update_game_state, :update_game_to_play, :save_after_board)
+  after_create(:update_game_state, :update_game_to_play)
+  validates_uniqueness_of(:after_board_serialized, :scope => :game_id, :on => :create, :message => "you cannot recreate a position that has already occurred in the game")
   def check_game_state
     if self.game.send("can_#{self.class.name.demodulize.downcase}?") then
       return true
@@ -10,20 +11,15 @@ class Action::Gameplay < Action::Base
     self.errors.add(:game, "does not permit you to #{self.class.name.demodulize.downcase}")
     false
   end
-  def clone_game_board_to_before
-    self.before ||= (__12644546502730__ = self.game and __12644546502730__.current_board)
-    true
-  end
-  def clone_before_to_after
-    self.after ||= (__12644546504343__ = self.before and __12644546504343__.clone)
+  def copy_game_to_after
+    unless self.after? then
+      self.after = (__126453797858314__ = self.game and __126453797858314__.current_board).clone
+    end
     true
   end
   def update_game_current_board
     self.game.update_attribute(:current_board, self.after)
-    true
-  end
-  def save_after_board
-    self.after.save!
+    self.game.update_attribute(:current_move_number, self.cardinality)
     true
   end
   def update_game_state

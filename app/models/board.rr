@@ -1,4 +1,7 @@
-class Board < ActiveRecord::Base
+class Board
+  
+  attr_accessor :as_str
+  attr_accessor :dimension
   
   DIMENSIONS = [9, 11, 13, 15, 17, 19]
   
@@ -75,7 +78,7 @@ class Board < ActiveRecord::Base
     def have(colour)
       arr = self.board.to_a
       arr[self.across][self.down] = colour
-      self.board.array_hack = arr.inspect
+      self.board.as_str = arr.inspect
       self
     end
     
@@ -90,7 +93,7 @@ class Board < ActiveRecord::Base
     def remove
       arr = self.board.to_a
       arr[self.across][self.down] = nil
-      self.board.array_hack = arr.inspect
+      self.board.as_str = arr.inspect
       self
     end
   
@@ -239,13 +242,19 @@ class Board < ActiveRecord::Base
     
   end
   
-  before_validation_on_create :initialize_array_hack
+  def initialize(str, dimension)
+    self.as_str = str
+    self.dimension = dimension
+    initialize_as_str
+  end
   
-  validates_inclusion_of :dimension, :in => DIMENSIONS
-  
-  validate do |board|
-    undead = board.dead_stones.all
-    board.errors.add_to_base("The stones at #{undead.to_sentence} are dead") unless undead.empty?
+  def self.validate_for(belongs_to, *board_attrs)
+    board_attrs.each do |sym|
+      board = belongs_to.send(sym)
+      undead = board.dead_stones.all
+      belongs_to.errors.add(sym, "The stones at #{undead.to_sentence} are dead") unless undead.empty?
+      belongs_to.errors.add(sym, "#{board.dimension} is not a valid board size") unless DIMENSIONS.include?(board.dimension)
+    end
   end
   
   STARS = Board::DIMENSIONS.inject(Hash.new) do |sizes_to_game_sets, dimension|
@@ -364,7 +373,7 @@ class Board < ActiveRecord::Base
   
   def []=(str_or_symbol,value)
     # TODO: memoize #to_a and invalidate it here
-    initialize_array_hack
+    initialize_as_str
     str = str_or_symbol.to_s.downcase
     if valid_position?(str)
       arr = self.to_a
@@ -381,8 +390,8 @@ class Board < ActiveRecord::Base
   end
   
   def to_a
-    initialize_array_hack
-    eval(self.array_hack)
+    initialize_as_str
+    eval(self.as_str)
   end
   
   def groupings
@@ -423,9 +432,9 @@ class Board < ActiveRecord::Base
     Location.for(self, offsets.first, offsets.last) if offsets.size == 2
   end
   
-  def initialize_array_hack
-    if self.array_hack.blank?
-      self.array_hack = ((1..self.dimension).map{ [nil] * self.dimension }).inspect
+  def initialize_as_str
+    if self.as_str.blank?
+      self.as_str = ((1..self.dimension).map{ [nil] * self.dimension }).inspect
     end
   end
   

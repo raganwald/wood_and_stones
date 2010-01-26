@@ -4,8 +4,8 @@ class CreateActionTable < ActiveRecord::Migration
       t.string :type
       t.string :position
       t.string :player
-      t.integer :before_id
-      t.integer :after_id
+      t.string :after_board_serialized
+      t.integer :dimension
       t.integer :game_id
       t.timestamps
     end

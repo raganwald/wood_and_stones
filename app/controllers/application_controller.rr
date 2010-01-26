@@ -1,5 +1,7 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+
+require 'ostruct'
  
 class ApplicationController < ActionController::Base
   
@@ -30,24 +32,9 @@ class ApplicationController < ActionController::Base
     params[:game_id].andand { @game = Game.find(it) }
   end
   
-  def assemble_info_without_move_number
-    is_active = self.current_user_id.andand { it == @game.user_to_play_id }
-    playing = self.current_user_id.andand do |id|
-      if id == @game.black_id
-        'black'
-      elsif id == @game.white_id
-        'white'
-      end
-    end
-    @info = {
-      :active => is_active,
-      :playing => playing
-    }
-  end
-  
   def assemble_info
     is_active = self.current_user_id.andand { it == @game.user_to_play_id }
-    current_move = @game.actions.count
+    current_move = @game.current_move_number
     playing = self.current_user_id.andand do |id|
       if id == @game.black_id
         'black'
@@ -55,11 +42,15 @@ class ApplicationController < ActionController::Base
         'white'
       end
     end
-    @info = {
+    @info = OpenStruct.new(
       :active => is_active,
       :move_number => current_move,
-      :playing => playing
-    }
+      :playing => playing,
+      :create_move_js => "function (position) { return '#{create_move_url(:game_id=>@game.id, :position=>'zzzzz')}'.replace('zzzzz', position);}",
+      :get_updates_js => "function (current_move_number) { return '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_move_number);}",
+      :get_history_js => "function (current_move_number) { return '#{get_history_url(:game_id=>@game.id, :before_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_move_number);}",
+      :move_info_url => move_info_url(:game_id=>@game.id)
+    )
   end
   
   private

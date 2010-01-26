@@ -1,4 +1,6 @@
-class Board < ActiveRecord::Base
+class Board
+  attr_accessor(:as_str)
+  attr_accessor(:dimension)
   DIMENSIONS = [9, 11, 13, 15, 17, 19]
   BLACK_S, WHITE_S = "black", "white"
   class Occupied < Exception
@@ -52,7 +54,7 @@ class Board < ActiveRecord::Base
     def have(colour)
       arr = self.board.to_a
       arr[self.across][self.down] = colour
-      self.board.array_hack = arr.inspect
+      self.board.as_str = arr.inspect
       self
     end
     def blacken
@@ -64,7 +66,7 @@ class Board < ActiveRecord::Base
     def remove
       arr = self.board.to_a
       arr[self.across][self.down] = nil
-      self.board.array_hack = arr.inspect
+      self.board.as_str = arr.inspect
       self
     end
     def adjacent_scalars(offset)
@@ -178,12 +180,21 @@ class Board < ActiveRecord::Base
       end.call(Location.for(board, self.across, down))
     end
   end
-  before_validation_on_create(:initialize_array_hack)
-  validates_inclusion_of(:dimension, :in => (DIMENSIONS))
-  validate do |board|
-    undead = board.dead_stones.all
-    unless undead.empty? then
-      board.errors.add_to_base("The stones at #{undead.to_sentence} are dead")
+  def initialize(str, dimension)
+    self.as_str = str
+    self.dimension = dimension
+    initialize_as_str
+  end
+  def self.validate_for(belongs_to, *board_attrs)
+    board_attrs.each do |sym|
+      board = belongs_to.send(sym)
+      undead = board.dead_stones.all
+      unless undead.empty? then
+        belongs_to.errors.add(sym, "The stones at #{undead.to_sentence} are dead")
+      end
+      unless DIMENSIONS.include?(board.dimension) then
+        belongs_to.errors.add(sym, "#{board.dimension} is not a valid board size")
+      end
     end
   end
   STARS = Board::DIMENSIONS.inject(Hash.new) do |sizes_to_game_sets, dimension|
@@ -255,7 +266,7 @@ class Board < ActiveRecord::Base
     end
   end
   def []=(str_or_symbol, value)
-    initialize_array_hack
+    initialize_as_str
     str = str_or_symbol.to_s.downcase
     if valid_position?(str) then
       arr = self.to_a
@@ -267,8 +278,8 @@ class Board < ActiveRecord::Base
     end
   end
   def to_a
-    initialize_array_hack
-    eval(self.array_hack)
+    initialize_as_str
+    eval(self.as_str)
   end
   def groupings
     black_offsets, white_offsets = self.stone_locations
@@ -303,9 +314,9 @@ class Board < ActiveRecord::Base
     end
     Location.for(self, offsets.first, offsets.last) if (offsets.size == 2)
   end
-  def initialize_array_hack
-    if self.array_hack.blank? then
-      self.array_hack = (1..self.dimension).map { ([nil] * self.dimension) }.inspect
+  def initialize_as_str
+    if self.as_str.blank? then
+      self.as_str = (1..self.dimension).map { ([nil] * self.dimension) }.inspect
     end
   end
 end
