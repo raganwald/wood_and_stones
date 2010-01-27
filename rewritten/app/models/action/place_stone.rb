@@ -24,10 +24,11 @@ module Action::PlaceStone
   end
   def place_stone
     if (self.after? and self.after[self.position].open?) then
-      self.after = lambda do |board|
-        board[self.position] = self.player
-        board
-      end.call(self.after.dup)
+      self.after += if (self.player == "black") then
+        Board::Black.new(position)
+      else
+        Board::White.new(position)
+      end
     end
   end
 end

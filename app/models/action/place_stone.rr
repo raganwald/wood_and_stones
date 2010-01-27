@@ -35,9 +35,7 @@ module Action::PlaceStone
   
   def place_stone
     if self.after? && self.after[self.position].open?
-      self.after = returning(self.after.dup) do |board|
-        board[self.position] = self.player
-      end
+      self.after += (self.player == 'black' ? Board::Black.new(position) : Board::White.new(position))
     end
   end
   

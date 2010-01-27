@@ -11,6 +11,36 @@ class Board
   
   class Wtf < Exception; end
   
+  class Placement
+    
+    attr_reader :across, :down
+    
+    def initialize(across_or_position, down = nil)
+      if across_or_position.kind_of?(Integer) && down.kind_of?(Integer)
+        @across, @down = across_or_position, down
+      elsif down.nil?
+        @across, @down = across_or_position.scan(/[abcdefghijklmnopqrst]/i).map { Board::LETTERS.index(its.upcase) }
+      end
+    end
+    
+  end
+  
+  class Black < Placement
+    
+    def colour
+      'black'
+    end
+    
+  end
+  
+  class White < Placement
+    
+    def colour
+      'white'
+    end
+    
+  end
+  
   # intended for an array of two elements, one of which is an array of black things
   # and the other is an array of white things
   module BlacksAndWhites
@@ -371,21 +401,23 @@ class Board
     end
   end
   
-  def []=(str_or_symbol,value)
-    # TODO: memoize #to_a and invalidate it here
-    initialize_as_str
-    str = str_or_symbol.to_s.downcase
-    if valid_position?(str)
-      arr = self.to_a
-      loc = parse_position(str)
-      if value.nil?
-        loc.remove
-      else
-        loc.have(value)
-      end
-      loc
+  def + something
+    if something.respond_to?(:across) && something.respond_to?(:down) && something.respond_to?(:colour)
+      self + [something]
     else
-      super(str_or_symbol)
+      returning(self.dup) do |other|
+        something.each { other[its.across][its.down] = its.colour unless its.colour.nil? }
+      end
+    end
+  end
+  
+  def - something
+    if something.respond_to?(:across) && something.respond_to?(:down)
+      self - [something]
+    else
+      returning(self.dup) do |other|
+        something.each { other[its.across][its.down].remove }
+      end
     end
   end
   
@@ -435,6 +467,26 @@ class Board
   def initialize_as_str
     if self.as_str.blank?
       self.as_str = ((1..self.dimension).map{ [nil] * self.dimension }).inspect
+    end
+  end
+  
+  protected
+  
+  def []=(str_or_symbol,value)
+    # TODO: memoize #to_a and invalidate it here
+    initialize_as_str
+    str = str_or_symbol.to_s.downcase
+    if valid_position?(str)
+      arr = self.to_a
+      loc = parse_position(str)
+      if value.nil?
+        loc.remove
+      else
+        loc.have(value)
+      end
+      loc
+    else
+      super(str_or_symbol)
     end
   end
   

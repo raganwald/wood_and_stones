@@ -7,6 +7,30 @@ class Board
   end
   class Wtf < Exception
   end
+  class Placement
+    attr_reader(:across, :down)
+    def initialize(across_or_position, down = nil)
+      if (across_or_position.kind_of?(Integer) and down.kind_of?(Integer)) then
+        @across, @down = across_or_position, down
+      else
+        if down.nil? then
+          @across, @down = across_or_position.scan(/[abcdefghijklmnopqrst]/i).map do |its|
+            Board::LETTERS.index(its.upcase)
+          end
+        end
+      end
+    end
+  end
+  class Black < Placement
+    def colour
+      "black"
+    end
+  end
+  class White < Placement
+    def colour
+      "white"
+    end
+  end
   module BlacksAndWhites
     def self.for(*arr)
       returning(arr) { arr.extend(self) }
@@ -265,16 +289,26 @@ class Board
       end
     end
   end
-  def []=(str_or_symbol, value)
-    initialize_as_str
-    str = str_or_symbol.to_s.downcase
-    if valid_position?(str) then
-      arr = self.to_a
-      loc = parse_position(str)
-      value.nil? ? (loc.remove) : (loc.have(value))
-      loc
+  def +(something)
+    if (something.respond_to?(:across) and (something.respond_to?(:down) and something.respond_to?(:colour))) then
+      (self + [something])
     else
-      super(str_or_symbol)
+      lambda do |other|
+        something.each do |its|
+          other[its.across][its.down] = its.colour unless its.colour.nil?
+        end
+        other
+      end.call(self.dup)
+    end
+  end
+  def -(something)
+    if (something.respond_to?(:across) and something.respond_to?(:down)) then
+      (self - [something])
+    else
+      lambda do |other|
+        something.each { |its| other[its.across][its.down].remove }
+        other
+      end.call(self.dup)
     end
   end
   def to_a
@@ -317,6 +351,19 @@ class Board
   def initialize_as_str
     if self.as_str.blank? then
       self.as_str = (1..self.dimension).map { ([nil] * self.dimension) }.inspect
+    end
+  end
+  protected
+  def []=(str_or_symbol, value)
+    initialize_as_str
+    str = str_or_symbol.to_s.downcase
+    if valid_position?(str) then
+      arr = self.to_a
+      loc = parse_position(str)
+      value.nil? ? (loc.remove) : (loc.have(value))
+      loc
+    else
+      super(str_or_symbol)
     end
   end
 end

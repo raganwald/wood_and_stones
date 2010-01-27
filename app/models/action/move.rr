@@ -12,7 +12,7 @@ class Action::Move < Action::Gameplay
   def remove_opponent_dead_stones
     stones_to_remove = self.after.dead_stones[self.player == Board::BLACK_S ? 1 : 0]
     self.captured_stones = stones_to_remove.size
-    stones_to_remove.each(&:remove)
+    self.after -= stones_to_remove
     true
   end
   
