@@ -166,7 +166,8 @@ var GO = function () {
 			var update_status_on_current_board = function () {
 				var selector = move_selector(current_move_number);
 			  $('.move .info').not(selector).addClass('invisible');
-			  $(selector + ' .info').text('this is the current board');
+			  $(selector + ' .info').removeClass('invisible');
+			  $(selector + ' .info p').text('this is the current board');
 			};
 
 			return {
