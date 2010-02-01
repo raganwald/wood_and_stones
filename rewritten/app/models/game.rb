@@ -12,7 +12,7 @@ class Game < ActiveRecord::Base
   has_many(:actions, :class_name => "Action::Base", :foreign_key => "game_id", :order => :cardinality)
   has_many(:boards, :through => :actions, :source => :after)
   has_many(:secrets, :as => :target)
-  OPTIONS = [:handicap, :dimension, :fork]
+  OPTIONS = [:handicap, :dimension, :fork, :b, :w]
   named_scope(:played_by, lambda do |user|
     { :conditions => (["black_id = ? OR white_id = ?", user.id, user.id]) }
   end)
@@ -34,6 +34,12 @@ class Game < ActiveRecord::Base
       h
     end
     super(attributes)
+    if black_email = options[:b] then
+      self.black ||= User.find_or_create_by_email(black_email)
+    end
+    if white_email = options[:w] then
+      self.white ||= User.find_or_create_by_email(white_email)
+    end
     if forked = options[:fork] then
       self.current_board = if forked.kind_of?(Board) then
         forked
@@ -47,21 +53,37 @@ class Game < ActiveRecord::Base
       fork
     else
       if dimension = options[:dimension] then
-        self.current_board = Board.new(dimension)
+        board = Board.new(nil, dimension)
         (handicap = options[:handicap].to_i
         if (handicap > 1) then
-          self.current_board.handicap(handicap)
-          self.current_board.save!
+          board.handicap(handicap)
           self.to_play = Board::WHITE_S
         else
           self.to_play = Board::BLACK_S
         end)
-        self.initial_board = self.current_board
+        self.initial_board, self.current_board = board, board
         start
       else
         self.errors.add(:before, "cannot initialize a game without forking or setting a dimension")
       end
     end
+  end
+  def current_removed
+    ((it = self.current_removed_serialized and eval(it)) or [])
+  end
+  def current_removed=(stones)
+    self.current_removed_serialized = stones.inspect
+  end
+  def valid_positions
+    return [] if self.ended?
+    lambda do |valid_move_hashes|
+      if (self.current_removed.size == 1) then
+        valid_move_hashes.reject! do |its|
+          ((its.location.to_a == self.current_removed.first.to_a) and (its.dead_stones.size == 1))
+        end
+      end
+      valid_move_hashes
+    end.call(self.current_board.legal_moves_for(self.to_play)).map(&:location)
   end
   state_machine do
     event(:start) { transition(nil => :started) }

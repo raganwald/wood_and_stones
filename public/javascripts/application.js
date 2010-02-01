@@ -51,8 +51,8 @@ var GO = function () {
 			};
 			var place_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
-			  if (target.hasClass('empty')) {
-			    $('.to_move .board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
+			  if (target.hasClass('valid') ) {
+			    $('.active .board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
 			    target.addClass(latest_server_info.playing);
 			  }
 			};
@@ -64,10 +64,10 @@ var GO = function () {
 			};
 			var update_active_div = function () {
 			  var move_to_unbind_selector = '.move.active';
-			  var places_to_unbind_selector = '.move.active .board .empty';
+			  var places_to_unbind_selector = '.move.active .board .empty.valid';
 			  return function (move_number) {
 			    var move_to_bind_selector = (move_number ? move_selector(move_number) : NULL_SELECTOR);
-			    var places_to_bind_selector = (move_number ? move_to_bind_selector + ' .board .empty' : NULL_SELECTOR);
+			    var places_to_bind_selector = (move_number ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
 			    $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(do_stone_move);
 			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
@@ -150,14 +150,14 @@ var GO = function () {
 			    url: info.move_info_url,
 			    type: 'GET',
 			    dataType: 'json',
-			    success: function (info) {
-			      latest_server_info = info;
+			    success: function (data) {
+			      latest_server_info = data;
 			    }
 			  });
 			};
 			var update_active_on_current_board = function () {
 			  if (latest_server_info.active) {
-			    update_active_div(current_move_number);
+			    update_active_div(latest_server_info.move_number);
 			  }
 			  else {
 			    update_active_div();
@@ -174,7 +174,11 @@ var GO = function () {
 				  update_active_on_current_board: update_active_on_current_board,
 				  process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,
-				  update_latest_server_info: update_latest_server_info
+				  update_latest_server_info: update_latest_server_info,
+					debug: {
+						info: function () { return info; },
+						latest_server_info: function () { return latest_server_info; },
+					}
 			};
 		}
 	};

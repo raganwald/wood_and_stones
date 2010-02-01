@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Board
   
   attr_accessor :as_str
@@ -180,6 +182,10 @@ class Board
     
     def to_s
       (LETTERS[self.across] + LETTERS[self.down]).downcase
+    end
+    
+    def to_a
+      [self.across, self.down]
     end
     
   end
@@ -444,14 +450,26 @@ class Board
     self.dead_groupings.map { it.inject([], &:+) }
   end
   
+  def empty_locations
+    arr = self.to_a
+    returning([]) do |empties|
+      (0..(self.dimension - 1)).each do |across|
+        (0..(self.dimension - 1)).each do |down|
+          empties << Location.for(self, across, down) if arr[across][down].nil?
+        end
+      end
+    end
+  end
+  
   def stone_locations
     #shlemiel the painter goes to work
+    arr = self.to_a
     returning(BlacksAndWhites.for([], [])) do |blacks, whites|
       (0..(self.dimension - 1)).each do |across|
         (0..(self.dimension - 1)).each do |down|
-          if self.to_a[across][down] == BLACK_S
+          if arr[across][down] == BLACK_S
             blacks << Location.for(self, across, down)
-          elsif self.to_a[across][down] == WHITE_S
+          elsif arr[across][down] == WHITE_S
             whites << Location.for(self, across, down)
           end
         end
@@ -468,6 +486,35 @@ class Board
     if self.as_str.blank?
       self.as_str = ((1..self.dimension).map{ [nil] * self.dimension }).inspect
     end
+  end
+  
+  def legal_moves_for(player)
+    empties = self.empty_locations
+    captureable_groups = self.groupings.map { |array_of_groupings| 
+      array_of_groupings.map { |grouping|
+        OpenStruct.new(:grouping => grouping, :liberties => grouping.liberties, :liberty => nil) 
+      }.select { 
+        its.liberties.size == 1 
+      }.each {
+        its.liberty = its.liberties.first
+      }
+    } 
+    locations_that_capture_blacks, locations_that_capture_whites = captureable_groups.map { |arr| arr.map(&:liberty) }
+    non_capturing_empty_locations = empties - locations_that_capture_blacks - locations_that_capture_whites
+    non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
+    # note that empty locations that don't capture anything are suicides
+    opponents_captureable_groups = (player.to_s == 'black' ? captureable_groups.last : captureable_groups.first)
+    # note that the other capturing locations are fratricides
+    # pivot and merge groupings
+    pivoted = opponents_captureable_groups.inject({}) do |liberties_to_victims, liberty_and_grouping|
+      returning(liberties_to_victims) do |h|
+        h[liberty_and_grouping.liberty] ||= []
+        h[liberty_and_grouping.liberty] += liberty_and_grouping.grouping
+      end
+    end
+    (pivoted.map { |liberty, dead_stones| OpenStruct.new(:location => liberty, :dead_stones => dead_stones) }) + (
+      non_capturing_legal_locations.map { |location| OpenStruct.new(:location => location, :dead_stones => []) }
+    )
   end
   
   protected

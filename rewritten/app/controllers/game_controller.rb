@@ -28,4 +28,7 @@ class GameController < ApplicationController
   def new
     # do nothing
   end
+  def valid_moves
+    # do nothing
+  end
 end

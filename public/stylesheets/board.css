@@ -59,7 +59,7 @@
 .board .star.empty {
   background: url('/images/board/temporary/tile0c.png'); }
 
-.active .board .empty {
+.active .board .empty.valid {
   cursor: pointer; }
 
 .move .actions .send {

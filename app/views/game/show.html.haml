@@ -1,9 +1,9 @@
 :javascript
   $(document).ready( function () {
     var info = #{@info.to_json};
-    info.create_move_f = #{@info.create_move_js};
-    info.get_updates_f = #{@info.get_updates_js};
-    info.get_history_f = #{@info.get_history_js};
+    info.create_move_f = #{@info[:create_move_js]};
+    info.get_updates_f = #{@info[:get_updates_js]};
+    info.get_history_f = #{@info[:get_history_js]};
     var game_show_helper = GO.game_show_helper(info);
     game_show_helper.update_active_on_current_board();
     game_show_helper.update_status_on_current_board();
@@ -24,7 +24,7 @@
       %h1 Beginning
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :board => @game.initial_board }
+      = render :partial => "board/board", :locals => { :game => @game }
     %ul.individual.actions
       %a.send Move
     %ul.individual.history
@@ -61,7 +61,7 @@
       %h1 Move #{@game.current_move_number}
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :board => @game.current_board }
+      = render :partial => "board/board", :locals => { :game => @game }
     %ul.individual.actions
       %a.send Move
     %ul.individual.history

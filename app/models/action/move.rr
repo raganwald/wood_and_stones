@@ -4,24 +4,33 @@ class Action::Move < Action::Gameplay
   
   include Action::PlaceStone
   
+  def removed
+    self.removed_serialized.andand { eval(it) } or []
+  end
+  
+  def removed=(stones)
+    self.removed_serialized = stones.inspect
+  end
+  
   before_validation_on_create :remove_opponent_dead_stones
   after_create :updated_captured_stones
   
   private
   
   def remove_opponent_dead_stones
-    stones_to_remove = self.after.dead_stones[self.player == Board::BLACK_S ? 1 : 0]
-    self.captured_stones = stones_to_remove.size
-    self.after -= stones_to_remove
+    self.after -= (self.removed = self.after.dead_stones[self.player == Board::BLACK_S ? 1 : 0])
     true
   end
   
   def updated_captured_stones
-    if self.captured_stones > 0
-      self.game.increment!(
-        (player == Board::BLACK_S ? :captured_blacks : :captured_whites),
-        self.captured_stones
-      )
+    captured_stones = self.removed
+    if captured_stones.size > 0
+      Game.transaction do |variable|
+        msg = (player == Board::BLACK_S ? "captured_blacks" : "captured_whites")
+        self.game.send("#{msg}=", self.game.send(msg) + captured_stones.size)
+        self.game.current_removed = captured_stones
+        self.game.save!
+      end
     end
     true
   end

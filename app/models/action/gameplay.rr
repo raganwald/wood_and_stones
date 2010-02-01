@@ -8,11 +8,6 @@ class Action::Gameplay < Action::Base
     
   after_create :update_game_state, :update_game_to_play
   
-  validates_uniqueness_of :after_board_serialized,
-                          :scope => :game_id,
-                          :on => :create, 
-                          :message => "you cannot recreate a position that has already occurred in the game"
-  
   def check_game_state
     return true if self.game.send("can_#{self.class.name.demodulize.downcase}?")
     self.errors.add :game, "does not permit you to #{self.class.name.demodulize.downcase}"

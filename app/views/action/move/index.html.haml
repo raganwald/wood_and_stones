@@ -4,7 +4,10 @@
       %h1 Move #{action.cardinality}
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :board => action.after }
+      -if action.cardinality < action.game.actions.size
+        = render :partial => "board/board", :locals => { :board => action.after }
+      -else
+        = render :partial => "board/board", :locals => { :game => action.game }
     %ul.individual.actions
       %a.send Move
     %ul.individual.history

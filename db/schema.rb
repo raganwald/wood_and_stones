@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100126151834) do
+ActiveRecord::Schema.define(:version => 20100201033614) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(:version => 20100126151834) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cardinality"
-    t.integer  "captured_stones",        :default => 0
+    t.string   "removed_serialized"
   end
 
   add_index "actions", ["game_id", "cardinality"], :name => "index_actions_on_game_id_and_cardinality"
@@ -50,9 +50,10 @@ ActiveRecord::Schema.define(:version => 20100126151834) do
     t.integer  "black_id"
     t.integer  "white_id"
     t.string   "to_play"
-    t.integer  "captured_whites",          :default => 0
-    t.integer  "captured_blacks",          :default => 0
+    t.integer  "captured_whites",            :default => 0
+    t.integer  "captured_blacks",            :default => 0
     t.integer  "current_move_number"
+    t.string   "current_removed_serialized"
   end
 
   add_index "games", ["id"], :name => "index_games_on_id"

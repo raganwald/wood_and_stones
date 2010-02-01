@@ -3,7 +3,6 @@ class Action::Gameplay < Action::Base
   before_validation_on_create(:copy_game_to_after, :check_game_state)
   before_create(:update_game_current_board)
   after_create(:update_game_state, :update_game_to_play)
-  validates_uniqueness_of(:after_board_serialized, :scope => :game_id, :on => :create, :message => "you cannot recreate a position that has already occurred in the game")
   def check_game_state
     if self.game.send("can_#{self.class.name.demodulize.downcase}?") then
       return true
@@ -13,7 +12,7 @@ class Action::Gameplay < Action::Base
   end
   def copy_game_to_after
     unless self.after? then
-      self.after = (__126461591518266__ = self.game and __126461591518266__.current_board).clone
+      self.after = (__126505934480536__ = self.game and __126505934480536__.current_board).clone
     end
     true
   end

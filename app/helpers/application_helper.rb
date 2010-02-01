@@ -54,7 +54,7 @@ module ApplicationHelper
     }
   }
   
-  def tile_img_class_array(board)
+  def tile_class_array(board)
     board.map_array(TILE_IMG_CLASS_MAP)
   end
   

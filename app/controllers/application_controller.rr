@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
         'white'
       end
     end
-    @info = OpenStruct.new(
+    @info = {
       :active => is_active,
       :move_number => current_move,
       :playing => playing,
@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
       :get_updates_js => "function (current_move_number) { return '#{get_updates_url(:game_id=>@game.id, :after_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_move_number);}",
       :get_history_js => "function (current_move_number) { return '#{get_history_url(:game_id=>@game.id, :before_move=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_move_number);}",
       :move_info_url => move_info_url(:game_id=>@game.id)
-    )
+    }
   end
   
   private

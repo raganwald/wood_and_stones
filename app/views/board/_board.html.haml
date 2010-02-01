@@ -1,6 +1,11 @@
 -# board/_board.html.haml
-- tile_img_class_arr = tile_img_class_array(board)
+- if defined?(game)
+  - board = game.current_board
+  - valids = game.valid_positions
+- else
+  - valids = []
+- tile_classes = valids.inject(tile_class_array(board)) { |classes, loc| classes[loc.first][loc.last] += ' valid'; classes }
 - (0..(board.dimension - 1)).each do |down|
   .row
     - (0..(board.dimension - 1)).each do |across|
-      %img{ :id => "#{Board::LETTERS[across].downcase}#{Board::LETTERS[down].downcase}", :src => '/images/dot_clear.gif', :class => tile_img_class_arr[across][down], :height => 30, :width => 30 }>
+      %img{ :id => "#{Board::LETTERS[across].downcase}#{Board::LETTERS[down].downcase}", :src => '/images/dot_clear.gif', :class => tile_classes[across][down], :height => 30, :width => 30 }>

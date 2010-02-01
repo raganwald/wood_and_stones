@@ -34,4 +34,7 @@ class GameController < ApplicationController
   def new
   end
   
+  def valid_moves
+  end
+  
 end
