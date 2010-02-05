@@ -64,9 +64,9 @@ class Game < ActiveRecord::Base
       fork
     elsif dimension = options[:dimension]
       board =  Board.new(nil, dimension)
-      options[:handicap].to_i.into do |handicap| # nil.to_i == 0!
-        if handicap > 1
-          board.handicap(handicap)
+      options[:handicap].to_i.into do # nil.to_i == 0!
+        if it > 1
+          board.handicap(it)
           self.to_play = Board::WHITE_S
         else
           self.to_play = Board::BLACK_S

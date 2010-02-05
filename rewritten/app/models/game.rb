@@ -54,9 +54,9 @@ class Game < ActiveRecord::Base
     else
       if dimension = options[:dimension] then
         board = Board.new(nil, dimension)
-        (handicap = options[:handicap].to_i
-        if (handicap > 1) then
-          board.handicap(handicap)
+        (it = options[:handicap].to_i
+        if (it > 1) then
+          board.handicap(it)
           self.to_play = Board::WHITE_S
         else
           self.to_play = Board::BLACK_S

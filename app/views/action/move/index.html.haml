@@ -9,7 +9,10 @@
       -else
         = render :partial => "board/board", :locals => { :game => action.game }
     %ul.individual.actions
-      %a.send Move
+      %input{:type=>:button,:value=>'test',:disbled=>true}
+      %a.send
+        Move
+        %span.position
     %ul.individual.history
       %li.prev
         %a.slideback{:href=>"#m#{action.cardinality - 1}"}

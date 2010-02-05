@@ -28,8 +28,3 @@ config.action_mailer.default_url_options = { :host => "go.raganwald.com" }
 
 # Enable threaded mode
 # config.threadsafe!
-
-config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/controllers )
-config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/helpers )
-config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/models )
-config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/lib )

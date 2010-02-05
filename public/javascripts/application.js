@@ -52,14 +52,15 @@ var GO = function () {
 			var place_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
 			  if (target.hasClass('valid') ) {
-			    $('.active .board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
-			    target.addClass(latest_server_info.playing);
+			    $('.active .board .empty.' + latest_server_info.user_is_playing).removeClass(latest_server_info.user_is_playing);
+			    target.addClass(latest_server_info.user_is_playing);
 			  }
 			};
 			var lift_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
-			  if (target.hasClass('empty') && target.hasClass(latest_server_info.playing)) {
-			    target.removeClass(latest_server_info.playing);
+			  if (target.hasClass('empty') && target.hasClass(latest_server_info.user_is_playing)) {
+			    target.removeClass(latest_server_info.user_is_playing);
+					$('')
 			  }
 			};
 			var update_active_div = function () {
@@ -70,7 +71,7 @@ var GO = function () {
 			    var places_to_bind_selector = (move_number ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
 			    $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(do_stone_move);
-			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
+			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.user_is_playing);
 			    $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
 			  };
 			}();
@@ -104,7 +105,7 @@ var GO = function () {
 			    can_process_server_info = false;
 			    if (latest_server_info.move_number > current_move_number) {
 			      var was_current_move_number = current_move_number;
-			      if (latest_server_info.active) {
+			      if (latest_server_info.is_users_turn) {
 			        get_latest_moves(function (latest_move_selector) {
 			          update_active_div(latest_server_info.move_number);
 			          update_status_on_current_board();
@@ -156,7 +157,7 @@ var GO = function () {
 			  });
 			};
 			var update_active_on_current_board = function () {
-			  if (latest_server_info.active) {
+			  if (latest_server_info.is_users_turn) {
 			    update_active_div(latest_server_info.move_number);
 			  }
 			  else {
