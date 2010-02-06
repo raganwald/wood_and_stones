@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100206061453) do
+ActiveRecord::Schema.define(:version => 20100206224355) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(:version => 20100206061453) do
     t.string   "to_play"
     t.integer  "captured_whites",                           :default => 0
     t.integer  "captured_blacks",                           :default => 0
-    t.integer  "current_move_number"
+    t.integer  "current_move_number",                       :default => 0
     t.text     "current_removed_serialized", :limit => 255
   end
 
