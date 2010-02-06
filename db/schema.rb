@@ -9,19 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100201033614) do
+ActiveRecord::Schema.define(:version => 20100206061453) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
     t.string   "position"
     t.string   "player"
-    t.string   "after_board_serialized"
+    t.text     "after_board_serialized", :limit => 255
     t.integer  "dimension"
     t.integer  "game_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "cardinality"
-    t.string   "removed_serialized"
+    t.text     "removed_serialized",     :limit => 255
   end
 
   add_index "actions", ["game_id", "cardinality"], :name => "index_actions_on_game_id_and_cardinality"
@@ -42,18 +42,18 @@ ActiveRecord::Schema.define(:version => 20100201033614) do
 
   create_table "games", :force => true do |t|
     t.string   "state"
-    t.string   "initial_board_serialized"
-    t.string   "current_board_serialized"
+    t.text     "initial_board_serialized",   :limit => 255
+    t.text     "current_board_serialized",   :limit => 255
     t.integer  "dimension"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "black_id"
     t.integer  "white_id"
     t.string   "to_play"
-    t.integer  "captured_whites",            :default => 0
-    t.integer  "captured_blacks",            :default => 0
+    t.integer  "captured_whites",                           :default => 0
+    t.integer  "captured_blacks",                           :default => 0
     t.integer  "current_move_number"
-    t.string   "current_removed_serialized"
+    t.text     "current_removed_serialized", :limit => 255
   end
 
   add_index "games", ["id"], :name => "index_games_on_id"
