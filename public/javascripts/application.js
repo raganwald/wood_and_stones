@@ -67,8 +67,8 @@ var GO = function () {
 			  var move_to_unbind_selector = '.move.active';
 			  var places_to_unbind_selector = '.move.active .board .empty.valid';
 			  return function (move_number) {
-			    var move_to_bind_selector = (move_number ? move_selector(move_number) : NULL_SELECTOR);
-			    var places_to_bind_selector = (move_number ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
+			    var move_to_bind_selector = (move_number != null ? move_selector(move_number) : NULL_SELECTOR);
+			    var places_to_bind_selector = (move_number != null ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
 			    $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(do_stone_move);
 			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.user_is_playing);
