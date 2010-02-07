@@ -14,10 +14,11 @@
     $(document).everyTime('1s', function (count) {
       game_show_helper.process_server_info();
     });
-    if (#{@game.current_move_number} > 1) {
-      game_show_helper.get_history_up_to(#{@game.current_move_number});
-    }
+    $('.board').bind("swipe",function(event, data){
+       alert(data.direction);
+    });
   });
+
 -if @game.current_move_number == 0
   .current.move#m0
     .toolbar 
@@ -41,6 +42,10 @@
     .info
       %p
 -else
+  :javascript
+    $(document).ready( function () {
+      game_show_helper.get_history_up_to(#{@game.current_move_number});
+    });
   .move#m0
     .toolbar 
       %h1 Beginning
