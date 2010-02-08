@@ -133,18 +133,23 @@ var GO = function () {
 			  }
 			}();
 			var get_history_up_to = function (current_move_number) {
-			  $.ajax({
-			    url: info.get_history_f(current_move_number),
-			    type: 'GET',
-			    dataType: 'html',
-			    success: function (html) {
-			      $(html).insertAfter('#m0');
-			      $(move_selector(current_move_number) + ' .history .prev').removeClass('invisible');
-			    },
-			    error: function (error_response) {
-			      GO.message('error', 'unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
-			    }
-			  });
+				if (current_move_number > 1) {
+				  $.ajax({
+				    url: info.get_history_f(current_move_number),
+				    type: 'GET',
+				    dataType: 'html',
+				    success: function (html) {
+				      $(html).insertAfter('#m0');
+				      $(move_selector(current_move_number) + ' .history .prev').removeClass('invisible');
+				    },
+				    error: function (error_response) {
+				      GO.message('error', 'unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
+				    }
+				  });
+				}
+				else {
+					$(move_selector(current_move_number) + ' .history .prev').removeClass('invisible');
+				}
 			};
 			var update_latest_server_info = function () {
 			  $.ajax({
@@ -171,12 +176,32 @@ var GO = function () {
 			  $(selector + ' .info p').text('this is the current board');
 			};
 
+			var try_go_to = function (selector, animation) {
+				if ($(selector).size() > 0) {
+					jQT.goTo(selector, animation);
+				}
+			};
+			var swipeBoardLeft = function () {
+				var tm = $('.current .next .target_move');
+				if (tm.size() > 0) {
+					try_go_to(move_selector(tm.text()));
+				}
+			};
+			var swipeBoardRight = function () {
+				var tm = $('.current .prev .target_move');
+				if (tm.size() > 0) {
+					try_go_to(move_selector(tm.text()));
+				}
+			};
+			
 			return {
 				  update_status_on_current_board: update_status_on_current_board,
 				  update_active_on_current_board: update_active_on_current_board,
 				  process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,
 				  update_latest_server_info: update_latest_server_info,
+					swipeBoardLeft: swipeBoardLeft,
+					swipeBoardRight: swipeBoardRight,
 					debug: {
 						info: function () { return info; },
 						latest_server_info: function () { return latest_server_info; },

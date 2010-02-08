@@ -1,3 +1,4 @@
+- optional_get_history = @game.current_move_number > 0 ? ("game_show_helper.get_history_up_to(" + @game.current_move_number.to_s + ");") : ''
 :javascript
   $(document).ready( function () {
     var info = #{@info.to_json};
@@ -7,15 +8,31 @@
     var game_show_helper = GO.game_show_helper(info);
     game_show_helper.update_active_on_current_board();
     game_show_helper.update_status_on_current_board();
-    $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
-      { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
-      game_show_helper.update_latest_server_info
-    );
-    $(document).everyTime('1s', function (count) {
-      game_show_helper.process_server_info();
+    // $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
+    //   { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
+    //   game_show_helper.update_latest_server_info
+    // );
+    // $(document).everyTime('1s', function (count) {
+    //   game_show_helper.process_server_info();
+    // });
+    #{optional_get_history}
+    $('.board img').swipe(function(event, data){
+      if (data.direction == 'left') {
+        game_show_helper.swipeBoardLeft();
+        return false;
+      }
+      else {
+        game_show_helper.swipeBoardRight();
+        return false;
+      }
     });
-    $('.board').bind("swipe",function(event, data){
-       alert(data.direction);
+    $('.simulateSwipeBoardLeft').click(function () {
+      game_show_helper.swipeBoardLeft();
+      return false;
+    });
+    $('.simulateSwipeBoardRight').click(function () {
+      game_show_helper.swipeBoardRight();
+      return false;
     });
   });
 
@@ -26,45 +43,29 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
-    %ul.individual.actions
-      %a.send
-        Move
-        %span.position
     %ul.individual.history
       %li.prev.invisible
-        %a.slideback{:href=>"#m0"}
-          Prev
-          %small 0
+        %a No Prev
       %li.next.invisible
-        %a{:href=>"#m1"}
+        %span.simulateSwipeBoardLeft{:href=>'#'}
           Next
-          %small 1
+          %small.target_move 1
     .info
       %p
 -else
-  :javascript
-    $(document).ready( function () {
-      game_show_helper.get_history_up_to(#{@game.current_move_number});
-    });
   .move#m0
     .toolbar 
       %h1 Beginning
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    %ul.individual.actions
-      %a.send
-        Move
-        %span.position
     %ul.individual.history
       %li.prev.invisible
-        %a.slideback{:href=>"#m0"}
-          Prev
-          %small 0
+        %a No Prev
       %li.next
-        %a{:href=>"#m1"}
+        %span.simulateSwipeBoardLeft{:href=>'#'}
           Next
-          %small 1
+          %small.target_move 1
     .info
       %p
   .current.move{:id=>"m#{@game.current_move_number}"}
@@ -73,20 +74,14 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
-    %ul.individual.actions
-      %a.send
-        Move
-        %span.position
     %ul.individual.history
       %li.prev.invisible
-        %a.slideback{:href=>"#m#{@game.current_move_number - 1}"}
+        %span.simulateSwipeBoardRight{:href=>'#'}
           Prev
-          %small
-            = @game.current_move_number - 1
+          %small.target_move= @game.current_move_number - 1
       %li.next.invisible
-        %a{:href=>"#m#{@game.current_move_number + 1}"}
+        %span.simulateSwipeBoardLeft{:href=>'#'}
           Next
-          %small
-            = @game.current_move_number + 1
+          %small.target_move= @game.current_move_number + 1
     .info
       %p

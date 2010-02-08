@@ -8,28 +8,20 @@
         = render :partial => "board/board", :locals => { :board => action.after }
       -else
         = render :partial => "board/board", :locals => { :game => action.game }
-    %ul.individual.actions
-      %input{:type=>:button,:value=>'test',:disbled=>true}
-      %a.send
-        Move
-        %span.position
     %ul.individual.history
       %li.prev
-        %a.slideback{:href=>"#m#{action.cardinality - 1}"}
+        %span.simulateSwipeBoardRight{:href=>'#'}
           Prev
-          %small
-            = action.cardinality - 1
+          %small.target_move= action.cardinality - 1
       -if action.cardinality < action.game.actions.size
         %li.next
-          %a{:href=>"#m#{action.cardinality + 1}"}
+          %span.simulateSwipeBoardLeft{:href=>'#'}
             Next
-            %small
-              = action.cardinality + 1
+            %small.target_move= action.cardinality + 1
       -else
         %li.next.invisible
-          %a{:href=>"#m#{action.cardinality + 1}"}
+          %span.simulateSwipeBoardLeft{:href=>'#'}
             Next
-            %small
-              = action.cardinality + 1
+            %small.target_move= action.cardinality + 1
     .info
       %p
