@@ -8,7 +8,7 @@
         = render :partial => "board/board", :locals => { :board => action.after }
       -else
         = render :partial => "board/board", :locals => { :game => action.game }
-    %ul.individual.history
+    %ul.individual.history.no_touch
       %li.prev
         %span.simulateSwipeBoardRight{:href=>'#'}
           Prev

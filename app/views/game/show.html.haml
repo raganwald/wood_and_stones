@@ -8,32 +8,17 @@
     var game_show_helper = GO.game_show_helper(info);
     game_show_helper.update_active_on_current_board();
     game_show_helper.update_status_on_current_board();
-    // $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
-    //   { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
-    //   game_show_helper.update_latest_server_info
-    // );
-    // $(document).everyTime('1s', function (count) {
-    //   game_show_helper.process_server_info();
-    // });
+    $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
+      { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
+      game_show_helper.update_latest_server_info
+    );
+    $(document).everyTime('1s', function (count) {
+      game_show_helper.process_server_info();
+    });
     #{optional_get_history}
-    $('.board img').swipe(function(event, data){
-      if (data.direction == 'left') {
-        game_show_helper.swipeBoardLeft();
-        return false;
-      }
-      else {
-        game_show_helper.swipeBoardRight();
-        return false;
-      }
-    });
-    $('.simulateSwipeBoardLeft').click(function () {
-      game_show_helper.swipeBoardLeft();
-      return false;
-    });
-    $('.simulateSwipeBoardRight').click(function () {
-      game_show_helper.swipeBoardRight();
-      return false;
-    });
+    $('#m0').data('move',0);
+    $('#m#{@game.current_move_number}').data('move',#{@game.current_move_number});
+    game_show_helper.document_ready_hook();
   });
 
 -if @game.current_move_number == 0
@@ -43,10 +28,10 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
-    %ul.individual.history
+    %ul.individual.history.no_touch
       %li.prev.invisible
         %a No Prev
-      %li.next.invisible
+      %li.next
         %span.simulateSwipeBoardLeft{:href=>'#'}
           Next
           %small.target_move 1
@@ -59,7 +44,7 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
-    %ul.individual.history
+    %ul.individual.history.no_touch
       %li.prev.invisible
         %a No Prev
       %li.next
@@ -74,8 +59,8 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
-    %ul.individual.history
-      %li.prev.invisible
+    %ul.individual.history.no_touch
+      %li.prev
         %span.simulateSwipeBoardRight{:href=>'#'}
           Prev
           %small.target_move= @game.current_move_number - 1

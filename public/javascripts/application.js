@@ -83,8 +83,12 @@ var GO = function () {
 			    success: function (html) {
 			      update_moves = $(html);
 			      if (update_moves.size() > 0) {
+							$.each(update_moves, function (index, el) {
+								$(el).data('move', index + current_move_number + 1);
+							});
 			        update_moves.insertAfter('#m' + current_move_number);
-			        $(move_selector(current_move_number) + ' .history .next').removeClass('invisible');
+							update_elements_with_navigation_handlers(update_moves);
+			        $(move_selector(current_move_number) + ' .history .next').show();
 			        current_move_number = current_move_number + update_moves.size();
 			        if (callback) {
 			          callback(move_selector(current_move_number));
@@ -139,8 +143,16 @@ var GO = function () {
 				    type: 'GET',
 				    dataType: 'html',
 				    success: function (html) {
-				      $(html).insertAfter('#m0');
-				      $(move_selector(current_move_number) + ' .history .prev').removeClass('invisible');
+			      	update_moves = $(html);
+			      	if (update_moves.size() > 0) {
+								$.each(update_moves, function (index, el) {
+									$(el).data('move', index + 1);
+									update_elements_with_navigation_handlers(el);
+								});
+				      	update_moves.insertAfter('#m0');
+								update_elements_with_navigation_handlers(update_moves);
+							}
+				      $(move_selector(current_move_number) + ' .history .prev').show();
 				    },
 				    error: function (error_response) {
 				      GO.message('error', 'unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
@@ -148,7 +160,7 @@ var GO = function () {
 				  });
 				}
 				else {
-					$(move_selector(current_move_number) + ' .history .prev').removeClass('invisible');
+					$(move_selector(current_move_number) + ' .history .prev').show();
 				}
 			};
 			var update_latest_server_info = function () {
@@ -171,9 +183,19 @@ var GO = function () {
 			};
 			var update_status_on_current_board = function () {
 				var selector = move_selector(current_move_number);
-			  $('.move .info').not(selector).addClass('invisible');
-			  $(selector + ' .info').removeClass('invisible');
-			  $(selector + ' .info p').text('this is the current board');
+			  $('.move .info').not(selector).hide();
+			  $(selector + ' .info').show();
+				var info_text = 'This is the current position.';
+				if (latest_server_info.playing) {
+					info_text = info_text + ' You are playing ' + latest_server_info.playing + ', and ';
+					if (latest_server_info.is_users_turn) {
+						info_text = info_text + 'it is your turn to play or pass.';
+					}
+					else {
+						info_text = info_text + 'you are waiting for your opponent to play or pass.';
+					}
+				}
+			  $(selector + ' .info p').text(info_text);
 			};
 
 			var try_go_to = function (selector, animation) {
@@ -182,16 +204,45 @@ var GO = function () {
 				}
 			};
 			var swipeBoardLeft = function () {
-				var tm = $('.current .next .target_move');
-				if (tm.size() > 0) {
-					try_go_to(move_selector(tm.text()));
+				var tm = $('.current').data('move');
+				if (tm != null) {
+					try_go_to(move_selector(tm + 1));
 				}
 			};
 			var swipeBoardRight = function () {
-				var tm = $('.current .prev .target_move');
-				if (tm.size() > 0) {
-					try_go_to(move_selector(tm.text()));
+				var tm = $('.current').data('move');
+				if (tm!= null && tm > 0) {
+					try_go_to(move_selector(tm - 1));
 				}
+			};
+			
+			var update_elements_with_navigation_handlers = function (selector) {
+				elements = $(selector).find('*');
+				if (elements.size() == 0) {
+					console.warn("unable to update navigation: no elements for " + selector);
+				}
+				elements.filter('.board img').swipe(function(event, data){
+		      if (data.direction == 'left') {
+		        swipeBoardLeft();
+		        return false;
+		      }
+		      else {
+		        swipeBoardRight();
+		        return false;
+		      }
+		    });
+		    elements.filter('.simulateSwipeBoardLeft').click(function () {
+		      swipeBoardLeft();
+		      return false;
+		    });
+		    elements.filter('.simulateSwipeBoardRight').click(function () {
+		      swipeBoardRight();
+		      return false;
+		    });
+			};
+			
+			var document_ready_hook = function () {
+		    update_elements_with_navigation_handlers('body');
 			};
 			
 			return {
@@ -200,8 +251,7 @@ var GO = function () {
 				  process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,
 				  update_latest_server_info: update_latest_server_info,
-					swipeBoardLeft: swipeBoardLeft,
-					swipeBoardRight: swipeBoardRight,
+					document_ready_hook: document_ready_hook,
 					debug: {
 						info: function () { return info; },
 						latest_server_info: function () { return latest_server_info; },
