@@ -24,6 +24,21 @@ var GO = function () {
 			var move_selector = function (move_number) {
 			  return '#m' + move_number;
 			};
+			
+			var play_current_stone  = function () {
+				if (latest_server_info.is_users_turn) {
+					target = $('.board .empty.' + latest_server_info.playing);
+					if (target.size() > 0) {
+						send_move(target.attr('id'))
+					}
+					else {
+						GO.message('Sorry', "You must first play a stone in a valid location.")
+					}
+				}
+				else {
+					GO.message('Sorry', 'It is not your turn to play!');
+				}
+			};
 			var send_move = function (position) {
 			  $.ajax({
 			    url: info.create_move_f(position),
@@ -51,15 +66,16 @@ var GO = function () {
 			};
 			var place_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
+				console.log('placing a ' + latest_server_info.playing + ' stone at: ' + target.attr('id'));
 			  if (target.hasClass('valid') ) {
-			    $('.active .board .empty.' + latest_server_info.user_is_playing).removeClass(latest_server_info.user_is_playing);
-			    target.addClass(latest_server_info.user_is_playing);
+			    $('.board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
+			    target.addClass(latest_server_info.playing);
 			  }
 			};
 			var lift_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
-			  if (target.hasClass('empty') && target.hasClass(latest_server_info.user_is_playing)) {
-			    target.removeClass(latest_server_info.user_is_playing);
+			  if (target.hasClass('empty') && target.hasClass(latest_server_info.playing)) {
+			    target.removeClass(latest_server_info.playing);
 					$('')
 			  }
 			};
@@ -71,7 +87,7 @@ var GO = function () {
 			    var places_to_bind_selector = (move_number != null ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
 			    $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(do_stone_move);
-			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.user_is_playing);
+			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
 			    $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
 			  };
 			}();
@@ -81,10 +97,10 @@ var GO = function () {
 			    type: 'GET',
 			    dataType: 'html',
 			    success: function (html) {
-			      update_moves = $(html);
+			      update_moves = $(html).filter('.move');
 			      if (update_moves.size() > 0) {
-							$.each(update_moves, function (index, el) {
-								$(el).data('move', index + current_move_number + 1);
+							update_moves.each(function (i, el) {
+								$(el).data('move', current_move_number + i + 1);
 							});
 			        update_moves.insertAfter('#m' + current_move_number);
 							update_elements_with_navigation_handlers(update_moves);
@@ -143,11 +159,10 @@ var GO = function () {
 				    type: 'GET',
 				    dataType: 'html',
 				    success: function (html) {
-			      	update_moves = $(html);
+			      	update_moves = $(html).filter('.move');
 			      	if (update_moves.size() > 0) {
-								$.each(update_moves, function (index, el) {
-									$(el).data('move', index + 1);
-									update_elements_with_navigation_handlers(el);
+								update_moves.each(function (i, el) {
+									$(el).data('move', i + 1);
 								});
 				      	update_moves.insertAfter('#m0');
 								update_elements_with_navigation_handlers(update_moves);
@@ -198,48 +213,66 @@ var GO = function () {
 			  $(selector + ' .info p').text(info_text);
 			};
 
-			var try_go_to = function (selector, animation) {
-				if ($(selector).size() > 0) {
-					jQT.goTo(selector, animation);
-				}
-			};
-			var swipeBoardLeft = function () {
-				var tm = $('.current').data('move');
-				if (tm != null) {
-					try_go_to(move_selector(tm + 1));
-				}
-			};
-			var swipeBoardRight = function () {
-				var tm = $('.current').data('move');
-				if (tm!= null && tm > 0) {
-					try_go_to(move_selector(tm - 1));
-				}
-			};
-			
-			var update_elements_with_navigation_handlers = function (selector) {
-				elements = $(selector).find('*');
-				if (elements.size() == 0) {
-					console.warn("unable to update navigation: no elements for " + selector);
-				}
-				elements.filter('.board img').swipe(function(event, data){
+			var update_elements_with_navigation_handlers = function () {
+				var try_go_to = function (selector, animation) {
+					console.log('trying to go to ' + selector);
+					if ($(selector).size() > 0) {
+						jQT.goTo(selector, animation);
+					}
+				};
+				var swipeBoardLeft = function (target) {
+					console.log("swiping left from " + $(target).parents('.move').attr('id'));
+					var tm = $(target).parents('.move').data('move');
+					if (tm != null) {
+						if (tm < latest_server_info.move_number) {
+							try_go_to(move_selector(tm + 1), ''); // slide seems to work
+						}
+						else {
+							play_current_stone();
+						}
+					}
+				};
+				var swipeBoardRight = function (target) {
+					console.log("swiping right from " + $(target).parents('.move').attr('id') + ' which has a move number of ' +  $(target).parents('.move').data('move'));
+					var tm = $(target).parents('.move').data('move');
+					if (tm != null && tm > 0) {
+						try_go_to(move_selector(tm - 1), ''); // slideback  seems unreliable
+					}
+				};
+				var swiper = function(event, data){
 		      if (data.direction == 'left') {
-		        swipeBoardLeft();
+		        swipeBoardLeft(event.currentTarget);
 		        return false;
 		      }
 		      else {
-		        swipeBoardRight();
+		        swipeBoardRight(event.currentTarget);
 		        return false;
 		      }
-		    });
-		    elements.filter('.simulateSwipeBoardLeft').click(function () {
-		      swipeBoardLeft();
+		    };
+				var lefty = function (event) {
+		      swipeBoardLeft(event.currentTarget);
 		      return false;
-		    });
-		    elements.filter('.simulateSwipeBoardRight').click(function () {
-		      swipeBoardRight();
+		    };
+				var rightho = function (event) {
+		      swipeBoardRight(event.currentTarget);
 		      return false;
-		    });
-			};
+		    };
+				return function (selector) {
+					elements = $(selector).find('*');
+					if (elements.size() == 0) {
+						console.warn("unable to update navigation: no elements for " + selector);
+					}
+					// elements.filter('.board img').unbind('swipe.navigation', swiper);
+					// 			    elements.filter('.simulateSwipeBoardLeft').unbind('click.navigation', lefty);
+					// 			    elements.filter('.simulateSwipeBoardRight').unbind('click.navigation', rightho);
+					elements.filter('.board img').bind('swipe.navigation', swiper);
+			    elements.filter('.simulateSwipeBoardLeft').bind('click.navigation', lefty);
+			    elements.filter('.simulateSwipeBoardRight').bind('click.navigation', rightho);
+	        if ($.support.touch) {
+	          elements.filter('.no_touch').remove();
+	        }
+				};
+			}();
 			
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
