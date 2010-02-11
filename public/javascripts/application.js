@@ -117,7 +117,7 @@ var GO = function () {
 							});
 			        update_moves.insertAfter('#m' + current_move_number);
 							update_elements_with_navigation_handlers(update_moves);
-			        $(move_selector(current_move_number) + ' .history .next').show();
+			        $(move_selector(current_move_number) + ' .history .next').removeClass('invisible').show();
 			        current_move_number = current_move_number + update_moves.size();
 			        if (callback) {
 			          callback(move_selector(current_move_number));
@@ -129,9 +129,9 @@ var GO = function () {
 			    }
 			  });
 			};
+			
 			var process_server_info = function () {
 		    if (!can_process_server_info) {
-					console.log('skipping process_server_info, probably waiting for ajax');
 		      return null;
 		    }
 		    else if (!latest_server_info.move_number) {
@@ -145,7 +145,7 @@ var GO = function () {
 		      if (latest_server_info.is_users_turn) {
 		        get_latest_moves(function (latest_move_selector) { // updates current_move_number
 		          update_active_div(latest_server_info.move_number);
-		          update_status_on_current_board();
+		          update_move_infos();
 		          can_process_server_info = true;
 		          if ($(move_selector(was_current_move_number)).is('.current')) {
 								console.log('fading from ' + was_current_move_number + ' to ' + current_move_number);
@@ -156,7 +156,7 @@ var GO = function () {
 		      else {
 		        get_latest_moves(function (latest_move_selector) { // updates current_move_number
 		          update_active_div();
-		          update_status_on_current_board();
+		          update_move_infos();
 		          can_process_server_info = true;
 		          if ($(move_selector(was_current_move_number)).is('.current')) {
 								console.log('fading from ' + was_current_move_number + ' to ' + current_move_number);
@@ -166,11 +166,40 @@ var GO = function () {
 		      }
 		    }
 		    else {
-					console.log('i think i am up to date');
 		      update_active_on_current_board();
 		      can_process_server_info = true;
 		    }
 		  };
+		
+			var update_move_infos = function () {
+				console.log("update_move_infos");
+				var selector = move_selector(latest_server_info.move_number);
+				if (latest_server_info.move_number > 0) {
+					$(selector).find('.info .desc').addClass('current').text('current position.');
+					$('.move').not(selector).has('.info .desc.current').each(function (index, move_el) {
+						console.log('found an outdated move ' + $(move_el).attr('id'));
+						$(move_el).find('.info .desc.current').removeClass('current').text('position after move ' + $(move_el).data('move') + '.');
+						$(move_el).find('.info .news').text('');
+					});
+				}
+				var news_text = '';
+				if (latest_server_info.playing) {
+					if (latest_server_info.is_users_turn) {
+						news_text = 'Thus, it is your turn.';
+					}
+					else if (latest_server_info.playing == 'black') {
+						news_text = 'Thus, you are waiting for white to play or pass.';
+					}
+					else {
+						news_text = 'Thus, you are waiting for black to play or pass.';
+					}
+				}
+				else if (latest_server_info.move_number == 0) {
+					news_text = news_text + 'It is ' + latest_server_info.to_play + "'s turn.";
+				}
+				$(selector).find('.info .news').text(news_text);
+			};
+
 			var get_history_up_to = function (current_move_number) {
 				if (current_move_number > 1) {
 				  $.ajax({
@@ -186,7 +215,7 @@ var GO = function () {
 				      	update_moves.insertAfter('#m0');
 								update_elements_with_navigation_handlers(update_moves);
 							}
-				      $(move_selector(current_move_number) + ' .history .prev').show();
+				      $(move_selector(current_move_number) + ' .history .prev').removeClass('invisible').show();
 				    },
 				    error: function (error_response) {
 				      console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
@@ -194,7 +223,7 @@ var GO = function () {
 				  });
 				}
 				else {
-					$(move_selector(current_move_number) + ' .history .prev').show();
+					$(move_selector(current_move_number) + ' .history .prev').removeClass('invisible').show();
 				}
 			};
 			var update_latest_server_info = function () {
@@ -222,32 +251,7 @@ var GO = function () {
 			    update_active_div();
 			  }
 			};
-			var update_status_on_current_board = function () {
-				var selector = move_selector(current_move_number);
-				if (current_move_number > 0) {
-					$(selector).find('.info .desc').addClass('current').text('current position.');
-					$('.move').not(selector).has('.info .desc.current').each(function (move_el) {
-						$(move_el).find('.info .desc.current').removeClass('current').text('position after move' + $(move_el).data('move') + '.');
-					});
-				}
-				var news_text = '';
-				if (latest_server_info.playing) {
-					if (latest_server_info.is_users_turn) {
-						news_text = 'Thus, it is your turn.';
-					}
-					else if (latest_server_info.playing == 'black') {
-						news_text = 'Thus, you are waiting for white to play or pass.';
-					}
-					else {
-						news_text = 'Thus, you are waiting for black to play or pass.';
-					}
-				}
-				else if (latest_server_info.move_number == 0) {
-					news_text = news_text + 'It is ' + latest_server_info.to_play + "'s turn.";
-				}
-				$(selector).find('.info .news').text(news_text);
-			};
-
+			
 			var update_elements_with_navigation_handlers = function () {
 				var try_go_to = function (selector, animation) {
 					console.log('trying to go to ' + selector);
@@ -323,7 +327,7 @@ var GO = function () {
 			};
 			
 			return {
-				  update_status_on_current_board: update_status_on_current_board,
+				  update_move_infos: update_move_infos,
 				  update_active_on_current_board: update_active_on_current_board,
 				  process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,

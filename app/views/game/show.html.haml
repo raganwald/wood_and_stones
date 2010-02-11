@@ -7,7 +7,7 @@
     info.get_history_f = #{@info[:get_history_js]};
     var game_show_helper = GO.game_show_helper(info);
     game_show_helper.update_active_on_current_board();
-    game_show_helper.update_status_on_current_board();
+    game_show_helper.update_move_infos();
     $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
       { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
       game_show_helper.update_latest_server_info
