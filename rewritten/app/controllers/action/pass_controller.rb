@@ -1,10 +1,10 @@
 class Action::PassController < Action::PlayerActionController
   def create
-    @move = Action::Pass.create(:game => (@game), :position => (params[:position]))
-    render(:status => 403) unless @move.valid?
+    @pass = Action::Pass.create(:game => (@game))
+    render(:status => 403) unless @pass.valid?
   end
   def valid
-    @move = Action::Pass.new(:game => (@game), :position => (params[:position]))
-    render(:status => 403) unless @move.valid?
+    @pass = Action::Pass.new(:game => (@game), :position => (params[:position]))
+    render(:status => 403) unless @pass.valid?
   end
 end

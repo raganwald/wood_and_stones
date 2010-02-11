@@ -3,7 +3,7 @@ var GO = function () {
 		message: function (title, text) {
       $('#message h1').text(title);
       $('.message').text(text);
-      jQT.goTo($('#message'), 'flip');
+      jQT.goTo($('#message'), 'pop');
 		},
 		submit: function(e, success, error) {
 		  var $form = (typeof(e)==='string') ? $(e) : $(e.target);
@@ -20,26 +20,25 @@ var GO = function () {
 			var update_latest_server_info = null;
 			var current_move_number = info.move_number;
 			var latest_server_info = info;
+			var can_process_server_info = true;
 
 			var move_selector = function (move_number) {
 			  return '#m' + move_number;
 			};
 			
-			var play_current_stone  = function () {
-				if (latest_server_info.is_users_turn) {
-					target = $('.board .empty.' + latest_server_info.playing);
-					if (target.size() > 0) {
-						send_move(target.attr('id'))
-					}
-					else {
-						GO.message('Sorry', "You must first play a stone in a valid location.")
-					}
+			var position_of_played_stone = function () {
+				var target = $('.board .empty.' + latest_server_info.playing);
+				if (target.size() == 1) {
+					return target.attr('id');
 				}
-				else {
-					GO.message('Sorry', 'It is not your turn to play!');
-				}
+				else return null;
 			};
-			var send_move = function (position) {
+			
+			var stone_has_been_legally_placed = function () {
+				return latest_server_info.is_users_turn && ($('.board .empty.' + latest_server_info.playing).size() == 1);
+			};
+			
+			var play_stone  = function (position) {
 			  $.ajax({
 			    url: info.create_move_f(position),
 			    type: 'POST',
@@ -50,7 +49,21 @@ var GO = function () {
 			    },
 			  });
 			};
+			
+			var pass = function () {
+			  $.ajax({
+			    url: info.create_pass_url,
+			    type: 'POST',
+			    dataType: 'json',
+			    success: update_latest_server_info,
+			    error: function (error_response) {
+			      GO.message('error', 'unable to pass because: ' + error_response.responseText);
+			    },
+			  });
+			}
+			
 			var do_stone_move = function (dbl_click_event_data) {
+				console.log('double clicking ' + target.attr('id'));
 			  target = $(dbl_click_event_data.currentTarget);
 			  if (target.hasClass('empty')) {
 			    $.ajax({
@@ -117,41 +130,47 @@ var GO = function () {
 			  });
 			};
 			var process_server_info = function () {
-			  var can_process_server_info = true;
-			  return function () {
-			    if (!can_process_server_info || !latest_server_info.move_number) {
-			      return null;
-			    }
-			    can_process_server_info = false;
-			    if (latest_server_info.move_number > current_move_number) {
-			      var was_current_move_number = current_move_number;
-			      if (latest_server_info.is_users_turn) {
-			        get_latest_moves(function (latest_move_selector) {
-			          update_active_div(latest_server_info.move_number);
-			          update_status_on_current_board();
-			          can_process_server_info = true;
-			          if ($(move_selector(was_current_move_number)).is('.current')) {
-			            jQT.goTo(latest_move_selector, 'flip');
-			          }
-			        });
-			      }
-			      else {
-			        get_latest_moves(function (latest_move_selector) {
-			          update_active_div();
-			          update_status_on_current_board();
-			          can_process_server_info = true;
-			          if ($(move_selector(was_current_move_number)).is('.current')) {
-			            jQT.goTo(latest_move_selector, 'flip');
-			          }
-			        });
-			      }
-			    }
-			    else {
-			      update_active_on_current_board();
-			      can_process_server_info = true;
-			    }
-			  }
-			}();
+		    if (!can_process_server_info) {
+					console.log('skipping process_server_info, probably waiting for ajax');
+		      return null;
+		    }
+		    else if (!latest_server_info.move_number) {
+					console.error('unable to process server info because there is no latest_server_info.move_number');
+		      return null;
+		    }
+		    can_process_server_info = false;
+		    if (latest_server_info.move_number > current_move_number) {
+		      var was_current_move_number = current_move_number;
+					console.log('requesting updates for moves from ' + was_current_move_number + ' to ' + latest_server_info.move_number);
+		      if (latest_server_info.is_users_turn) {
+		        get_latest_moves(function (latest_move_selector) { // updates current_move_number
+		          update_active_div(latest_server_info.move_number);
+		          update_status_on_current_board();
+		          can_process_server_info = true;
+		          if ($(move_selector(was_current_move_number)).is('.current')) {
+								console.log('fading from ' + was_current_move_number + ' to ' + current_move_number);
+		            jQT.goTo($(latest_move_selector), 'fade');
+		          }
+		        });
+		      }
+		      else {
+		        get_latest_moves(function (latest_move_selector) { // updates current_move_number
+		          update_active_div();
+		          update_status_on_current_board();
+		          can_process_server_info = true;
+		          if ($(move_selector(was_current_move_number)).is('.current')) {
+								console.log('fading from ' + was_current_move_number + ' to ' + current_move_number);
+		            jQT.goTo($(latest_move_selector), 'fade');
+		          }
+		        });
+		      }
+		    }
+		    else {
+					console.log('i think i am up to date');
+		      update_active_on_current_board();
+		      can_process_server_info = true;
+		    }
+		  };
 			var get_history_up_to = function (current_move_number) {
 				if (current_move_number > 1) {
 				  $.ajax({
@@ -170,7 +189,7 @@ var GO = function () {
 				      $(move_selector(current_move_number) + ' .history .prev').show();
 				    },
 				    error: function (error_response) {
-				      GO.message('error', 'unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
+				      console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
 				    }
 				  });
 				}
@@ -179,12 +198,19 @@ var GO = function () {
 				}
 			};
 			var update_latest_server_info = function () {
+		    if (!can_process_server_info) {
+					console.log('skipping update_latest_server_info, probably waiting for ajax');
+		      return null;
+		    }
 			  $.ajax({
 			    url: info.move_info_url,
 			    type: 'GET',
 			    dataType: 'json',
 			    success: function (data) {
 			      latest_server_info = data;
+			    },
+			    error: function (error_response) {
+			      console.error('unable to update_latest_server_info because: ' + error_response.responseText);
 			    }
 			  });
 			};
@@ -198,19 +224,28 @@ var GO = function () {
 			};
 			var update_status_on_current_board = function () {
 				var selector = move_selector(current_move_number);
-			  $('.move .info').not(selector).hide();
-			  $(selector + ' .info').show();
-				var info_text = 'This is the current position.';
+				if (current_move_number > 0) {
+					$(selector).find('.info .desc').addClass('current').text('current position.');
+					$('.move').not(selector).has('.info .desc.current').each(function (move_el) {
+						$(move_el).find('.info .desc.current').removeClass('current').text('position after move' + $(move_el).data('move') + '.');
+					});
+				}
+				var news_text = '';
 				if (latest_server_info.playing) {
-					info_text = info_text + ' You are playing ' + latest_server_info.playing + ', and ';
 					if (latest_server_info.is_users_turn) {
-						info_text = info_text + 'it is your turn to play or pass.';
+						news_text = 'Thus, it is your turn.';
+					}
+					else if (latest_server_info.playing == 'black') {
+						news_text = 'Thus, you are waiting for white to play or pass.';
 					}
 					else {
-						info_text = info_text + 'you are waiting for your opponent to play or pass.';
+						news_text = 'Thus, you are waiting for black to play or pass.';
 					}
 				}
-			  $(selector + ' .info p').text(info_text);
+				else if (latest_server_info.move_number == 0) {
+					news_text = news_text + 'It is ' + latest_server_info.to_play + "'s turn.";
+				}
+				$(selector).find('.info .news').text(news_text);
 			};
 
 			var update_elements_with_navigation_handlers = function () {
@@ -228,7 +263,16 @@ var GO = function () {
 							try_go_to(move_selector(tm + 1), ''); // slide seems to work
 						}
 						else {
-							play_current_stone();
+							position = position_of_played_stone();
+							if (position != null) {
+								play_stone(position);
+							}
+							else if (latest_server_info.is_users_turn) {
+								pass();
+							}
+							else {
+								GO.message('Sorry', 'It is not your turn to play or pass');
+							}
 						}
 					}
 				};

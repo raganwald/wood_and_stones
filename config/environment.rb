@@ -14,10 +14,12 @@ Rails::Initializer.run do |config|
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
   
-  config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/controllers )
-  config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/helpers )
-  config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/models )
-  config.load_paths += %W( #{RAILS_ROOT}/rewritten/lib )
+  if RAILS_ENV == 'production'
+    config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/controllers )
+    config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/helpers )
+    config.load_paths += %W( #{RAILS_ROOT}/rewritten/app/models )
+    config.load_paths += %W( #{RAILS_ROOT}/rewritten/lib )
+  end
 
   # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem "haml"

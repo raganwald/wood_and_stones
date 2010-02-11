@@ -1,0 +1,24 @@
+class Action::GameplayController < Action::PlayerActionController
+  
+  def show
+    @cardinality = params[:cardinality]
+    @game = params[:game_id].andand { Game.find(it) }
+    if @move
+    elsif @cardinality && @game
+      if @cardinality == 0
+        @move = nil
+        @board = @game.initial_board
+        @previous_cardinality = nil
+        @next_cardinality = @game.actions.count > 0 ? 1 : nil
+      else
+        @move = @game.actions.find(:conditions=>{:cardinality => @cardinality}) #TODO test whether this has a fencepost error
+        @board = @move.after
+        @previous_cardinality = @move.lower_item.andand.cardinality #TODO use simple math instead of fetching objects
+        @next_cardinality = @move.higher_item.andand.cardinality
+      end
+    else
+      render :status => 404
+    end
+  end
+
+end

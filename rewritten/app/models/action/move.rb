@@ -16,12 +16,10 @@ class Action::Move < Action::Gameplay
   def updated_captured_stones
     captured_stones = self.removed
     if (captured_stones.size > 0) then
-      Game.transaction do |variable|
-        msg = (player == Board::BLACK_S) ? ("captured_blacks") : ("captured_whites")
-        self.game.send("#{msg}=", (self.game.send(msg) + captured_stones.size))
-        self.game.current_removed = captured_stones
-        self.game.save!
-      end
+      msg = (player == Board::BLACK_S) ? ("captured_blacks") : ("captured_whites")
+      self.game.send("#{msg}=", (self.game.send(msg) + captured_stones.size))
+      self.game.current_removed = captured_stones
+      self.game.save!
     end
     true
   end

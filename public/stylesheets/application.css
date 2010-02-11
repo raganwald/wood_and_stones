@@ -14,3 +14,7 @@
 .slideback.out          { -webkit-animation-name: slideouttoright; }
 .slideback.in.reverse   { -webkit-animation-name: slideouttoright; }
 .slideback.out.reverse  { -webkit-animation-name: slideinfromleft; }
+
+.move .info .desc:before {
+	content: 'This is the ';
+}

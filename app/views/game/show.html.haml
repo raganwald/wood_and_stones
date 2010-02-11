@@ -19,12 +19,13 @@
     $('#m0').data('move',0);
     $('#m#{@game.current_move_number}').data('move',#{@game.current_move_number});
     game_show_helper.document_ready_hook();
+    $(document).data('game_show_helper', game_show_helper);
   });
 
 -if @game.current_move_number == 0
   .current.move#m0
     .toolbar 
-      %h1 Beginning
+      %h1 We Go!
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
@@ -32,15 +33,17 @@
       %li.prev.invisible
         %a No Prev
       %li.next
-        %span.simulateSwipeBoardLeft{:href=>'#'}
+        %span.simulateSwipeBoardLeft
           Next
           %small.target_move 1
     .info
-      %p
+      %span.desc initial position. 
+      %span.history
+      %span.news
 -else
   .move#m0
     .toolbar 
-      %h1 Beginning
+      %h1 We Go!
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board }
@@ -48,25 +51,35 @@
       %li.prev.invisible
         %a No Prev
       %li.next
-        %span.simulateSwipeBoardLeft{:href=>'#'}
+        %span.simulateSwipeBoardLeft
           Next
           %small.target_move 1
     .info
-      %p
+      %span.desc initial position. 
+      %span.history
+      %span.news
   .current.move{:id=>"m#{@game.current_move_number}"}
     .toolbar 
-      %h1 Move #{@game.current_move_number}
+      %h1 We Go!
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
     %ul.individual.history.no_touch
       %li.prev
-        %span.simulateSwipeBoardRight{:href=>'#'}
+        %span.simulateSwipeBoardRight
           Prev
           %small.target_move= @game.current_move_number - 1
       %li.next.invisible
-        %span.simulateSwipeBoardLeft{:href=>'#'}
+        %span.simulateSwipeBoardLeft
           Next
           %small.target_move= @game.current_move_number + 1
     .info
-      %p
+      %span.desc.current current position. 
+      %span.history
+        - action = @game.actions.last # TODO: denormalize like everything else
+        #{action.player.titleize} has just
+        -if action.kind_of?(Action::Pass)
+          passed.
+        -elsif !action.position.blank?
+          played #{action.position}#{!action.removed.empty? ? (', capturing ' + pluralize(action.removed.size, 'stone')) : ''}.
+      %span.news

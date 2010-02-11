@@ -1,0 +1,34 @@
+-@actions.each do |action|
+  .move{:id=>"m#{action.cardinality}"}
+    .toolbar 
+      %h1 We Go!
+      %a.back{:href=>"#"} Back
+    .board
+      -if action.cardinality < action.game.actions.size
+        = render :partial => "board/board", :locals => { :board => action.after }
+      -else
+        = render :partial => "board/board", :locals => { :game => action.game }
+    %ul.individual.history.no_touch
+      %li.prev
+        %span.simulateSwipeBoardRight
+          Prev
+          %small.target_move= action.cardinality - 1
+      -if action.cardinality < action.game.current_move_number
+        %li.next
+          %span.simulateSwipeBoardLeft
+            Next
+            %small.target_move= action.cardinality + 1
+      -else
+        %li.next.invisible
+          %span.simulateSwipeBoardLeft
+            Next
+            %small.target_move= action.cardinality + 1
+    .info
+      %span.desc position after move #{action.cardinality}. 
+      %span.history
+        #{action.player.titleize} has just
+        -if action.kind_of?(Action::Pass)
+          passed.
+        -elsif !action.position.blank?
+          played #{action.position}#{!action.removed.empty? ? (', capturing ' + pluralize(action.removed.size, 'stone')) : ''}.
+      %span.news

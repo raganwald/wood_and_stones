@@ -1,19 +1,25 @@
 class Action::PassController < Action::PlayerActionController
   
   def create
-    @move = Action::Pass.create(
-      :game => @game,
-      :position => params[:position]
+    @pass = Action::Pass.create(
+      :game => @game
     )
-    render :status => 403 unless @move.valid?
+    render :status => 403 unless @pass.valid?
+    self.assemble_info # it has been updated!
+    @info[:move] = @pass
+    respond_to do |format|
+      format.json {
+        render :json => @info
+      }
+    end
   end
   
   def valid
-    @move = Action::Pass.new(
+    @pass = Action::Pass.new(
       :game => @game,
       :position => params[:position]
     )
-    render :status => 403 unless @move.valid?
+    render :status => 403 unless @pass.valid?
   end
 
 end

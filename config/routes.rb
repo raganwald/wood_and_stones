@@ -37,11 +37,12 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :game
   
-  map.move_info 'move/info/:game_id', :controller => 'action/move', :action => 'info', :method => 'GET'
+  map.move_info 'game/:game_id/info', :controller => 'action/gameplay', :action => 'info', :method => 'GET'
+  map.get_history 'game/:game_id/plays_before/:before_play', :controller => 'action/gameplay', :action => 'index', :method => 'GET'
+  map.get_updates 'game/:game_id/plays_after/:after_play', :controller => 'action/gameplay', :action => 'index', :method => 'GET'
   
   map.create_move 'move/create/:game_id/:position', :controller => 'action/move', :action => 'create', :method => 'POST'
-  map.get_history 'move/history/:game_id/:before_move', :controller => 'action/move', :action => 'index', :method => 'GET'
-  map.get_updates 'move/updates/:game_id/:after_move', :controller => 'action/move', :action => 'index', :method => 'GET'
+  map.create_pass 'pass/create/:game_id', :controller => 'action/pass', :action => 'create', :method => 'POST'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

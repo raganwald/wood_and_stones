@@ -8,7 +8,7 @@ module Action::PlaceStone
           unless record.game.current_board.valid_position?(value) then
             record.errors.add(attr, "should be of the form aa and be a valid position on the board")
           end
-          unless record.game.current_board[value].open? then
+          unless (record.game.current_board[value].open? or (record.cardinality <= record.game.current_move_number)) then
             record.errors.add(attr, "should be to an empty place on the board")
           end
         end

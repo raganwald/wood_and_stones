@@ -16,7 +16,7 @@ module Action::PlaceStone
             record.game.current_board.valid_position?(value)
           end
           record.errors.add attr, 'should be to an empty place on the board' unless begin
-            record.game.current_board[value].open?
+            record.game.current_board[value].open? or record.cardinality <= record.game.current_move_number
           end
         end
       end
