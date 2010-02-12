@@ -16,8 +16,8 @@
       game_show_helper.process_server_info();
     });
     #{optional_get_history}
-    $('#m0').data('move',0);
-    $('#m#{@game.current_move_number}').data('move',#{@game.current_move_number});
+    $('#m0').data('number',0);
+    $('#m#{@game.current_move_number}').data('number',#{@game.current_move_number});
     game_show_helper.document_ready_hook();
     $(document).data('game_show_helper', game_show_helper);
   });

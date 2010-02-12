@@ -18,9 +18,12 @@ var GO = function () {
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
 			var update_latest_server_info = null;
-			var current_move_number = info.move_number;
 			var latest_server_info = info;
 			var can_process_server_info = true;
+			
+			var last_displayed_move_number = function () {
+				return $('.move:last').data('number');
+			};
 
 			var move_selector = function (move_number) {
 			  return '#m' + move_number;
@@ -60,37 +63,38 @@ var GO = function () {
 			      GO.message('error', 'unable to pass because: ' + error_response.responseText);
 			    },
 			  });
-			}
-			
-			var show_loading = function (target) {
-				target.find('img').attr('src', '/themes/apple/img/loading.gif');
 			};
 			
-			var hide_loading = function (target) {
-				target.find('img').attr('src', '/images/dot_clear.gif');
-			};
+			var double_click = function () {
+				var show_loading = function (target) {
+					target.find('img').attr('src', '/themes/apple/img/loading.gif');
+				};
+				var hide_loading = function (target) {
+					target.find('img').attr('src', '/images/dot_clear.gif');
+				};
+				return function (dbl_click_event_data) {
+				  var target = $(dbl_click_event_data.currentTarget);
+					console.log('double clicking ' + target.attr('id'));
+				  if (target.hasClass('valid')) {
+						target.addClass(latest_server_info.playing);
+						show_loading(target);
+				    $.ajax({
+				      url: info.create_move_f(target.attr('id')),
+				      type: 'POST',
+				      dataType: 'json',
+				      success: function (blort) {
+								update_latest_server_info(blort);
+								hide_loading(target);
+							},
+				      error: function (error_response) {
+								hide_loading(target);
+				        GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
+				      },
+				    });
+				  }
+				}
+			}();
 			
-			var do_stone_move = function (dbl_click_event_data) {
-			  var target = $(dbl_click_event_data.currentTarget);
-				console.log('double clicking ' + target.attr('id'));
-			  if (target.hasClass('valid')) {
-					target.addClass(latest_server_info.playing);
-					show_loading(target);
-			    $.ajax({
-			      url: info.create_move_f(target.attr('id')),
-			      type: 'POST',
-			      dataType: 'json',
-			      success: function (blort) {
-							update_latest_server_info(blort);
-							hide_loading(target);
-						},
-			      error: function (error_response) {
-							hide_loading(target);
-			        GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
-			      },
-			    });
-			  }
-			};
 			var place_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
 			  if (target.hasClass('valid') ) {
@@ -112,33 +116,33 @@ var GO = function () {
 			    var move_to_bind_selector = (move_number != null ? move_selector(move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (move_number != null ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
-			    $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(do_stone_move);
+			    $(places_to_bind_selector).toggle(place_stone, lift_stone).dblclick(double_click);
 			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
 			    $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
 			  };
 			}();
 			var get_latest_moves = function (callback) {
 			  $.ajax({
-			    url: info.get_updates_f(current_move_number),
+			    url: info.get_updates_f(last_displayed_move_number()),
 			    type: 'GET',
 			    dataType: 'html',
 			    success: function (html) {
 			      update_moves = $(html).filter('.move');
 			      if (update_moves.size() > 0) {
+							var current_move_number = last_displayed_move_number();
 							update_moves.each(function (i, el) {
-								$(el).data('move', current_move_number + i + 1);
+								$(el).data('number', current_move_number + i + 1);
 							});
-			        update_moves.insertAfter('#m' + current_move_number);
+			        update_moves.insertAfter('.move:last');
 							update_elements_with_navigation_handlers(update_moves);
 			        $(move_selector(current_move_number) + ' .history .next').removeClass('invisible').show();
-			        current_move_number = current_move_number + update_moves.size();
 			        if (callback) {
-			          callback(move_selector(current_move_number));
+			          callback('.move:last');
 			        }
 			      }
 			    },
 			    error: function (error_response) {
-			      GO.message('error', 'unable to load the game history after ' + current_move_number + ' because: ' + error_response.responseText);
+			      GO.message('error', 'unable to load the game history after ' + last_displayed_move_number() + ' because: ' + error_response.responseText);
 			    }
 			  });
 			};
@@ -152,8 +156,8 @@ var GO = function () {
 		      return null;
 		    }
 		    can_process_server_info = false;
-		    if (latest_server_info.move_number > current_move_number) {
-		      var was_current_move_number = current_move_number;
+		    if (latest_server_info.move_number > last_displayed_move_number()) {
+		      var was_current_move_number = last_displayed_move_number();
 					console.log('requesting updates for moves from ' + was_current_move_number + ' to ' + latest_server_info.move_number);
 		      if (latest_server_info.is_users_turn) {
 		        get_latest_moves(function (latest_move_selector) { // updates current_move_number
@@ -161,7 +165,7 @@ var GO = function () {
 		          update_move_infos();
 		          can_process_server_info = true;
 		          if ($(move_selector(was_current_move_number)).is('.current')) {
-								console.log('fading from ' + was_current_move_number + ' to ' + current_move_number);
+								console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 		            jQT.goTo($(latest_move_selector), 'fade');
 		          }
 		        });
@@ -172,7 +176,7 @@ var GO = function () {
 		          update_move_infos();
 		          can_process_server_info = true;
 		          if ($(move_selector(was_current_move_number)).is('.current')) {
-								console.log('fading from ' + was_current_move_number + ' to ' + current_move_number);
+								console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 		            jQT.goTo($(latest_move_selector), 'fade');
 		          }
 		        });
@@ -196,7 +200,7 @@ var GO = function () {
 					}
 					$('.move').not(selector).has('.info .desc.current').each(function (index, move_el) {
 						console.log('found an outdated move ' + $(move_el).attr('id'));
-						$(move_el).find('.info .desc.current').removeClass('current').text('position after move ' + $(move_el).data('move') + '.');
+						$(move_el).find('.info .desc.current').removeClass('current').text('position after move ' + $(move_el).data('number') + '.');
 						$(move_el).find('.info .news').text('');
 					});
 				}
@@ -228,7 +232,7 @@ var GO = function () {
 			      	update_moves = $(html).filter('.move');
 			      	if (update_moves.size() > 0) {
 								update_moves.each(function (i, el) {
-									$(el).data('move', i + 1);
+									$(el).data('number', i + 1);
 								});
 				      	update_moves.insertAfter('#m0');
 								update_elements_with_navigation_handlers(update_moves);
@@ -279,7 +283,7 @@ var GO = function () {
 				};
 				var swipeBoardLeft = function (target) {
 					console.log("swiping left from " + $(target).parents('.move').attr('id'));
-					var tm = $(target).parents('.move').data('move');
+					var tm = $(target).parents('.move').data('number');
 					if (tm != null) {
 						if (tm < latest_server_info.move_number) {
 							try_go_to(move_selector(tm + 1), ''); // slide seems to work
@@ -299,8 +303,8 @@ var GO = function () {
 					}
 				};
 				var swipeBoardRight = function (target) {
-					console.log("swiping right from " + $(target).parents('.move').attr('id') + ' which has a move number of ' +  $(target).parents('.move').data('move'));
-					var tm = $(target).parents('.move').data('move');
+					console.log("swiping right from " + $(target).parents('.move').attr('id') + ' which has a move number of ' +  $(target).parents('.move').data('number'));
+					var tm = $(target).parents('.move').data('number');
 					if (tm != null && tm > 0) {
 						try_go_to(move_selector(tm - 1), ''); // slideback  seems unreliable
 					}
