@@ -1,4 +1,4 @@
-- optional_get_history = @game.current_move_number > 0 ? ("game_show_helper.get_history_up_to(" + @game.current_move_number.to_s + ");") : ''
+- optional_get_history = @game.current_move_number > 1 ? ("game_show_helper.get_history_up_to(" + @game.current_move_number.to_s + ");") : ''
 :javascript
   $(document).ready( function () {
     var info = #{@info.to_json};
@@ -65,7 +65,7 @@
     .board
       = render :partial => "board/board", :locals => { :game => @game }
     %ul.individual.history.no_touch
-      %li.prev
+      %li.prev.invisible
         %span.simulateSwipeBoardRight
           Prev
           %small.target_move= @game.current_move_number - 1
