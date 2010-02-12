@@ -74,7 +74,7 @@
           Next
           %small.target_move= @game.current_move_number + 1
     .info
-      %span.desc.current current position. 
+      %span.desc.current= (@game.ended? ? 'position at the end of the game.' : 'current position.') 
       %span.history
         - action = @game.actions.last # TODO: denormalize like everything else
         #{action.player.titleize} has just

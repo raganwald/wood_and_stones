@@ -62,16 +62,30 @@ var GO = function () {
 			  });
 			}
 			
+			var show_loading = function (target) {
+				target.find('img').attr('src', '/themes/apple/img/loading.gif');
+			};
+			
+			var hide_loading = function (target) {
+				target.find('img').attr('src', '/images/dot_clear.gif');
+			};
+			
 			var do_stone_move = function (dbl_click_event_data) {
+			  var target = $(dbl_click_event_data.currentTarget);
 				console.log('double clicking ' + target.attr('id'));
-			  target = $(dbl_click_event_data.currentTarget);
-			  if (target.hasClass('empty')) {
+			  if (target.hasClass('valid')) {
+					target.addClass(latest_server_info.playing);
+					show_loading(target);
 			    $.ajax({
 			      url: info.create_move_f(target.attr('id')),
 			      type: 'POST',
 			      dataType: 'json',
-			      success: update_latest_server_info,
+			      success: function (blort) {
+							update_latest_server_info(blort);
+							hide_loading(target);
+						},
 			      error: function (error_response) {
+							hide_loading(target);
 			        GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
 			      },
 			    });
@@ -79,7 +93,6 @@ var GO = function () {
 			};
 			var place_stone = function (click_event_data) {
 			  target = $(click_event_data.currentTarget);
-				console.log('placing a ' + latest_server_info.playing + ' stone at: ' + target.attr('id'));
 			  if (target.hasClass('valid') ) {
 			    $('.board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
 			    target.addClass(latest_server_info.playing);
@@ -175,7 +188,12 @@ var GO = function () {
 				console.log("update_move_infos");
 				var selector = move_selector(latest_server_info.move_number);
 				if (latest_server_info.move_number > 0) {
-					$(selector).find('.info .desc').addClass('current').text('current position.');
+					if (latest_server_info.game_state != 'ended') {
+						$(selector).find('.info .desc').addClass('current').text('current position.');
+					}
+					else {
+						$(selector).find('.info .desc').addClass('current').text('position at the end of the game.')
+					}
 					$('.move').not(selector).has('.info .desc.current').each(function (index, move_el) {
 						console.log('found an outdated move ' + $(move_el).attr('id'));
 						$(move_el).find('.info .desc.current').removeClass('current').text('position after move ' + $(move_el).data('move') + '.');
@@ -190,8 +208,8 @@ var GO = function () {
 					else if (latest_server_info.playing == 'black') {
 						news_text = 'Thus, you are waiting for white to play or pass.';
 					}
-					else {
-						news_text = 'Thus, you are waiting for black to play or pass.';
+					else if (latest_server_info.playing == 'white') {
+						news_text = 'Thus, you are waiting for white to play or pass.';
 					}
 				}
 				else if (latest_server_info.move_number == 0) {
