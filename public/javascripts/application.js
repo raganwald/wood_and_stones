@@ -104,40 +104,36 @@ var GO = function () {
 			  });
 			};
 			
-			var place_stone = function (target) {
-			  if (target.hasClass('valid') ) {
-			    $('.move.active .board .empty.' + latest_server_info.playing).removeClass(latest_server_info.playing);
-			    target.addClass(latest_server_info.playing);
-			  }
-			};
-			
-			var double_click = function (dbl_click_event_data) {
-			  var target = $(dbl_click_event_data.currentTarget);
-				console.log('double clicking ' + target.attr('id'));
-				place_stone(target);
-				play_stone(target.attr('id'));
-			};
-
 			var update_active_div = function () {
 			  var move_to_unbind_selector = '.move.active';
 			  var places_to_unbind_selector = '.move.active .board .empty.valid';
-				var click_empty = function (click_event_data) {
-				  place_stone($(click_event_data.currentTarget));
-				};
-				var click_placed = function (click_event_data) {
-				  var target = $(click_event_data.currentTarget);
-				  if (target.hasClass('empty') && target.hasClass(latest_server_info.playing)) {
-				    target.removeClass(latest_server_info.playing);
-				  }
-				};
+			
 			  return function (active_p) {
 				  var move_to_bind_selector = (latest_server_info.is_users_turn ? select_move_by_move_number(latest_server_info.move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (latest_server_info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
-			    $(places_to_bind_selector).toggle(click_empty, click_placed).dblclick(double_click);
-			    $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
 			    $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
+			    // $(places_to_bind_selector).toggle(click_empty, click_placed).dblclick(place_and_play_stone);
+			    // $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
 			  };
+			}();
+			var liven_active_positions = function () {
+			
+				var toggle_placed_stone = function (dbl_click_event_data) {
+					var target = $(dbl_click_event_data.currentTarget);
+					$('.move.active .board .empty.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					target.toggleClass(latest_server_info.playing);
+				};
+			
+				var place_and_play_stone = function (dbl_click_event_data) {
+				  var target = $(dbl_click_event_data.currentTarget);
+					$('.move.active .board .empty.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					target.addClass(latest_server_info.playing);
+					play_stone(target.attr('id'));
+				};
+
+				$('.move.active .board .empty.valid').live('click', toggle_placed_stone);
+				$('.move.active .board .empty.valid').live('dblclick', place_and_play_stone);
 			}();
 			
 			var get_latest_moves = function (callback) {
@@ -337,6 +333,7 @@ var GO = function () {
 			
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
+				liven_active_positions();
 			};
 			
 			return {
