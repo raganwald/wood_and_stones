@@ -32,7 +32,7 @@
     %ul.individual.history.no_touch
       %li.prev.invisible
         %a No Prev
-      %li.next
+      %li.next.invisible
         %span.simulateSwipeBoardLeft
           Next
           %small.target_move 1
@@ -64,6 +64,7 @@
       %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game }
+    -# is this a bug when there's one move?
     %ul.individual.history.no_touch
       %li.prev.invisible
         %span.simulateSwipeBoardRight

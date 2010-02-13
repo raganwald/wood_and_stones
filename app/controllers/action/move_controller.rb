@@ -12,6 +12,9 @@ class Action::MoveController < Action::GameplayController
       format.json {
         render :json => @info
       }
+      format.html {
+        render :partial => 'action/gameplay/action', :locals => { :action => @move }
+      }
     end
   end
   

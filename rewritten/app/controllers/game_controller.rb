@@ -7,7 +7,7 @@ class GameController < ApplicationController
       render(:status => 401)
     else
       Game.transaction do
-        @game = Game.new(:black => (@black), :white => (@white), :dimension => (params[:dimension]), :handicap => (params[:handicap]))
+        @game = Game.new(:black => (@black), :white => (@white), :dimension => (params[:dimension].to_i), :handicap => (params[:handicap].to_i))
         if @game.save then
           respond_to do |format|
             format.html { redirect_to(:action => :show, :id => (@game.id)) }

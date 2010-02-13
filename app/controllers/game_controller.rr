@@ -12,8 +12,8 @@ class GameController < ApplicationController
         @game = Game.new(
           :black => @black,
           :white => @white,
-          :dimension => params[:dimension],
-          :handicap => params[:handicap]
+          :dimension => params[:dimension].to_i,
+          :handicap => params[:handicap].to_i
         )
         if @game.save
           respond_to do |format|

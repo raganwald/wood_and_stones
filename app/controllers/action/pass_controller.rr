@@ -8,6 +8,9 @@ class Action::PassController < Action::PlayerActionController
     self.assemble_info # it has been updated!
     @info[:move] = @pass
     respond_to do |format|
+      format.html {
+        render render :partial => 'action/gameplay/action', :locals => { :action => @pass }
+      }
       format.json {
         render :json => @info
       }
