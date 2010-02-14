@@ -2,6 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveRecord::TestCase
   
+=begin
+  
   context "boards" do
     
     context "with a valid dimension" do
@@ -544,5 +546,26 @@ class BoardTest < ActiveRecord::TestCase
     end
     
   end  
+  
+=end
+
+  context "legal_moves_for" do
+    
+    setup do
+      @board = Board.new(nil, 9) do
+        self['ba'] = Board::BLACK_S
+        self['bb'] = Board::WHITE_S
+        self['cb'] = Board::BLACK_S
+        self['bc'] = Board::BLACK_S
+      end
+    end
+    
+    context Board::BLACK_S do
+      should "include 'ab'" do
+        assert @board.legal_moves_for(Board::BLACK_S).any? { |legal| legal.position == 'ab' }
+      end
+    end
+    
+  end
   
 end
