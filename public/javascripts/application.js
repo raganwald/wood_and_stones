@@ -113,8 +113,6 @@ var GO = function () {
 			    var places_to_bind_selector = (latest_server_info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
 			    $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
-			    // $(places_to_bind_selector).toggle(click_empty, click_placed).dblclick(place_and_play_stone);
-			    // $(places_to_unbind_selector).not(places_to_bind_selector).unbind('click').unbind('dblclick').removeClass(latest_server_info.playing);
 			  };
 			}();
 			var liven_active_positions = function () {

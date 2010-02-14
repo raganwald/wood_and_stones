@@ -208,22 +208,32 @@ class Board
       end.call(Location.for(board, self.across, down))
     end
   end
-  def initialize(str, dimension)
+  def initialize(str, dimension, &block)
     self.as_str = str
     self.dimension = dimension
     initialize_as_str
+    self.instance_eval(&block) if block
+    self
   end
   def self.validate_for(belongs_to, *board_attrs)
     board_attrs.each do |sym|
-      board = belongs_to.send(sym)
-      undead = board.dead_stones.all
-      unless undead.empty? then
-        belongs_to.errors.add(sym, "The stones at #{undead.to_sentence} are dead")
-      end
-      unless DIMENSIONS.include?(board.dimension) then
-        belongs_to.errors.add(sym, "#{board.dimension} is not a valid board size")
-      end
+      board.invalid_reasons.each { |reason| belongs_to.errors.add(sym, reason) }
     end
+  end
+  def invalid_reasons
+    lambda do |reasons|
+      undead = self.dead_stones.all
+      unless undead.empty? then
+        (reasons << "The stones at #{undead.to_sentence} are dead")
+      end
+      unless DIMENSIONS.include?(self.dimension) then
+        (reasons << "#{self.dimension} is not a valid board size")
+      end
+      reasons
+    end.call([])
+  end
+  def valid?
+    self.invalid_reasons.empty?
   end
   STARS = Board::DIMENSIONS.inject(Hash.new) do |sizes_to_game_sets, dimension|
     sizes_to_game_sets.merge(dimension => ((offset = (dimension <= 11) ? (3) : (4)

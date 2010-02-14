@@ -7,11 +7,11 @@ class BoardTest < ActiveRecord::TestCase
     context "with a valid dimension" do
       
       setup do
-        @board = Board.create(:dimension => 13)
+        @board = Board.new(nil, 13)
       end
       
       should "be valid" do
-        assert_valid @board
+        assert @board.valid?
       end
       
     end
@@ -44,7 +44,7 @@ class BoardTest < ActiveRecord::TestCase
       context "and Maps" do
       
         setup do
-          @board = returning(Board.create!(:dimension => 9)) do |b|
+          @board = returning(Board.new(nil,  9)) do |b|
             b[0][0].blacken
             b[1][1].whiten
             b[2][2].blacken
@@ -146,7 +146,7 @@ class BoardTest < ActiveRecord::TestCase
   context "Locations" do
     
     setup do
-      @board = Board.create(:dimension => 9)
+      @board = Board.new(nil, 9)
     end
     
     context "for corners" do
@@ -202,7 +202,7 @@ class BoardTest < ActiveRecord::TestCase
   context "dead stones" do
       
     setup do
-      @board = Board.create(:dimension => 9)
+      @board = Board.new(nil, 9)
     end
     
     context "for an empty board" do
@@ -216,7 +216,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a board with a single stone of each colour" do
       
       setup do
-        @board = Board.create(:dimension => 9) do |b|
+        @board = Board.new(nil, 9) do |b|
           b['aa'] = Board::BLACK_S
           b['bb'] = Board::WHITE_S
         end
@@ -231,7 +231,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a stone trapped in the corner" do
       
       setup do
-        @board = Board.create(:dimension => 9) do |b|
+        @board = Board.new(nil, 9) do |b|
           b['aa'] = Board::BLACK_S
           b['ba'] = Board::WHITE_S
           b['ab'] = Board::WHITE_S
@@ -288,7 +288,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a couple of stones trapped along an edge" do
       
       setup do
-        @board = Board.create(:dimension => 9) do |b|
+        @board = Board.new(nil, 9) do |b|
           b['aa'] = Board::BLACK_S
           b['bb'] = Board::BLACK_S
           b['cb'] = Board::BLACK_S
@@ -311,7 +311,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for an empty board" do
       
       setup do
-        @board = Board.create(:dimension => 9)
+        @board = Board.new(nil, 9)
       end
       
       should "be empty" do
@@ -323,7 +323,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a board with a single stone of each colour" do
       
       setup do
-        @board = Board.create(:dimension => 9) do |b|
+        @board = Board.new(nil, 9) do |b|
           b['aa'] = Board::BLACK_S
           b['ba'] = Board::WHITE_S
         end
@@ -349,7 +349,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for adjacent stones of the same colour" do
       
       setup do
-        @board = Board.create(:dimension => 9) do |b|
+        @board = Board.new(nil, 9) do |b|
           b['aa'] = Board::BLACK_S
           b['ba'] = Board::BLACK_S
         end
@@ -374,9 +374,9 @@ class BoardTest < ActiveRecord::TestCase
   context "a board with one black stone and one white stone" do
       
     setup do
-      @board = Board.create(:dimension => 9) do |b|
-        b['aa'] = Board::BLACK_S
-        b['bb'] = Board::WHITE_S
+      @board = Board.new(nil, 9) do
+        self['aa'] = Board::BLACK_S
+        self['bb'] = Board::WHITE_S
       end
     end
     
@@ -404,7 +404,7 @@ class BoardTest < ActiveRecord::TestCase
   context "an empty board" do
       
     setup do
-      @board = Board.create(:dimension => 13)
+      @board = Board.new(nil, 13)
     end
     
     should "retrieve empty stones in the four corners" do
@@ -416,20 +416,24 @@ class BoardTest < ActiveRecord::TestCase
     
     should "allow placement of stones in handicap spots" do
       assert_nothing_raised do
-        @board['dd'] = Board::BLACK_S
-        @board['jd'] = Board::WHITE_S
-        @board['jj'] = Board::BLACK_S
-        @board['dj'] = Board::WHITE_S
+        @board.instance_eval do
+          self['dd'] = Board::BLACK_S
+          self['jd'] = Board::WHITE_S
+          self['jj'] = Board::BLACK_S
+          self['dj'] = Board::WHITE_S
+        end
       end
     end
   
     context "when stones are placed in handicap spots" do
     
       setup do
-        @board['dd'] = Board::BLACK_S
-        @board['jd'] = Board::WHITE_S
-        @board['jj'] = Board::BLACK_S
-        @board['dj'] = Board::WHITE_S
+        @board.instance_eval do
+          self['dd'] = Board::BLACK_S
+          self['jd'] = Board::WHITE_S
+          self['jj'] = Board::BLACK_S
+          self['dj'] = Board::WHITE_S
+        end
       end
     
       should "retrieve empty stones in the four corners" do
@@ -473,11 +477,13 @@ class BoardTest < ActiveRecord::TestCase
     context "when there is a dead stone" do
       
       setup do
-        @board['dc'] = Board::BLACK_S
-        @board['cd'] = Board::BLACK_S
-        @board['dd'] = Board::WHITE_S
-        @board['ed'] = Board::BLACK_S
-        @board['de'] = Board::BLACK_S
+        @board.instance_eval do
+          self['dc'] = Board::BLACK_S
+          self['cd'] = Board::BLACK_S
+          self['dd'] = Board::WHITE_S
+          self['ed'] = Board::BLACK_S
+          self['de'] = Board::BLACK_S
+        end
       end
       
       should "not be valid because the white stone is dead" do
@@ -493,8 +499,8 @@ class BoardTest < ActiveRecord::TestCase
     # right then down
     
     setup do
-      @thirteen_board = Board.create(:dimension => 13) # mm
-      @nineteen_board = Board.create(:dimension => 19) # ss
+      @thirteen_board = Board.new(nil, 13) # mm
+      @nineteen_board = Board.new(nil, 19) # ss
     end
     
     should "reject entirely invalid positions" do
