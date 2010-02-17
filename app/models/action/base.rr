@@ -3,7 +3,7 @@ class Action::Base < ActiveRecord::Base
   set_table_name :actions
   
   belongs_to :game
-  composed_of :after, :class_name => "Board", :mapping => [%w(after_board_serialized as_str), %w(dimension dimension)]
+  composed_of :after, :class_name => "Board", :mapping => [%w(dimension dimension), %w(after_board_serialized as_str)]
   
   def after?
     !self.after_board_serialized.blank?

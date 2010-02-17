@@ -12,7 +12,7 @@ class Action::Gameplay < Action::Base
   end
   def copy_game_to_after
     unless self.after? then
-      self.after = (__126612370551383__ = self.game and __126612370551383__.current_board).clone
+      self.after = (__126612553962330__ = self.game and __126612553962330__.current_board).clone
     end
     true
   end

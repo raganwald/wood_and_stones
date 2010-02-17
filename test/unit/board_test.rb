@@ -9,7 +9,7 @@ class BoardTest < ActiveRecord::TestCase
     context "with a valid dimension" do
       
       setup do
-        @board = Board.new(nil, 13)
+        @board = Board.new(13)
       end
       
       should "be valid" do
@@ -46,7 +46,7 @@ class BoardTest < ActiveRecord::TestCase
       context "and Maps" do
       
         setup do
-          @board = returning(Board.new(nil,  9)) do |b|
+          @board = returning(Board.new( 9)) do |b|
             b[0][0].blacken
             b[1][1].whiten
             b[2][2].blacken
@@ -148,7 +148,7 @@ class BoardTest < ActiveRecord::TestCase
   context "Locations" do
     
     setup do
-      @board = Board.new(nil, 9)
+      @board = Board.new(9)
     end
     
     context "for corners" do
@@ -204,7 +204,7 @@ class BoardTest < ActiveRecord::TestCase
   context "dead stones" do
       
     setup do
-      @board = Board.new(nil, 9)
+      @board = Board.new(9)
     end
     
     context "for an empty board" do
@@ -218,7 +218,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a board with a single stone of each colour" do
       
       setup do
-        @board = Board.new(nil, 9) do |b|
+        @board = Board.new(9) do |b|
           b['aa'] = Board::BLACK_S
           b['bb'] = Board::WHITE_S
         end
@@ -233,7 +233,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a stone trapped in the corner" do
       
       setup do
-        @board = Board.new(nil, 9) do |b|
+        @board = Board.new(9) do |b|
           b['aa'] = Board::BLACK_S
           b['ba'] = Board::WHITE_S
           b['ab'] = Board::WHITE_S
@@ -290,7 +290,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a couple of stones trapped along an edge" do
       
       setup do
-        @board = Board.new(nil, 9) do |b|
+        @board = Board.new(9) do |b|
           b['aa'] = Board::BLACK_S
           b['bb'] = Board::BLACK_S
           b['cb'] = Board::BLACK_S
@@ -313,7 +313,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for an empty board" do
       
       setup do
-        @board = Board.new(nil, 9)
+        @board = Board.new(9)
       end
       
       should "be empty" do
@@ -325,7 +325,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for a board with a single stone of each colour" do
       
       setup do
-        @board = Board.new(nil, 9) do |b|
+        @board = Board.new(9) do |b|
           b['aa'] = Board::BLACK_S
           b['ba'] = Board::WHITE_S
         end
@@ -351,7 +351,7 @@ class BoardTest < ActiveRecord::TestCase
     context "for adjacent stones of the same colour" do
       
       setup do
-        @board = Board.new(nil, 9) do |b|
+        @board = Board.new(9) do |b|
           b['aa'] = Board::BLACK_S
           b['ba'] = Board::BLACK_S
         end
@@ -376,7 +376,7 @@ class BoardTest < ActiveRecord::TestCase
   context "a board with one black stone and one white stone" do
       
     setup do
-      @board = Board.new(nil, 9) do
+      @board = Board.new(9) do
         self['aa'] = Board::BLACK_S
         self['bb'] = Board::WHITE_S
       end
@@ -406,7 +406,7 @@ class BoardTest < ActiveRecord::TestCase
   context "an empty board" do
       
     setup do
-      @board = Board.new(nil, 13)
+      @board = Board.new(13)
     end
     
     should "retrieve empty stones in the four corners" do
@@ -501,8 +501,8 @@ class BoardTest < ActiveRecord::TestCase
     # right then down
     
     setup do
-      @thirteen_board = Board.new(nil, 13) # mm
-      @nineteen_board = Board.new(nil, 19) # ss
+      @thirteen_board = Board.new(13) # mm
+      @nineteen_board = Board.new(19) # ss
     end
     
     should "reject entirely invalid positions" do
@@ -551,19 +551,80 @@ class BoardTest < ActiveRecord::TestCase
 
   context "legal_moves_for" do
     
-    setup do
-      @board = Board.new(nil, 9) do
-        self['ba'] = Board::BLACK_S
-        self['bb'] = Board::WHITE_S
-        self['cb'] = Board::BLACK_S
-        self['bc'] = Board::BLACK_S
+    context "simple case" do
+    
+      setup do
+        @board = Board.new(3) do
+          self['ba'] = Board::BLACK_S
+          self['bb'] = Board::WHITE_S
+          self['cb'] = Board::BLACK_S
+          self['bc'] = Board::BLACK_S
+        end
       end
+    
+      context Board::BLACK_S do
+      
+        [[0,0], [0,1], [0,2], [2,0], [2,2]].each do |loc|
+      
+          should "include #{loc.inspect}" do
+            legals = @board.legal_moves_for(Board::BLACK_S)
+            assert legals.any? { |legal| legal.location == loc }, "#{legals.inspect} did not include #{loc.inspect}"
+          end
+        
+        end
+      
+      end
+    
+      context Board::WHITE_S do
+      
+        [[0, 0], [0, 1], [0, 2]].each do |loc|
+      
+          should "include #{loc.inspect}" do
+            legals = @board.legal_moves_for(Board::WHITE_S)
+            assert legals.any? { |legal| legal.location == loc }, "#{legals.inspect} did not include #{loc.inspect}"
+          end
+        
+        end
+      
+      end
+    
     end
     
-    context Board::BLACK_S do
-      should "include 'ab'" do
-        assert @board.legal_moves_for(Board::BLACK_S).any? { |legal| legal.position == 'ab' }
+    context "capture case" do
+    
+      setup do
+        @board = Board.new(3) do
+          self['aa'] = Board::WHITE_S
+          self['ac'] = Board::WHITE_S
+          self['ba'] = Board::BLACK_S
+          self['bb'] = Board::WHITE_S
+          self['cb'] = Board::BLACK_S
+          self['bc'] = Board::BLACK_S
+        end
       end
+    
+      context Board::BLACK_S do
+      
+        [[0,1], [2,0], [2,2]].each do |loc|
+      
+          should "include #{loc.inspect}" do
+            legals = @board.legal_moves_for(Board::BLACK_S)
+            assert legals.any? { |legal| legal.location == loc }, "#{legals.inspect} did not include #{loc.inspect}"
+          end
+        
+        end
+      
+      end
+    
+      context Board::WHITE_S do
+      
+        should "not have any legal moves" do
+          legals = @board.legal_moves_for(Board::WHITE_S)
+          assert legals.empty?, "#{legals.inspect} was not empty"
+        end
+      
+      end
+    
     end
     
   end

@@ -1,6 +1,6 @@
 require("ostruct")
 class Board
-  attr_accessor(:as_str)
+  attr_reader(:stones_array)
   attr_accessor(:dimension)
   DIMENSIONS = [9, 11, 13, 15, 17, 19]
   BLACK_S, WHITE_S = "black", "white"
@@ -65,7 +65,7 @@ class Board
       self.last
     end
     def open?
-      self.board.to_a[self.across][self.down].blank?
+      self.board.stones_array[self.across][self.down].blank?
     end
     def black?
       self.has?(BLACK_S)
@@ -74,12 +74,10 @@ class Board
       self.has?(WHITE_S)
     end
     def has?(colour)
-      (self.board.to_a[self.across][self.down] == colour)
+      (self.board.stones_array[self.across][self.down] == colour)
     end
     def have(colour)
-      arr = self.board.to_a
-      arr[self.across][self.down] = colour
-      self.board.as_str = arr.inspect
+      self.board.stones_array[self.across][self.down] = colour
       self
     end
     def blacken
@@ -89,9 +87,7 @@ class Board
       self.have(WHITE_S)
     end
     def remove
-      arr = self.board.to_a
-      arr[self.across][self.down] = nil
-      self.board.as_str = arr.inspect
+      self.board.stones_array[self.across][self.down] = nil
       self
     end
     def adjacent_scalars(offset)
@@ -208,32 +204,275 @@ class Board
       end.call(Location.for(board, self.across, down))
     end
   end
-  def initialize(str, dimension, &block)
-    self.as_str = str
-    self.dimension = dimension
-    initialize_as_str
-    self.instance_eval(&block) if block
-    self
-  end
-  def self.validate_for(belongs_to, *board_attrs)
-    board_attrs.each do |sym|
-      board.invalid_reasons.each { |reason| belongs_to.errors.add(sym, reason) }
+  state_machine(:state, :initial => :writable) do ||
+    event(:lock) { || transition(:writable => :readable) }
+    after_transition(any => :readable) do |board, transition|
+      board.stones_array.freeze
+      board.stones_array.each(&:freeze)
+    end
+    state(:writable) do ||
+      def as_str=(str)
+        @stones_array = eval(str)
+      end
+      def stones_array=(arr)
+        @stones_array = arr
+      end
+      def []=(str_or_symbol, value)
+        str = str_or_symbol.to_s.downcase
+        if valid_position?(str) then
+          loc = parse_position(str)
+          value.nil? ? (loc.remove) : (loc.have(value))
+          loc
+        else
+          super(str_or_symbol, value)
+        end
+      end
+      def handicap(number_of_stones)
+        self.star_points(number_of_stones).each do |across, down|
+          self[across][down].blacken
+        end
+      end
+    end
+    state(:readable) do ||
+      def self.validate_for(belongs_to, *board_attrs)
+        board_attrs.each do |sym|
+          board.invalid_reasons.each { |reason| belongs_to.errors.add(sym, reason) }
+        end
+      end
+      def invalid_reasons
+        lambda do |reasons|
+          undead = self.dead_stones.all
+          unless undead.empty? then
+            (reasons << "The stones at #{undead.to_sentence} are dead")
+          end
+          unless DIMENSIONS.include?(self.dimension) then
+            (reasons << "#{self.dimension} is not a valid board size")
+          end
+          reasons
+        end.call([])
+      end
+      def valid?
+        self.invalid_reasons.empty?
+      end
+      def map_array(map)
+        template = TEMPLATES[self.dimension]
+        (0..(self.dimension - 1)).map do |across|
+          (0..(self.dimension - 1)).map do |down|
+            map[template[across][down]][self.stones_array[across][down]]
+          end
+        end
+      end
+      def +(something)
+        if (something.respond_to?(:across) and (something.respond_to?(:down) and something.respond_to?(:colour))) then
+          (self + [something])
+        else
+          Board.new(self.dimension, self.as_str) do |other|
+            something.each do |its|
+              other[its.across][its.down] = its.colour unless its.colour.nil?
+            end
+          end
+        end
+      end
+      def -(something)
+        if (something.respond_to?(:across) and something.respond_to?(:down)) then
+          (self - [something])
+        else
+          Board.new(self.dimension, self.as_str) do |other|
+            something.each { |its| other[its.across][its.down].remove }
+          end
+        end
+      end
+      def groupings
+        black_offsets, white_offsets = self.stone_locations
+        BlacksAndWhites.for(Grouping.groupings_for_one_colour(self, black_offsets), Grouping.groupings_for_one_colour(self, white_offsets))
+      end
+      def dead_groupings
+        self.groupings.map do |groupings_of_one_colour|
+          groupings_of_one_colour.select { |its| its.dead? }
+        end
+      end
+      def dead_stones
+        self.dead_groupings.map { |it| it.inject([], &:+) }
+      end
+      def empty_locations
+        lambda do |empties|
+          (0..(self.dimension - 1)).each do |across|
+            (0..(self.dimension - 1)).each do |down|
+              if self.stones_array[across][down].nil? then
+                (empties << Location.for(self, across, down))
+              end
+            end
+          end
+          empties
+        end.call([])
+      end
+      def stone_locations
+        returning(BlacksAndWhites.for([], [])) do |blacks, whites|
+          (0..(self.dimension - 1)).each do |across|
+            (0..(self.dimension - 1)).each do |down|
+              if (self.stones_array[across][down] == BLACK_S) then
+                (blacks << Location.for(self, across, down))
+              else
+                if (self.stones_array[across][down] == WHITE_S) then
+                  (whites << Location.for(self, across, down))
+                end
+              end
+            end
+          end
+        end
+      end
+      def old_legal_moves_for(player)
+        empties = self.empty_locations
+        captureable_groups = self.groupings.map do |array_of_groupings|
+          array_of_groupings.map do |grouping|
+            OpenStruct.new(:grouping => (grouping), :liberties => (grouping.liberties), :liberty => (nil))
+          end.select do |its|
+            (its.liberties.size == 1)
+          end.each do |its|
+            its.liberty = its.liberties.first
+          end
+        end
+        puts(empties.map { |e| "#{e.inspect}: #{e.has_liberty?}" })
+        locations_that_capture_blacks, locations_that_capture_whites = captureable_groups[0].map(&:liberty), captureable_groups[1].map(&:liberty)
+        non_capturing_empty_locations = ((empties - locations_that_capture_blacks) - locations_that_capture_whites)
+        non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
+        opponents_captureable_groups = if (player.to_s == "black") then
+          captureable_groups.last
+        else
+          captureable_groups.first
+        end
+        pivoted = opponents_captureable_groups.inject({}) do |liberties_to_victims, liberty_and_grouping|
+          lambda do |h|
+            h[liberty_and_grouping.liberty] ||= []
+            h[liberty_and_grouping.liberty] += liberty_and_grouping.grouping
+            h
+          end.call(liberties_to_victims)
+        end
+        (pivoted.map do |liberty, dead_stones|
+          OpenStruct.new(:location => (liberty), :dead_stones => (dead_stones))
+        end + non_capturing_legal_locations.map do |location|
+          OpenStruct.new(:location => (location), :dead_stones => ([]))
+        end)
+      end
+      def info
+        @info ||= (aa = self.adjacents_array
+        lambda do |rval|
+          (0..(self.dimension - 1)).each do |across|
+            (0..(self.dimension - 1)).each do |down|
+              colour = stones_array[across][down]
+              if colour.blank? then
+                if aa[across][down].any? { |a_adj, d_adj| stones_array[a_adj][d_adj].blank? } then
+                  (rval.empty_place_liberties << [across, down])
+                end
+              else
+                rval.belong_to_group[across][down] = [across, down]
+                rval.group_liberties_by_location[across][down] = []
+                aa[across][down].each do |a_adj, d_adj|
+                  adj_colour = stones_array[a_adj][d_adj]
+                  if adj_colour.blank? then
+                    lib_arr = rval.group_liberties_by_location[rval.belong_to_group[across][down][0]][rval.belong_to_group[across][down][1]]
+                    (lib_arr << [a_adj, d_adj])
+                    lib_arr.uniq!
+                  else
+                    if ((adj_colour == colour) and ((a_adj < across) or ((a_adj == across) and (d_adj < down)))) then
+                      adj_bt = rval.belong_to_group[a_adj][d_adj]
+                      this_bt = rval.belong_to_group[across][down]
+                      unless (adj_bt == this_bt) then
+                        case (adj_bt <=> this_bt)
+                        when -1 then
+                          from, to = this_bt, adj_bt
+                        when 1 then
+                          from, to = adj_bt, this_bt
+                        else
+                          # do nothing
+                        end
+                        rval.group_liberties_by_location[to[0]][to[1]] += rval.group_liberties_by_location[from[0]][from[1]]
+                        rval.group_liberties_by_location[from[0]][from[1]] = nil
+                        rval.group_liberties_by_location[to[0]][to[1]].uniq!
+                        (from[0]..across).each do |i_across|
+                          (i_across == from[0]) ? (low_down = from[1]) : (low_down = 0)
+                          if (i_across == to[0]) then
+                            high_down = to[1]
+                          else
+                            high_down = (self.dimension - 1)
+                          end
+                          (low_down..high_down).each do |i_down|
+                            if (rval.belong_to_group[i_across][i_down] == from) then
+                              rval.belong_to_group[i_across][i_down] = to
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+          (0..(self.dimension - 1)).each do |across|
+            (0..(self.dimension - 1)).each do |down|
+              unless rval.group_liberties_by_location[across][down].blank? then
+                (rval.group_liberties[(self.stones_array[across][down] == Board::BLACK_S) ? (0) : (1)] << rval.group_liberties_by_location[across][down])
+              end
+            end
+          end
+          rval
+        end.call(OpenStruct.new(:belong_to_group => (dim_by_dim_array), :group_liberties_by_location => (dim_by_dim_array), :empty_place_liberties => ([]), :group_liberties => ([[], []]))))
+      end
+      def legal_moves_for(player)
+        if (player == BLACK_S) then
+          player_i, opponent_i, opponent = 0, 1, WHITE_S
+        else
+          player_i, opponent_i, opponent = 1, 0, BLACK_S
+        end
+        empty_placements_with_liberty = self.info.empty_place_liberties
+        placements_that_grow_player_groups = self.info.group_liberties[player_i].select { |its| (its.size > 1) }.inject([], &:+)
+        placements_that_capture = self.info.group_liberties[opponent_i].select { |its| (its.size == 1) }.inject([], &:+)
+        ((empty_placements_with_liberty + placements_that_grow_player_groups) + placements_that_capture).uniq
+      end
+      def adjacent_scalars_lambda
+        lambda do |magnitude|
+          if (magnitude == 0) then
+            return [(magnitude + 1)]
+          else
+            if (magnitude == (self.dimension - 1)) then
+              return [(magnitude - 1)]
+            else
+              return [(magnitude - 1), (magnitude + 1)]
+            end
+          end
+        end
+      end
+      def adjacents_priors_helper(scalar_lambda)
+        lambda do |a|
+          (0..(self.dimension - 1)).each do |across|
+            a_adj = scalar_lambda[across]
+            (0..(self.dimension - 1)).each do |down|
+              d_adj = scalar_lambda[down]
+              a_adj.each { |a_e| (a[across][down] << [a_e, down]) }
+              d_adj.each { |d_e| (a[across][down] << [across, d_e]) }
+            end
+          end
+          a
+        end.call((1..self.dimension).map { (1..self.dimension).map { Array.new } })
+      end
+      def adjacents_array
+        @@adjacents_array ||= {  }
+        @@adjacents_array[self.dimension] ||= adjacents_priors_helper(self.adjacent_scalars_lambda)
+      end
     end
   end
-  def invalid_reasons
-    lambda do |reasons|
-      undead = self.dead_stones.all
-      unless undead.empty? then
-        (reasons << "The stones at #{undead.to_sentence} are dead")
-      end
-      unless DIMENSIONS.include?(self.dimension) then
-        (reasons << "#{self.dimension} is not a valid board size")
-      end
-      reasons
-    end.call([])
+  def initialize(dimension, str = nil, &block)
+    super()
+    self.as_str = str unless str.blank?
+    self.dimension = dimension
+    self.stones_array ||= self.dim_by_dim_array
+    self.instance_eval(&block) if block
+    self.lock
+    self
   end
-  def valid?
-    self.invalid_reasons.empty?
+  def as_str
+    self.stones_array.inspect
   end
   STARS = Board::DIMENSIONS.inject(Hash.new) do |sizes_to_game_sets, dimension|
     sizes_to_game_sets.merge(dimension => ((offset = (dimension <= 11) ? (3) : (4)
@@ -254,11 +493,6 @@ class Board
   end
   def hoshi_points
     @hoshi_points ||= self.star_points(HOSHI[self.dimension])
-  end
-  def handicap(number_of_stones)
-    self.star_points(number_of_stones).each do |across, down|
-      self[across][down].blacken
-    end
   end
   LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
   SGF_BLACK_PLACEMENT_PROPERTIES = ["B", "AB"]
@@ -282,15 +516,6 @@ class Board
       arr
     end.call((1..dim).map { ([:blank] * dim) })))
   end
-  def map_array(map)
-    arr = self.to_a
-    template = TEMPLATES[self.dimension]
-    (0..(self.dimension - 1)).map do |across|
-      (0..(self.dimension - 1)).map do |down|
-        map[template[across][down]][arr[across][down]]
-      end
-    end
-  end
   def [](str_or_symbol_or_offset)
     if str_or_symbol_or_offset.kind_of?(Integer) then
       return Column.new(self, str_or_symbol_or_offset)
@@ -303,125 +528,17 @@ class Board
       end
     end
   end
-  def +(something)
-    if (something.respond_to?(:across) and (something.respond_to?(:down) and something.respond_to?(:colour))) then
-      (self + [something])
-    else
-      lambda do |other|
-        something.each do |its|
-          other[its.across][its.down] = its.colour unless its.colour.nil?
-        end
-        other
-      end.call(self.dup)
-    end
-  end
-  def -(something)
-    if (something.respond_to?(:across) and something.respond_to?(:down)) then
-      (self - [something])
-    else
-      lambda do |other|
-        something.each { |its| other[its.across][its.down].remove }
-        other
-      end.call(self.dup)
-    end
-  end
   def to_a
-    initialize_as_str
-    eval(self.as_str)
+    self.stones_array
   end
-  def groupings
-    black_offsets, white_offsets = self.stone_locations
-    BlacksAndWhites.for(Grouping.groupings_for_one_colour(self, black_offsets), Grouping.groupings_for_one_colour(self, white_offsets))
-  end
-  def dead_groupings
-    self.groupings.map do |groupings_of_one_colour|
-      groupings_of_one_colour.select { |its| its.dead? }
-    end
-  end
-  def dead_stones
-    self.dead_groupings.map { |it| it.inject([], &:+) }
-  end
-  def empty_locations
-    arr = self.to_a
-    lambda do |empties|
-      (0..(self.dimension - 1)).each do |across|
-        (0..(self.dimension - 1)).each do |down|
-          (empties << Location.for(self, across, down)) if arr[across][down].nil?
-        end
-      end
-      empties
-    end.call([])
-  end
-  def stone_locations
-    arr = self.to_a
-    returning(BlacksAndWhites.for([], [])) do |blacks, whites|
-      (0..(self.dimension - 1)).each do |across|
-        (0..(self.dimension - 1)).each do |down|
-          if (arr[across][down] == BLACK_S) then
-            (blacks << Location.for(self, across, down))
-          else
-            if (arr[across][down] == WHITE_S) then
-              (whites << Location.for(self, across, down))
-            end
-          end
-        end
-      end
-    end
+  protected
+  def dim_by_dim_array
+    (1..self.dimension).map { ([nil] * self.dimension) }
   end
   def parse_position(str)
     offsets = str.scan(/[abcdefghijklmnopqrst]/i).map { |its| LETTERS.index(its.upcase) }.select do |it|
       (it and ((it >= 0) and (it < dimension)))
     end
     Location.for(self, offsets.first, offsets.last) if (offsets.size == 2)
-  end
-  def initialize_as_str
-    if self.as_str.blank? then
-      self.as_str = (1..self.dimension).map { ([nil] * self.dimension) }.inspect
-    end
-  end
-  def legal_moves_for(player)
-    empties = self.empty_locations
-    captureable_groups = self.groupings.map do |array_of_groupings|
-      array_of_groupings.map do |grouping|
-        OpenStruct.new(:grouping => (grouping), :liberties => (grouping.liberties), :liberty => (nil))
-      end.select do |its|
-        (its.liberties.size == 1)
-      end.each do |its|
-        its.liberty = its.liberties.first
-      end
-    end
-    locations_that_capture_blacks, locations_that_capture_whites = captureable_groups.map { |arr| arr.map(&:liberty) }
-    non_capturing_empty_locations = ((empties - locations_that_capture_blacks) - locations_that_capture_whites)
-    non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
-    opponents_captureable_groups = if (player.to_s == "black") then
-      captureable_groups.last
-    else
-      captureable_groups.first
-    end
-    pivoted = opponents_captureable_groups.inject({}) do |liberties_to_victims, liberty_and_grouping|
-      lambda do |h|
-        h[liberty_and_grouping.liberty] ||= []
-        h[liberty_and_grouping.liberty] += liberty_and_grouping.grouping
-        h
-      end.call(liberties_to_victims)
-    end
-    (pivoted.map do |liberty, dead_stones|
-      OpenStruct.new(:location => (liberty), :dead_stones => (dead_stones))
-    end + non_capturing_legal_locations.map do |location|
-      OpenStruct.new(:location => (location), :dead_stones => ([]))
-    end)
-  end
-  protected
-  def []=(str_or_symbol, value)
-    initialize_as_str
-    str = str_or_symbol.to_s.downcase
-    if valid_position?(str) then
-      arr = self.to_a
-      loc = parse_position(str)
-      value.nil? ? (loc.remove) : (loc.have(value))
-      loc
-    else
-      super(str_or_symbol)
-    end
   end
 end

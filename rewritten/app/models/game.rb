@@ -16,8 +16,8 @@ class Game < ActiveRecord::Base
   named_scope(:played_by, lambda do |user|
     { :conditions => (["black_id = ? OR white_id = ?", user.id, user.id]) }
   end)
-  composed_of(:initial_board, :class_name => "Board", :mapping => ([["initial_board_serialized", "as_str"], ["dimension", "dimension"]]))
-  composed_of(:current_board, :class_name => "Board", :mapping => ([["current_board_serialized", "as_str"], ["dimension", "dimension"]]))
+  composed_of(:initial_board, :class_name => "Board", :mapping => ([["dimension", "dimension"], ["current_board_serialized", "as_str"]]))
+  composed_of(:current_board, :class_name => "Board", :mapping => ([["dimension", "dimension"], ["current_board_serialized", "as_str"]]))
   validates_each(:initial_board, :current_board) do |record, attribute, value|
     Board.validate_for(record, attribute)
   end
@@ -53,7 +53,7 @@ class Game < ActiveRecord::Base
       fork
     else
       if dimension = options[:dimension] then
-        board = Board.new(nil, dimension)
+        board = Board.new(dimension)
         (it = options[:handicap].to_i
         if (it > 1) then
           board.handicap(it)
