@@ -427,7 +427,6 @@ class Board
             its.liberty = its.liberties.first
           }
         }
-        puts empties.map { |e| "#{e.inspect}: #{e.has_liberty?}" }
         locations_that_capture_blacks, locations_that_capture_whites = captureable_groups[0].map(&:liberty), captureable_groups[1].map(&:liberty)
         non_capturing_empty_locations = empties - locations_that_capture_blacks - locations_that_capture_whites
         non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
@@ -510,12 +509,28 @@ class Board
                 end
               end
             end
-            
+            #---------- Second pass to consolidate certain derivatives.   ----------
+            #---------- Optimize into the first pass when the api settles ----------
+            group_locations_to_liberties_and_stones = {}
             (0..(self.dimension - 1)).each do |across|
               (0..(self.dimension - 1)).each do |down|
                 unless rval.group_liberties_by_location[across][down].blank?
-                  rval.group_liberties[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << rval.group_liberties_by_location[across][down]
+                  # rval.group_liberties[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << rval.group_liberties_by_location[across][down]
+                  group_locations_to_liberties_and_stones[[across, down]] ||= OpenStruct.new(
+                    :liberties => rval.group_liberties_by_location[across][down],
+                    :stones => []
+                  )
                 end
+                unless rval.belong_to_group[across][down].blank?
+                  group_locations_to_liberties_and_stones[rval.belong_to_group[across][down]].stones << [across, down]
+                end
+              end
+            end
+            rval.group_liberties = group_locations_to_liberties_and_stones.inject([[], []]) do |acc, val|
+              returning(acc) do |blacks_and_whites|
+                location, liberties_and_stones = *val
+                across, down = *location
+                blacks_and_whites[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << liberties_and_stones
               end
             end
           end
@@ -528,14 +543,34 @@ class Board
         else
           player_i, opponent_i, opponent = 1, 0, BLACK_S
         end
-        # any empty spot with one or more liberties is a legal move
-        empty_placements_with_liberty = self.info.empty_place_liberties
-        # any spot adjacent to my own group that has two or more liberties is a legal spot
-        placements_that_grow_player_groups = self.info.group_liberties[player_i].select { its.size > 1  }.inject([], &:+)
-        # any spot that performs a capture is a legal spot
-        placements_that_capture = self.info.group_liberties[opponent_i].select { its.size == 1 }.inject([], &:+)
         
-        (empty_placements_with_liberty + placements_that_grow_player_groups + placements_that_capture).uniq
+        # any empty spot with one or more liberties is a legal move
+        empty_placements_with_liberty = self.info.empty_place_liberties.map { 
+          OpenStruct.new(:location => it, :dead_stones => []) 
+        }
+        
+        # any liberty belonging to a group with two or more liberties is a legal spot
+        placements_that_grow_player_groups = self.info.group_liberties[player_i].select{ |liberties_and_stones|
+          liberties_and_stones.liberties.size > 1 
+        }.map{ |liberties_and_stones|
+          liberties_and_stones.liberties.map { OpenStruct.new(:location => it, :dead_stones => []) }
+        }.inject([], &:+)
+        
+        # any spot that performs a capture is a legal spot
+        placements_that_capture = self.info.group_liberties[opponent_i].select { |liberties_and_stones|
+          liberties_and_stones.liberties.size == 1 
+        }.map {
+          OpenStruct.new(:location => its.liberties.first, :dead_stones => its.stones)
+        }
+        
+        (empty_placements_with_liberty + placements_that_grow_player_groups + placements_that_capture).inject({}) do |legal_move_hash, location_and_dead_stones|
+          returning(legal_move_hash) do |h|
+            h[location_and_dead_stones.location] ||= []
+            h[location_and_dead_stones.location] += location_and_dead_stones.dead_stones
+          end
+        end.map do |location, dead_stones|
+          OpenStruct.new(:location => location, :dead_stones => dead_stones)
+        end
       end
       
       #---------- quasi-private ----------

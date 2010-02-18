@@ -332,7 +332,6 @@ class Board
             its.liberty = its.liberties.first
           end
         end
-        puts(empties.map { |e| "#{e.inspect}: #{e.has_liberty?}" })
         locations_that_capture_blacks, locations_that_capture_whites = captureable_groups[0].map(&:liberty), captureable_groups[1].map(&:liberty)
         non_capturing_empty_locations = ((empties - locations_that_capture_blacks) - locations_that_capture_whites)
         non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
@@ -409,12 +408,24 @@ class Board
               end
             end
           end
+          group_locations_to_liberties_and_stones = {  }
           (0..(self.dimension - 1)).each do |across|
             (0..(self.dimension - 1)).each do |down|
               unless rval.group_liberties_by_location[across][down].blank? then
-                (rval.group_liberties[(self.stones_array[across][down] == Board::BLACK_S) ? (0) : (1)] << rval.group_liberties_by_location[across][down])
+                group_locations_to_liberties_and_stones[[across, down]] ||= OpenStruct.new(:liberties => (rval.group_liberties_by_location[across][down]), :stones => ([]))
+              end
+              unless rval.belong_to_group[across][down].blank? then
+                (group_locations_to_liberties_and_stones[rval.belong_to_group[across][down]].stones << [across, down])
               end
             end
+          end
+          rval.group_liberties = group_locations_to_liberties_and_stones.inject([[], []]) do |acc, val|
+            lambda do |blacks_and_whites|
+              location, liberties_and_stones = *val
+              across, down = *location
+              (blacks_and_whites[(self.stones_array[across][down] == Board::BLACK_S) ? (0) : (1)] << liberties_and_stones)
+              blacks_and_whites
+            end.call(acc)
           end
           rval
         end.call(OpenStruct.new(:belong_to_group => (dim_by_dim_array), :group_liberties_by_location => (dim_by_dim_array), :empty_place_liberties => ([]), :group_liberties => ([[], []]))))
@@ -425,10 +436,30 @@ class Board
         else
           player_i, opponent_i, opponent = 1, 0, BLACK_S
         end
-        empty_placements_with_liberty = self.info.empty_place_liberties
-        placements_that_grow_player_groups = self.info.group_liberties[player_i].select { |its| (its.size > 1) }.inject([], &:+)
-        placements_that_capture = self.info.group_liberties[opponent_i].select { |its| (its.size == 1) }.inject([], &:+)
-        ((empty_placements_with_liberty + placements_that_grow_player_groups) + placements_that_capture).uniq
+        empty_placements_with_liberty = self.info.empty_place_liberties.map do |it|
+          OpenStruct.new(:location => (it), :dead_stones => ([]))
+        end
+        placements_that_grow_player_groups = self.info.group_liberties[player_i].select do |liberties_and_stones|
+          (liberties_and_stones.liberties.size > 1)
+        end.map do |liberties_and_stones|
+          liberties_and_stones.liberties.map do |it|
+            OpenStruct.new(:location => (it), :dead_stones => ([]))
+          end
+        end.inject([], &:+)
+        placements_that_capture = self.info.group_liberties[opponent_i].select do |liberties_and_stones|
+          (liberties_and_stones.liberties.size == 1)
+        end.map do |its|
+          OpenStruct.new(:location => (its.liberties.first), :dead_stones => (its.stones))
+        end
+        ((empty_placements_with_liberty + placements_that_grow_player_groups) + placements_that_capture).inject({}) do |legal_move_hash, location_and_dead_stones|
+          lambda do |h|
+            h[location_and_dead_stones.location] ||= []
+            h[location_and_dead_stones.location] += location_and_dead_stones.dead_stones
+            h
+          end.call(legal_move_hash)
+        end.map do |location, dead_stones|
+          OpenStruct.new(:location => (location), :dead_stones => (dead_stones))
+        end
       end
       def adjacent_scalars_lambda
         lambda do |magnitude|

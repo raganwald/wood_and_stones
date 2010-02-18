@@ -590,12 +590,12 @@ class BoardTest < ActiveRecord::TestCase
     
     end
     
-    context "capture case" do
+    context "capture case and multiple liberties case" do
     
       setup do
         @board = Board.new(3) do
-          self['aa'] = Board::WHITE_S
-          self['ac'] = Board::WHITE_S
+          self['aa'] = Board::BLACK_S
+          self['ac'] = Board::BLACK_S
           self['ba'] = Board::BLACK_S
           self['bb'] = Board::WHITE_S
           self['cb'] = Board::BLACK_S
