@@ -4,6 +4,7 @@ class Board
   attr_accessor(:dimension)
   DIMENSIONS = [9, 11, 13, 15, 17, 19]
   BLACK_S, WHITE_S = "black", "white"
+  LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
   class Occupied < Exception
   end
   class Wtf < Exception
@@ -321,38 +322,6 @@ class Board
           end
         end
       end
-      def old_legal_moves_for(player)
-        empties = self.empty_locations
-        captureable_groups = self.groupings.map do |array_of_groupings|
-          array_of_groupings.map do |grouping|
-            OpenStruct.new(:grouping => (grouping), :liberties => (grouping.liberties), :liberty => (nil))
-          end.select do |its|
-            (its.liberties.size == 1)
-          end.each do |its|
-            its.liberty = its.liberties.first
-          end
-        end
-        locations_that_capture_blacks, locations_that_capture_whites = captureable_groups[0].map(&:liberty), captureable_groups[1].map(&:liberty)
-        non_capturing_empty_locations = ((empties - locations_that_capture_blacks) - locations_that_capture_whites)
-        non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
-        opponents_captureable_groups = if (player.to_s == "black") then
-          captureable_groups.last
-        else
-          captureable_groups.first
-        end
-        pivoted = opponents_captureable_groups.inject({}) do |liberties_to_victims, liberty_and_grouping|
-          lambda do |h|
-            h[liberty_and_grouping.liberty] ||= []
-            h[liberty_and_grouping.liberty] += liberty_and_grouping.grouping
-            h
-          end.call(liberties_to_victims)
-        end
-        (pivoted.map do |liberty, dead_stones|
-          OpenStruct.new(:location => (liberty), :dead_stones => (dead_stones))
-        end + non_capturing_legal_locations.map do |location|
-          OpenStruct.new(:location => (location), :dead_stones => ([]))
-        end)
-      end
       def info
         @info ||= (aa = self.adjacents_array
         lambda do |rval|
@@ -493,11 +462,18 @@ class Board
       end
     end
   end
-  def initialize(dimension, str = nil, &block)
+  def initialize(dimension_or_board, str = nil, &block)
     super()
-    self.as_str = str unless str.blank?
-    self.dimension = dimension
-    self.stones_array ||= self.dim_by_dim_array
+    if dimension_or_board.kind_of?(Fixnum) then
+      self.dimension = dimension_or_board
+      self.as_str = str unless str.blank?
+      self.stones_array ||= self.dim_by_dim_array
+    else
+      if dimension_or_board.kind_of?(Board) then
+        self.dimension = dimension_or_board.dimension
+        self.stones_array = dimension_or_board.stones_array
+      end
+    end
     self.instance_eval(&block) if block
     self.lock
     self
@@ -525,7 +501,6 @@ class Board
   def hoshi_points
     @hoshi_points ||= self.star_points(HOSHI[self.dimension])
   end
-  LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
   SGF_BLACK_PLACEMENT_PROPERTIES = ["B", "AB"]
   SGF_WHITE_PLACEMENT_PROPERTIES = ["W", "AW"]
   def valid_position?(str)
@@ -568,7 +543,7 @@ class Board
   end
   def parse_position(str)
     offsets = str.scan(/[abcdefghijklmnopqrst]/i).map { |its| LETTERS.index(its.upcase) }.select do |it|
-      (it and ((it >= 0) and (it < dimension)))
+      (it and ((it >= 0) and (it < self.dimension)))
     end
     Location.for(self, offsets.first, offsets.last) if (offsets.size == 2)
   end

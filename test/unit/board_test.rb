@@ -1,9 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveRecord::TestCase
-  
-=begin
-  
+
   context "boards" do
     
     context "with a valid dimension" do
@@ -46,7 +44,7 @@ class BoardTest < ActiveRecord::TestCase
       context "and Maps" do
       
         setup do
-          @board = returning(Board.new( 9)) do |b|
+          @board = Board.new(9) do |b|
             b[0][0].blacken
             b[1][1].whiten
             b[2][2].blacken
@@ -248,39 +246,6 @@ class BoardTest < ActiveRecord::TestCase
         assert !Board::Location.for(@board, 0, 0).has_liberty?
       end
       
-      should "belong to a board with three groupings" do
-        assert_equal [
-          [ # blacks
-            [[0,0]]
-          ], 
-          [ # whites
-            [[0,1]], 
-            [[1,0]]
-          ]
-        ], @board.groupings
-      end
-      
-      context "the black stone grouping" do
-        
-        setup do
-          @black_grouping = @board.groupings.first.first
-        end
-        
-        should "be dead" do
-          assert @black_grouping.dead?
-        end
-        
-        should "not have liberties" do
-          assert @black_grouping.liberties.empty?
-        end
-        
-        should "have one stone in the corner" do
-          assert_equal(Board::Location.for(@board, 0, 0), @black_grouping.first)
-          assert_equal(1, @black_grouping.size)
-        end
-        
-      end
-      
       should "be a dead group" do
         assert_equal [[[0,0]], []], @board.dead_stones()
       end
@@ -306,71 +271,6 @@ class BoardTest < ActiveRecord::TestCase
       
     end
       
-  end
-  
-  context "groupings" do
-    
-    context "for an empty board" do
-      
-      setup do
-        @board = Board.new(9)
-      end
-      
-      should "be empty" do
-        assert_equal [[], []], @board.groupings
-      end
-      
-    end
-    
-    context "for a board with a single stone of each colour" do
-      
-      setup do
-        @board = Board.new(9) do |b|
-          b['aa'] = Board::BLACK_S
-          b['ba'] = Board::WHITE_S
-        end
-      end
-      
-      should "produce two groupings, one for each stone" do
-        assert_equal [
-          [ # blacks
-            [ # only grouping
-              [0,0] # only stone
-            ]
-          ], 
-          [ # whites
-            [ # only grouping
-              [1,0] # only stone
-            ]
-          ]
-        ], @board.groupings
-      end
-      
-    end
-    
-    context "for adjacent stones of the same colour" do
-      
-      setup do
-        @board = Board.new(9) do |b|
-          b['aa'] = Board::BLACK_S
-          b['ba'] = Board::BLACK_S
-        end
-      end
-      
-      should "produce one grouping" do
-        assert_equal [
-          [ # blacks
-            [ # only grouping
-              [0,0], # first stone
-              [1,0]  # second stone
-            ]
-          ], 
-          [] # whites
-        ], @board.groupings
-      end
-      
-    end
-    
   end
   
   context "a board with one black stone and one white stone" do
@@ -418,7 +318,7 @@ class BoardTest < ActiveRecord::TestCase
     
     should "allow placement of stones in handicap spots" do
       assert_nothing_raised do
-        @board.instance_eval do
+        @board = Board.new(13) do
           self['dd'] = Board::BLACK_S
           self['jd'] = Board::WHITE_S
           self['jj'] = Board::BLACK_S
@@ -430,7 +330,7 @@ class BoardTest < ActiveRecord::TestCase
     context "when stones are placed in handicap spots" do
     
       setup do
-        @board.instance_eval do
+        @board = Board.new(13) do
           self['dd'] = Board::BLACK_S
           self['jd'] = Board::WHITE_S
           self['jj'] = Board::BLACK_S
@@ -479,7 +379,7 @@ class BoardTest < ActiveRecord::TestCase
     context "when there is a dead stone" do
       
       setup do
-        @board.instance_eval do
+        @board = Board.new(13) do
           self['dc'] = Board::BLACK_S
           self['cd'] = Board::BLACK_S
           self['dd'] = Board::WHITE_S
@@ -546,8 +446,6 @@ class BoardTest < ActiveRecord::TestCase
     end
     
   end  
-  
-=end
 
   context "legal_moves_for" do
     

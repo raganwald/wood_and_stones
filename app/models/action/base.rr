@@ -3,7 +3,26 @@ class Action::Base < ActiveRecord::Base
   set_table_name :actions
   
   belongs_to :game
-  composed_of :after, :class_name => "Board", :mapping => [%w(dimension dimension), %w(after_board_serialized as_str)]
+  composed_of :before, :class_name => "Board", :mapping => [%w(dimension dimension), %w(before_board_serialized as_str)]
+  composed_of :after,  :class_name => "Board", :mapping => [%w(dimension dimension), %w(after_board_serialized  as_str)]
+  
+  before_validation_on_create :initialize_before_board
+  
+  before_create :update_game_current_board
+  
+  after_create do 
+    self.game.save! 
+  end
+  
+  def initialize_before_board
+    self.before = self.game.current_board
+  end
+  
+  def update_game_current_board
+    self.game.current_board = self.after
+    self.game.current_move_number = self.cardinality
+    true
+  end
   
   def after?
     !self.after_board_serialized.blank?

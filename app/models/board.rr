@@ -9,6 +9,8 @@ class Board
   
   BLACK_S, WHITE_S = 'black', 'white'
   
+  LETTERS = %w(A B C D E F G H I J K L M N O P Q R S)
+  
   class Occupied < Exception; end
   
   class Wtf < Exception; end
@@ -370,7 +372,7 @@ class Board
       end
       
       #---------- OLD SCHOOL ----------
-
+ 
       def groupings
         black_offsets, white_offsets = self.stone_locations
         BlacksAndWhites.for(
@@ -414,36 +416,6 @@ class Board
         end
       end
       
-      # known to be broken
-      def old_legal_moves_for(player)
-        empties = self.empty_locations
-    
-        captureable_groups = self.groupings.map { |array_of_groupings| 
-          array_of_groupings.map { |grouping|
-            OpenStruct.new(:grouping => grouping, :liberties => grouping.liberties, :liberty => nil) 
-          }.select { 
-            its.liberties.size == 1 
-          }.each {
-            its.liberty = its.liberties.first
-          }
-        }
-        locations_that_capture_blacks, locations_that_capture_whites = captureable_groups[0].map(&:liberty), captureable_groups[1].map(&:liberty)
-        non_capturing_empty_locations = empties - locations_that_capture_blacks - locations_that_capture_whites
-        non_capturing_legal_locations = non_capturing_empty_locations.select(&:has_liberty?)
-        # note that empty locations that don't capture anything are suicides
-        opponents_captureable_groups = (player.to_s == 'black' ? captureable_groups.last : captureable_groups.first)
-        # note that the other capturing locations are fratricides
-        # pivot and merge groupings
-        pivoted = opponents_captureable_groups.inject({}) do |liberties_to_victims, liberty_and_grouping|
-          returning(liberties_to_victims) do |h|
-            h[liberty_and_grouping.liberty] ||= []
-            h[liberty_and_grouping.liberty] += liberty_and_grouping.grouping
-          end
-        end
-        (pivoted.map { |liberty, dead_stones| OpenStruct.new(:location => liberty, :dead_stones => dead_stones) }) + (
-          non_capturing_legal_locations.map { |location| OpenStruct.new(:location => location, :dead_stones => []) }
-        )
-      end
       
       #---------- NEW SCHOOL ----------
   
@@ -613,11 +585,16 @@ class Board
     
   end
   
-  def initialize(dimension, str = nil, &block)
+  def initialize(dimension_or_board, str = nil, &block)
     super()
-    self.as_str = str unless str.blank?
-    self.dimension = dimension
-    self.stones_array ||= self.dim_by_dim_array()
+    if dimension_or_board.kind_of?(Fixnum)
+      self.dimension = dimension_or_board 
+      self.as_str = str unless str.blank?
+      self.stones_array ||= self.dim_by_dim_array()
+    elsif dimension_or_board.kind_of?(Board)
+      self.dimension = dimension_or_board.dimension
+      self.stones_array = dimension_or_board.stones_array
+    end
     self.instance_eval(&block) if block
     self.lock
     self
@@ -678,8 +655,6 @@ class Board
     @hoshi_points ||= self.star_points(HOSHI[self.dimension])
   end
   
-  LETTERS = %w(A B C D E F G H I J K L M N O P Q R S)
-  
   SGF_BLACK_PLACEMENT_PROPERTIES = %w(B AB)
   SGF_WHITE_PLACEMENT_PROPERTIES = %w(W AW)
   
@@ -735,7 +710,7 @@ class Board
   end
   
   def parse_position(str)
-    offsets = str.scan(/[abcdefghijklmnopqrst]/i).map { LETTERS.index(its.upcase) }.select { it && it >= 0 && it < dimension  }
+    offsets = str.scan(/[abcdefghijklmnopqrst]/i).map { LETTERS.index(its.upcase) }.select { it && it >= 0 && it < self.dimension  }
     Location.for(self, offsets.first, offsets.last) if offsets.size == 2
   end
   

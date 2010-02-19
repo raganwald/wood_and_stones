@@ -2,7 +2,35 @@
 # A move is a placement of a stone that happens when a player places a stone on their turn
 class Action::Move < Action::Gameplay
   
-  include Action::PlaceStone
+  after_validation_on_create :place_stone
+  
+  after_create :updated_captured_stones
+        
+  validates_presence_of(:position, :on => :create, :message => "can't be blank")
+    
+  # a valid placement is not exactly the same thing as a valid move
+  # validation occurs after the creation of before and after
+  validates_each :position do |record, attr, value|
+    record.errors.add attr, 'should be of the form aa and be a valid position on the board' unless begin
+      self.before.valid_position?(value)
+    end
+    record.errors.add attr, 'should be to an empty place on the board' unless begin
+      self.before[value].open?
+    end
+    record.errors.add attr, 'is not a valid move' unless begin
+      self.before.valid_moves_for(self.player).any? { its.location == self.location }
+    end
+  end
+    
+  validates_each :after do |record, attr, value|
+    if record.after
+      record.errors.add attr, 'should result in a stone placed on the board' unless begin
+        value[record.position].has?(record.player)
+      end
+    end
+  end
+
+  private
   
   def removed
     self.removed_serialized.andand { eval(it) } or []
@@ -12,14 +40,21 @@ class Action::Move < Action::Gameplay
     self.removed_serialized = stones.inspect
   end
   
-  before_validation_on_create :remove_opponent_dead_stones
-  after_create :updated_captured_stones
+  def location
+    @location ||= self.position.to_location
+  end
   
-  private
-  
-  def remove_opponent_dead_stones
-    self.after -= (self.removed = self.after.dead_stones[self.player == Board::BLACK_S ? 1 : 0])
-    true
+  def place_stone
+    self.before.valid_moves_for(self.player).detect { 
+      its.location == self.location
+    }.andand.dead_stones.andand do |dead_stones|
+      self.removed = dead_stones
+      self.after = Board.new(self.before) do |b|
+        b[self.position] = self.player
+        dead_stones.each { |across, down| b[across][down].remove }
+      end
+      true
+    end
   end
   
   def updated_captured_stones
@@ -28,7 +63,6 @@ class Action::Move < Action::Gameplay
       msg = (player == Board::BLACK_S ? "captured_blacks" : "captured_whites")
       self.game.send("#{msg}=", self.game.send(msg) + captured_stones.size)
       self.game.current_removed = captured_stones
-      self.game.save!
     end
     true
   end
