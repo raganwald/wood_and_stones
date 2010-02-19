@@ -2,9 +2,9 @@
 # A move is a placement of a stone that happens when a player places a stone on their turn
 class Action::Move < Action::Gameplay
   
-  after_validation_on_create :place_stone
+  before_validation_on_create :place_stone
   
-  after_create :updated_captured_stones
+  after_validation_on_create :updated_captured_stones
         
   validates_presence_of(:position, :on => :create, :message => "can't be blank")
     
@@ -12,13 +12,13 @@ class Action::Move < Action::Gameplay
   # validation occurs after the creation of before and after
   validates_each :position do |record, attr, value|
     record.errors.add attr, 'should be of the form aa and be a valid position on the board' unless begin
-      self.before.valid_position?(value)
+      record.before.valid_position?(value)
     end
     record.errors.add attr, 'should be to an empty place on the board' unless begin
-      self.before[value].open?
+      record.before[value].open?
     end
     record.errors.add attr, 'is not a valid move' unless begin
-      self.before.valid_moves_for(self.player).any? { its.location == self.location }
+      record.before.legal_moves_for(record.player).any? { its.location == record.location }
     end
   end
     
@@ -28,6 +28,10 @@ class Action::Move < Action::Gameplay
         value[record.position].has?(record.player)
       end
     end
+  end
+  
+  def location
+    @location ||= self.position.to_location
   end
 
   private
@@ -40,12 +44,8 @@ class Action::Move < Action::Gameplay
     self.removed_serialized = stones.inspect
   end
   
-  def location
-    @location ||= self.position.to_location
-  end
-  
   def place_stone
-    self.before.valid_moves_for(self.player).detect { 
+    self.before.legal_moves_for(self.player).detect { 
       its.location == self.location
     }.andand.dead_stones.andand do |dead_stones|
       self.removed = dead_stones
@@ -58,7 +58,7 @@ class Action::Move < Action::Gameplay
   end
   
   def updated_captured_stones
-    captured_stones = self.removed
+    captured_stones = removed()
     if captured_stones.size > 0
       msg = (player == Board::BLACK_S ? "captured_blacks" : "captured_whites")
       self.game.send("#{msg}=", self.game.send(msg) + captured_stones.size)

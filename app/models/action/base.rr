@@ -10,8 +10,8 @@ class Action::Base < ActiveRecord::Base
   
   before_create :update_game_current_board
   
-  after_create do 
-    self.game.save! 
+  after_create do |action|
+    action.game.save! 
   end
   
   def initialize_before_board

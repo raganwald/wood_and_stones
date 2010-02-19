@@ -1,7 +1,19 @@
 class Action::Base < ActiveRecord::Base
   set_table_name(:actions)
   belongs_to(:game)
-  composed_of(:after, :class_name => "Board", :mapping => ([["after_board_serialized", "as_str"], ["dimension", "dimension"]]))
+  composed_of(:before, :class_name => "Board", :mapping => ([["dimension", "dimension"], ["before_board_serialized", "as_str"]]))
+  composed_of(:after, :class_name => "Board", :mapping => ([["dimension", "dimension"], ["after_board_serialized", "as_str"]]))
+  before_validation_on_create(:initialize_before_board)
+  before_create(:update_game_current_board)
+  after_create { |action| action.game.save! }
+  def initialize_before_board
+    self.before = self.game.current_board
+  end
+  def update_game_current_board
+    self.game.current_board = self.after
+    self.game.current_move_number = self.cardinality
+    true
+  end
   def after?
     (not self.after_board_serialized.blank?)
   end

@@ -276,6 +276,15 @@ class Board
     
   end
   
+  def self.validate_for(belongs_to, *board_attrs)
+    board_attrs.each do |sym|
+      board = belongs_to.send(sym)
+      board.invalid_reasons.each do |reason|
+        belongs_to.errors.add(sym, reason)
+      end
+    end
+  end
+      
   state_machine(:state, :initial => :writable) do ||
     
     event :lock do ||
@@ -322,19 +331,11 @@ class Board
     
     state :readable do ||
   
-      def self.validate_for(belongs_to, *board_attrs)
-        board_attrs.each do |sym|
-          board.invalid_reasons.each do |reason|
-            belongs_to.errors.add(sym, reason)
-          end
-        end
-      end
-  
       def invalid_reasons
         returning([]) do |reasons|
           undead = self.dead_stones.all
           reasons << "The stones at #{undead.to_sentence} are dead"unless undead.empty?
-          reasons << "#{self.dimension} is not a valid board size" unless DIMENSIONS.include?(self.dimension)
+          # reasons << "#{self.dimension} is not a valid board size" unless DIMENSIONS.include?(self.dimension)
         end
       end
   
@@ -419,60 +420,64 @@ class Board
       
       #---------- NEW SCHOOL ----------
   
-      def info
-        @info ||= begin
-          aa = self.adjacents_array
-          returning(OpenStruct.new(
-            :belong_to_group => dim_by_dim_array(), 
-            :group_liberties_by_location => dim_by_dim_array(), 
-            :empty_place_liberties => [],
-            :group_liberties => [[], []]
-          )) do |rval|
-            (0..(self.dimension - 1)).each do |across|
-              (0..(self.dimension - 1)).each do |down|
-                colour = stones_array[across][down]
-                if colour.blank?
-                  rval.empty_place_liberties << [across, down] if aa[across][down].any? { |a_adj, d_adj| stones_array[a_adj][d_adj].blank? }
-                else
-                  # by default, it is its own group
-                  rval.belong_to_group[across][down] = [across, down]
-                  rval.group_liberties_by_location[across][down] = []
-                  aa[across][down].each do |a_adj, d_adj|
-                    adj_colour = stones_array[a_adj][d_adj]
-                    if adj_colour.blank?
-                      rval.group_liberties_by_location[rval.belong_to_group[across][down][0]][rval.belong_to_group[across][down][1]].into do |lib_arr|
-                        lib_arr << [a_adj, d_adj]
-                        lib_arr.uniq!
+      def info(debug = false)
+        aa = self.adjacents_array
+        returning(OpenStruct.new(
+          :belong_to_group => dim_by_dim_array(), 
+          :group_liberties_by_location => dim_by_dim_array(), 
+          :empty_place_liberties => [],
+          :group_liberties => [[], []]
+        )) do |rval|
+          (0..(self.dimension - 1)).each do |across|
+            (0..(self.dimension - 1)).each do |down|
+              colour = stones_array[across][down]
+              if colour.blank?
+                rval.empty_place_liberties << [across, down] if aa[across][down].any? { |a_adj, d_adj| stones_array[a_adj][d_adj].blank? }
+              else
+                # by default, it is its own group
+                rval.belong_to_group[across][down] = [across, down]
+                rval.group_liberties_by_location[across][down] = []
+                aa[across][down].each do |a_adj, d_adj|
+                  adj_colour = stones_array[a_adj][d_adj]
+                  if adj_colour.blank?
+                    rval.group_liberties_by_location[rval.belong_to_group[across][down][0]][rval.belong_to_group[across][down][1]].into do |lib_arr|
+                      lib_arr << [a_adj, d_adj]
+                      lib_arr.uniq!
+                    end
+                  elsif adj_colour == colour && (a_adj < across or a_adj == across && d_adj < down)
+                    # merge groups
+                    adj_bt = rval.belong_to_group[a_adj][d_adj]
+                    this_bt = rval.belong_to_group[across][down]
+                    if adj_bt != this_bt # merge groups
+                      puts "merging this_bt: #{this_bt.inspect} with adj_bt: #{adj_bt.inspect}" if debug
+                      case adj_bt <=> this_bt
+                      when -1:
+                        from, to = this_bt, adj_bt
+                      when 1:
+                        from, to = adj_bt, this_bt
+                      when 0:
+                        raise "unexpected error in Board#info"
                       end
-                    elsif adj_colour == colour && (a_adj < across or a_adj == across && d_adj < down)
-                      # merge groups
-                      adj_bt = rval.belong_to_group[a_adj][d_adj]
-                      this_bt = rval.belong_to_group[across][down]
-                      if adj_bt != this_bt # merge groups
-                        case adj_bt <=> this_bt
-                        when -1:
-                          from, to = this_bt, adj_bt
-                        when 1:
-                          from, to = adj_bt, this_bt
+                      # copy liberties and nil out
+                      rval.group_liberties_by_location[to[0]][to[1]] += rval.group_liberties_by_location[from[0]][from[1]]
+                      rval.group_liberties_by_location[from[0]][from[1]] = nil
+                      rval.group_liberties_by_location[to[0]][to[1]].uniq!
+                      # update all belongs_to
+                      (to[0]..across).each do |i_across|
+                        if i_across == to[0]
+                          low_down = to[1]
+                        else
+                          low_down = 0
                         end
-                        rval.group_liberties_by_location[to[0]][to[1]] += rval.group_liberties_by_location[from[0]][from[1]]
-                        rval.group_liberties_by_location[from[0]][from[1]] = nil
-                        rval.group_liberties_by_location[to[0]][to[1]].uniq!
-                        (from[0]..across).each do |i_across|
-                          if i_across == from[0]
-                            low_down = from[1]
-                          else
-                            low_down = 0
-                          end
-                          if i_across == to[0]
-                            high_down = to[1]
-                          else
-                            high_down = self.dimension - 1
-                          end
-                          (low_down..high_down).each do |i_down|
-                            if rval.belong_to_group[i_across][i_down] == from
-                              rval.belong_to_group[i_across][i_down] = to
-                            end
+                        if i_across == from[0]
+                          high_down = from[1]
+                        else
+                          high_down = self.dimension - 1
+                        end
+                        (low_down..high_down).each do |i_down|
+                          if rval.belong_to_group[i_across][i_down] == from
+                            puts "changing belongs_to of #{rval.belong_to_group[i_across][i_down]} to #{to}" if debug
+                            rval.belong_to_group[i_across][i_down] = to
                           end
                         end
                       end
@@ -481,29 +486,41 @@ class Board
                 end
               end
             end
-            #---------- Second pass to consolidate certain derivatives.   ----------
-            #---------- Optimize into the first pass when the api settles ----------
-            group_locations_to_liberties_and_stones = {}
+          end
+          if debug
+            messages = []
             (0..(self.dimension - 1)).each do |across|
               (0..(self.dimension - 1)).each do |down|
-                unless rval.group_liberties_by_location[across][down].blank?
-                  # rval.group_liberties[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << rval.group_liberties_by_location[across][down]
-                  group_locations_to_liberties_and_stones[[across, down]] ||= OpenStruct.new(
-                    :liberties => rval.group_liberties_by_location[across][down],
-                    :stones => []
-                  )
-                end
-                unless rval.belong_to_group[across][down].blank?
-                  group_locations_to_liberties_and_stones[rval.belong_to_group[across][down]].stones << [across, down]
-                end
+                #messages << "rval.belong_to_group[#{across}][#{down}]: #{rval.belong_to_group[across][down].inspect}"
+                messages << "rval.group_liberties_by_location[#{across}][#{down}]: #{rval.group_liberties_by_location[across][down].inspect}"  
               end
             end
-            rval.group_liberties = group_locations_to_liberties_and_stones.inject([[], []]) do |acc, val|
-              returning(acc) do |blacks_and_whites|
-                location, liberties_and_stones = *val
-                across, down = *location
-                blacks_and_whites[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << liberties_and_stones
+            puts messages.join(', ')
+          end
+          #---------- Second pass to consolidate certain derivatives.   ----------
+          #---------- Optimize into the first pass when the api settles ----------
+          group_locations_to_liberties_and_stones = {}
+          (0..(self.dimension - 1)).each do |across|
+            (0..(self.dimension - 1)).each do |down|
+              unless rval.group_liberties_by_location[across][down].blank?
+                # rval.group_liberties[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << rval.group_liberties_by_location[across][down]
+                group_locations_to_liberties_and_stones[[across, down]] ||= OpenStruct.new(
+                  :liberties => rval.group_liberties_by_location[across][down],
+                  :stones => []
+                )
+                puts "group_locations_to_liberties_and_stones[#{[across, down].inspect}]: #{group_locations_to_liberties_and_stones[[across, down]].inspect}" if debug
               end
+              unless rval.belong_to_group[across][down].blank?
+                puts "group_locations_to_liberties_and_stones[#{rval.belong_to_group[across][down].inspect}]: ???" if debug
+                group_locations_to_liberties_and_stones[rval.belong_to_group[across][down]].stones << [across, down]
+              end
+            end
+          end
+          rval.group_liberties = group_locations_to_liberties_and_stones.inject([[], []]) do |acc, val|
+            returning(acc) do |blacks_and_whites|
+              location, liberties_and_stones = *val
+              across, down = *location
+              blacks_and_whites[self.stones_array[across][down] == Board::BLACK_S ? 0 : 1] << liberties_and_stones
             end
           end
         end
@@ -585,7 +602,7 @@ class Board
     
   end
   
-  def initialize(dimension_or_board, str = nil, &block)
+  def initialize(dimension_or_board, str = nil)
     super()
     if dimension_or_board.kind_of?(Fixnum)
       self.dimension = dimension_or_board 
@@ -593,9 +610,9 @@ class Board
       self.stones_array ||= self.dim_by_dim_array()
     elsif dimension_or_board.kind_of?(Board)
       self.dimension = dimension_or_board.dimension
-      self.stones_array = dimension_or_board.stones_array
+      self.stones_array = dimension_or_board.stones_array.map { it.map { it } }
     end
-    self.instance_eval(&block) if block
+    yield self if block_given?
     self.lock
     self
   end

@@ -205,6 +205,12 @@ class Board
       end.call(Location.for(board, self.across, down))
     end
   end
+  def self.validate_for(belongs_to, *board_attrs)
+    board_attrs.each do |sym|
+      board = belongs_to.send(sym)
+      board.invalid_reasons.each { |reason| belongs_to.errors.add(sym, reason) }
+    end
+  end
   state_machine(:state, :initial => :writable) do ||
     event(:lock) { || transition(:writable => :readable) }
     after_transition(any => :readable) do |board, transition|
@@ -235,19 +241,11 @@ class Board
       end
     end
     state(:readable) do ||
-      def self.validate_for(belongs_to, *board_attrs)
-        board_attrs.each do |sym|
-          board.invalid_reasons.each { |reason| belongs_to.errors.add(sym, reason) }
-        end
-      end
       def invalid_reasons
         lambda do |reasons|
           undead = self.dead_stones.all
           unless undead.empty? then
             (reasons << "The stones at #{undead.to_sentence} are dead")
-          end
-          unless DIMENSIONS.include?(self.dimension) then
-            (reasons << "#{self.dimension} is not a valid board size")
           end
           reasons
         end.call([])
@@ -322,8 +320,8 @@ class Board
           end
         end
       end
-      def info
-        @info ||= (aa = self.adjacents_array
+      def info(debug = false)
+        aa = self.adjacents_array
         lambda do |rval|
           (0..(self.dimension - 1)).each do |across|
             (0..(self.dimension - 1)).each do |down|
@@ -346,26 +344,34 @@ class Board
                       adj_bt = rval.belong_to_group[a_adj][d_adj]
                       this_bt = rval.belong_to_group[across][down]
                       unless (adj_bt == this_bt) then
+                        if debug then
+                          puts("merging this_bt: #{this_bt.inspect} with adj_bt: #{adj_bt.inspect}")
+                        end
                         case (adj_bt <=> this_bt)
                         when -1 then
                           from, to = this_bt, adj_bt
                         when 1 then
                           from, to = adj_bt, this_bt
+                        when 0 then
+                          raise("unexpected error in Board#info")
                         else
                           # do nothing
                         end
                         rval.group_liberties_by_location[to[0]][to[1]] += rval.group_liberties_by_location[from[0]][from[1]]
                         rval.group_liberties_by_location[from[0]][from[1]] = nil
                         rval.group_liberties_by_location[to[0]][to[1]].uniq!
-                        (from[0]..across).each do |i_across|
-                          (i_across == from[0]) ? (low_down = from[1]) : (low_down = 0)
-                          if (i_across == to[0]) then
-                            high_down = to[1]
+                        (to[0]..across).each do |i_across|
+                          (i_across == to[0]) ? (low_down = to[1]) : (low_down = 0)
+                          if (i_across == from[0]) then
+                            high_down = from[1]
                           else
                             high_down = (self.dimension - 1)
                           end
                           (low_down..high_down).each do |i_down|
                             if (rval.belong_to_group[i_across][i_down] == from) then
+                              if debug then
+                                puts("changing belongs_to of #{rval.belong_to_group[i_across][i_down]} to #{to}")
+                              end
                               rval.belong_to_group[i_across][i_down] = to
                             end
                           end
@@ -377,13 +383,28 @@ class Board
               end
             end
           end
+          if debug then
+            messages = []
+            (0..(self.dimension - 1)).each do |across|
+              (0..(self.dimension - 1)).each do |down|
+                (messages << "rval.group_liberties_by_location[#{across}][#{down}]: #{rval.group_liberties_by_location[across][down].inspect}")
+              end
+            end
+            puts(messages.join(", "))
+          end
           group_locations_to_liberties_and_stones = {  }
           (0..(self.dimension - 1)).each do |across|
             (0..(self.dimension - 1)).each do |down|
               unless rval.group_liberties_by_location[across][down].blank? then
                 group_locations_to_liberties_and_stones[[across, down]] ||= OpenStruct.new(:liberties => (rval.group_liberties_by_location[across][down]), :stones => ([]))
+                if debug then
+                  puts("group_locations_to_liberties_and_stones[#{[across, down].inspect}]: #{group_locations_to_liberties_and_stones[[across, down]].inspect}")
+                end
               end
               unless rval.belong_to_group[across][down].blank? then
+                if debug then
+                  puts("group_locations_to_liberties_and_stones[#{rval.belong_to_group[across][down].inspect}]: ???")
+                end
                 (group_locations_to_liberties_and_stones[rval.belong_to_group[across][down]].stones << [across, down])
               end
             end
@@ -397,7 +418,7 @@ class Board
             end.call(acc)
           end
           rval
-        end.call(OpenStruct.new(:belong_to_group => (dim_by_dim_array), :group_liberties_by_location => (dim_by_dim_array), :empty_place_liberties => ([]), :group_liberties => ([[], []]))))
+        end.call(OpenStruct.new(:belong_to_group => (dim_by_dim_array), :group_liberties_by_location => (dim_by_dim_array), :empty_place_liberties => ([]), :group_liberties => ([[], []])))
       end
       def legal_moves_for(player)
         if (player == BLACK_S) then
@@ -462,7 +483,7 @@ class Board
       end
     end
   end
-  def initialize(dimension_or_board, str = nil, &block)
+  def initialize(dimension_or_board, str = nil)
     super()
     if dimension_or_board.kind_of?(Fixnum) then
       self.dimension = dimension_or_board
@@ -471,10 +492,10 @@ class Board
     else
       if dimension_or_board.kind_of?(Board) then
         self.dimension = dimension_or_board.dimension
-        self.stones_array = dimension_or_board.stones_array
+        self.stones_array = dimension_or_board.stones_array.map { |it| it.map { |it| it } }
       end
     end
-    self.instance_eval(&block) if block
+    yield(self) if block_given?
     self.lock
     self
   end

@@ -5,7 +5,7 @@ class Action::MoveTest < ActiveRecord::TestCase
   context Action::Move do
     
     setup do
-      @before = Board.create(:dimension => 9)
+      @before = Board.new(9)
       @adam = User.find_or_create_by_email('adam@garden.org')
       @eve = User.find_or_create_by_email('eve@garden.org')
       @game = Game.create(:dimension => 9, :black => @adam, :white => @eve)
@@ -47,12 +47,13 @@ class Action::MoveTest < ActiveRecord::TestCase
       context "when killing another stone" do
         
         setup do
-          Action::Move.create(:game => @game, :position => 'ad')
-          Action::Move.create(:game => @game, :position => 'ac')
-          Action::Move.create(:game => @game, :position => 'bc')
-          Action::Move.create(:game => @game, :position => 'ab')
-          Action::Move.create(:game => @game, :position => 'bb')
-          Action::Move.create(:game => @game, :position => 'bd')
+          @game = Game.create(:dimension => 9, :black => @adam, :white => @eve)
+          Action::Move.create!(:game => @game, :position => 'ad')
+          Action::Move.create!(:game => @game, :position => 'ac')
+          Action::Move.create!(:game => @game, :position => 'bc')
+          Action::Move.create!(:game => @game, :position => 'ab')
+          Action::Move.create!(:game => @game, :position => 'bb')
+          Action::Move.create!(:game => @game, :position => 'bd')
           @was_captured_blacks = @game.captured_blacks
           @move = Action::Move.create(:game => @game, :position => 'aa')
           @game.reload
@@ -79,12 +80,12 @@ class Action::MoveTest < ActiveRecord::TestCase
           
           setup do
             @game2 = Game.create(:dimension => 13, :black => @adam, :white => @eve)
-            Action::Move.create(:game => @game2, :position => 'ad')
-            Action::Move.create(:game => @game2, :position => 'ac')
-            Action::Move.create(:game => @game2, :position => 'bc')
-            Action::Move.create(:game => @game2, :position => 'ab')
-            Action::Move.create(:game => @game2, :position => 'bb')
-            Action::Move.create(:game => @game2, :position => 'bd')
+            Action::Move.create!(:game => @game2, :position => 'ad')
+            Action::Move.create!(:game => @game2, :position => 'ac')
+            Action::Move.create!(:game => @game2, :position => 'bc')
+            Action::Move.create!(:game => @game2, :position => 'ab')
+            Action::Move.create!(:game => @game2, :position => 'bb')
+            Action::Move.create!(:game => @game2, :position => 'bd')
           end
           
           context "the next move" do
@@ -110,8 +111,10 @@ class Action::MoveTest < ActiveRecord::TestCase
       context "when playing into suicide" do
         
         setup do
-          @before['ab'] = @opponent
-          @before['ba'] = @opponent
+          @before = Board.new(@before) do |b|
+            b['ab'] = @opponent
+            b['ba'] = @opponent
+          end
           @move = Action::Move.create(:game => @game, :before => @before, :position => @position, :player => @player)
         end
         

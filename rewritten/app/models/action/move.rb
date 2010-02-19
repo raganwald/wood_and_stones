@@ -1,25 +1,58 @@
 class Action::Move < Action::Gameplay
-  include(Action::PlaceStone)
+  before_validation_on_create(:place_stone)
+  after_validation_on_create(:updated_captured_stones)
+  validates_presence_of(:position, :on => :create, :message => "can't be blank")
+  validates_each(:position) do |record, attr, value|
+    unless record.before.valid_position?(value) then
+      record.errors.add(attr, "should be of the form aa and be a valid position on the board")
+    end
+    unless record.before[value].open? then
+      record.errors.add(attr, "should be to an empty place on the board")
+    end
+    unless (record.before.legal_moves_for(record.player).any? do |its|
+      (its.location == record.location)
+    end) then
+      record.errors.add(attr, "is not a valid move")
+    end
+  end
+  validates_each(:after) do |record, attr, value|
+    if record.after then
+      unless value[record.position].has?(record.player) then
+        record.errors.add(attr, "should result in a stone placed on the board")
+      end
+    end
+  end
+  def location
+    @location ||= (__126661869164505__ = self.position
+    if __126661869164505__.kind_of?(String) then
+      RewriteRails::ExtensionMethods::String.to_location(__126661869164505__)
+    else
+      __126661869164505__.to_location
+    end)
+  end
+  private
   def removed
     ((it = self.removed_serialized and eval(it)) or [])
   end
   def removed=(stones)
     self.removed_serialized = stones.inspect
   end
-  before_validation_on_create(:remove_opponent_dead_stones)
-  after_create(:updated_captured_stones)
-  private
-  def remove_opponent_dead_stones
-    self.after -= self.removed = self.after.dead_stones[(self.player == Board::BLACK_S) ? (1) : (0)]
-    true
+  def place_stone
+    (dead_stones = (__126661869068453__ = self.before.legal_moves_for(self.player).detect do |its|
+      (its.location == self.location)
+    end and __126661869068453__.dead_stones) and (self.removed = dead_stones
+    self.after = Board.new(self.before) do |b|
+      b[self.position] = self.player
+      dead_stones.each { |across, down| b[across][down].remove }
+    end
+    true))
   end
   def updated_captured_stones
-    captured_stones = self.removed
+    captured_stones = removed
     if (captured_stones.size > 0) then
       msg = (player == Board::BLACK_S) ? ("captured_blacks") : ("captured_whites")
       self.game.send("#{msg}=", (self.game.send(msg) + captured_stones.size))
       self.game.current_removed = captured_stones
-      self.game.save!
     end
     true
   end

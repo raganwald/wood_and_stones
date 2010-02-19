@@ -63,16 +63,12 @@ class Game < ActiveRecord::Base
       end
       fork
     elsif dimension = options[:dimension]
-      board =  Board.new(dimension)
-      options[:handicap].to_i.into do # nil.to_i == 0!
-        if it > 1
-          board.handicap(it)
-          self.to_play = Board::WHITE_S
-        else
-          self.to_play = Board::BLACK_S
-        end
-      end 
-      self.initial_board, self.current_board = board, board
+      handicap_amount = options[:handicap].to_i
+      board = Board.new(dimension) do |nascent_board|
+        nascent_board.handicap(it) if handicap_amount > 1
+      end
+      self.to_play = handicap_amount > 1 ? Board::WHITE_S : Board::BLACK_S
+      self.initial_board = self.current_board = board
       start
     else 
       self.errors.add :before, "cannot initialize a game without forking or setting a dimension"

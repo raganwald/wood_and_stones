@@ -276,9 +276,9 @@ class BoardTest < ActiveRecord::TestCase
   context "a board with one black stone and one white stone" do
       
     setup do
-      @board = Board.new(9) do
-        self['aa'] = Board::BLACK_S
-        self['bb'] = Board::WHITE_S
+      @board = Board.new(9) do |b|
+        b['aa'] = Board::BLACK_S
+        b['bb'] = Board::WHITE_S
       end
     end
     
@@ -318,11 +318,11 @@ class BoardTest < ActiveRecord::TestCase
     
     should "allow placement of stones in handicap spots" do
       assert_nothing_raised do
-        @board = Board.new(13) do
-          self['dd'] = Board::BLACK_S
-          self['jd'] = Board::WHITE_S
-          self['jj'] = Board::BLACK_S
-          self['dj'] = Board::WHITE_S
+        @board = Board.new(13) do |b|
+          b['dd'] = Board::BLACK_S
+          b['jd'] = Board::WHITE_S
+          b['jj'] = Board::BLACK_S
+          b['dj'] = Board::WHITE_S
         end
       end
     end
@@ -330,11 +330,11 @@ class BoardTest < ActiveRecord::TestCase
     context "when stones are placed in handicap spots" do
     
       setup do
-        @board = Board.new(13) do
-          self['dd'] = Board::BLACK_S
-          self['jd'] = Board::WHITE_S
-          self['jj'] = Board::BLACK_S
-          self['dj'] = Board::WHITE_S
+        @board = Board.new(13) do |b|
+          b['dd'] = Board::BLACK_S
+          b['jd'] = Board::WHITE_S
+          b['jj'] = Board::BLACK_S
+          b['dj'] = Board::WHITE_S
         end
       end
     
@@ -379,12 +379,12 @@ class BoardTest < ActiveRecord::TestCase
     context "when there is a dead stone" do
       
       setup do
-        @board = Board.new(13) do
-          self['dc'] = Board::BLACK_S
-          self['cd'] = Board::BLACK_S
-          self['dd'] = Board::WHITE_S
-          self['ed'] = Board::BLACK_S
-          self['de'] = Board::BLACK_S
+        @board = Board.new(13) do |b|
+          b['dc'] = Board::BLACK_S
+          b['cd'] = Board::BLACK_S
+          b['dd'] = Board::WHITE_S
+          b['ed'] = Board::BLACK_S
+          b['de'] = Board::BLACK_S
         end
       end
       
@@ -452,11 +452,11 @@ class BoardTest < ActiveRecord::TestCase
     context "simple case" do
     
       setup do
-        @board = Board.new(3) do
-          self['ba'] = Board::BLACK_S
-          self['bb'] = Board::WHITE_S
-          self['cb'] = Board::BLACK_S
-          self['bc'] = Board::BLACK_S
+        @board = Board.new(3) do |b|
+          b['ba'] = Board::BLACK_S
+          b['bb'] = Board::WHITE_S
+          b['cb'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
         end
       end
     
@@ -491,13 +491,13 @@ class BoardTest < ActiveRecord::TestCase
     context "capture case and multiple liberties case" do
     
       setup do
-        @board = Board.new(3) do
-          self['aa'] = Board::BLACK_S
-          self['ac'] = Board::BLACK_S
-          self['ba'] = Board::BLACK_S
-          self['bb'] = Board::WHITE_S
-          self['cb'] = Board::BLACK_S
-          self['bc'] = Board::BLACK_S
+        @board = Board.new(3) do |b|
+          b['aa'] = Board::BLACK_S
+          b['ac'] = Board::BLACK_S
+          b['ba'] = Board::BLACK_S
+          b['bb'] = Board::WHITE_S
+          b['cb'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
         end
       end
     
