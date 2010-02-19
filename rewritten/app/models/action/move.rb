@@ -23,11 +23,11 @@ class Action::Move < Action::Gameplay
     end
   end
   def location
-    @location ||= (__126661869164505__ = self.position
-    if __126661869164505__.kind_of?(String) then
-      RewriteRails::ExtensionMethods::String.to_location(__126661869164505__)
+    @location ||= (__126661936119140__ = self.position
+    if __126661936119140__.kind_of?(String) then
+      RewriteRails::ExtensionMethods::String.to_location(__126661936119140__)
     else
-      __126661869164505__.to_location
+      __126661936119140__.to_location
     end)
   end
   private
@@ -38,9 +38,9 @@ class Action::Move < Action::Gameplay
     self.removed_serialized = stones.inspect
   end
   def place_stone
-    (dead_stones = (__126661869068453__ = self.before.legal_moves_for(self.player).detect do |its|
+    (dead_stones = (__126661936056753__ = self.before.legal_moves_for(self.player).detect do |its|
       (its.location == self.location)
-    end and __126661869068453__.dead_stones) and (self.removed = dead_stones
+    end and __126661936056753__.dead_stones) and (self.removed = dead_stones
     self.after = Board.new(self.before) do |b|
       b[self.position] = self.player
       dead_stones.each { |across, down| b[across][down].remove }

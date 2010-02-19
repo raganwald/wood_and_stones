@@ -111,11 +111,11 @@ class Action::MoveTest < ActiveRecord::TestCase
       context "when playing into suicide" do
         
         setup do
-          @before = Board.new(@before) do |b|
-            b['ab'] = @opponent
-            b['ba'] = @opponent
-          end
-          @move = Action::Move.create(:game => @game, :before => @before, :position => @position, :player => @player)
+          @game = Game.create!(:dimension=>3, :b=>'b', :w=>'w')
+          Action::Move.create!(:game => @game, :position=>'ab')
+          Action::Move.create!(:game => @game, :position=>'cc')
+          Action::Move.create!(:game => @game, :position=>'ba')
+          @move = Action::Move.create(:game => @game, :position=>'aa')
         end
         
         should "not be valid" do
