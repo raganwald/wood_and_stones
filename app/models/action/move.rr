@@ -33,12 +33,12 @@ class Action::Move < Action::Gameplay
   def location
     @location ||= self.position.to_location
   end
-
-  private
   
   def removed
     self.removed_serialized.andand { eval(it) } or []
   end
+
+  private
   
   def removed=(stones)
     self.removed_serialized = stones.inspect
