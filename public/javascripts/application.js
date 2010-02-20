@@ -119,14 +119,22 @@ var GO = function () {
 			
 				var toggle_placed_stone = function (dbl_click_event_data) {
 					var target = $(dbl_click_event_data.currentTarget);
-					$('.move.active .board .empty.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					var killed_selector = '.move.active .board .atari.killed_by_' + target.attr('id');
+					$('.move.active .board .valid.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					$('.move.active .board .atari' ).addClass(latest_server_info.opponent).removeClass('empty');
 					target.toggleClass(latest_server_info.playing);
+					if (target.hasClass(latest_server_info.playing)) {
+						$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
+					}
 				};
 			
 				var place_and_play_stone = function (dbl_click_event_data) {
 				  var target = $(dbl_click_event_data.currentTarget);
-					$('.move.active .board .empty.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					var killed_selector = '.move.active .board .atari.killed_by_' + target.attr('id');
+					$('.move.active .board .valid.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					$('.move.active .board .atari' ).addClass(latest_server_info.opponent).removeClass('empty');
 					target.addClass(latest_server_info.playing);
+					$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
 					play_stone(target.attr('id'));
 				};
 

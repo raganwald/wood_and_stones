@@ -92,7 +92,7 @@ class Game < ActiveRecord::Base
           its.dead_stones.size == 1 # removes one stone. i think this is a sufficient condition
         }
       end
-    end.map(&:location)
+    end
   end
   
   state_machine do

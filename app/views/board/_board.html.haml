@@ -4,7 +4,7 @@
   - valids = game.valid_positions
 - else
   - valids = []
-- tile_classes = valids.inject(tile_class_array(board)) { |classes, loc| classes[loc.first][loc.last] += ' valid'; classes }
+- tile_classes = tile_class_array(board, valids)
 - (0..(board.dimension - 1)).each do |down|
   .row
     - (0..(board.dimension - 1)).each do |across|

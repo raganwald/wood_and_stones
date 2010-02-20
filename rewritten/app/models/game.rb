@@ -80,7 +80,7 @@ class Game < ActiveRecord::Base
         end
       end
       valid_move_hashes
-    end.call(self.current_board.legal_moves_for(self.to_play)).map(&:location)
+    end.call(self.current_board.legal_moves_for(self.to_play))
   end
   state_machine do
     event(:start) { transition(nil => :started) }
