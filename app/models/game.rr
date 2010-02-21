@@ -25,7 +25,7 @@ class Game < ActiveRecord::Base
     {:conditions => ["black_id = ? OR white_id = ?", user.id, user.id]}
   }
   
-  composed_of :initial_board, :class_name => "Board", :mapping => [%w(dimension dimension), %w(current_board_serialized as_str)]
+  composed_of :initial_board, :class_name => "Board", :mapping => [%w(dimension dimension), %w(initial_board_serialized as_str)]
   composed_of :current_board, :class_name => "Board", :mapping => [%w(dimension dimension), %w(current_board_serialized as_str)]
   
   validates_each :initial_board, :current_board do |record, attribute, value|

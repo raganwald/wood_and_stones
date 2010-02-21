@@ -4,9 +4,9 @@
     %a.back{:href=>"#"} Back
   .board
     -if action.cardinality < action.game.actions.size
-      = render :partial => "board/board", :locals => { :board => action.after }
+      = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
     -else
-      = render :partial => "board/board", :locals => { :game => action.game }
+      = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
   %ul.individual.history.no_touch
     %li.prev
       %span.simulateSwipeBoardRight

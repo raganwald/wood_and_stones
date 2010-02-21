@@ -4,7 +4,8 @@
   - valids = game.valid_positions
 - else
   - valids = []
-- tile_classes = tile_class_array(board, valids)
+- last_across, last_down = Board.position_to_location(latest) unless latest.blank?
+- tile_classes = returning(tile_class_array(board, valids)) { |a| a[last_across][last_down] += ' last latest' unless latest.blank? }
 - (0..(board.dimension - 1)).each do |down|
   .row
     - (0..(board.dimension - 1)).each do |across|

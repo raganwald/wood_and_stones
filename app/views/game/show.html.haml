@@ -28,7 +28,7 @@
       %h1 We Go!
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :game => @game }
+      = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
     %ul.individual.history.no_touch
       %li.prev.invisible
         %a No Prev
@@ -46,7 +46,7 @@
       %h1 We Go!
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :board => @game.initial_board }
+      = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
     %ul.individual.history.no_touch
       %li.prev.invisible
         %a No Prev
@@ -59,11 +59,12 @@
       %span.history
       %span.news
   .current.move{:id=>"m#{@game.current_move_number}"}
+    - action = @game.actions.last # TODO: denormalize like everything else
     .toolbar 
       %h1 We Go!
       %a.back{:href=>"#"} Back
     .board
-      = render :partial => "board/board", :locals => { :game => @game }
+      = render :partial => "board/board", :locals => { :game => @game, :latest => action.position }
     -# is this a bug when there's one move?
     %ul.individual.history.no_touch
       %li.prev.invisible
@@ -77,7 +78,6 @@
     .info
       %span.desc.current= (@game.ended? ? 'position at the end of the game.' : 'current position.') 
       %span.history
-        - action = @game.actions.last # TODO: denormalize like everything else
         #{action.player.titleize} has just
         -if action.kind_of?(Action::Pass)
           passed.

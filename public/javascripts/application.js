@@ -125,6 +125,10 @@ var GO = function () {
 					target.toggleClass(latest_server_info.playing);
 					if (target.hasClass(latest_server_info.playing)) {
 						$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
+						$('.last').removeClass('latest');
+					}
+					else {
+						$('.last').addClass('latest');
 					}
 				};
 			
@@ -135,6 +139,7 @@ var GO = function () {
 					$('.move.active .board .atari' ).addClass(latest_server_info.opponent).removeClass('empty');
 					target.addClass(latest_server_info.playing);
 					$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
+					$('.last').removeClass('latest');
 					play_stone(target.attr('id'));
 				};
 

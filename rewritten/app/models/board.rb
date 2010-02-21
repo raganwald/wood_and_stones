@@ -5,6 +5,16 @@ class Board
   DIMENSIONS = [9, 11, 13, 15, 17, 19]
   BLACK_S, WHITE_S = "black", "white"
   LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"]
+  def self.position_to_location(str)
+    str.scan(/[abcdefghijklmnopqrst]/i).map do |l|
+      Board::LETTERS.index(l.upcase)
+    end.select do |i|
+      (i and ((i >= 0) and (i < 18)))
+    end
+  end
+  def self.location_to_position(arr)
+    "#{Board::LETTERS[arr[0]]}#{Board::LETTERS[arr[1]]}".downcase
+  end
   class Occupied < Exception
   end
   class Wtf < Exception

@@ -10,6 +10,14 @@ class Board
   BLACK_S, WHITE_S = 'black', 'white'
   
   LETTERS = %w(A B C D E F G H I J K L M N O P Q R S)
+      
+  def self.position_to_location(str)
+    str.scan(/[abcdefghijklmnopqrst]/i).map { |l| Board::LETTERS.index(l.upcase) }.select { |i| i && i >= 0 && i < 18  }
+  end
+  
+  def self.location_to_position(arr)
+    "#{Board::LETTERS[arr[0]]}#{Board::LETTERS[arr[1]]}".downcase
+  end
   
   class Occupied < Exception; end
   
