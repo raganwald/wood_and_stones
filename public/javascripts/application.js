@@ -17,7 +17,7 @@ var GO = function () {
 		},
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
-			var update_latest_server_info = null;
+			var ajax_update_latest_server_info = null;
 			var latest_server_info = info;
 			var can_process_server_info = true;
 			
@@ -52,6 +52,7 @@ var GO = function () {
 					$(this).data('number', current_move_number + i + 1); // BOO! updates in a select!!
 					return $(this).attr('id') == ('m' + (current_move_number + i + 1));
 				});
+				console.log('process_html_of_latest_moves 2');
 	      if (update_moves.size() > 0) {
 	        update_moves.insertAfter('.move:last');
 					console.log('process_html_of_latest_moves: update_moves.insertAfter');
@@ -64,9 +65,10 @@ var GO = function () {
 					else {
 						console.log('process_html_of_latest_moves: update_active_div');
 						update_active_div();
-						update_latest_server_info();
+						ajax_update_latest_server_info();
 					}
 	      }
+				console.log('process_html_of_latest_moves exit');
 	    };
 			
 			var play_stone  = function (position) {
@@ -76,9 +78,12 @@ var GO = function () {
 			    dataType: 'html',
 			    success: function (html) {
 						process_html_of_latest_moves(html, function (latest_move_selector) {
-							update_latest_server_info();
+							latest_server_info.is_users_turn = false;
+							latest_server_info.move_number = last_displayed_move_number();
+							latest_server_info.to_play = latest_server_info.opponent;
 							update_active_div();
 							update_move_infos();
+							ajax_update_latest_server_info(); // just sends an ajax request
 							jQT.goTo($('.move:last'), '');
 						});
 					},
@@ -96,9 +101,12 @@ var GO = function () {
 			    dataType: 'html',
 			    success: function (html) {
 						process_html_of_latest_moves(html, function (latest_move_selector) {
+							latest_server_info.is_users_turn = false;
+							latest_server_info.move_number = last_displayed_move_number() + 1;
+							latest_server_info.to_play = latest_server_info.opponent;
 							update_active_div();
 							update_move_infos();
-							update_latest_server_info();
+							ajax_update_latest_server_info();
 							jQT.goTo($('.move:last'), '');
 						});
 					},
@@ -224,8 +232,8 @@ var GO = function () {
 		  };
 		
 			var update_move_infos = function () {
-				console.log("update_move_infos");
 				var selector = select_move_by_move_number(latest_server_info.move_number);
+				console.log('update_move_infos given ' + $(selector).size() + ' move ' + latest_server_info.move_number);
 				if (latest_server_info.move_number > 0) {
 					if (latest_server_info.game_state != 'ended') {
 						$(selector).find('.info .desc').addClass('current').text('current position.');
@@ -233,6 +241,7 @@ var GO = function () {
 					else {
 						$(selector).find('.info .desc').addClass('current').text('position at the end of the game.')
 					}
+					console.log('looking for outdated moves that are not ' + selector);
 					$('.move').not(selector).has('.info .desc.current').each(function (index, move_el) {
 						console.log('found an outdated move ' + $(move_el).attr('id'));
 						$(move_el).find('.info .desc.current').removeClass('current').text('position after move ' + $(move_el).data('number') + '.');
@@ -287,9 +296,9 @@ var GO = function () {
 				}
 			};
 
-			var update_latest_server_info = function () {
+			var ajax_update_latest_server_info = function () {
 		    if (!can_process_server_info) {
-					console.log('skipping update_latest_server_info, probably waiting for ajax');
+					console.log('skipping ajax_update_latest_server_info, probably waiting for ajax');
 		      return null;
 		    }
 			  $.ajax({
@@ -300,7 +309,7 @@ var GO = function () {
 			      latest_server_info = data;
 			    },
 			    error: function (error_response) {
-			      console.error('unable to update_latest_server_info because: ' + error_response.responseText);
+			      console.error('unable to ajax_update_latest_server_info because: ' + error_response.responseText);
 			    }
 			  });
 			};
@@ -394,7 +403,7 @@ var GO = function () {
 				  update_active_on_current_board: update_active_div,
 				  process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,
-				  update_latest_server_info: update_latest_server_info,
+				  ajax_update_latest_server_info: ajax_update_latest_server_info,
 					document_ready_hook: document_ready_hook,
 					debug: {
 						info: function () { return info; },

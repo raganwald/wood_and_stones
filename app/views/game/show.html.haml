@@ -8,8 +8,8 @@
     game_show_helper.update_active_on_current_board();
     game_show_helper.update_move_infos();
     $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
-      { type : 'json', minTimeout: 1000, maxTimeout: 4000 },
-      game_show_helper.update_latest_server_info
+      { type : 'json', minTimeout: 1000, maxTimeout: 1000 },
+      game_show_helper.ajax_update_latest_server_info
     );
     $(document).everyTime('1s', function (count) {
       game_show_helper.process_server_info();
