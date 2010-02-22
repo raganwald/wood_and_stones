@@ -46,6 +46,7 @@ var GO = function () {
 			};
 			
 			var process_html_of_latest_moves = function (html, callback) {
+				console.log('process_html_of_latest_moves');
 				var current_move_number = last_displayed_move_number();
 	      var update_moves = $(html).filter('.move').filter(function (i) {
 					$(this).data('number', current_move_number + i + 1); // BOO! updates in a select!!
@@ -53,12 +54,15 @@ var GO = function () {
 				});
 	      if (update_moves.size() > 0) {
 	        update_moves.insertAfter('.move:last');
+					console.log('process_html_of_latest_moves: update_moves.insertAfter');
 					update_elements_with_navigation_handlers(update_moves);
 	        $(select_move_by_move_number(current_move_number) + ' .history .next').removeClass('invisible').show();
 	        if (callback) {
+						console.log('process_html_of_latest_moves: callback');
 	          callback('.move:last');
 	        }
 					else {
+						console.log('process_html_of_latest_moves: update_active_div');
 						update_active_div();
 						update_latest_server_info();
 					}
@@ -72,9 +76,9 @@ var GO = function () {
 			    dataType: 'html',
 			    success: function (html) {
 						process_html_of_latest_moves(html, function (latest_move_selector) {
+							update_latest_server_info();
 							update_active_div();
 							update_move_infos();
-							update_latest_server_info();
 							jQT.goTo($('.move:last'), '');
 						});
 					},
@@ -106,15 +110,31 @@ var GO = function () {
 			
 			var update_active_div = function () {
 			  var move_to_unbind_selector = '.move.active';
-			  var places_to_unbind_selector = '.move.active .board .empty.valid';
+			  var places_to_unbind_selector = '.move.active .board .valid';
+				var lasts_to_reclassify_finder = '.board .last';
+				var killed_finder = '.board .atari.empty';
 			
 			  return function (active_p) {
 				  var move_to_bind_selector = (latest_server_info.is_users_turn ? select_move_by_move_number(latest_server_info.move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (latest_server_info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
+					if ($(places_to_unbind_selector).not(places_to_bind_selector).size() > 0) {
+						console.log('unbinding ' + $(places_to_unbind_selector).not(places_to_bind_selector).size() + ' intersections');
+					}
+					$(places_to_unbind_selector).not(places_to_bind_selector).removeClass('black').removeClass('white');
+					if ($(move_to_unbind_selector).not(move_to_bind_selector).size() > 0) {
+						console.log('unbinding ' + $(move_to_unbind_selector).not(move_to_bind_selector).size() + ' moves');
+					}
+					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() > 0) {
+						console.log('restoring ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() + ' stones');
+					}
+					$(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).addClass(latest_server_info.opponent).removeClass('empty');
+					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size() > 0) {
+						console.log('re-lasting ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size());
+					}
+					$(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).addClass('latest');
+					
+					$(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
 			    $(move_to_bind_selector).addClass('active');
-					var move_to_unbind = $(move_to_unbind_selector).not(move_to_bind_selector)
-			    move_to_unbind.removeClass('active');
-					// move_to_unbind.find('.info .news').text('')
 			  };
 			}();
 			
@@ -174,6 +194,7 @@ var GO = function () {
 					console.log('requesting updates for moves from ' + was_current_move_number + ' to ' + latest_server_info.move_number);
 		      if (latest_server_info.is_users_turn) {
 		        get_latest_moves(function (latest_select_move_by_move_number) { // updates current_move_number
+							console.log('get_latest_moves callback 1');
 		          update_active_div();
 		          update_move_infos();
 		          can_process_server_info = true;
@@ -185,6 +206,7 @@ var GO = function () {
 		      }
 		      else {
 		        get_latest_moves(function (latest_select_move_by_move_number) { // updates current_move_number
+							console.log('get_latest_moves callback 2');
 		          update_active_div();
 		          update_move_infos();
 		          can_process_server_info = true;
