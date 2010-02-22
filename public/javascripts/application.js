@@ -257,8 +257,11 @@ var GO = function () {
 				    }
 				  });
 				}
-				else {
+				else if (current_move_number == 1) {
 					$(select_move_by_move_number(current_move_number) + ' .history .prev').removeClass('invisible').show();
+				}
+				else {
+					$(select_move_by_move_number(current_move_number) + ' .history .prev').addClass('invisible').hide();
 				}
 			};
 

@@ -4,11 +4,11 @@ module ApplicationHelper
     valids.inject(board.map_array(TILE_IMG_CLASS_MAP)) do |classes, its|
       lambda do |cc|
         cc[its.location.first][its.location.last] += " valid"
-        pos = (__126686311031815__ = its.location
-        if __126686311031815__.kind_of?(Array) then
-          RewriteRails::ExtensionMethods::Array.to_position(__126686311031815__)
+        pos = (__126686621474249__ = its.location
+        if __126686621474249__.kind_of?(Array) then
+          RewriteRails::ExtensionMethods::Array.to_position(__126686621474249__)
         else
-          __126686311031815__.to_position
+          __126686621474249__.to_position
         end)
         its.dead_stones.each do |dead_location|
           cc[dead_location.first][dead_location.last] += " atari killed_by_#{pos}"
