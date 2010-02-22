@@ -54,8 +54,15 @@ class ApplicationController < ActionController::Base
       :get_updates_js => "function (current_move_number) { return '#{get_updates_url(:game_id=>@game.id, :after_play=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_move_number);}",
       :get_history_js => "function (current_move_number) { return '#{get_history_url(:game_id=>@game.id, :before_play=>'zzzzz', :layout=>'false')}'.replace('zzzzz', current_move_number);}",
       :create_pass_url => create_pass_url(:game_id=>@game.id),
-      :move_info_url => move_info_url(:game_id=>@game.id)
+      :move_info_url => move_info_url(:game_id=>@game.id),
+      :board_image_paths_url => url_for(:controller => :board, :action => :image_paths)
     }
+  end
+  
+  # don't you hate cutesy names you'll forget in a week?
+  # this returns an array of image paths
+  def all_tile_paths
+    Rails.root.join('public', 'images', 'board', 'temporary').entries.map(&:to_s).select { |e| e =~ /png$/ }.map { |e| "/images/board/temporary/#{e}"}
   end
   
   private

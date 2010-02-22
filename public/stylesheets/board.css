@@ -1,145 +1,146 @@
 .board .top.left.black {
   background: url('/images/board/temporary/tile1nw.png'); }
-  .board .top.left.black.valid {
-    background: url('/images/board/temporary/tile1nwd.png') !important; }
-  .board .top.left.black.last.latest {
-    background: url('/images/board/temporary/tile1nwd.png') !important; }
 .board .top.left.white {
   background: url('/images/board/temporary/tile2nw.png'); }
-  .board .top.left.white.valid {
-    background: url('/images/board/temporary/tile2nwd.png') !important; }
-  .board .top.left.white.last.latest {
-    background: url('/images/board/temporary/tile2nwd.png') !important; }
 .board .top.left.empty {
   background: url('/images/board/temporary/tile0nw.png'); }
 .board .top.right.black {
   background: url('/images/board/temporary/tile1ne.png'); }
-  .board .top.right.black.valid {
-    background: url('/images/board/temporary/tile1ned.png') !important; }
-  .board .top.right.black.last.latest {
-    background: url('/images/board/temporary/tile1ned.png') !important; }
 .board .top.right.white {
   background: url('/images/board/temporary/tile2ne.png'); }
-  .board .top.right.white.valid {
-    background: url('/images/board/temporary/tile2ned.png') !important; }
-  .board .top.right.white.last.latest {
-    background: url('/images/board/temporary/tile2ned.png') !important; }
 .board .top.right.empty {
   background: url('/images/board/temporary/tile0ne.png'); }
 .board .bottom.left.black {
   background: url('/images/board/temporary/tile1sw.png'); }
-  .board .bottom.left.black.valid {
-    background: url('/images/board/temporary/tile1swd.png') !important; }
-  .board .bottom.left.black.last.latest {
-    background: url('/images/board/temporary/tile1swd.png') !important; }
 .board .bottom.left.white {
   background: url('/images/board/temporary/tile2sw.png'); }
-  .board .bottom.left.white.valid {
-    background: url('/images/board/temporary/tile2swd.png') !important; }
-  .board .bottom.left.white.last.latest {
-    background: url('/images/board/temporary/tile2swd.png') !important; }
 .board .bottom.left.empty {
   background: url('/images/board/temporary/tile0sw.png'); }
 .board .bottom.right.black {
   background: url('/images/board/temporary/tile1se.png'); }
-  .board .bottom.right.black.valid {
-    background: url('/images/board/temporary/tile1sed.png') !important; }
-  .board .bottom.right.black.last.latest {
-    background: url('/images/board/temporary/tile1sed.png') !important; }
 .board .bottom.right.white {
   background: url('/images/board/temporary/tile2se.png'); }
-  .board .bottom.right.white.valid {
-    background: url('/images/board/temporary/tile2sed.png') !important; }
-  .board .bottom.right.white.last.latest {
-    background: url('/images/board/temporary/tile2sed.png') !important; }
 .board .bottom.right.empty {
   background: url('/images/board/temporary/tile0se.png'); }
 .board .top.middle.black {
   background: url('/images/board/temporary/tile1n.png'); }
-  .board .top.middle.black.valid {
-    background: url('/images/board/temporary/tile1nd.png') !important; }
-  .board .top.middle.black.last.latest {
-    background: url('/images/board/temporary/tile1nd.png') !important; }
 .board .top.middle.white {
   background: url('/images/board/temporary/tile2n.png'); }
-  .board .top.middle.white.valid {
-    background: url('/images/board/temporary/tile2nd.png') !important; }
-  .board .top.middle.white.last.latest {
-    background: url('/images/board/temporary/tile2nd.png') !important; }
 .board .top.middle.empty {
   background: url('/images/board/temporary/tile0n.png'); }
 .board .left.middle.black {
   background: url('/images/board/temporary/tile1w.png'); }
-  .board .left.middle.black.valid {
-    background: url('/images/board/temporary/tile1wd.png') !important; }
-  .board .left.middle.black.last.latest {
-    background: url('/images/board/temporary/tile1wd.png') !important; }
 .board .left.middle.white {
   background: url('/images/board/temporary/tile2w.png'); }
-  .board .left.middle.white.valid {
-    background: url('/images/board/temporary/tile2wd.png') !important; }
-  .board .left.middle.white.last.latest {
-    background: url('/images/board/temporary/tile2wd.png') !important; }
 .board .left.middle.empty {
   background: url('/images/board/temporary/tile0w.png'); }
 .board .bottom.middle.black {
   background: url('/images/board/temporary/tile1s.png'); }
-  .board .bottom.middle.black.valid {
-    background: url('/images/board/temporary/tile1sd.png') !important; }
-  .board .bottom.middle.black.last.latest {
-    background: url('/images/board/temporary/tile1sd.png') !important; }
 .board .bottom.middle.white {
   background: url('/images/board/temporary/tile2s.png'); }
-  .board .bottom.middle.white.valid {
-    background: url('/images/board/temporary/tile2sd.png') !important; }
-  .board .bottom.middle.white.last.latest {
-    background: url('/images/board/temporary/tile2sd.png') !important; }
 .board .bottom.middle.empty {
   background: url('/images/board/temporary/tile0s.png'); }
 .board .right.middle.black {
   background: url('/images/board/temporary/tile1e.png'); }
-  .board .right.middle.black.valid {
-    background: url('/images/board/temporary/tile1ed.png') !important; }
-  .board .right.middle.black.last.latest {
-    background: url('/images/board/temporary/tile1ed.png') !important; }
 .board .right.middle.white {
   background: url('/images/board/temporary/tile2e.png'); }
-  .board .right.middle.white.valid {
-    background: url('/images/board/temporary/tile2ed.png') !important; }
-  .board .right.middle.white.last.latest {
-    background: url('/images/board/temporary/tile2ed.png') !important; }
 .board .right.middle.empty {
   background: url('/images/board/temporary/tile0e.png'); }
 .board .interior.black {
   background: url('/images/board/temporary/tile1.png'); }
-  .board .interior.black.valid {
-    background: url('/images/board/temporary/tile1d.png') !important; }
-  .board .interior.black.last.latest {
-    background: url('/images/board/temporary/tile1d.png') !important; }
 .board .interior.white {
   background: url('/images/board/temporary/tile2.png'); }
-  .board .interior.white.valid {
-    background: url('/images/board/temporary/tile2d.png') !important; }
-  .board .interior.white.last.latest {
-    background: url('/images/board/temporary/tile2d.png') !important; }
 .board .interior.empty {
   background: url('/images/board/temporary/tile0.png'); }
 .board .star.black {
   background: url('/images/board/temporary/tile1.png'); }
-  .board .star.black.valid {
-    background: url('/images/board/temporary/tile1d.png') !important; }
-  .board .star.black.last.latest {
-    background: url('/images/board/temporary/tile1d.png') !important; }
 .board .star.white {
   background: url('/images/board/temporary/tile2.png'); }
-  .board .star.white.valid {
-    background: url('/images/board/temporary/tile2d.png') !important; }
-  .board .star.white.last.latest {
-    background: url('/images/board/temporary/tile2d.png') !important; }
 .board .star.empty {
   background: url('/images/board/temporary/tile0c.png'); }
 .board .star.valid {
   background: url('/images/board/temporary/tile0c.png'); }
+
+.active .board .top.left.black.valid {
+  background: url('/images/board/temporary/tile1nwd.png') !important; }
+.active .board .top.left.black.last.latest {
+  background: url('/images/board/temporary/tile1nwd.png') !important; }
+.active .board .top.left.white.valid {
+  background: url('/images/board/temporary/tile2nwd.png') !important; }
+.active .board .top.left.white.last.latest {
+  background: url('/images/board/temporary/tile2nwd.png') !important; }
+.active .board .top.right.black.valid {
+  background: url('/images/board/temporary/tile1ned.png') !important; }
+.active .board .top.right.black.last.latest {
+  background: url('/images/board/temporary/tile1ned.png') !important; }
+.active .board .top.right.white.valid {
+  background: url('/images/board/temporary/tile2ned.png') !important; }
+.active .board .top.right.white.last.latest {
+  background: url('/images/board/temporary/tile2ned.png') !important; }
+.active .board .bottom.left.black.valid {
+  background: url('/images/board/temporary/tile1swd.png') !important; }
+.active .board .bottom.left.black.last.latest {
+  background: url('/images/board/temporary/tile1swd.png') !important; }
+.active .board .bottom.left.white.valid {
+  background: url('/images/board/temporary/tile2swd.png') !important; }
+.active .board .bottom.left.white.last.latest {
+  background: url('/images/board/temporary/tile2swd.png') !important; }
+.active .board .bottom.right.black.valid {
+  background: url('/images/board/temporary/tile1sed.png') !important; }
+.active .board .bottom.right.black.last.latest {
+  background: url('/images/board/temporary/tile1sed.png') !important; }
+.active .board .bottom.right.white.valid {
+  background: url('/images/board/temporary/tile2sed.png') !important; }
+.active .board .bottom.right.white.last.latest {
+  background: url('/images/board/temporary/tile2sed.png') !important; }
+.active .board .top.middle.black.valid {
+  background: url('/images/board/temporary/tile1nd.png') !important; }
+.active .board .top.middle.black.last.latest {
+  background: url('/images/board/temporary/tile1nd.png') !important; }
+.active .board .top.middle.white.valid {
+  background: url('/images/board/temporary/tile2nd.png') !important; }
+.active .board .top.middle.white.last.latest {
+  background: url('/images/board/temporary/tile2nd.png') !important; }
+.active .board .left.middle.black.valid {
+  background: url('/images/board/temporary/tile1wd.png') !important; }
+.active .board .left.middle.black.last.latest {
+  background: url('/images/board/temporary/tile1wd.png') !important; }
+.active .board .left.middle.white.valid {
+  background: url('/images/board/temporary/tile2wd.png') !important; }
+.active .board .left.middle.white.last.latest {
+  background: url('/images/board/temporary/tile2wd.png') !important; }
+.active .board .bottom.middle.black.valid {
+  background: url('/images/board/temporary/tile1sd.png') !important; }
+.active .board .bottom.middle.black.last.latest {
+  background: url('/images/board/temporary/tile1sd.png') !important; }
+.active .board .bottom.middle.white.valid {
+  background: url('/images/board/temporary/tile2sd.png') !important; }
+.active .board .bottom.middle.white.last.latest {
+  background: url('/images/board/temporary/tile2sd.png') !important; }
+.active .board .right.middle.black.valid {
+  background: url('/images/board/temporary/tile1ed.png') !important; }
+.active .board .right.middle.black.last.latest {
+  background: url('/images/board/temporary/tile1ed.png') !important; }
+.active .board .right.middle.white.valid {
+  background: url('/images/board/temporary/tile2ed.png') !important; }
+.active .board .right.middle.white.last.latest {
+  background: url('/images/board/temporary/tile2ed.png') !important; }
+.active .board .interior.black.valid {
+  background: url('/images/board/temporary/tile1d.png') !important; }
+.active .board .interior.black.last.latest {
+  background: url('/images/board/temporary/tile1d.png') !important; }
+.active .board .interior.white.valid {
+  background: url('/images/board/temporary/tile2d.png') !important; }
+.active .board .interior.white.last.latest {
+  background: url('/images/board/temporary/tile2d.png') !important; }
+.active .board .star.black.valid {
+  background: url('/images/board/temporary/tile1d.png') !important; }
+.active .board .star.black.last.latest {
+  background: url('/images/board/temporary/tile1d.png') !important; }
+.active .board .star.white.valid {
+  background: url('/images/board/temporary/tile2d.png') !important; }
+.active .board .star.white.last.latest {
+  background: url('/images/board/temporary/tile2d.png') !important; }
 
 .active .board .valid {
   cursor: pointer; }

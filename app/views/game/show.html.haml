@@ -9,7 +9,7 @@
     game_show_helper.update_active_on_current_board();
     game_show_helper.update_move_infos();
     $.PeriodicalUpdater('#{move_info_url(:game_id=>@game.id)}',
-      { type : 'json', minTimeout: 2000, maxTimeout: 8000 },
+      { type : 'json', minTimeout: 1000, maxTimeout: 4000 },
       game_show_helper.update_latest_server_info
     );
     $(document).everyTime('1s', function (count) {
@@ -21,12 +21,22 @@
     game_show_helper.document_ready_hook();
     $(document).data('game_show_helper', game_show_helper);
   });
-
+#pass
+  .toolbar 
+    %h1 Pass
+  .message
+    You haven't placed a stone. Would you like to pass your turn?
+    -if @game.passed?
+      Since your opponent has just passed, if you pass the game will end.
+    -else
+      If your opponent passes in response, the game will end.
+  %a.pass.whiteButton.goback{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Pass
+  -# %a.resign.whiteButton.goback{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Resign
+  %a.whiteButton.goback{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Cancel
 -if @game.current_move_number == 0
   .current.move#m0
     .toolbar 
       %h1 We Go!
-      %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
     %ul.individual.history.no_touch
@@ -44,7 +54,6 @@
   .move#m0
     .toolbar 
       %h1 We Go!
-      %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
     %ul.individual.history.no_touch
@@ -62,7 +71,6 @@
     - action = @game.actions.last # TODO: denormalize like everything else
     .toolbar 
       %h1 We Go!
-      %a.back{:href=>"#"} Back
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => action.position }
     -# is this a bug when there's one move?

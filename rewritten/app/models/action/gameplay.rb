@@ -17,7 +17,7 @@ class Action::Gameplay < Action::Base
     true
   end
   def update_game_to_play
-    self.game.update_attribute(:to_play, (self.player == Board::BLACK_S) ? (Board::WHITE_S) : (Board::BLACK_S))
+    self.game.to_play = (self.player == Board::BLACK_S) ? (Board::WHITE_S) : (Board::BLACK_S)
     true
   end
 end

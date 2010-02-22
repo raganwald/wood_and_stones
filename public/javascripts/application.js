@@ -112,9 +112,11 @@ var GO = function () {
 				  var move_to_bind_selector = (latest_server_info.is_users_turn ? select_move_by_move_number(latest_server_info.move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (latest_server_info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 			    $(move_to_bind_selector).addClass('active');
-			    $(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
+					var move_to_unbind = $(move_to_unbind_selector).not(move_to_bind_selector)
+			    move_to_unbind.removeClass('active');
 			  };
 			}();
+			
 			var liven_active_positions = function () {
 			
 				var toggle_placed_stone = function (dbl_click_event_data) {
@@ -143,9 +145,9 @@ var GO = function () {
 					play_stone(target.attr('id'));
 				};
 
-				$('.move.active .board .empty.valid').live('click', toggle_placed_stone);
-				$('.move.active .board .empty.valid').live('dblclick', place_and_play_stone);
-			}();
+				$('.move.active .board .valid').live('tap', toggle_placed_stone);
+				$('.move.active .board .valid').live('dblclick', place_and_play_stone);
+			};
 			
 			var get_latest_moves = function (callback) {
 			  $.ajax({
@@ -298,7 +300,7 @@ var GO = function () {
 							play_stone(position);
 						}
 						else if (latest_server_info.is_users_turn) {
-							pass();
+							jQT.goTo('#pass', 'pop');
 						}
 						else {
 							GO.message('Sorry', 'It is not your turn to play or pass');
@@ -342,9 +344,23 @@ var GO = function () {
 				};
 			}();
 			
+			var cache_board_image_paths = function () {
+				$.ajax({
+				  url: info.board_image_paths_url,
+				  success: function (paths) {
+						$.each(paths, function (index, path) {
+							(new Image(30,30)).src = path;
+						});
+					},
+				  dataType: 'json'
+				});
+			};
+			
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
 				liven_active_positions();
+				cache_board_image_paths();
+				$('.pass').live('tap', pass);
 			};
 			
 			return {

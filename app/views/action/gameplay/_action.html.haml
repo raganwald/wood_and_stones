@@ -1,9 +1,8 @@
 .move{:id=>"m#{action.cardinality}"}
   .toolbar 
     %h1 We Go!
-    %a.back{:href=>"#"} Back
   .board
-    -if action.cardinality < action.game.actions.size
+    -if action.cardinality < action.game.current_move_number
       = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
     -else
       = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }

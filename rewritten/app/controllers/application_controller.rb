@@ -21,7 +21,14 @@ class ApplicationController < ActionController::Base
     else
       playing, opponent = "white", "black" if (id == @game.white_id)
     end)
-    @info = { :is_users_turn => (is_active), :move_number => (current_move), :playing => (playing), :opponent => (opponent), :to_play => (@game.to_play), :game_state => (@game.state), :create_move_js => ("function (position) { return '#{create_move_url(:game_id => (@game.id), :position => "zzzzz")}'.replace('zzzzz', position);}"), :get_updates_js => ("function (current_move_number) { return '#{get_updates_url(:game_id => (@game.id), :after_play => "zzzzz", :layout => "false")}'.replace('zzzzz', current_move_number);}"), :get_history_js => ("function (current_move_number) { return '#{get_history_url(:game_id => (@game.id), :before_play => "zzzzz", :layout => "false")}'.replace('zzzzz', current_move_number);}"), :create_pass_url => (create_pass_url(:game_id => (@game.id))), :move_info_url => (move_info_url(:game_id => (@game.id))) }
+    @info = { :is_users_turn => (is_active), :move_number => (current_move), :playing => (playing), :opponent => (opponent), :to_play => (@game.to_play), :game_state => (@game.state), :create_move_js => ("function (position) { return '#{create_move_url(:game_id => (@game.id), :position => "zzzzz")}'.replace('zzzzz', position);}"), :get_updates_js => ("function (current_move_number) { return '#{get_updates_url(:game_id => (@game.id), :after_play => "zzzzz", :layout => "false")}'.replace('zzzzz', current_move_number);}"), :get_history_js => ("function (current_move_number) { return '#{get_history_url(:game_id => (@game.id), :before_play => "zzzzz", :layout => "false")}'.replace('zzzzz', current_move_number);}"), :create_pass_url => (create_pass_url(:game_id => (@game.id))), :move_info_url => (move_info_url(:game_id => (@game.id))), :board_image_paths_url => (url_for(:controller => :board, :action => :image_paths)) }
+  end
+  def all_tile_paths
+    Rails.root.join("public", "images", "board", "temporary").entries.map(&:to_s).select do |e|
+      e =~ /png$/
+    end.map do |e|
+      "/images/board/temporary/#{e}"
+    end
   end
   private
   def get_const_for(modularized_name)

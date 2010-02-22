@@ -65,7 +65,7 @@ class Game < ActiveRecord::Base
     elsif dimension = options[:dimension]
       handicap_amount = options[:handicap].to_i
       board = Board.new(dimension) do |nascent_board|
-        nascent_board.handicap(it) if handicap_amount > 1
+        nascent_board.handicap(handicap_amount) if handicap_amount > 1
       end
       self.to_play = handicap_amount > 1 ? Board::WHITE_S : Board::BLACK_S
       self.initial_board = self.current_board = board
