@@ -114,6 +114,7 @@ var GO = function () {
 			    $(move_to_bind_selector).addClass('active');
 					var move_to_unbind = $(move_to_unbind_selector).not(move_to_bind_selector)
 			    move_to_unbind.removeClass('active');
+					// move_to_unbind.find('.info .news').text('')
 			  };
 			}();
 			

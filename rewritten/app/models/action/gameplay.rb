@@ -1,7 +1,8 @@
 class Action::Gameplay < Action::Base
   include(Action::PlayerAction)
   before_validation_on_create(:set_player, :check_whether_this_is_a_valid_action_in_the_game)
-  after_create(:update_game_state, :update_game_to_play)
+  after_validation_on_create(:update_game_to_play)
+  after_create(:update_game_state)
   def set_player
     self.player ||= self.game.to_play
   end
