@@ -18,6 +18,7 @@ var GO = function () {
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
 			var latest_server_info = info;
+			var SELECTION_EVENT = ($.support.touch ? 'tap' : 'click');
 			
 			var last_displayed_move_number = function () {
 				return $('.move:last').data('number');
@@ -144,7 +145,7 @@ var GO = function () {
 					play_stone(target.attr('id'));
 				};
 
-				$('.move.active .board .valid').live('tap', toggle_placed_stone);
+				$('.move.active .board .valid').live(SELECTION_EVENT, toggle_placed_stone);
 				$('.move.active .board .valid').live('dblclick', place_and_play_stone);
 			};
 			
@@ -336,7 +337,7 @@ var GO = function () {
 		    update_elements_with_navigation_handlers('body');
 				liven_active_positions();
 				//cache_board_image_paths();
-				$('.pass').live('tap', pass);
+				$('.pass').live(SELECTION_EVENT, pass);
 		    $('body').oneTime('3s', 'update', function (count) {
 		      get_latest_moves();
 		    });
