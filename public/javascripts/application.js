@@ -17,9 +17,7 @@ var GO = function () {
 		},
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
-			var ajax_update_latest_server_info = null;
 			var latest_server_info = info;
-			var can_process_server_info = true;
 			
 			var last_displayed_move_number = function () {
 				return $('.move:last').data('number');
@@ -45,30 +43,29 @@ var GO = function () {
 				return latest_server_info.is_users_turn && ($('.move.active .board .empty.' + latest_server_info.playing).size() == 1);
 			};
 			
-			var process_html_of_latest_moves = function (html, callback) {
-				console.log('process_html_of_latest_moves');
+			var process_update = function (html, callback) {
 				var current_move_number = last_displayed_move_number();
 	      var update_moves = $(html).filter('.move').filter(function (i) {
 					$(this).data('number', current_move_number + i + 1); // BOO! updates in a select!!
 					return $(this).attr('id') == ('m' + (current_move_number + i + 1));
 				});
-				console.log('process_html_of_latest_moves 2');
 	      if (update_moves.size() > 0) {
+					console.log('processing ' + update_moves.size() + ' updated moves');
 	        update_moves.insertAfter('.move:last');
-					console.log('process_html_of_latest_moves: update_moves.insertAfter');
 					update_elements_with_navigation_handlers(update_moves);
 	        $(select_move_by_move_number(current_move_number) + ' .history .next').removeClass('invisible').show();
 	        if (callback) {
-						console.log('process_html_of_latest_moves: callback');
 	          callback('.move:last');
 	        }
 					else {
-						console.log('process_html_of_latest_moves: update_active_div');
 						update_active_div();
-						ajax_update_latest_server_info();
 					}
 	      }
-				console.log('process_html_of_latest_moves exit');
+				$(html).filter('script').each(function (i, el) {
+					console.log('processing json: ' + $(el).text());
+					latest_server_info = jQuery.parseJSON($(el).text());
+					process_server_info();
+				});
 	    };
 			
 			var play_stone  = function (position) {
@@ -77,13 +74,12 @@ var GO = function () {
 			    type: 'POST',
 			    dataType: 'html',
 			    success: function (html) {
-						process_html_of_latest_moves(html, function (latest_move_selector) {
+						process_update(html, function (latest_move_selector) {
 							latest_server_info.is_users_turn = false;
 							latest_server_info.move_number = last_displayed_move_number();
 							latest_server_info.to_play = latest_server_info.opponent;
 							update_active_div();
 							update_move_infos();
-							ajax_update_latest_server_info(); // just sends an ajax request
 							jQT.goTo($('.move:last'), '');
 						});
 					},
@@ -100,13 +96,12 @@ var GO = function () {
 			    type: 'POST',
 			    dataType: 'html',
 			    success: function (html) {
-						process_html_of_latest_moves(html, function (latest_move_selector) {
+						process_update(html, function (latest_move_selector) {
 							latest_server_info.is_users_turn = false;
 							latest_server_info.move_number = last_displayed_move_number() + 1;
 							latest_server_info.to_play = latest_server_info.opponent;
 							update_active_div();
 							update_move_infos();
-							ajax_update_latest_server_info();
 							jQT.goTo($('.move:last'), '');
 						});
 					},
@@ -184,7 +179,10 @@ var GO = function () {
 			    type: 'GET',
 			    dataType: 'html',
 			    success: function (html) {
-			      process_html_of_latest_moves(html, callback)
+			      process_update(html, callback);
+				    $('body').oneTime('1s', 'update', function (count) {
+				      get_latest_moves();
+				    });
 			    },
 			    error: function (error_response) {
 			      GO.message('error', 'unable to load the game history after ' + last_displayed_move_number() + ' because: ' + error_response.responseText);
@@ -193,10 +191,6 @@ var GO = function () {
 			};
 			
 			var process_server_info = function () {
-		    if (!can_process_server_info) {
-		      return null;
-		    }
-		    can_process_server_info = false;
 		    if (latest_server_info.move_number > last_displayed_move_number()) {
 		      var was_current_move_number = last_displayed_move_number();
 					console.log('requesting updates for moves from ' + was_current_move_number + ' to ' + latest_server_info.move_number);
@@ -205,7 +199,6 @@ var GO = function () {
 							console.log('get_latest_moves callback 1');
 		          update_active_div();
 		          update_move_infos();
-		          can_process_server_info = true;
 		          if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
 								console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 		            jQT.goTo($(latest_select_move_by_move_number), 'fade');
@@ -217,7 +210,6 @@ var GO = function () {
 							console.log('get_latest_moves callback 2');
 		          update_active_div();
 		          update_move_infos();
-		          can_process_server_info = true;
 		          if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
 								console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 		            jQT.goTo($(latest_select_move_by_move_number), 'fade');
@@ -227,7 +219,6 @@ var GO = function () {
 		    }
 		    else {
 		      update_active_div();
-		      can_process_server_info = true;
 		    }
 		  };
 		
@@ -296,24 +287,6 @@ var GO = function () {
 				}
 			};
 
-			var ajax_update_latest_server_info = function () {
-		    if (!can_process_server_info) {
-					console.log('skipping ajax_update_latest_server_info, probably waiting for ajax');
-		      return null;
-		    }
-			  $.ajax({
-			    url: info.move_info_url,
-			    type: 'GET',
-			    dataType: 'json',
-			    success: function (data) {
-			      latest_server_info = data;
-			    },
-			    error: function (error_response) {
-			      console.error('unable to ajax_update_latest_server_info because: ' + error_response.responseText);
-			    }
-			  });
-			};
-			
 			var update_elements_with_navigation_handlers = function () {
 				var goto_move = function (selector, animation) {
 					console.log('trying to go to ' + selector);
@@ -394,16 +367,18 @@ var GO = function () {
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
 				liven_active_positions();
-				cache_board_image_paths();
+				//cache_board_image_paths();
 				$('.pass').live('tap', pass);
+		    $('body').oneTime('3s', 'update', function (count) {
+		      get_latest_moves();
+		    });
 			};
 			
 			return {
 				  update_move_infos: update_move_infos,
 				  update_active_on_current_board: update_active_div,
-				  process_server_info: process_server_info,
+				  // process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,
-				  ajax_update_latest_server_info: ajax_update_latest_server_info,
 					document_ready_hook: document_ready_hook,
 					debug: {
 						info: function () { return info; },
