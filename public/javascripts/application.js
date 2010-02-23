@@ -43,31 +43,6 @@ var GO = function () {
 				return latest_server_info.is_users_turn && ($('.move.active .board .empty.' + latest_server_info.playing).size() == 1);
 			};
 			
-			var process_update = function (html, callback) {
-				var current_move_number = last_displayed_move_number();
-	      var update_moves = $(html).filter('.move').filter(function (i) {
-					$(this).data('number', current_move_number + i + 1); // BOO! updates in a select!!
-					return $(this).attr('id') == ('m' + (current_move_number + i + 1));
-				});
-	      if (update_moves.size() > 0) {
-					console.log('processing ' + update_moves.size() + ' updated moves');
-	        update_moves.insertAfter('.move:last');
-					update_elements_with_navigation_handlers(update_moves);
-	        $(select_move_by_move_number(current_move_number) + ' .history .next').removeClass('invisible').show();
-	        if (callback) {
-	          callback('.move:last');
-	        }
-					else {
-						update_active_div();
-					}
-	      }
-				$(html).filter('script').each(function (i, el) {
-					console.log('processing json: ' + $(el).text());
-					latest_server_info = jQuery.parseJSON($(el).text());
-					process_server_info();
-				});
-	    };
-			
 			var play_stone  = function (position) {
 			  $.ajax({
 			    url: info.create_move_f(position),
@@ -173,6 +148,31 @@ var GO = function () {
 				$('.move.active .board .valid').live('dblclick', place_and_play_stone);
 			};
 			
+			var process_update = function (html, callback) {
+				var was_current_move_number = last_displayed_move_number();
+	      var update_moves = $(html).filter('.move').filter(function (i) {
+					$(this).data('number', was_current_move_number + i + 1); // BOO! updates in a select!!
+					return $(this).attr('id') == ('m' + (was_current_move_number + i + 1));
+				});
+	      if (update_moves.size() > 0) {
+					console.log('processing ' + update_moves.size() + ' updated moves');
+	        update_moves.insertAfter('.move:last');
+					update_elements_with_navigation_handlers(update_moves);
+	        $(select_move_by_move_number(was_current_move_number) + ' .history .next').removeClass('invisible').show();
+	      }
+				$(html).filter('script').each(function (i, el) {
+					latest_server_info = jQuery.parseJSON($(el).text());
+				});
+				if (update_moves.size() > 0) {
+	        update_active_div();
+	        update_move_infos();
+	        if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
+						console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
+	          jQT.goTo($('.move:last'), 'fade');
+	        }
+				}		
+	    };
+			
 			var get_latest_moves = function (callback) {
 			  $.ajax({
 			    url: info.get_updates_f(last_displayed_move_number()),
@@ -189,38 +189,6 @@ var GO = function () {
 			    }
 			  });
 			};
-			
-			var process_server_info = function () {
-		    if (latest_server_info.move_number > last_displayed_move_number()) {
-		      var was_current_move_number = last_displayed_move_number();
-					console.log('requesting updates for moves from ' + was_current_move_number + ' to ' + latest_server_info.move_number);
-		      if (latest_server_info.is_users_turn) {
-		        get_latest_moves(function (latest_select_move_by_move_number) { // updates current_move_number
-							console.log('get_latest_moves callback 1');
-		          update_active_div();
-		          update_move_infos();
-		          if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
-								console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
-		            jQT.goTo($(latest_select_move_by_move_number), 'fade');
-		          }
-		        });
-		      }
-		      else {
-		        get_latest_moves(function (latest_select_move_by_move_number) { // updates current_move_number
-							console.log('get_latest_moves callback 2');
-		          update_active_div();
-		          update_move_infos();
-		          if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
-								console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
-		            jQT.goTo($(latest_select_move_by_move_number), 'fade');
-		          }
-		        });
-		      }
-		    }
-		    else {
-		      update_active_div();
-		    }
-		  };
 		
 			var update_move_infos = function () {
 				var selector = select_move_by_move_number(latest_server_info.move_number);
@@ -377,7 +345,6 @@ var GO = function () {
 			return {
 				  update_move_infos: update_move_infos,
 				  update_active_on_current_board: update_active_div,
-				  // process_server_info: process_server_info,
 				  get_history_up_to: get_history_up_to,
 					document_ready_hook: document_ready_hook,
 					debug: {
