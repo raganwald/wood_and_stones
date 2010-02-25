@@ -44,21 +44,12 @@ var GO = function () {
 				return latest_server_info.is_users_turn && ($('.move.active .board .empty.' + latest_server_info.playing).size() == 1);
 			};
 			
-			var play_stone  = function (position) {
+			var play_stone = function (position) {
 			  $.ajax({
 			    url: info.create_move_f(position),
 			    type: 'POST',
 			    dataType: 'html',
-			    success: function (html) {
-						process_update(html, function (latest_move_selector) {
-							latest_server_info.is_users_turn = false;
-							latest_server_info.move_number = last_displayed_move_number();
-							latest_server_info.to_play = latest_server_info.opponent;
-							update_active_div();
-							update_move_infos();
-							jQT.goTo($('.move:last'), '');
-						});
-					},
+			    success: process_update,
 			    error: function (error_response) {
 			      GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
 			    },
@@ -71,16 +62,7 @@ var GO = function () {
 			    url: info.create_pass_url,
 			    type: 'POST',
 			    dataType: 'html',
-			    success: function (html) {
-						process_update(html, function (latest_move_selector) {
-							latest_server_info.is_users_turn = false;
-							latest_server_info.move_number = last_displayed_move_number() + 1;
-							latest_server_info.to_play = latest_server_info.opponent;
-							update_active_div();
-							update_move_infos();
-							jQT.goTo($('.move:last'), '');
-						});
-					},
+			    success: process_update,
 			    error: function (error_response) {
 			      GO.message('error', 'unable to pass because: ' + error_response.responseText);
 			    },
@@ -93,7 +75,7 @@ var GO = function () {
 				var lasts_to_reclassify_finder = '.board .last';
 				var killed_finder = '.board .atari.empty';
 			
-			  return function (active_p) {
+			  return function () {
 				  var move_to_bind_selector = (latest_server_info.is_users_turn ? select_move_by_move_number(latest_server_info.move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (latest_server_info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 					if ($(places_to_unbind_selector).not(places_to_bind_selector).size() > 0) {
@@ -110,38 +92,50 @@ var GO = function () {
 					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size() > 0) {
 						console.log('re-lasting ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size());
 					}
-					$(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).addClass('latest');
+					$('.move').not(move_to_bind_selector).find(lasts_to_reclassify_finder).addClass('latest');
 					
-					$(move_to_unbind_selector).not(move_to_bind_selector).removeClass('active');
-			    $(move_to_bind_selector).addClass('active');
+					$('.move').not(move_to_bind_selector).removeClass('active');
+					$(move_to_bind_selector).addClass('active');
 			  };
 			}();
 			
 			var liven_active_positions = function () {
-			
-				var toggle_placed_stone = function (dbl_click_event_data) {
-					var target = $(dbl_click_event_data.currentTarget);
-					var killed_selector = '.move.active .board .atari.killed_by_' + target.attr('id');
+				
+				var set_played_stone = function (target, play_p) {
+					// restore all other plays
 					$('.move.active .board .valid.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
-					$('.move.active .board .atari' ).addClass(latest_server_info.opponent).removeClass('empty');
-					target.toggleClass(latest_server_info.playing);
-					if (target.hasClass(latest_server_info.playing)) {
-						$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
+					// make the play or remove the play
+					if (play_p) {
+						target.addClass(latest_server_info.playing);
 						$('.last').removeClass('latest');
 					}
 					else {
+						target.removeClass(latest_server_info.playing);
 						$('.last').addClass('latest');
 					}
 				};
 			
-				var place_and_play_stone = function (dbl_click_event_data) {
-				  var target = $(dbl_click_event_data.currentTarget);
+				var set_killed_stones = function (target, kill_p) {
 					var killed_selector = '.move.active .board .atari.killed_by_' + target.attr('id');
-					$('.move.active .board .valid.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					// restore all atari stones
 					$('.move.active .board .atari' ).addClass(latest_server_info.opponent).removeClass('empty');
-					target.addClass(latest_server_info.playing);
-					$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
-					$('.last').removeClass('latest');
+					// maybe kill some stones
+					if (kill_p) {
+						$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
+					}
+				};
+				
+				var toggle_placed_stone = function (event_data) {
+					var target = $(event_data.currentTarget);
+					var playing_stone_p = !target.hasClass(latest_server_info.playing);
+					set_played_stone(target, playing_stone_p);
+					set_killed_stones(target, playing_stone_p);
+				};
+			
+				var place_and_play_stone = function (event_data) {
+					var target = $(event_data.currentTarget);
+					set_played_stone(target, true);
+					set_killed_stones(target, true);
 					play_stone(target.attr('id'));
 				};
 
@@ -149,7 +143,7 @@ var GO = function () {
 				$('.move.active .board .valid').live('dblclick', place_and_play_stone);
 			};
 			
-			var process_update = function (html, callback) {
+			var process_update = function (html) {
 				var was_current_move_number = last_displayed_move_number();
 	      var update_moves = $(html).filter('.move').filter(function (i) {
 					$(this).data('number', was_current_move_number + i + 1); // BOO! updates in a select!!
@@ -173,23 +167,6 @@ var GO = function () {
 	        }
 				}		
 	    };
-			
-			var get_latest_moves = function (callback) {
-			  $.ajax({
-			    url: info.get_updates_f(last_displayed_move_number()),
-			    type: 'GET',
-			    dataType: 'html',
-			    success: function (html) {
-			      process_update(html, callback);
-				    $('body').oneTime('1s', 'update', function (count) {
-				      get_latest_moves();
-				    });
-			    },
-			    error: function (error_response) {
-			      GO.message('error', 'unable to load the game history after ' + last_displayed_move_number() + ' because: ' + error_response.responseText);
-			    }
-			  });
-			};
 		
 			var update_move_infos = function () {
 				var selector = select_move_by_move_number(latest_server_info.move_number);
@@ -258,7 +235,6 @@ var GO = function () {
 
 			var update_elements_with_navigation_handlers = function () {
 				var goto_move = function (selector, animation) {
-					console.log('trying to go to ' + selector);
 					if ($(selector).size() > 0) {
 						jQT.goTo(selector, animation);
 						return true;
@@ -267,7 +243,6 @@ var GO = function () {
 				};
 				var swipeBoardLeft = function (target) {
 					var this_move = $(target).parents('.move');
-					console.log("swiping left from " + this_move.attr('id'));
 					if (goto_move(this_move.next('.move'), '')) {
 						return true;
 					}
@@ -286,7 +261,6 @@ var GO = function () {
 				};
 				var swipeBoardRight = function (target) {
 					var this_move = $(target).parents('.move');
-					console.log("swiping right from " + this_move.attr('id'));
 					goto_move(this_move.prev('.move'), '');
 				};
 				var swiper = function(event, data){
@@ -338,9 +312,19 @@ var GO = function () {
 				liven_active_positions();
 				//cache_board_image_paths();
 				$('.pass').live(SELECTION_EVENT, pass);
-		    $('body').oneTime('3s', 'update', function (count) {
-		      get_latest_moves();
-		    });
+				$.PeriodicalUpdater(latest_server_info.plays_url, {
+					  method: 'get',          // method; get or post
+					  data: function () {
+							return { after_play: latest_server_info.move_number };
+						},
+					  minTimeout: 1000,       // starting value for the timeout in milliseconds
+					  maxTimeout: 8000,       // maximum length of time between requests
+					  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
+					  maxCalls: 0,            // maximum number of calls. 0 = no limit.
+					  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
+					}, 
+					process_update // Handle the new data (only called when there was a change)
+				);
 			};
 			
 			return {
