@@ -107,11 +107,11 @@ var GO = function () {
 					// make the play or remove the play
 					if (play_p) {
 						target.addClass(latest_server_info.playing);
-						$('.last').removeClass('latest');
+						$('.move.active .last').removeClass('latest');
 					}
 					else {
 						target.removeClass(latest_server_info.playing);
-						$('.last').addClass('latest');
+						$('.move.active .last').addClass('latest');
 					}
 				};
 			
