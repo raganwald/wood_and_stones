@@ -6,21 +6,6 @@
       = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
     -else
       = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
-  %ul.individual.history.no_touch
-    %li.prev
-      %span.simulateSwipeBoardRight
-        Prev
-        %small.target_move= action.cardinality - 1
-    -if action.cardinality < action.game.current_move_number
-      %li.next
-        %span.simulateSwipeBoardLeft
-          Next
-          %small.target_move= action.cardinality + 1
-    -else
-      %li.next.invisible
-        %span.simulateSwipeBoardLeft
-          Next
-          %small.target_move= action.cardinality + 1
   .info
     %span.desc position after move #{action.cardinality}. 
     %span.history

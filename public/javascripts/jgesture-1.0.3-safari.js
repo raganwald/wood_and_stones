@@ -104,6 +104,7 @@ jQuery.fn.gesture = function(fn, settings) {
         return false;
       });
     }
+		if (e.preventDefault) { e.preventDefault(); } // added by reg to see if it fixes default image drag
   
     gesture.moves = "";
     gesture.x = -1;

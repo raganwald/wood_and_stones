@@ -1,10 +1,30 @@
 var GO = function () {
-	return {
-		message: function (title, text) {
-      $('#message h1').text(title);
-      $('.message').text(text);
-      jQT.goTo($('#message'), 'pop');
-		},
+	var lazy_load_library = function (path) {
+		return function () {
+			var wrapper_f = function (callback) {
+				$.getScript(path, function (data) {
+					// k combinator, the hard way
+					k_result = callback();
+					wrapper_f = function (callback) {
+						return callback();
+					};
+					return k_result;
+				});
+			};
+			return function (callback) {
+				return wrapper_f(callback);
+			};
+		}();
+	};
+	var with_gestures = lazy_load_library('/javascripts/jgesture-1.0.3-safari.js');
+	var with_periodical_updater = lazy_load_library("/javascripts/jquery.periodicalupdater.js")
+	var message_dialog = function (title, text) {
+     $('#message h1').text(title);
+     $('.message').text(text);
+     jQT.goTo($('#message'), 'pop');
+	};
+	var go = {
+		message: message_dialog,
 		submit: function(e, success, error) {
 		  var $form = (typeof(e)==='string') ? $(e) : $(e.target);
 		  $.ajax({
@@ -15,6 +35,8 @@ var GO = function () {
 		      error: error
 		  });
 		},
+		with_gestures: with_gestures,
+		with_periodical_updater: with_periodical_updater,
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
 			var latest_server_info = info;
@@ -51,7 +73,7 @@ var GO = function () {
 			    dataType: 'html',
 			    success: process_update,
 			    error: function (error_response) {
-			      GO.message('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
+			      message_dialog('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
 			    },
 			  });
 			};
@@ -64,7 +86,7 @@ var GO = function () {
 			    dataType: 'html',
 			    success: process_update,
 			    error: function (error_response) {
-			      GO.message('error', 'unable to pass because: ' + error_response.responseText);
+			      message_dialog('error', 'unable to pass because: ' + error_response.responseText);
 			    },
 			  });
 			};
@@ -153,7 +175,6 @@ var GO = function () {
 					console.log('processing ' + update_moves.size() + ' updated moves');
 	        update_moves.insertAfter('.move:last');
 					update_elements_with_navigation_handlers(update_moves);
-	        $(select_move_by_move_number(was_current_move_number) + ' .history .next').removeClass('invisible').show();
 	      }
 				$(html).filter('script').each(function (i, el) {
 					latest_server_info = jQuery.parseJSON($(el).text());
@@ -218,18 +239,11 @@ var GO = function () {
 				      	update_moves.insertAfter('#m0');
 								update_elements_with_navigation_handlers(update_moves);
 							}
-				      $(select_move_by_move_number(current_move_number) + ' .history .prev').removeClass('invisible').show();
 				    },
 				    error: function (error_response) {
 				      console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
 				    }
 				  });
-				}
-				else if (current_move_number == 1) {
-					$(select_move_by_move_number(current_move_number) + ' .history .prev').removeClass('invisible').show();
-				}
-				else {
-					$(select_move_by_move_number(current_move_number) + ' .history .prev').addClass('invisible').hide();
 				}
 			};
 
@@ -255,7 +269,7 @@ var GO = function () {
 							jQT.goTo('#pass', 'pop');
 						}
 						else {
-							GO.message('Sorry', 'It is not your turn to play or pass');
+							message_dialog('Sorry', 'It is not your turn to play or pass');
 						}
 					}
 				};
@@ -263,35 +277,37 @@ var GO = function () {
 					var this_move = $(target).parents('.move');
 					goto_move(this_move.prev('.move'), '');
 				};
-				var swiper = function(event, data){
-		      if (data.direction == 'left') {
-		        swipeBoardLeft(event.currentTarget);
-		        return false;
-		      }
-		      else {
-		        swipeBoardRight(event.currentTarget);
-		        return false;
-		      }
-		    };
-				var lefty = function (event) {
-		      swipeBoardLeft(event.currentTarget);
-		      return false;
-		    };
-				var rightho = function (event) {
-		      swipeBoardRight(event.currentTarget);
-		      return false;
-		    };
 				return function (selector) {
 					elements = $(selector).find('*');
 					if (elements.size() == 0) {
 						console.warn("unable to update navigation: no elements for " + selector);
 					}
-					elements.filter('.board img').bind('swipe.navigation', swiper);
-			    elements.filter('.simulateSwipeBoardLeft').bind('click.navigation', lefty);
-			    elements.filter('.simulateSwipeBoardRight').bind('click.navigation', rightho);
 	        if ($.support.touch) {
+						var swiper = function(event, data) {
+				      if (data.direction == 'left') {
+				        swipeBoardLeft(event.currentTarget);
+				        return false;
+				      }
+				      else {
+				        swipeBoardRight(event.currentTarget);
+				        return false;
+				      }
+				    };
+						elements.filter('.board img').bind('swipe.navigation', swiper);
 	          elements.filter('.no_touch').remove();
 	        }
+					else {
+						with_gestures(function () {
+							$('.board').gesture(function (gs) {
+								if (gs.getName() == 'left') {
+									swipeBoardLeft(this);
+								}
+								else if (gs.getName() == 'right') {
+									swipeBoardRight(this);
+								}
+							});
+						});
+					}
 				};
 			}();
 			
@@ -309,22 +325,24 @@ var GO = function () {
 			
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
-				liven_active_positions();
+		    liven_active_positions();
 				//cache_board_image_paths();
 				$('.pass').live(SELECTION_EVENT, pass);
-				$.PeriodicalUpdater(latest_server_info.plays_url, {
-					  method: 'get',          // method; get or post
-					  data: function () {
-							return { after_play: latest_server_info.move_number };
-						},
-					  minTimeout: 1000,       // starting value for the timeout in milliseconds
-					  maxTimeout: 8000,       // maximum length of time between requests
-					  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
-					  maxCalls: 0,            // maximum number of calls. 0 = no limit.
-					  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
-					}, 
-					process_update // Handle the new data (only called when there was a change)
-				);
+				with_periodical_updater(function () {
+					$.PeriodicalUpdater(latest_server_info.plays_url, {
+						  method: 'get',          // method; get or post
+						  data: function () {
+								return { after_play: latest_server_info.move_number };
+							},
+						  minTimeout: 1000,       // starting value for the timeout in milliseconds
+						  maxTimeout: 8000,       // maximum length of time between requests
+						  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
+						  maxCalls: 0,            // maximum number of calls. 0 = no limit.
+						  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
+						}, 
+						process_update // Handle the new data (only called when there was a change)
+					);
+				});
 			};
 			
 			return {
@@ -339,4 +357,5 @@ var GO = function () {
 			};
 		}
 	};
+	return go;
 }();

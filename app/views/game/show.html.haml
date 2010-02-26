@@ -41,13 +41,6 @@
       %h1 We Go!
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
-    %ul.individual.history.no_touch
-      %li.prev.invisible
-        %a No Prev
-      %li.next.invisible
-        %span.simulateSwipeBoardLeft
-          Next
-          %small.target_move 1
     .info
       %span.desc initial position. 
       %span.history
@@ -58,13 +51,6 @@
       %h1 We Go!
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
-    %ul.individual.history.no_touch
-      %li.prev.invisible
-        %a No Prev
-      %li.next
-        %span.simulateSwipeBoardLeft
-          Next
-          %small.target_move 1
     .info
       %span.desc initial position. 
       %span.history
@@ -75,16 +61,6 @@
       %h1 We Go!
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => action.position }
-    -# is this a bug when there's one move?
-    %ul.individual.history.no_touch
-      %li.prev.invisible
-        %span.simulateSwipeBoardRight
-          Prev
-          %small.target_move= @game.current_move_number - 1
-      %li.next.invisible
-        %span.simulateSwipeBoardLeft
-          Next
-          %small.target_move= @game.current_move_number + 1
     .info
       %span.desc.current= (@game.ended? ? 'position at the end of the game.' : 'current position.') 
       %span.history
