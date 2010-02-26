@@ -251,14 +251,14 @@ var GO = function () {
 				var goto_move = function (selector, animation) {
 					if ($(selector).size() > 0) {
 						jQT.goTo(selector, animation);
-						return true;
+						return false;
 					}
-					else return false;
+					else return true;
 				};
 				var swipeBoardLeft = function (target) {
 					var this_move = $(target).parents('.move');
-					if (goto_move(this_move.next('.move'), '')) {
-						return true;
+					if (this_move.next('.move').size() > 0) {
+						return goto_move(this_move.next('.move'), '');
 					}
 					else {
 						position = position_of_played_stone();
@@ -271,11 +271,12 @@ var GO = function () {
 						else {
 							message_dialog('Sorry', 'It is not your turn to play or pass');
 						}
+						return false;
 					}
 				};
 				var swipeBoardRight = function (target) {
 					var this_move = $(target).parents('.move');
-					goto_move(this_move.prev('.move'), '');
+					return goto_move(this_move.prev('.move'), '');
 				};
 				return function (selector) {
 					elements = $(selector).find('*');
@@ -293,18 +294,18 @@ var GO = function () {
 				        return false;
 				      }
 				    };
-						elements.filter('.board img').bind('swipe.navigation', swiper);
-	          elements.filter('.no_touch').remove();
+						elements.filter('.board .intersection').bind('swipe.navigation', swiper);
 	        }
 					else {
 						with_gestures(function () {
-							$('.board').gesture(function (gs) {
+							elements.filter('.board').gesture(function (gs) {
 								if (gs.getName() == 'left') {
-									swipeBoardLeft(this);
+									return swipeBoardLeft(this);
 								}
 								else if (gs.getName() == 'right') {
-									swipeBoardRight(this);
+									return swipeBoardRight(this);
 								}
+								return true;
 							});
 						});
 					}
