@@ -17,7 +17,7 @@ var GO = function () {
 		}();
 	};
 	var with_gestures = lazy_load_library('/javascripts/jgesture-1.0.3-safari.js');
-	var with_periodical_updater = lazy_load_library("/javascripts/jquery.periodicalupdater.js")
+	var with_periodical_updater = lazy_load_library("/javascripts/jquery.periodicalupdater.js");
 	var message_dialog = function (title, text) {
      $('#message h1').text(title);
      $('.message').text(text);
