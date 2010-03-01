@@ -4,12 +4,12 @@ class Action::PassController < Action::PlayerActionController
     @pass = Action::Pass.create(
       :game => @game
     )
-    render :status => 403 unless @pass.valid?
+    (render :status => 403 and return) unless @pass.valid?
     self.assemble_info # it has been updated!
     @info[:move] = @pass
     respond_to do |format|
       format.html {
-        render render :partial => 'action/gameplay/action', :locals => { :action => @pass }
+        render :partial => 'action/gameplay/action', :locals => { :action => @pass }
       }
       format.json {
         render :json => @info

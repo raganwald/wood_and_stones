@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveRecord::TestCase
-
+=begin
   context "boards" do
     
     context "with a valid dimension" do
@@ -396,7 +396,6 @@ class BoardTest < ActiveRecord::TestCase
       
   end
   
-  
   context "dimensions and valid positions" do
     # right then down
     
@@ -446,6 +445,8 @@ class BoardTest < ActiveRecord::TestCase
     end
     
   end  
+
+=end
 
   context "legal_moves_for" do
     
@@ -523,6 +524,45 @@ class BoardTest < ActiveRecord::TestCase
       
       end
     
+    end
+    
+    context "regression test for issue #71" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['aa'] = Board::WHITE_S 
+          b['ab'] = Board::BLACK_S 
+          b['bb'] = Board::WHITE_S 
+          b['ba'] = Board::BLACK_S 
+          b['ca'] = Board::WHITE_S 
+          b['cb'] = Board::BLACK_S 
+          b['da'] = Board::WHITE_S 
+          b['bc'] = Board::BLACK_S 
+          b['ac'] = Board::WHITE_S 
+          b['bd'] = Board::BLACK_S 
+          b['ad'] = Board::WHITE_S 
+          b['aa'] = Board::BLACK_S 
+          b['bb'] = Board::WHITE_S 
+          b['ae'] = Board::BLACK_S 
+          b['ab'] = Board::WHITE_S 
+          b['ba'] = Board::BLACK_S 
+          b['aa'] = Board::WHITE_S 
+          b['db'] = Board::BLACK_S 
+          b['ea'] = Board::WHITE_S 
+          b['eb'] = Board::BLACK_S 
+          b['fa'] = Board::WHITE_S 
+          b['fb'] = Board::BLACK_S 
+          b['ga'] = Board::WHITE_S 
+          b['gb'] = Board::BLACK_S 
+          b['ha'] = Board::BLACK_S 
+          b['be'] = Board::BLACK_S 
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+      
     end
     
   end

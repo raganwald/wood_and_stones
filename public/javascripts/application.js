@@ -1,26 +1,7 @@
 var GO = function () {
-	var lazy_load_library = function (path) {
-		return function () {
-			var wrapper_f = function (callback) {
-				$.getScript(path, function (data) {
-					// k combinator, the hard way
-					k_result = callback();
-					wrapper_f = function (callback) {
-						return callback();
-					};
-					return k_result;
-				});
-			};
-			return function (callback) {
-				return wrapper_f(callback);
-			};
-		}();
-	};
-	var with_gestures = lazy_load_library('/javascripts/jgesture-1.0.3-safari.js');
-	var with_periodical_updater = lazy_load_library("/javascripts/jquery.periodicalupdater.js");
 	var message_dialog = function (title, text) {
      $('#message h1').text(title);
-     $('.message').text(text);
+     $('#message .message').text(text);
      jQT.goTo($('#message'), 'pop');
 	};
 	var go = {
@@ -35,8 +16,6 @@ var GO = function () {
 		      error: error
 		  });
 		},
-		with_gestures: with_gestures,
-		with_periodical_updater: with_periodical_updater,
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
 			var latest_server_info = info;
@@ -48,6 +27,34 @@ var GO = function () {
 
 			var select_move_by_move_number = function (move_number) {
 			  return '#m' + move_number;
+			};
+			
+			var timer = null;
+			
+			var resume_polling = function () {
+				if (!timer) {
+					timer = $.PeriodicalUpdater(latest_server_info.plays_url, 
+						{
+						  method: 'get',          // method; get or post
+						  data: function () {
+								return { after_play: latest_server_info.move_number };
+							},
+						  minTimeout: 1000,       // starting value for the timeout in milliseconds
+						  maxTimeout: 8000,       // maximum length of time between requests
+						  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
+						  maxCalls: 0,            // maximum number of calls. 0 = no limit.
+						  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
+						}, 
+						process_update // Handle the new data (only called when there was a change)
+					);
+				}
+			};
+			
+			var stop_polling = function () {
+				if (timer) {
+					clearTimeout(timer);
+					timer = null;
+				}
 			};
 			
 			var select_current_image_by_position  = function (position) {
@@ -66,25 +73,36 @@ var GO = function () {
 				return latest_server_info.is_users_turn && ($('.move.active .board .empty.' + latest_server_info.playing).size() == 1);
 			};
 			
+			var process_update_and_resume_polling = function (html) {
+				var k = process_update(html);
+				resume_polling;
+				return k;
+			};
+			
 			var play_stone = function (position) {
+				stop_polling();
 			  $.ajax({
 			    url: info.create_move_f(position),
 			    type: 'POST',
 			    dataType: 'html',
-			    success: process_update,
+			    success: process_update_and_resume_polling,
 			    error: function (error_response) {
 			      message_dialog('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
 			    },
 			  });
 			};
 			
-			var pass = function () {
-				// TODO: we know if this will end the game, so branch and show the right thing(tm)
-			  $.ajax({
+			var pass = function (callback) {
+				// TODO: we know if this will end the game, so branch and show the right thing(tm)???
+				stop_polling();
+				$.ajax({
 			    url: info.create_pass_url,
 			    type: 'POST',
 			    dataType: 'html',
-			    success: process_update,
+			    success: function (html) {
+						process_update_and_resume_polling();
+						if (callback) callback();
+					},
 			    error: function (error_response) {
 			      message_dialog('error', 'unable to pass because: ' + error_response.responseText);
 			    },
@@ -186,7 +204,7 @@ var GO = function () {
 						console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 	          jQT.goTo($('.move:last'), 'fade');
 	        }
-				}		
+				}
 	    };
 		
 			var update_move_infos = function () {
@@ -231,6 +249,7 @@ var GO = function () {
 				    type: 'GET',
 				    dataType: 'html',
 				    success: function (html) {
+							stop_polling();
 			      	update_moves = $(html).filter('.move');
 			      	if (update_moves.size() > 0) {
 								update_moves.each(function (i, el) {
@@ -238,6 +257,7 @@ var GO = function () {
 								});
 				      	update_moves.insertAfter('#m0');
 								update_elements_with_navigation_handlers(update_moves);
+								resume_polling();
 							}
 				    },
 				    error: function (error_response) {
@@ -258,7 +278,7 @@ var GO = function () {
 				var swipeBoardLeft = function (target) {
 					var this_move = $(target).parents('.move');
 					if (this_move.next('.move').size() > 0) {
-						return goto_move(this_move.next('.move'), '');
+						return goto_move(this_move.next('.move'), 'dissolve');
 					}
 					else {
 						position = position_of_played_stone();
@@ -276,14 +296,14 @@ var GO = function () {
 				};
 				var swipeBoardRight = function (target) {
 					var this_move = $(target).parents('.move');
-					return goto_move(this_move.prev('.move'), '');
+					return goto_move(this_move.prev('.move'), 'dissolve');
 				};
 				return function (selector) {
 					elements = $(selector).find('*');
 					if (elements.size() == 0) {
 						console.warn("unable to update navigation: no elements for " + selector);
 					}
-	        if ($.support.touch) {
+					else if ($.support.touch) {
 						var swiper = function(event, data) {
 				      if (data.direction == 'left') {
 				        swipeBoardLeft(event.currentTarget);
@@ -295,18 +315,16 @@ var GO = function () {
 				      }
 				    };
 						elements.filter('.board .intersection').bind('swipe.navigation', swiper);
-	        }
+					}
 					else {
-						with_gestures(function () {
-							elements.filter('.board').gesture(function (gs) {
-								if (gs.getName() == 'left') {
-									return swipeBoardLeft(this);
-								}
-								else if (gs.getName() == 'right') {
-									return swipeBoardRight(this);
-								}
-								return true;
-							});
+						elements.filter('.board').gesture(function (gs) {
+							if (gs.getName() == 'left') {
+								return swipeBoardLeft(this);
+							}
+							else if (gs.getName() == 'right') {
+								return swipeBoardRight(this);
+							}
+							return true;
 						});
 					}
 				};
@@ -328,22 +346,12 @@ var GO = function () {
 		    update_elements_with_navigation_handlers('body');
 		    liven_active_positions();
 				//cache_board_image_paths();
-				$('.pass').live(SELECTION_EVENT, pass);
-				with_periodical_updater(function () {
-					$.PeriodicalUpdater(latest_server_info.plays_url, {
-						  method: 'get',          // method; get or post
-						  data: function () {
-								return { after_play: latest_server_info.move_number };
-							},
-						  minTimeout: 1000,       // starting value for the timeout in milliseconds
-						  maxTimeout: 8000,       // maximum length of time between requests
-						  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
-						  maxCalls: 0,            // maximum number of calls. 0 = no limit.
-						  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
-						}, 
-						process_update // Handle the new data (only called when there was a change)
-					);
+				$('.pass').live(SELECTION_EVENT, function (event) {
+					pass(function () {
+						jQT.goBack('.move');
+					});
 				});
+				resume_polling();
 			};
 			
 			return {

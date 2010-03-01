@@ -1,7 +1,7 @@
 class Action::Pass < Action::Gameplay
   
-  before_validation_on_create do
-    self.after = self.before
+  before_validation_on_create do |pass|
+    pass.after = pass.before
   end
   
 end
