@@ -15,7 +15,15 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   
-  before_filter :set_instance
+  before_filter :decode_secret, :set_instance
+  
+  def decode_secret
+    Secret.find_by_secret(params[:secret]).andand do |its|
+      self.current_user = its.user
+      name = its.target.class.name.demodulize.underscore
+      params["#{name}_id"] ||= its.target.id
+    end
+  end
   
   def set_instance(
     name = self.class.name.demodulize.underscore[/^(.*)_controller$/, 1],

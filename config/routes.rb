@@ -35,7 +35,9 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
   
-  map.resources :game
+  map.root        :controller => 'game', :action => 'new'
+  
+  map.show_game   '/:secret', :controller => 'game', :action => 'show'
   
   map.move_info   'game/:game_id/info', :controller => 'action/gameplay', :action => 'info', :method => 'GET'
   map.get_history 'game/:game_id/plays_before/:before_play', :controller => 'action/gameplay', :action => 'index', :method => 'GET'
@@ -52,7 +54,5 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing the them or commenting them out if you're using named routes and resources.
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
-  
-  map.secret '/:secret', :controller => 'secret', :action => 'go'
   
 end
