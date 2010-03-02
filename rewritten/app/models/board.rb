@@ -330,6 +330,18 @@ class Board
           end
         end
       end
+      def stone_positions
+        stone_locations.map do |one_colour|
+          one_colour.map do |one_location|
+            __126754970325078__ = one_location
+            if __126754970325078__.kind_of?(Array) then
+              RewriteRails::ExtensionMethods::Array.to_position(__126754970325078__)
+            else
+              __126754970325078__.to_position
+            end
+          end
+        end
+      end
       def info(debug = false)
         aa = self.adjacents_array
         lambda do |rval|
@@ -346,17 +358,18 @@ class Board
                 aa[across][down].each do |a_adj, d_adj|
                   adj_colour = stones_array[a_adj][d_adj]
                   if adj_colour.blank? then
-                    lib_arr = rval.group_liberties_by_location[rval.belong_to_group[across][down][0]][rval.belong_to_group[across][down][1]]
+                    group = rval.belong_to_group[across][down]
+                    (lib_arr = rval.group_liberties_by_location[group[0]][group[1]]
+                    if debug then
+                      puts("discovered liberty #{[a_adj, d_adj].inspect} and adding it to liberties #{lib_arr.inspect} belonging to group #{group.inspect}")
+                    end
                     (lib_arr << [a_adj, d_adj])
-                    lib_arr.uniq!
+                    lib_arr.uniq!)
                   else
                     if ((adj_colour == colour) and ((a_adj < across) or ((a_adj == across) and (d_adj < down)))) then
                       adj_bt = rval.belong_to_group[a_adj][d_adj]
                       this_bt = rval.belong_to_group[across][down]
                       unless (adj_bt == this_bt) then
-                        if debug then
-                          puts("merging this_bt: #{this_bt.inspect} with adj_bt: #{adj_bt.inspect}")
-                        end
                         case (adj_bt <=> this_bt)
                         when -1 then
                           from, to = this_bt, adj_bt
@@ -367,20 +380,18 @@ class Board
                         else
                           # do nothing
                         end
+                        puts("merging group: #{from.inspect} into group: #{to.inspect}") if debug
+                        if debug then
+                          puts("merging liberties #{rval.group_liberties_by_location[from[0]][from[1]].inspect} into #{rval.group_liberties_by_location[to[0]][to[1]].inspect} belonging to group: #{to.inspect}")
+                        end
                         rval.group_liberties_by_location[to[0]][to[1]] += rval.group_liberties_by_location[from[0]][from[1]]
                         rval.group_liberties_by_location[from[0]][from[1]] = nil
                         rval.group_liberties_by_location[to[0]][to[1]].uniq!
-                        (to[0]..across).each do |i_across|
-                          (i_across == to[0]) ? (low_down = to[1]) : (low_down = 0)
-                          if (i_across == from[0]) then
-                            high_down = from[1]
-                          else
-                            high_down = (self.dimension - 1)
-                          end
-                          (low_down..high_down).each do |i_down|
+                        (0..across).each do |i_across|
+                          (0..(self.dimension - 1)).each do |i_down|
                             if (rval.belong_to_group[i_across][i_down] == from) then
                               if debug then
-                                puts("changing belongs_to of #{rval.belong_to_group[i_across][i_down]} to #{to}")
+                                puts("changing belongs_to of #{rval.belong_to_group[i_across][i_down].inspect} to #{to.inspect}")
                               end
                               rval.belong_to_group[i_across][i_down] = to
                             end

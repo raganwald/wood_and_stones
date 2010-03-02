@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveRecord::TestCase
-=begin
+
   context "boards" do
     
     context "with a valid dimension" do
@@ -446,10 +446,9 @@ class BoardTest < ActiveRecord::TestCase
     
   end  
 
-=end
 
   context "legal_moves_for" do
-    
+ 
     context "simple case" do
     
       setup do
@@ -525,38 +524,40 @@ class BoardTest < ActiveRecord::TestCase
       end
     
     end
-    
-    context "regression test for issue #71" do
+
+    context "regression test for issue #71 1-27 (original)" do
       
       setup do
-        @board = Board.new(9) do |b|
-          b['aa'] = Board::WHITE_S 
-          b['ab'] = Board::BLACK_S 
-          b['bb'] = Board::WHITE_S 
-          b['ba'] = Board::BLACK_S 
-          b['ca'] = Board::WHITE_S 
-          b['cb'] = Board::BLACK_S 
-          b['da'] = Board::WHITE_S 
-          b['bc'] = Board::BLACK_S 
-          b['ac'] = Board::WHITE_S 
-          b['bd'] = Board::BLACK_S 
-          b['ad'] = Board::WHITE_S 
-          b['aa'] = Board::BLACK_S 
-          b['bb'] = Board::WHITE_S 
-          b['ae'] = Board::BLACK_S 
-          b['ab'] = Board::WHITE_S 
-          b['ba'] = Board::BLACK_S 
-          b['aa'] = Board::WHITE_S 
-          b['db'] = Board::BLACK_S 
-          b['ea'] = Board::WHITE_S 
-          b['eb'] = Board::BLACK_S 
-          b['fa'] = Board::WHITE_S 
-          b['fb'] = Board::BLACK_S 
-          b['ga'] = Board::WHITE_S 
-          b['gb'] = Board::BLACK_S 
-          b['ha'] = Board::BLACK_S 
-          b['be'] = Board::BLACK_S 
-        end
+        @game = Game.create!(:handicap=>3, :dimension=>9, :b=>'b', :w=>'w')
+        Action::Move.create!(:game=>@game, :position=>'aa')
+        Action::Move.create!(:game=>@game, :position=>'ab')
+        Action::Move.create!(:game=>@game, :position=>'bb')
+        Action::Move.create!(:game=>@game, :position=>'ba')
+        Action::Move.create!(:game=>@game, :position=>'ca')
+        Action::Move.create!(:game=>@game, :position=>'cb')
+        Action::Move.create!(:game=>@game, :position=>'da')
+        Action::Move.create!(:game=>@game, :position=>'bc')
+        Action::Move.create!(:game=>@game, :position=>'ac')
+        Action::Move.create!(:game=>@game, :position=>'bd')
+        Action::Move.create!(:game=>@game, :position=>'ad')
+        Action::Move.create!(:game=>@game, :position=>'aa')
+        Action::Move.create!(:game=>@game, :position=>'bb')
+        Action::Move.create!(:game=>@game, :position=>'ae')
+        Action::Move.create!(:game=>@game, :position=>'ab')
+        Action::Move.create!(:game=>@game, :position=>'ba')
+        Action::Move.create!(:game=>@game, :position=>'aa')
+        Action::Move.create!(:game=>@game, :position=>'db')
+        Action::Move.create!(:game=>@game, :position=>'ea')
+        Action::Move.create!(:game=>@game, :position=>'eb')
+        Action::Move.create!(:game=>@game, :position=>'fa')
+        Action::Move.create!(:game=>@game, :position=>'fb')
+        Action::Move.create!(:game=>@game, :position=>'ga')
+        Action::Move.create!(:game=>@game, :position=>'gb')
+        Action::Pass.create!(:game=>@game)
+        Action::Move.create!(:game=>@game, :position=>'ha')
+        Action::Pass.create!(:game=>@game)
+        Action::Move.create!(:game=>@game, :position=>'be')
+        @board = @game.current_board
       end
       
       should "not throw an exception when calculating valid moves" do
@@ -564,7 +565,335 @@ class BoardTest < ActiveRecord::TestCase
       end
       
     end
+
+    context "regression test for issue #71 (direct assignment)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+          b['cb'] = Board::BLACK_S
+          b['cg'] = Board::BLACK_S
+          b['db'] = Board::BLACK_S
+          b['eb'] = Board::BLACK_S
+          b['fb'] = Board::BLACK_S
+          b['gb'] = Board::BLACK_S
+          b['gc'] = Board::BLACK_S
+          b['gg'] = Board::BLACK_S
+          b['ha'] = Board::BLACK_S
+          b['aa'] = Board::WHITE_S
+          b['ab'] = Board::WHITE_S
+          b['ac'] = Board::WHITE_S
+          b['ad'] = Board::WHITE_S
+          b['bb'] = Board::WHITE_S
+          b['ca'] = Board::WHITE_S
+          b['da'] = Board::WHITE_S
+          b['ea'] = Board::WHITE_S
+          b['fa'] = Board::WHITE_S
+          b['ga'] = Board::WHITE_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
     
+    end
+
+    context "regression test for issue #71 (blacks)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+          b['cb'] = Board::BLACK_S
+          b['cg'] = Board::BLACK_S
+          b['db'] = Board::BLACK_S
+          b['eb'] = Board::BLACK_S
+          b['fb'] = Board::BLACK_S
+          b['gb'] = Board::BLACK_S
+          b['gc'] = Board::BLACK_S
+          b['gg'] = Board::BLACK_S
+          b['ha'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1-7)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+          b['cb'] = Board::BLACK_S
+          b['cg'] = Board::BLACK_S
+          b['db'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (smallest subset)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (smallest known variation)" do
+      
+      setup do
+        @board = Board.new(3) do |b|
+          b['ac'] = Board::BLACK_S
+          b['ba'] = Board::BLACK_S
+          b['bb'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1,3,4)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1,2,4)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1,3)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1,4)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 2,4)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['bc'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1-3)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 2-3)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 2-4)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['bc'] = Board::BLACK_S
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 1-2)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['ae'] = Board::BLACK_S
+          b['bc'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 3-4)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['bd'] = Board::BLACK_S
+          b['be'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (blacks 5-7)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['cb'] = Board::BLACK_S
+          b['cg'] = Board::BLACK_S
+          b['db'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (8-13)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['eb'] = Board::BLACK_S
+          b['fb'] = Board::BLACK_S
+          b['gb'] = Board::BLACK_S
+          b['gc'] = Board::BLACK_S
+          b['gg'] = Board::BLACK_S
+          b['ha'] = Board::BLACK_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
+    context "regression test for issue #71 (whites)" do
+      
+      setup do
+        @board = Board.new(9) do |b|
+          b['aa'] = Board::WHITE_S
+          b['ab'] = Board::WHITE_S
+          b['ac'] = Board::WHITE_S
+          b['ad'] = Board::WHITE_S
+          b['bb'] = Board::WHITE_S
+          b['ca'] = Board::WHITE_S
+          b['da'] = Board::WHITE_S
+          b['ea'] = Board::WHITE_S
+          b['fa'] = Board::WHITE_S
+          b['ga'] = Board::WHITE_S
+        end
+      end
+      
+      should "not throw an exception when calculating valid moves" do
+        assert_nothing_raised(Exception) { @board.legal_moves_for(Board::WHITE_S) }
+      end
+    
+    end
+
   end
   
 end

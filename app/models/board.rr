@@ -425,6 +425,9 @@ class Board
         end
       end
       
+      def stone_positions
+        stone_locations().map { |one_colour| one_colour.map { |one_location| one_location.to_position } }
+      end
       
       #---------- NEW SCHOOL ----------
   
@@ -448,7 +451,9 @@ class Board
                 aa[across][down].each do |a_adj, d_adj|
                   adj_colour = stones_array[a_adj][d_adj]
                   if adj_colour.blank?
-                    rval.group_liberties_by_location[rval.belong_to_group[across][down][0]][rval.belong_to_group[across][down][1]].into do |lib_arr|
+                    group = rval.belong_to_group[across][down]
+                    rval.group_liberties_by_location[group[0]][group[1]].into do |lib_arr|
+                      puts "discovered liberty #{[a_adj, d_adj].inspect} and adding it to liberties #{lib_arr.inspect} belonging to group #{group.inspect}" if debug
                       lib_arr << [a_adj, d_adj]
                       lib_arr.uniq!
                     end
@@ -457,7 +462,6 @@ class Board
                     adj_bt = rval.belong_to_group[a_adj][d_adj]
                     this_bt = rval.belong_to_group[across][down]
                     if adj_bt != this_bt # merge groups
-                      puts "merging this_bt: #{this_bt.inspect} with adj_bt: #{adj_bt.inspect}" if debug
                       case adj_bt <=> this_bt
                       when -1:
                         from, to = this_bt, adj_bt
@@ -466,25 +470,18 @@ class Board
                       when 0:
                         raise "unexpected error in Board#info"
                       end
+                      puts "merging group: #{from.inspect} into group: #{to.inspect}" if debug
                       # copy liberties and nil out
+                      puts "merging liberties #{rval.group_liberties_by_location[from[0]][from[1]].inspect} into #{rval.group_liberties_by_location[to[0]][to[1]].inspect} belonging to group: #{to.inspect}" if debug
                       rval.group_liberties_by_location[to[0]][to[1]] += rval.group_liberties_by_location[from[0]][from[1]]
                       rval.group_liberties_by_location[from[0]][from[1]] = nil
                       rval.group_liberties_by_location[to[0]][to[1]].uniq!
                       # update all belongs_to
-                      (to[0]..across).each do |i_across|
-                        if i_across == to[0]
-                          low_down = to[1]
-                        else
-                          low_down = 0
-                        end
-                        if i_across == from[0]
-                          high_down = from[1]
-                        else
-                          high_down = self.dimension - 1
-                        end
-                        (low_down..high_down).each do |i_down|
+                      # fencepost error here?
+                      (0..across).each do |i_across|
+                        (0..(self.dimension - 1)).each do |i_down|
                           if rval.belong_to_group[i_across][i_down] == from
-                            puts "changing belongs_to of #{rval.belong_to_group[i_across][i_down]} to #{to}" if debug
+                            puts "changing belongs_to of #{rval.belong_to_group[i_across][i_down].inspect} to #{to.inspect}" if debug
                             rval.belong_to_group[i_across][i_down] = to
                           end
                         end
