@@ -38,35 +38,34 @@
 -if @game.current_move_number == 0
   .current.move#m0
     .toolbar 
-      %h1 We Go!
+      %h1 Initial Position
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
     .info
-      %span.desc initial position. 
+      %span.desc
       %span.history
       %span.news
 -else
   .move#m0
     .toolbar 
-      %h1 We Go!
+      %h1 Initial Position
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
     .info
-      %span.desc initial position. 
+      %span.desc
       %span.history
       %span.news
   .current.move{:id=>"m#{@game.current_move_number}"}
     - action = @game.actions.last # TODO: denormalize like everything else
     .toolbar 
-      %h1 We Go!
+      %h1
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => action.position }
     .info
-      %span.desc.current= (@game.ended? ? 'position at the end of the game.' : 'current position.') 
+      %span.desc
       %span.history
-        #{action.player.titleize} has just
         -if action.kind_of?(Action::Pass)
-          passed.
+          #{action.player.titleize} passed.
         -elsif !action.position.blank?
-          played #{action.position}#{!action.removed.empty? ? (', capturing ' + pluralize(action.removed.size, 'stone')) : ''}.
+          #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone.')) : ''}
       %span.news

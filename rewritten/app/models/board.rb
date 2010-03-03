@@ -333,11 +333,11 @@ class Board
       def stone_positions
         stone_locations.map do |one_colour|
           one_colour.map do |one_location|
-            __126756269625589__ = one_location
-            if __126756269625589__.kind_of?(Array) then
-              RewriteRails::ExtensionMethods::Array.to_position(__126756269625589__)
+            __126759271123126__ = one_location
+            if __126759271123126__.kind_of?(Array) then
+              RewriteRails::ExtensionMethods::Array.to_position(__126759271123126__)
             else
-              __126756269625589__.to_position
+              __126759271123126__.to_position
             end
           end
         end

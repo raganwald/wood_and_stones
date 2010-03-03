@@ -1,8 +1,13 @@
 var GO = function () {
+	var dialog_instance;
 	var message_dialog = function (title, text) {
-     $('#message h1').text(title);
-     $('#message .message').text(text);
-     jQT.goTo($('#message'), 'pop');
+    dialog_instance
+			.text(text)
+			.dialog({
+				title: title,
+				buttons: { "Ok": function() { $(this).dialog("close"); } }
+			})
+			.dialog('open');
 	};
 	var go = {
 		message: message_dialog,
@@ -212,34 +217,30 @@ var GO = function () {
 				console.log('update_move_infos given ' + $(selector).size() + ' move ' + latest_server_info.move_number);
 				if (latest_server_info.move_number > 0) {
 					if (latest_server_info.game_state != 'ended') {
-						$(selector).find('.info .desc').addClass('current').text('current position.');
+						var text;
+						if (latest_server_info.playing && latest_server_info.playing != '') {
+							if (latest_server_info.is_users_turn) {
+								text = "Your turn vs. " + latest_server_info.opponent // TODO: Nicknames
+							}
+							else {
+								text = latest_server_info.opponent + "'s turn"
+							}
+						}
+						else {
+							text = "We Go!"
+						}
+						$(selector).find('.toolbar h1').addClass('current').text(text);
 					}
 					else {
-						$(selector).find('.info .desc').addClass('current').text('position at the end of the game.')
+						$(selector).find('.toolbar h1').addClass('current').text('End')
 					}
 					console.log('looking for outdated moves that are not ' + selector);
-					$('.move').not(selector).has('.info .desc.current').each(function (index, move_el) {
+					$('.move').not(selector).has('.toolbar h1.current').each(function (index, move_el) {
 						console.log('found an outdated move ' + $(move_el).attr('id'));
-						$(move_el).find('.info .desc.current').removeClass('current').text('position after move ' + $(move_el).data('number') + '.');
+						$(move_el).find('.toolbar h1').text('Move ' + $(move_el).data('number')).remnoveClass('current');
 						$(move_el).find('.info .news').text('');
 					});
 				}
-				var news_text = '';
-				if (latest_server_info.playing) {
-					if (latest_server_info.is_users_turn) {
-						news_text = 'Thus, it is your turn.';
-					}
-					else if (latest_server_info.playing == 'black') {
-						news_text = 'Thus, you are waiting for white to play or pass.';
-					}
-					else if (latest_server_info.playing == 'white') {
-						news_text = 'Thus, you are waiting for black to play or pass.';
-					}
-				}
-				else if (latest_server_info.move_number == 0) {
-					news_text = news_text + 'It is ' + latest_server_info.to_play + "'s turn.";
-				}
-				$(selector).find('.info .news').text(news_text);
 			};
 
 			var get_history_up_to = function (current_move_number) {
@@ -286,7 +287,25 @@ var GO = function () {
 							play_stone(position);
 						}
 						else if (latest_server_info.is_users_turn) {
-							jQT.goTo('#pass', 'pop');
+							var text;
+							if (latest_server_info.game_state == 'passed') {
+								text = 'Since ' + latest_server_info.opponent + ' just passed, passing will end the game.';
+							}
+							else {
+								text = 'If ' + latest_server_info.opponent + ' passes, the game will end.';
+							}
+					    dialog_instance
+								.text(text)
+								.dialog({
+									title: "Really pass?",
+									buttons: { 
+										"Pass": function() { 
+											pass(function () { $(this).dialog("close"); });
+										},
+										"No":   function() { $(this).dialog("close"); } 
+									}
+								})
+								.dialog('open');
 						}
 						else {
 							message_dialog('Sorry', 'It is not your turn to play or pass');
@@ -345,11 +364,13 @@ var GO = function () {
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
 		    liven_active_positions();
+				update_move_infos();
 				//cache_board_image_paths();
-				$('.pass').live(SELECTION_EVENT, function (event) {
-					pass(function () {
-						jQT.goBack('.move');
-					});
+				dialog_instance = $('<div></div>')
+					.dialog({
+						autoOpen: false,
+						height: 'auto',
+						title: 'Hey!'
 				});
 				resume_polling();
 			};

@@ -10,4 +10,9 @@ class User < ActiveRecord::Base
   end
   
   has_many :notifications, :foreign_key => "recipient_id"
+  
+  def nickname
+    self.email # placeholder
+  end
+  
 end

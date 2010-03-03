@@ -4,4 +4,7 @@ class User < ActiveRecord::Base
     TMail::Address.parse(email) rescue user.errors.add(:email, "Must be a valid email")
   end
   has_many(:notifications, :foreign_key => "recipient_id")
+  def nickname
+    self.email
+  end
 end
