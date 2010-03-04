@@ -1,0 +1,31 @@
+.invisible
+  :visibility hidden
+	
+.slideback.in
+  -webkit-animation-name: slideinfromleft
+.slideback.out
+  -webkit-animation-name: slideouttoright
+.slideback.in.reverse
+  -webkit-animation-name: slideouttoright
+.slideback.out.reverse
+  -webkit-animation-name: slideinfromleft
+
+.in_progress:before
+  content:url(/images/in_progress.gif)
+
+.center
+  :margin
+    :left auto
+    :right auto
+    
+.right
+  :float right
+  
+.left
+  :float left
+   
+ul li input[type="text"].partial
+  :width 75% !important
+  :margin
+    :left 10px
+    :right 10px

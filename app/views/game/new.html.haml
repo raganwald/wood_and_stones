@@ -1,4 +1,5 @@
 :javascript
+  var game_new_helper = GO.game_new_helper();
   $(document).ready( function () {          
     $('#ajax_create').submit(function (e) {
       GO.submit(e, 
@@ -11,20 +12,26 @@
       );
       return false;
     });
+    game_new_helper.document_ready_hook();
   });    
 #new.current
   .toolbar 
     %h1 New Game
-    %a.back{:href=>"#"} Back
   %form#ajax_create.form{:action=>url_for(:controller=>:game, :action=>:create), :method=>'POST'}
     %input{:type => 'hidden', :name => 'authenticity_token', :value => form_authenticity_token}
     %ul.edit.rounded
-      %li
-        Between:
-        %input#black{:name=>'black', :placeholder=>"Black's email", :type=>'text'}/
-      %li
-        and:
-        %input#white{:name=>'white', :placeholder=>"White's email", :type=>'text'}/
+      %li.email
+        .left
+          %img{:src=>'/images/board/bowl/black.jpg', :height=>40, :width=>40}>
+          %input.partial#black{:name=>'black', :placeholder=>"Black's email", :type=>'text'}/
+        .gravatar.right
+          %img{:src=>'/images/dot_clear.gif'}>
+      %li.email
+        .left
+          %img{:src=>'/images/board/bowl/white.jpg', :height=>40, :width=>40}>
+          %input.partial#white{:name=>'white', :placeholder=>"White's email", :type=>'text'}/
+        .gravatar.right
+          %img{:src=>'/images/dot_clear.gif'}>
       %li
         Size: 
         %select#dimension{:name=>'dimension'}

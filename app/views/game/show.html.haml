@@ -23,18 +23,6 @@
     game_show_helper.document_ready_hook();
     $(document).data('game_show_helper', game_show_helper);
   });
-#pass
-  .toolbar 
-    %h1 Pass
-  .message
-    You haven't placed a stone. Would you like to pass your turn?
-    -if @game.passed?
-      Since your opponent has just passed, if you pass the game will end.
-    -else
-      If your opponent passes in response, the game will end.
-  %a.whiteButton.pass{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Pass
-  -# %a.whiteButton.resign{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Resign
-  %a.whiteButton.goback{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Cancel
 -if @game.current_move_number == 0
   .current.move#m0
     .toolbar 

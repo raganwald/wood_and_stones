@@ -1,16 +1,30 @@
-.row {
-	height: 30px;
-}
-.message {
-	font-size: 1.5em; 
-	text-align: center; 
-	margin: 160px 0 160px; 
-	font-family: Marker felt;
-}
 .invisible {
-	visibility:hidden;
-}
-.slideback.in           { -webkit-animation-name: slideinfromleft; }
-.slideback.out          { -webkit-animation-name: slideouttoright; }
-.slideback.in.reverse   { -webkit-animation-name: slideouttoright; }
-.slideback.out.reverse  { -webkit-animation-name: slideinfromleft; }
+  visibility: hidden; }
+
+.slideback.in {
+  -webkit-animation-name: slideinfromleft; }
+
+.slideback.out {
+  -webkit-animation-name: slideouttoright; }
+
+.slideback.in.reverse {
+  -webkit-animation-name: slideouttoright; }
+
+.slideback.out.reverse {
+  -webkit-animation-name: slideinfromleft; }
+
+
+.center {
+  margin-left: auto;
+  margin-right: auto; }
+
+.right {
+  float: right; }
+
+.left {
+  float: left; }
+
+ul li input[type="text"].partial {
+  width: 75% !important;
+  margin-left: 10px;
+  margin-right: 10px; }

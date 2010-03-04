@@ -21,6 +21,26 @@ var GO = function () {
 		      error: error
 		  });
 		},
+		game_new_helper: function (info) {
+			var assign_gravatar = function (event) {
+		    $(this).parents('.email').find('.gravatar img').replaceWith($.gravatar($(this).val(), {
+		        // integer size: between 1 and 512, default 80 (in pixels)
+		        size: 40,
+		        // maximum rating (in order of raunchiness, least to most): g (default), pg, r, x
+		        rating: 'pg',
+		        // url to define a default image (can also be one of: identicon, monsterid, wavatar)
+		        image: 'wavatar'
+		    }));
+			};
+			var document_ready_hook = function () {
+				$('.email input')
+					.each(assign_gravatar)
+					.blur(assign_gravatar);
+			};
+			return {
+				document_ready_hook: document_ready_hook
+			}
+		},
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
 			var latest_server_info = info;
@@ -372,6 +392,15 @@ var GO = function () {
 						height: 'auto',
 						title: 'Hey!'
 				});
+				$('body')
+					.ajaxStart(function () {
+						$('.move:last .info').addClass('in_progress');
+						console.log('starting');
+					})
+					.ajaxStop(function () {
+						$('.move:last .info').removeClass('in_progress');
+						console.log('stopping');
+					});
 				resume_polling();
 			};
 			
