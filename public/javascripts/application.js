@@ -59,7 +59,7 @@ var GO = function () {
 			var document_ready_hook = function () {
 				$('.email input')
 					.each(assign_gravatar)
-					.blur(assign_gravatar);          
+					.blur(assign_gravatar);
 		    $('form.new_game').submit(function (e) {
 					update_emails();
 					var form = $(e.currentTarget);
@@ -94,10 +94,10 @@ var GO = function () {
 				  });
 		      return false;
 		    });
-		    $('.you_play :checkbox').iphoneStyle({
-		      checkedLabel: 'Black',
-		      uncheckedLabel: 'White'
-		    });
+		    // $('.you_play :checkbox').iphoneStyle({
+		    //   checkedLabel: 'Black',
+		    //   uncheckedLabel: 'White'
+		    // });
 			};
 			return {
 				document_ready_hook: document_ready_hook

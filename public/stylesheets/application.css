@@ -33,9 +33,11 @@
   padding-left: 70px !important; }
 .new_game .you_play {
   padding-left: 100px !important; }
-  .new_game .you_play .iPhoneCheckContainer {
+  .new_game .you_play .toggle {
     display: block;
     position: relative;
     float: right; }
+    .new_game .you_play .toggle input[type="checkbox"] {
+      background: #fff url(/images/black_white.png) 0 0 no-repeat !important; }
 .new_game .handicap {
   padding-left: 110px !important; }
