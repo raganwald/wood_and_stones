@@ -62,10 +62,10 @@ var GO = function () {
 						{
 						  method: 'get',          // method; get or post
 						  data: function () {
-								return { after_play: latest_server_info.move_number };
+								return { after_play: latest_server_info.move_number, layout: false };
 							},
-						  minTimeout: 1000,       // starting value for the timeout in milliseconds
-						  maxTimeout: 8000,       // maximum length of time between requests
+						  minTimeout: 10000,       // starting value for the timeout in milliseconds
+						  maxTimeout: 80000,       // maximum length of time between requests
 						  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
 						  maxCalls: 0,            // maximum number of calls. 0 = no limit.
 						  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
