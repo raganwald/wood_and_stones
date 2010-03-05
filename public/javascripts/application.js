@@ -257,7 +257,7 @@ var GO = function () {
 					console.log('looking for outdated moves that are not ' + selector);
 					$('.move').not(selector).has('.toolbar h1.current').each(function (index, move_el) {
 						console.log('found an outdated move ' + $(move_el).attr('id'));
-						$(move_el).find('.toolbar h1').text('Move ' + $(move_el).data('number')).remnoveClass('current');
+						$(move_el).find('.toolbar h1').text('Move ' + $(move_el).data('number')).removeClass('current');
 						$(move_el).find('.info .news').text('');
 					});
 				}
