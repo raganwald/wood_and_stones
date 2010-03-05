@@ -1,44 +1,35 @@
 :javascript
   var game_new_helper = GO.game_new_helper();
-  $(document).ready( function () {          
-    $('#ajax_create').submit(function (e) {
-      GO.submit(e, 
-        function (data) { 
-          GO.message('Invitations Sent', 'Your invitations have been sent. Check your email for a link to the new game. Thanks!');
-        },
-        function (data) { 
-          GO.message('Invalid Invitation', 'Sorry, you cannot start a new game because: ' + data.responseText);
-        }
-      );
-      return false;
-    });
+  $(document).ready( function () {
     game_new_helper.document_ready_hook();
   });    
 #new.current
   .toolbar 
     %h1 New Game
-  %form#ajax_create.form{:action=>url_for(:controller=>:game, :action=>:create), :method=>'POST'}
+  %form#ajax_create.form.new_game{:action=>url_for(:controller=>:game, :action=>:create), :method=>'POST'}
     %input{:type => 'hidden', :name => 'authenticity_token', :value => form_authenticity_token}
+    %input#black{:type => 'hidden', :name => 'black'}
+    %input#white{:type => 'hidden', :name => 'white'}
     %ul.edit.rounded
       %li.email
-        .left
-          %img{:src=>'/images/board/bowl/black.jpg', :height=>40, :width=>40}>
-          %input.partial#black{:name=>'black', :placeholder=>"Black's email", :type=>'text'}/
-        .gravatar.right
-          %img{:src=>'/images/dot_clear.gif'}>
+        %img.label{:src=>'/images/dot_clear.gif'}>
+        -if current_user()
+          %input#player{:name=>'player', :value=>current_user().email, :type=>'text', :disabled=>'disabled'}/
+        -else
+          %input#player{:name=>'player', :placeholder=>"Your email address", :type=>'text'}/
       %li.email
-        .left
-          %img{:src=>'/images/board/bowl/white.jpg', :height=>40, :width=>40}>
-          %input.partial#white{:name=>'white', :placeholder=>"White's email", :type=>'text'}/
-        .gravatar.right
-          %img{:src=>'/images/dot_clear.gif'}>
-      %li
-        Size: 
+        %img.label{:src=>'/images/dot_clear.gif'}>
+        %input#opponent{:name=>'opponent', :placeholder=>"Opponent's email address", :type=>'text'}/
+      %li.size
+        .label Size: 
         %select#dimension{:name=>'dimension'}
           - Board::DIMENSIONS.each do |dim|
             %option{:value=>dim} #{dim}x#{dim}
-      %li
-        Handicap:
+      %li.you_play
+        .label You play:
+        %input#colour{:name=>'colour', :type=>'checkbox', :checked=>"checked"}
+      %li.handicap
+        .label Handicap:
         %select#handicap{:name=>'handicap'}
           %option{:value=>0} Black plays first
           %option{:value=>2} Two stones

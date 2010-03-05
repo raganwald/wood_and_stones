@@ -9,21 +9,35 @@ var GO = function () {
 			})
 			.dialog('open');
 	};
+	var submit = function(e, success, error) {
+	  var $form = (typeof(e)==='string') ? $(e) : $(e.target);
+	  $.ajax({
+	      url: $form.attr('action'),
+	      data: $form.serialize(),
+	      type: $form.attr('method') || "POST",
+	      success: success,
+	      error: error
+	  });
+	};
 	var go = {
 		message: message_dialog,
-		submit: function(e, success, error) {
-		  var $form = (typeof(e)==='string') ? $(e) : $(e.target);
-		  $.ajax({
-		      url: $form.attr('action'),
-		      data: $form.serialize(),
-		      type: $form.attr('method') || "POST",
-		      success: success,
-		      error: error
-		  });
+		submit: submit,
+		iphone_layout_helper: function () {
+			var document_ready_hook = function () {
+				dialog_instance = $('<div></div>')
+					.dialog({
+						autoOpen: false,
+						height: 'auto',
+						title: 'Hey!'
+				});
+			};
+			return {
+				document_ready_hook: document_ready_hook
+			}
 		},
 		game_new_helper: function (info) {
 			var assign_gravatar = function (event) {
-		    $(this).parents('.email').find('.gravatar img').replaceWith($.gravatar($(this).val(), {
+		    $(this).parents('.email').find('img').replaceWith($.gravatar($(this).val(), {
 		        // integer size: between 1 and 512, default 80 (in pixels)
 		        size: 40,
 		        // maximum rating (in order of raunchiness, least to most): g (default), pg, r, x
@@ -32,10 +46,58 @@ var GO = function () {
 		        image: 'wavatar'
 		    }));
 			};
+			var update_emails = function () {
+				if ($('form.new_game .you_play :checkbox').attr('checked')) {
+					$('form.new_game #black').val($('form.new_game #player').val())
+					$('form.new_game #white').val($('form.new_game #opponent').val())
+				}
+				else {
+					$('form.new_game #black').val($('form.new_game #player').val())
+					$('form.new_game #white').val($('form.new_game #opponent').val())
+				}
+			};
 			var document_ready_hook = function () {
 				$('.email input')
 					.each(assign_gravatar)
-					.blur(assign_gravatar);
+					.blur(assign_gravatar);          
+		    $('form.new_game').submit(function (e) {
+					update_emails();
+					var form = $(e.currentTarget);
+				  $.ajax({
+				      url: form.attr('action'),
+				      data: form.serialize(),
+				      type: form.attr('method') || "POST",
+							dataType: 'json',
+				      success: function (data) { 
+								if (data.url) {
+							    dialog_instance
+										.text("Your opponent has been emailed invitations to the new game. Thanks!")
+										.dialog({
+											title: "Invitation Sent",
+											buttons: { 
+												"Play Game": function() { 
+													$(this).dialog("close");
+													window.location = data.url
+												},
+												"Ok":   function() { $(this).dialog("close"); } 
+											}
+										})
+										.dialog('open');
+								}
+								else {
+									message_dialog('Invitations Sent', 'You and your opponent have been emailed invitations to the new game. Thanks!');
+								}
+			        },
+				      error: function (data) { 
+			          message_dialog('Invalid Invitation', 'Sorry, you cannot start a new game because: ' + data.responseText);
+			        }
+				  });
+		      return false;
+		    });
+		    $('.you_play :checkbox').iphoneStyle({
+		      checkedLabel: 'Black',
+		      uncheckedLabel: 'White'
+		    });
 			};
 			return {
 				document_ready_hook: document_ready_hook
@@ -386,21 +448,6 @@ var GO = function () {
 		    liven_active_positions();
 				update_move_infos();
 				//cache_board_image_paths();
-				dialog_instance = $('<div></div>')
-					.dialog({
-						autoOpen: false,
-						height: 'auto',
-						title: 'Hey!'
-				});
-				$('body')
-					.ajaxStart(function () {
-						$('.move:last .info').addClass('in_progress');
-						console.log('starting');
-					})
-					.ajaxStop(function () {
-						$('.move:last .info').removeClass('in_progress');
-						console.log('stopping');
-					});
 				resume_polling();
 			};
 			

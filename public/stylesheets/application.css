@@ -18,13 +18,24 @@
   margin-left: auto;
   margin-right: auto; }
 
-.right {
-  float: right; }
-
-.left {
-  float: left; }
-
-ul li input[type="text"].partial {
-  width: 75% !important;
-  margin-left: 10px;
-  margin-right: 10px; }
+.new_game ul li {
+  position: relative !important; }
+  .new_game ul li .label {
+    position: absolute;
+    left: 10px; }
+.new_game .email {
+  height: 40px       !important;
+  padding-left: 60px !important; }
+  .new_game .email img {
+    position: absolute;
+    left: 10px; }
+.new_game .size {
+  padding-left: 70px !important; }
+.new_game .you_play {
+  padding-left: 100px !important; }
+  .new_game .you_play .iPhoneCheckContainer {
+    display: block;
+    position: relative;
+    float: right; }
+.new_game .handicap {
+  padding-left: 110px !important; }

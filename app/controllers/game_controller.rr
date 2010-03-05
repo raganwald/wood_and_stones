@@ -1,5 +1,7 @@
 class GameController < ApplicationController
   
+  # 'this should case a re-parse'
+  
   before_filter :assemble_info, :only => :show
   
   def create
@@ -16,12 +18,17 @@ class GameController < ApplicationController
           :handicap => params[:handicap].to_i
         )
         if @game.save
+          secret = Secret.first(:conditions => {
+            :target_type => @game.class.name,
+            :target_id => @game.id,
+            :user_id => self.current_user_id
+          })
           respond_to do |format|
-            format.html { redirect_to :action => :show, :id => @game.id }
+            format.json { render :json => secret.present? ? {:url => show_game_url(:secret=>secret.secret)} : {} }
           end
         else
           respond_to do |format|
-            format.js { render :text => @game.errors.full_messages.to_sentence, :status => 403 }
+            format.text { render :text => @game.errors.full_messages.to_sentence, :status => 403 }
           end
         end
       end

@@ -9,12 +9,19 @@ class GameController < ApplicationController
       Game.transaction do
         @game = Game.new(:black => (@black), :white => (@white), :dimension => (params[:dimension].to_i), :handicap => (params[:handicap].to_i))
         if @game.save then
+          secret = Secret.first(:conditions => ({ :target_type => (@game.class.name), :target_id => (@game.id), :user_id => (self.current_user_id) }))
           respond_to do |format|
-            format.html { redirect_to(:action => :show, :id => (@game.id)) }
+            format.json do
+              render(:json => (if secret.present? then
+                { :url => (show_game_url(:secret => (secret.secret))) }
+              else
+                {  }
+              end))
+            end
           end
         else
           respond_to do |format|
-            format.js do
+            format.text do
               render(:text => (@game.errors.full_messages.to_sentence), :status => 403)
             end
           end

@@ -38,6 +38,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root        :controller => 'game', :action => 'new'
   
   map.show_game   '/:secret', :controller => 'game', :action => 'show'
+  map.create_game '/game/create', :controller => 'game', :action => 'create'
   
   map.move_info   'game/:game_id/info', :controller => 'action/gameplay', :action => 'info', :method => 'GET'
   map.get_history 'game/:game_id/plays_before/:before_play', :controller => 'action/gameplay', :action => 'index', :method => 'GET'

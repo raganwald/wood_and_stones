@@ -9,6 +9,7 @@
     %script{:src=>"/javascripts/jquery.periodicalupdater.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"/checkboxes/jquery/iphone-style-checkboxes.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/application.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "/jqtouch/jqtouch.css";
@@ -16,6 +17,7 @@
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/application.css";
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/board.css";
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/dark-hive/jquery-ui-1.8rc3.custom.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "/checkboxes/style.css";
     
     :javascript
       var jQT = new $.jQTouch({
@@ -35,5 +37,9 @@
               selector: '.slideback'
           });
       });
+      var iphone_layout_helper = GO.iphone_layout_helper();
+      $(document).ready( function () {
+        iphone_layout_helper.document_ready_hook();
+      }); 
   %body
     = yield
