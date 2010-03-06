@@ -194,7 +194,7 @@
         }
         
         // PUBLIC FUNCTIONS
-        function goBack(to) {
+        function goBack(to, animation) {
             // Init the param
             if (hist.length > 1) {
                 var numberOfPages = Math.min(parseInt(to || 1, 10), hist.length-1);
@@ -330,6 +330,15 @@
             });
         }
         function animatePages(fromPage, toPage, animation, backwards) {
+            if (typeof(animation) === 'string') {
+                for (var i = animations.length - 1; i >= 0; i--){
+                    if (animations[i].name === animation)
+                    {
+                        animation = animations[i];
+                        break;
+                    }
+                }
+            }
             // Error check for target page
             if(toPage.length === 0){
                 $.fn.unselect();
@@ -615,6 +624,7 @@
         }
         
         publicObj = {
+            animatePages: animatePages,
             getOrientation: getOrientation,
             goBack: goBack,
             goTo: goTo,

@@ -94,10 +94,6 @@ var GO = function () {
 				  });
 		      return false;
 		    });
-		    // $('.you_play :checkbox').iphoneStyle({
-		    //   checkedLabel: 'Black',
-		    //   uncheckedLabel: 'White'
-		    // });
 			};
 			return {
 				document_ready_hook: document_ready_hook
@@ -361,7 +357,8 @@ var GO = function () {
 				var swipeBoardLeft = function (target) {
 					var this_move = $(target).parents('.move');
 					if (this_move.next('.move').size() > 0) {
-						return goto_move(this_move.next('.move'), 'dissolve');
+						var target = this_move.next('.move');
+						return jQT.animatePages(this_move, target, 'slide', false);
 					}
 					else {
 						position = position_of_played_stone();
@@ -397,7 +394,8 @@ var GO = function () {
 				};
 				var swipeBoardRight = function (target) {
 					var this_move = $(target).parents('.move');
-					return goto_move(this_move.prev('.move'), 'dissolve');
+					var target = this_move.prev('.move')
+					return jQT.animatePages(this_move, target, 'slide', true);
 				};
 				return function (selector) {
 					elements = $(selector).find('*');
