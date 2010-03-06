@@ -2,14 +2,13 @@
 %html{html_attrs('en')}
   %head
       
-    %script{:src=>"/javascripts/jquery-1.4.2.min.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"/javascripts/jquery-1.4.2.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"/javascripts/jquery-ui-1.8rc3.custom.min.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"/jqtouch/jqtouch.min.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"/jqtouch/jqtouch.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/jgesture-1.0.3-safari.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/jquery.periodicalupdater.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/javascripts/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/checkboxes/jquery/iphone-style-checkboxes.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"/javascripts/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"/javascripts/application.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "/jqtouch/jqtouch.css";
@@ -17,13 +16,12 @@
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/application.css";
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/board.css";
     %style{:type=>"text/css", :media=>"screen"} @import "/stylesheets/dark-hive/jquery-ui-1.8rc3.custom.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "/checkboxes/style.css";
     
     :javascript
       var jQT = new $.jQTouch({
           icon: 'jqtouch.png',
           statusBar: 'black-translucent',
-          touchSelector: '.board img',
+          touchSelector: '.board img, .touch',
           preloadImages: [
               // '/themes/jqt/img/chevron_white.png',
               // '/themes/jqt/img/bg_row_select.gif',

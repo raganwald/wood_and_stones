@@ -27,7 +27,8 @@
             %option{:value=>dim} #{dim}x#{dim}
       %li.you_play
         .label You play:
-        %input#colour{:name=>'colour', :type=>'checkbox', :checked=>"checked"}
+        .toggle
+          %input#colour{:name=>'colour', :type=>'checkbox', :checked=>"checked"}
       %li.handicap
         .label Handicap:
         %select#handicap{:name=>'handicap'}
