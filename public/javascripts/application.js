@@ -43,7 +43,7 @@ var GO = function () {
 		        // maximum rating (in order of raunchiness, least to most): g (default), pg, r, x
 		        rating: 'pg',
 		        // url to define a default image (can also be one of: identicon, monsterid, wavatar)
-		        image: 'wavatar'
+		        image: 'monsterid'
 		    }));
 			};
 			var update_emails = function () {
@@ -101,8 +101,9 @@ var GO = function () {
 		},
 		game_show_helper: function (info) {
 			var NULL_SELECTOR = 'not(*)';
-			var latest_server_info = info;
 			var SELECTION_EVENT = ($.support.touch ? 'tap' : 'click');
+			
+			info = $.extend({}, info);
 			
 			var last_displayed_move_number = function () {
 				return $('.move:last').data('number');
@@ -116,11 +117,11 @@ var GO = function () {
 			
 			var resume_polling = function () {
 				if (!timer) {
-					timer = $.PeriodicalUpdater(latest_server_info.plays_url, 
+					timer = $.PeriodicalUpdater(info.plays_url, 
 						{
 						  method: 'get',          // method; get or post
 						  data: function () {
-								return { after_play: latest_server_info.move_number, layout: false };
+								return { after_play: info.move_number, layout: false };
 							},
 						  minTimeout: 10000,       // starting value for the timeout in milliseconds
 						  maxTimeout: 80000,       // maximum length of time between requests
@@ -145,7 +146,7 @@ var GO = function () {
 			}
 			
 			var position_of_played_stone = function () {
-				var target = $('.move.active .board .empty.' + latest_server_info.playing);
+				var target = $('.move.active .board .empty.' + info.playing);
 				if (target.size() == 1) {
 					return target.attr('id');
 				}
@@ -153,7 +154,7 @@ var GO = function () {
 			};
 			
 			var stone_has_been_legally_placed = function () {
-				return latest_server_info.is_users_turn && ($('.move.active .board .empty.' + latest_server_info.playing).size() == 1);
+				return info.is_users_turn && ($('.move.active .board .empty.' + info.playing).size() == 1);
 			};
 			
 			var process_update_and_resume_polling = function (html) {
@@ -199,8 +200,8 @@ var GO = function () {
 				var killed_finder = '.board .atari.empty';
 			
 			  return function () {
-				  var move_to_bind_selector = (latest_server_info.is_users_turn ? select_move_by_move_number(latest_server_info.move_number) : NULL_SELECTOR);
-			    var places_to_bind_selector = (latest_server_info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
+				  var move_to_bind_selector = (info.is_users_turn ? select_move_by_move_number(info.move_number) : NULL_SELECTOR);
+			    var places_to_bind_selector = (info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 					if ($(places_to_unbind_selector).not(places_to_bind_selector).size() > 0) {
 						console.log('unbinding ' + $(places_to_unbind_selector).not(places_to_bind_selector).size() + ' intersections');
 					}
@@ -211,7 +212,7 @@ var GO = function () {
 					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() > 0) {
 						console.log('restoring ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() + ' stones');
 					}
-					$(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).addClass(latest_server_info.opponent).removeClass('empty');
+					$(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).addClass(info.opponent).removeClass('empty');
 					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size() > 0) {
 						console.log('re-lasting ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size());
 					}
@@ -226,14 +227,14 @@ var GO = function () {
 				
 				var set_played_stone = function (target, play_p) {
 					// restore all other plays
-					$('.move.active .board .valid.' + latest_server_info.playing).not(target).removeClass(latest_server_info.playing);
+					$('.move.active .board .valid.' + info.playing).not(target).removeClass(info.playing);
 					// make the play or remove the play
 					if (play_p) {
-						target.addClass(latest_server_info.playing);
+						target.addClass(info.playing);
 						$('.move.active .last').removeClass('latest');
 					}
 					else {
-						target.removeClass(latest_server_info.playing);
+						target.removeClass(info.playing);
 						$('.move.active .last').addClass('latest');
 					}
 				};
@@ -241,16 +242,16 @@ var GO = function () {
 				var set_killed_stones = function (target, kill_p) {
 					var killed_selector = '.move.active .board .atari.killed_by_' + target.attr('id');
 					// restore all atari stones
-					$('.move.active .board .atari' ).addClass(latest_server_info.opponent).removeClass('empty');
+					$('.move.active .board .atari' ).addClass(info.opponent).removeClass('empty');
 					// maybe kill some stones
 					if (kill_p) {
-						$(killed_selector).removeClass(latest_server_info.opponent).addClass('empty');
+						$(killed_selector).removeClass(info.opponent).addClass('empty');
 					}
 				};
 				
 				var toggle_placed_stone = function (event_data) {
 					var target = $(event_data.currentTarget);
-					var playing_stone_p = !target.hasClass(latest_server_info.playing);
+					var playing_stone_p = !target.hasClass(info.playing);
 					set_played_stone(target, playing_stone_p);
 					set_killed_stones(target, playing_stone_p);
 				};
@@ -278,7 +279,7 @@ var GO = function () {
 					update_elements_with_navigation_handlers(update_moves);
 	      }
 				$(html).filter('script').each(function (i, el) {
-					latest_server_info = jQuery.parseJSON($(el).text());
+					$.extend(info, jQuery.parseJSON($(el).text()));
 				});
 				if (update_moves.size() > 0) {
 	        update_active_div();
@@ -291,34 +292,47 @@ var GO = function () {
 	    };
 		
 			var update_move_infos = function () {
-				var selector = select_move_by_move_number(latest_server_info.move_number);
-				console.log('update_move_infos given ' + $(selector).size() + ' move ' + latest_server_info.move_number);
-				if (latest_server_info.move_number > 0) {
-					if (latest_server_info.game_state != 'ended') {
-						var text;
-						if (latest_server_info.playing && latest_server_info.playing != '') {
-							if (latest_server_info.is_users_turn) {
-								text = "Your turn vs. " + latest_server_info.opponent // TODO: Nicknames
-							}
-							else {
-								text = latest_server_info.opponent + "'s turn"
-							}
+				var selector = select_move_by_move_number(info.move_number);
+				console.log('update_move_infos given ' + $(selector).size() + ' move ' + info.move_number);
+				if (info.game_state != 'ended') {
+					var text;
+					if (info.playing && info.playing != '') {
+						if (info.is_users_turn) {
+							text = "your turn"
 						}
 						else {
-							text = "We Go!"
+							text = info.opponent + "'s turn"
 						}
-						$(selector).find('.toolbar h1').addClass('current').text(text);
 					}
 					else {
-						$(selector).find('.toolbar h1').addClass('current').text('End')
+						text = "We Go!"
 					}
-					console.log('looking for outdated moves that are not ' + selector);
-					$('.move').not(selector).has('.toolbar h1.current').each(function (index, move_el) {
-						console.log('found an outdated move ' + $(move_el).attr('id'));
-						$(move_el).find('.toolbar h1').text('Move ' + $(move_el).data('number')).removeClass('current');
-						$(move_el).find('.info .news').text('');
-					});
+					$(selector).find('.toolbar .playing')
+						.addClass('current')
+						.text(text);
+					var gspan = $(selector).find('.toolbar .gravatar');
+					gspan.empty();
+					gspan.append(
+						$('<img/>').attr('src',
+							info.playing == 'black' ? info.black_gravatar_url : info.white_gravatar_url
+						)
+					);
 				}
+				else {
+					$(selector).find('.toolbar .playing')
+						.addClass('current')
+						.text('End');
+					$(selector).find('.toolbar .gravatar').empty();
+				}
+				console.log('looking for outdated moves that are not ' + selector);
+				$('.move').not(selector).has('.toolbar .playing.current').each(function (index, move_el) {
+					console.log('found an outdated move ' + $(move_el).attr('id'));
+					$(move_el).find('.toolbar .playing')
+						.removeClass('current')
+						.text('Move ' + $(move_el).data('number'));
+					$(move_el).find('.toolbar .gravatar').empty();
+					$(move_el).find('.info .news').text('');
+				});
 			};
 
 			var get_history_up_to = function (current_move_number) {
@@ -365,13 +379,13 @@ var GO = function () {
 						if (position != null) {
 							play_stone(position);
 						}
-						else if (latest_server_info.is_users_turn) {
+						else if (info.is_users_turn) {
 							var text;
-							if (latest_server_info.game_state == 'passed') {
-								text = 'Since ' + latest_server_info.opponent + ' just passed, passing will end the game.';
+							if (info.game_state == 'passed') {
+								text = 'Since ' + info.opponent + ' just passed, passing will end the game.';
 							}
 							else {
-								text = 'If ' + latest_server_info.opponent + ' passes, the game will end.';
+								text = 'If ' + info.opponent + ' passes, the game will end.';
 							}
 					    dialog_instance
 								.text(text)
@@ -456,7 +470,6 @@ var GO = function () {
 					document_ready_hook: document_ready_hook,
 					debug: {
 						info: function () { return info; },
-						latest_server_info: function () { return latest_server_info; },
 					}
 			};
 		}

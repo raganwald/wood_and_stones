@@ -4,17 +4,28 @@ module ApplicationHelper
     valids.inject(board.map_array(TILE_IMG_CLASS_MAP)) do |classes, its|
       lambda do |cc|
         cc[its.location.first][its.location.last] += " valid"
-        pos = (__126780562894215__ = its.location
-        if __126780562894215__.kind_of?(Array) then
-          RewriteRails::ExtensionMethods::Array.to_position(__126780562894215__)
+        pos = (__126784682518249__ = its.location
+        if __126784682518249__.kind_of?(Array) then
+          RewriteRails::ExtensionMethods::Array.to_position(__126784682518249__)
         else
-          __126780562894215__.to_position
+          __126784682518249__.to_position
         end)
         its.dead_stones.each do |dead_location|
           cc[dead_location.first][dead_location.last] += " atari killed_by_#{pos}"
         end
         cc
       end.call(classes)
+    end
+  end
+  def gravatar_url(email, gravatar_options = {  })
+    grav_url = "http://www.gravatar.com/avatar.php?"
+    (grav_url << "gravatar_id=#{Digest::MD5.new.update(email)}")
+    if gravatar_options[:rating] then
+      (grav_url << "&rating=#{gravatar_options[:rating]}")
+    end
+    (grav_url << "&size=#{gravatar_options[:size]}") if gravatar_options[:size]
+    if gravatar_options[:default] then
+      (grav_url << "&default=#{gravatar_options[:default]}")
     end
   end
 end

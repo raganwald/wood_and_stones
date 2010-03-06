@@ -1,14 +1,20 @@
 -# action/move/show.html.haml
-
+- action = @move
 %div{ :id => "game_#{@move.game.id}_move_#{@move.cardinality}" }
-  -# TODO: flip to history in another div
   .toolbar 
-    %h1 Move #{@move.cardinality}
-    %a.back{:href=>"#"} Back
+    %h1
+      %span.gravatar
+      %span.playing Move #{action.cardinality}
   .board
-    - board = @move.after
-    - (0..(board.dimension - 1)).each do |down|
-      .row
-        - (0..(board.dimension - 1)).each do |across|
-          - location = board[across][down]
-          %img{ :src => tile_path(location) }>
+    -if action.cardinality < action.game.current_move_number
+      = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
+    -else
+      = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
+  .info
+    %span.desc
+      %span.history
+        -if action.kind_of?(Action::Pass)
+          #{action.player.titleize} passed.
+        -elsif !action.position.blank?
+          #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone.')) : ''}
+    %span.news

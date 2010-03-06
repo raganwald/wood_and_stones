@@ -1,6 +1,8 @@
 .move{:id=>"m#{action.cardinality}"}
   .toolbar 
-    %h1 Move #{action.cardinality}
+    %h1
+      %span.gravatar
+      %span.playing Move #{action.cardinality}
   .board
     -if action.cardinality < action.game.current_move_number
       = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }

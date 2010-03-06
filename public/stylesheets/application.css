@@ -41,3 +41,6 @@
       background: #fff url(/images/black_white.png) 0 0 no-repeat !important; }
 .new_game .handicap {
   padding-left: 110px !important; }
+
+.move .toolbar .gravatar img {
+  vertical-align: middle; }
