@@ -25,6 +25,10 @@
     game_show_helper.document_ready_hook();
     $(document).data('game_show_helper', game_show_helper);
   });
+%style{:type=>"text/css", :media=>"screen"}
+  :sass
+    .board
+      :width #{@game.dimension * 30}px
 #info
   = render :partial => 'action/gameplay/toolbar', :locals => { :back => true, :info => false }
   %p This is some info about the game
