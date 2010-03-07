@@ -1,0 +1,12 @@
+- playing_text ||= ''
+- back = false if back.nil?
+- info = true if info.nil?
+.toolbar 
+  -if back
+    %a.back{:href=>'#'} Back
+  %h1
+    %span.gravatar
+    %span.playing= playing_text
+  -if info
+    %a#infoButton.button.flip{:href=>'#info'}<
+      %img{:height=>20, :width=>20, :src=>'/images/tools/info_20.png'}/

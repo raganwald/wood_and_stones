@@ -25,12 +25,12 @@
     game_show_helper.document_ready_hook();
     $(document).data('game_show_helper', game_show_helper);
   });
+#info
+  = render :partial => 'action/gameplay/toolbar', :locals => { :back => true, :info => false }
+  %p This is some info about the game
 -if @game.current_move_number == 0
   .current.move#m0
-    .toolbar 
-      %h1
-        %span.gravatar
-        %span.playing Initial Position
+    = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
     .info
@@ -39,10 +39,7 @@
       %span.news
 -else
   .move#m0
-    .toolbar 
-      %h1
-        %span.gravatar
-        %span.playing Initial Position
+    = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
     .info
@@ -51,10 +48,7 @@
       %span.news
   .current.move{:id=>"m#{@game.current_move_number}"}
     - action = @game.actions.last # TODO: denormalize like everything else
-    .toolbar 
-      %h1
-        %span.gravatar
-        %span.playing
+    = render :partial => 'action/gameplay/toolbar'
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => action.position }
     .info

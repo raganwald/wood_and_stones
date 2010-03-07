@@ -1,8 +1,5 @@
 .move{:id=>"m#{action.cardinality}"}
-  .toolbar 
-    %h1
-      %span.gravatar
-      %span.playing Move #{action.cardinality}
+  = render :partial => 'toolbar', :locals => { :playing_text => "Move #{action.cardinality}" }
   .board
     -if action.cardinality < action.game.current_move_number
       = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
