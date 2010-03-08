@@ -239,6 +239,7 @@
             if (typeof(toPage) === 'string') {
                 toPage = $(toPage);
             }
+
             if (typeof(animation) === 'string') {
                 for (var i = animations.length - 1; i >= 0; i--){
                     if (animations[i].name === animation)
@@ -331,6 +332,11 @@
         }
         function animatePages(fromPage, toPage, animation, backwards) {
             if (typeof(animation) === 'string') {
+								var m = animation.match('^(.*)[ _.](reverse|back|backwards)');
+								if (m) {
+									animation = m[1];
+									backwards = !backwards;
+								}
                 for (var i = animations.length - 1; i >= 0; i--){
                     if (animations[i].name === animation)
                     {
