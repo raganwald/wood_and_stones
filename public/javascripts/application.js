@@ -284,6 +284,7 @@ var GO = function () {
 				if (update_moves.size() > 0) {
 	        update_active_div();
 	        update_move_infos();
+					update_hey();
 	        if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
 						console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 	          jQT.goTo($('.move:last'), 'fade');
@@ -350,6 +351,7 @@ var GO = function () {
 								});
 				      	update_moves.insertAfter('#m0');
 								update_elements_with_navigation_handlers(update_moves);
+								update_hey();
 								resume_polling();
 							}
 				    },
@@ -461,12 +463,56 @@ var GO = function () {
 				});
 			};
 			
+			var update_hey = function () {
+				$('.hey:not(:empty)').each(function (index, hey_el) {
+					var hey = $(hey_el);
+					var heyMove = hey.parents('.move');
+					heyMove.find('.toolbar #heyButton img').each(function (index, heyButton_el) {
+						var heyButton = $(heyButton_el);
+						heyButton
+							.attr('src', '/images/tools/hey-text-green.png')
+							.qtip({
+								content:  hey.text(),
+								position: {
+								   corner: {
+								      target: 'bottomMiddle',
+								      tooltip: 'topLeft'
+								   },
+									container: heyMove
+								},
+								show: {
+									when: { event: SELECTION_EVENT, target: heyButton },
+									effect: { type: 'fade' }
+								},
+								hide: { 
+									when: { 
+										// target: heyMove,
+										event: SELECTION_EVENT
+									},
+									effect: { type: 'fade' }
+								},
+								style: {
+								   border: {
+								      width: 5,
+								      radius: 5
+								   },
+								   padding: 10, 
+									 tip: { corner: 'topLeft' },
+								   textAlign: 'center',
+								   name: 'green' 
+								}
+							});
+					});
+				});
+			};
+			
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
 		    liven_active_positions();
 				update_move_infos();
 				//cache_board_image_paths();
 				resume_polling();
+				update_hey();
 			};
 			
 			return {

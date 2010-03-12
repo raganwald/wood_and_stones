@@ -1,15 +1,7 @@
-.move{:id=>"m#{action.cardinality}"}
-  = render :partial => 'toolbar', :locals => { :playing_text => "Move #{action.cardinality}" }
-  .board
-    -if action.cardinality < action.game.current_move_number
-      = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
-    -else
-      = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
-  .info
-    %span.desc
-      %span.history
-        -if action.kind_of?(Action::Pass)
-          #{action.player.titleize} passed.
-        -elsif !action.position.blank?
-          #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone.')) : ''}
-    %span.news
+-current ||= false
+-if current
+  .current.move{:id=>"m#{action.cardinality}"}
+    = render :partial => 'action/gameplay/action_inner', :locals => { :action => action }
+-else
+  .move{:id=>"m#{action.cardinality}"}
+    = render :partial => 'action/gameplay/action_inner', :locals => { :action => action }

@@ -10,11 +10,8 @@
       = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
     -else
       = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
-  .info
-    %span.desc
-      %span.history
-        -if action.kind_of?(Action::Pass)
-          #{action.player.titleize} passed.
-        -elsif !action.position.blank?
-          #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone.')) : ''}
-    %span.news
+  .heyThere
+    -if action.kind_of?(Action::Pass)
+      #{action.player.titleize} passed.
+    -elsif !action.position.blank?
+      #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone.')) : ''}

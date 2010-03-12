@@ -1,0 +1,11 @@
+= render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => "Move #{action.cardinality}" }
+.board
+  -if action.cardinality < action.game.current_move_number
+    = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
+  -else
+    = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
+%span.hey<
+  -if action.kind_of?(Action::Pass)
+    #{action.player.titleize} passed.
+  -elsif !action.position.blank?
+    #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone') + ".") : ''}

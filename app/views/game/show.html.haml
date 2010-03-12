@@ -1,3 +1,16 @@
+%style{:type=>"text/css", :media=>"screen"}
+  :sass
+    .board
+      :width #{@game.dimension * 30}px
+      :height #{@game.dimension * 30}px
+      .row
+        :width #{@game.dimension * 30}px
+        :height 30px
+      :position absolute
+      :left -#{@game.dimension * 15}px
+      :top  60px
+      :margin
+        :left 50%
 :javascript
   $(document).ready( function () {
     var info = #{@info.to_json};
@@ -25,10 +38,6 @@
     game_show_helper.document_ready_hook();
     $(document).data('game_show_helper', game_show_helper);
   });
-%style{:type=>"text/css", :media=>"screen"}
-  :sass
-    .board
-      :width #{@game.dimension * 30}px
 #info
   = render :partial => 'action/gameplay/toolbar', :locals => { :back => true, :info => false }
   %p This is some info about the game
@@ -37,29 +46,9 @@
     = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
     .board
       = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
-    .info
-      %span.desc
-      %span.history
-      %span.news
 -else
   .move#m0
     = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
     .board
       = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
-    .info
-      %span.desc
-      %span.history
-      %span.news
-  .current.move{:id=>"m#{@game.current_move_number}"}
-    - action = @game.actions.last # TODO: denormalize like everything else
-    = render :partial => 'action/gameplay/toolbar'
-    .board
-      = render :partial => "board/board", :locals => { :game => @game, :latest => action.position }
-    .info
-      %span.desc
-      %span.history
-        -if action.kind_of?(Action::Pass)
-          #{action.player.titleize} passed.
-        -elsif !action.position.blank?
-          #{!action.removed.empty? ? (' ' + action.player.titleize + ' captured ' + pluralize(action.removed.size, 'stone.')) : ''}
-      %span.news
+  = render :partial => 'action/gameplay/action', :locals => { :action => @game.actions.last, :current => true }
