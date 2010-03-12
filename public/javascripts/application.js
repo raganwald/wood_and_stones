@@ -476,7 +476,7 @@ var GO = function () {
 								position: {
 								   corner: {
 								      target: 'bottomMiddle',
-								      tooltip: 'topLeft'
+								      tooltip: 'topRight'
 								   },
 									container: heyMove
 								},
@@ -497,7 +497,7 @@ var GO = function () {
 								      radius: 5
 								   },
 								   padding: 10, 
-									 tip: { corner: 'topLeft' },
+									 tip: { corner: 'topRight' },
 								   textAlign: 'center',
 								   name: 'green' 
 								}
