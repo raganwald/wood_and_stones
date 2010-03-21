@@ -27,9 +27,11 @@ var GO = function () {
 				dialog_instance = $('<div></div>')
 					.dialog({
 						autoOpen: false,
+						minHeight: 150,
 						height: 'auto',
-						title: 'Hey!'
-				});
+						title: 'Hey!',
+						open: function (event, ui) { dialog_instance.parent().detach().appendTo('.move.current'); }
+					});
 			};
 			return {
 				document_ready_hook: document_ready_hook
