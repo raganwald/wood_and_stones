@@ -116,29 +116,29 @@ var GO = function () {
 			var timer = null;
 			
 			var resume_polling = function () {
-				if (!timer) {
-					timer = $.PeriodicalUpdater(info.plays_url, 
-						{
-						  method: 'get',          // method; get or post
-						  data: function () {
-								return { after_play: info.move_number, layout: false };
-							},
-						  minTimeout: 10000,       // starting value for the timeout in milliseconds
-						  maxTimeout: 80000,       // maximum length of time between requests
-						  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
-						  maxCalls: 0,            // maximum number of calls. 0 = no limit.
-						  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
-						}, 
-						process_update // Handle the new data (only called when there was a change)
-					);
-				}
+				// if (!timer) {
+				// 	timer = $.PeriodicalUpdater(info.plays_url, 
+				// 		{
+				// 		  method: 'get',          // method; get or post
+				// 		  data: function () {
+				// 				return { after_play: info.move_number, layout: false };
+				// 			},
+				// 		  minTimeout: 10000,       // starting value for the timeout in milliseconds
+				// 		  maxTimeout: 80000,       // maximum length of time between requests
+				// 		  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
+				// 		  maxCalls: 0,            // maximum number of calls. 0 = no limit.
+				// 		  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
+				// 		}, 
+				// 		process_update // Handle the new data (only called when there was a change)
+				// 	);
+				// }
 			};
 			
 			var stop_polling = function () {
-				if (timer) {
-					clearTimeout(timer);
-					timer = null;
-				}
+				// if (timer) {
+				// 	clearTimeout(timer);
+				// 	timer = null;
+				// }
 			};
 			
 			var select_current_image_by_position  = function (position) {
@@ -363,7 +363,7 @@ var GO = function () {
 			};
 
 			var update_elements_with_navigation_handlers = function () {
-				var MOVE_ANIMATION = 'slide'; // 'slide';
+				var MOVE_ANIMATION = ''; // 'slide';
 				var goto_move = function (selector, animation, backwards) {
 					if ($(selector).size() > 0) {
 						if (backwards) {
@@ -409,7 +409,12 @@ var GO = function () {
 								.dialog('open');
 						}
 						else {
-							message_dialog('Sorry', 'It is not your turn to play or pass');
+							$.get(
+								info.plays_url, 
+								{ after_play: info.move_number, layout: false },
+								process_update
+							);
+							return true;
 						}
 						return false;
 					}
@@ -467,7 +472,7 @@ var GO = function () {
 				$('.hey:not(:empty)').each(function (index, hey_el) {
 					var hey = $(hey_el);
 					var heyMove = hey.parents('.move');
-					heyMove.find('.toolbar #heyButton img').each(function (index, heyButton_el) {
+					heyMove.find('.toolbar #heyButton').each(function (index, heyButton_el) {
 						var heyButton = $(heyButton_el);
 						heyButton
 							.attr('src', '/images/tools/hey-text-green.png')
@@ -480,16 +485,23 @@ var GO = function () {
 								   },
 									container: heyMove
 								},
-								show: {
-									when: { event: SELECTION_EVENT, target: heyButton },
-									effect: { type: 'fade' }
-								},
-								hide: { 
-									when: { 
-										// target: heyMove,
-										event: SELECTION_EVENT
-									},
-									effect: { type: 'fade' }
+								// show: {
+								// 	when: { 
+								// 		event: SELECTION_EVENT, 
+								// 		target: heyButton 
+								// 	},
+								// 	effect: { type: 'fade' }
+								// },
+								// hide: { 
+								// 	when: { 
+								// 		target: heyMove,
+								// 		event: SELECTION_EVENT
+								// 	},
+								// 	effect: { type: 'fade' }
+								// },
+								hide: {
+									delay: 1000,
+									event: 'inactive'
 								},
 								style: {
 								   border: {
@@ -501,7 +513,11 @@ var GO = function () {
 								   textAlign: 'center',
 								   name: 'green' 
 								}
-							});
+							})
+							// .click(function (event) {
+							// 	this.qtip('show');
+							// })
+							;
 					});
 				});
 			};
@@ -510,7 +526,7 @@ var GO = function () {
 		    update_elements_with_navigation_handlers('body');
 		    liven_active_positions();
 				update_move_infos();
-				//cache_board_image_paths();
+				cache_board_image_paths();
 				resume_polling();
 				update_hey();
 			};
