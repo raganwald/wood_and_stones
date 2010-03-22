@@ -50,11 +50,10 @@ var GO = function () {
 				message_dialog_instance = $('<div></div>')
 					.dialog({
 						autoOpen: false,
-						minHeight: 150,
 						height: 'auto',
-						title: 'Hey!'
+						title: 'Hey!',
+						open: function (event, ui) { message_dialog_instance.parent().detach().appendTo('body > .current'); }
 					});
-				message_dialog_instance.parent().detach().appendTo('.move:last');
 				progress_dialog_instance = $('.ajax_load')
 					.dialog({
 						dialogClass: 'progress',
@@ -63,7 +62,7 @@ var GO = function () {
 						width: 100,
 						height: 72
 					});
-				progress_dialog_instance.parent().detach().appendTo('.move:last');
+				progress_dialog_instance.parent().detach().appendTo('body > .current');
 			};
 			return {
 				document_ready_hook: document_ready_hook
