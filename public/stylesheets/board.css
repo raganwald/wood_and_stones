@@ -284,13 +284,13 @@
 .board .star.valid {
   background: url('/images/board/temporary/tile0c.png'); }
 
-.active .board .valid {
+.playing .board .valid {
   cursor: pointer; }
 
 .move .actions .send {
   display: none; }
 
-.move.active .actions .send {
+.move.playing .actions .send {
   display: inline !important; }
 
 .board .intersection {

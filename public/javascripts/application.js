@@ -144,11 +144,11 @@ var GO = function () {
 			};
 			
 			var select_current_image_by_position  = function (position) {
-				return '.move.active .board #' + position;
+				return '.move.playing .board #' + position;
 			}
 			
 			var position_of_played_stone = function () {
-				var target = $('.move.active .board .empty.' + info.playing);
+				var target = $('.move.playing .board .empty.' + info.playing);
 				if (target.size() == 1) {
 					return target.attr('id');
 				}
@@ -156,7 +156,7 @@ var GO = function () {
 			};
 			
 			var stone_has_been_legally_placed = function () {
-				return info.is_users_turn && ($('.move.active .board .empty.' + info.playing).size() == 1);
+				return info.is_users_turn && ($('.move.playing .board .empty.' + info.playing).size() == 1);
 			};
 			
 			var process_update_and_resume_polling = function (html) {
@@ -195,9 +195,9 @@ var GO = function () {
 			  });
 			};
 			
-			var update_active_div = function () {
-			  var move_to_unbind_selector = '.move.active';
-			  var places_to_unbind_selector = '.move.active .board .valid';
+			var update_playing_div = function () {
+			  var move_to_unbind_selector = '.move.playing';
+			  var places_to_unbind_selector = '.move.playing .board .valid';
 				var lasts_to_reclassify_finder = '.board .last';
 				var killed_finder = '.board .atari.empty';
 			
@@ -220,31 +220,31 @@ var GO = function () {
 					}
 					$('.move').not(move_to_bind_selector).find(lasts_to_reclassify_finder).addClass('latest');
 					
-					$('.move').not(move_to_bind_selector).removeClass('active');
-					$(move_to_bind_selector).addClass('active');
+					$('.move').not(move_to_bind_selector).removeClass('playing');
+					$(move_to_bind_selector).addClass('playing');
 			  };
 			}();
 			
-			var liven_active_positions = function () {
+			var liven_playing_positions = function () {
 				
 				var set_played_stone = function (target, play_p) {
 					// restore all other plays
-					$('.move.active .board .valid.' + info.playing).not(target).removeClass(info.playing);
+					$('.move.playing .board .valid.' + info.playing).not(target).removeClass(info.playing);
 					// make the play or remove the play
 					if (play_p) {
 						target.addClass(info.playing);
-						$('.move.active .last').removeClass('latest');
+						$('.move.playing .last').removeClass('latest');
 					}
 					else {
 						target.removeClass(info.playing);
-						$('.move.active .last').addClass('latest');
+						$('.move.playing .last').addClass('latest');
 					}
 				};
 			
 				var set_killed_stones = function (target, kill_p) {
-					var killed_selector = '.move.active .board .atari.killed_by_' + target.attr('id');
+					var killed_selector = '.move.playing .board .atari.killed_by_' + target.attr('id');
 					// restore all atari stones
-					$('.move.active .board .atari' ).addClass(info.opponent).removeClass('empty');
+					$('.move.playing .board .atari' ).addClass(info.opponent).removeClass('empty');
 					// maybe kill some stones
 					if (kill_p) {
 						$(killed_selector)
@@ -284,8 +284,8 @@ var GO = function () {
 					play_stone(target.attr('id'));
 				};
 
-				$('.move.active .board .valid').live(SELECTION_EVENT, toggle_placed_stone);
-				$('.move.active .board .valid').live('dblclick', place_and_play_stone);
+				$('.move.playing .board .valid').live(SELECTION_EVENT, toggle_placed_stone);
+				$('.move.playing .board .valid').live('dblclick', place_and_play_stone);
 			};
 			
 			var process_update = function (html) {
@@ -305,7 +305,7 @@ var GO = function () {
 					$('.info .captured_whites').text(info.captured_whites);
 				});
 				if (update_moves.size() > 0) {
-	        update_active_div();
+	        update_playing_div();
 	        update_move_infos();
 					update_hey();
 	        if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
@@ -508,20 +508,20 @@ var GO = function () {
 								   },
 									container: heyMove
 								},
-								// show: {
-								// 	when: { 
-								// 		event: SELECTION_EVENT, 
-								// 		target: heyButton 
-								// 	},
-								// 	effect: { type: 'fade' }
-								// },
-								// hide: { 
-								// 	when: { 
-								// 		target: heyMove,
-								// 		event: SELECTION_EVENT
-								// 	},
-								// 	effect: { type: 'fade' }
-								// },
+								show: {
+									when: { 
+										event: SELECTION_EVENT, 
+										target: heyButton 
+									},
+									effect: { type: 'fade' }
+								},
+								hide: { 
+									when: { 
+										target: heyMove,
+										event: SELECTION_EVENT
+									},
+									effect: { type: 'fade' }
+								},
 								hide: {
 									delay: 1000,
 									event: 'inactive'
@@ -537,9 +537,9 @@ var GO = function () {
 								   name: 'green' 
 								}
 							})
-							// .click(function (event) {
-							// 	this.qtip('show');
-							// })
+							.click(function (event) {
+								this.qtip('show');
+							})
 							;
 					});
 				});
@@ -547,7 +547,7 @@ var GO = function () {
 			
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
-		    liven_active_positions();
+		    liven_playing_positions();
 				update_move_infos();
 				// cache_board_image_paths();
 				resume_polling();
@@ -556,7 +556,7 @@ var GO = function () {
 			
 			return {
 				  update_move_infos: update_move_infos,
-				  update_active_on_current_board: update_active_div,
+				  update_playing_on_current_board: update_playing_div,
 				  get_history_up_to: get_history_up_to,
 					document_ready_hook: document_ready_hook,
 					debug: {
