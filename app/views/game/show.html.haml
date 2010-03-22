@@ -32,8 +32,6 @@
     info.black_gravatar_url = "#{black_gravatar_url}";
     info.white_gravatar_url = "#{white_gravatar_url}";
     var game_show_helper = GO.game_show_helper(info);
-    game_show_helper.update_playing_on_current_board();
-    game_show_helper.update_move_infos();
     game_show_helper.get_history_up_to(#{@game.current_move_number})
     $('#m0').data('number',0);
     $('#m#{@game.current_move_number}').data('number',#{@game.current_move_number});

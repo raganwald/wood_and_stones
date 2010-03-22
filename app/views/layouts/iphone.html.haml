@@ -41,4 +41,7 @@
         iphone_layout_helper.document_ready_hook();
       }); 
   %body
+    %div#useful_stuff
+      .ajax_load
+        %img{:src=>'/images/ajax-loader-black.gif',:height=>66,:width=>66}
     = yield

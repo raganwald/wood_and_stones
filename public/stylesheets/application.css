@@ -50,6 +50,9 @@
 .hey {
   display: none; }
 
+.progress .ui-dialog-titlebar {
+  display: none; }
+
 .iconButton {
   float: right;
   margin-right: 42px; }

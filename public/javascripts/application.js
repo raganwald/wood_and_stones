@@ -1,13 +1,36 @@
 var GO = function () {
-	var dialog_instance;
+	var message_dialog_instance;
 	var message_dialog = function (title, text) {
-    dialog_instance
+    message_dialog_instance
 			.text(text)
 			.dialog({
 				title: title,
 				buttons: { "Ok": function() { $(this).dialog("close"); } }
 			})
 			.dialog('open');
+	};
+	var progress_dialog_instance;
+	var progress_count = 0;
+	var progress_dialog = function (cmd) {
+		console.log("Progress " + cmd + " with level " + progress_count);
+		if (cmd == 'open') {
+			if (progress_count == 0) {
+				progress_count = 1;
+				progress_dialog_instance.dialog('open');
+			}
+			else {
+				progress_count = progress_count + 1;
+			}
+		}
+		else if (cmd == 'close') {
+			if (progress_count == 1) {
+				progress_count = 0;
+				progress_dialog_instance.dialog('close');
+			}
+			else if (progress_count > 1) {
+				progress_count = progress_count - 1;
+			}
+		}
 	};
 	var submit = function(e, success, error) {
 	  var $form = (typeof(e)==='string') ? $(e) : $(e.target);
@@ -24,14 +47,23 @@ var GO = function () {
 		submit: submit,
 		iphone_layout_helper: function () {
 			var document_ready_hook = function () {
-				dialog_instance = $('<div></div>')
+				message_dialog_instance = $('<div></div>')
 					.dialog({
 						autoOpen: false,
 						minHeight: 150,
 						height: 'auto',
-						title: 'Hey!',
-						open: function (event, ui) { dialog_instance.parent().detach().appendTo('.move.current'); }
+						title: 'Hey!'
 					});
+				message_dialog_instance.parent().detach().appendTo('.move:last');
+				progress_dialog_instance = $('.ajax_load')
+					.dialog({
+						dialogClass: 'progress',
+						autoOpen: false,
+						draggable: false,
+						width: 100,
+						height: 72
+					});
+				progress_dialog_instance.parent().detach().appendTo('.move:last');
 			};
 			return {
 				document_ready_hook: document_ready_hook
@@ -72,7 +104,7 @@ var GO = function () {
 							dataType: 'json',
 				      success: function (data) { 
 								if (data.url) {
-							    dialog_instance
+							    message_dialog_instance
 										.text("Your opponent has been emailed invitations to the new game. Thanks!")
 										.dialog({
 											title: "Invitation Sent",
@@ -166,13 +198,18 @@ var GO = function () {
 			};
 			
 			var play_stone = function (position) {
+				progress_dialog('open');
 				stop_polling();
 			  $.ajax({
 			    url: info.create_move_f(position),
 			    type: 'POST',
 			    dataType: 'html',
-			    success: process_update_and_resume_polling,
+			    success: function (html) {
+						process_update_and_resume_polling(html);
+						progress_dialog('close');
+					},
 			    error: function (error_response) {
+						progress_dialog('close');
 			      message_dialog('error', 'unable to place a stone at ' + position + ' because: ' + error_response.responseText);
 			    },
 			  });
@@ -361,6 +398,7 @@ var GO = function () {
 
 			var get_history_up_to = function (current_move_number) {
 				if (current_move_number > 1) {
+					progress_dialog('open');
 				  $.ajax({
 				    url: info.get_history_f(current_move_number),
 				    type: 'GET',
@@ -377,6 +415,7 @@ var GO = function () {
 								update_hey();
 								resume_polling();
 							}
+							progress_dialog('close');
 				    },
 				    error: function (error_response) {
 				      console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
@@ -418,7 +457,7 @@ var GO = function () {
 							else {
 								text = 'If ' + info.opponent + ' passes, the game will end.';
 							}
-					    dialog_instance
+					    message_dialog_instance
 								.text(text)
 								.dialog({
 									title: "Really pass?",
@@ -426,16 +465,20 @@ var GO = function () {
 										"Pass": function() { 
 											pass(function () { $(this).dialog("close"); });
 										},
-										"No":   function() { $(this).dialog("close"); } 
+										"No": function() { $(this).dialog("close"); } 
 									}
 								})
 								.dialog('open');
 						}
 						else {
+							progress_dialog('open');
 							$.get(
 								info.plays_url, 
 								{ after_play: info.move_number, layout: false },
-								process_update
+								function (html) {
+									process_update(html);
+									progress_dialog('close');
+								}
 							);
 							return true;
 						}
@@ -548,6 +591,7 @@ var GO = function () {
 			var document_ready_hook = function () {
 		    update_elements_with_navigation_handlers('body');
 		    liven_playing_positions();
+				update_playing_div()
 				update_move_infos();
 				// cache_board_image_paths();
 				resume_polling();
@@ -555,8 +599,6 @@ var GO = function () {
 			};
 			
 			return {
-				  update_move_infos: update_move_infos,
-				  update_playing_on_current_board: update_playing_div,
 				  get_history_up_to: get_history_up_to,
 					document_ready_hook: document_ready_hook,
 					debug: {
