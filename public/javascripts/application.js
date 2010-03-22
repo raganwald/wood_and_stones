@@ -250,8 +250,7 @@ var GO = function () {
 						$(killed_selector)
 							.each(function (i,e) {
 								e = $(e);
-								var i = $(new Image(e.height(), e.width()));
-								i
+								$(new Image(e.height(), e.width()))
 									.attr('src', /^url\((.*)\)/.exec(e.css('background-image'))[1])
 									.css({
 										position: 'absolute',
@@ -302,6 +301,8 @@ var GO = function () {
 	      }
 				$(html).filter('script').each(function (i, el) {
 					$.extend(info, jQuery.parseJSON($(el).text()));
+					$('.info .captured_blacks').text(info.captured_blacks);
+					$('.info .captured_whites').text(info.captured_whites);
 				});
 				if (update_moves.size() > 0) {
 	        update_active_div();

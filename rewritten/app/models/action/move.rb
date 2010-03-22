@@ -23,11 +23,11 @@ class Action::Move < Action::Gameplay
     end
   end
   def location
-    @location ||= (__126780589822036__ = self.position
-    if __126780589822036__.kind_of?(String) then
-      RewriteRails::ExtensionMethods::String.to_location(__126780589822036__)
+    @location ||= (__126923081560536__ = self.position
+    if __126923081560536__.kind_of?(String) then
+      RewriteRails::ExtensionMethods::String.to_location(__126923081560536__)
     else
-      __126780589822036__.to_location
+      __126923081560536__.to_location
     end)
   end
   def removed
@@ -38,9 +38,9 @@ class Action::Move < Action::Gameplay
     self.removed_serialized = stones.inspect
   end
   def place_stone
-    (dead_stones = (__126780589814113__ = self.before.legal_moves_for(self.player).detect do |its|
+    (dead_stones = (__126923081443164__ = self.before.legal_moves_for(self.player).detect do |its|
       (its.location == self.location)
-    end and __126780589814113__.dead_stones) and (self.removed = dead_stones
+    end and __126923081443164__.dead_stones) and (self.removed = dead_stones
     self.after = Board.new(self.before) do |b|
       b[self.position] = self.player
       dead_stones.each { |across, down| b[across][down].remove }
@@ -50,7 +50,7 @@ class Action::Move < Action::Gameplay
   def updated_captured_stones
     captured_stones = removed
     if (captured_stones.size > 0) then
-      msg = (player == Board::BLACK_S) ? ("captured_blacks") : ("captured_whites")
+      msg = (player == Board::WHITE_S) ? ("captured_blacks") : ("captured_whites")
       self.game.send("#{msg}=", (self.game.send(msg) + captured_stones.size))
     end
     self.game.current_removed = captured_stones
