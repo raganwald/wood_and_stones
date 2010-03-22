@@ -247,7 +247,27 @@ var GO = function () {
 					$('.move.active .board .atari' ).addClass(info.opponent).removeClass('empty');
 					// maybe kill some stones
 					if (kill_p) {
-						$(killed_selector).removeClass(info.opponent).addClass('empty');
+						$(killed_selector)
+							.each(function (i,e) {
+								e = $(e);
+								var i = $(new Image(e.height(), e.width()));
+								i
+									.attr('src', /^url\((.*)\)/.exec(e.css('background-image'))[1])
+									.css({
+										position: 'absolute',
+										top: e.position().top,
+										left: e.position().left,
+										'z-index': (e.css('z-index') + 1)
+									})
+									.addClass('fade_animation')
+									.appendTo(e.parent())
+									.show();
+							})
+							.removeClass(info.opponent)
+							.addClass('empty');
+						$('.fade_animation').fadeOut(1000, function () {
+							$('.fade_animation').remove();
+						});
 					}
 				};
 				
@@ -528,7 +548,7 @@ var GO = function () {
 		    update_elements_with_navigation_handlers('body');
 		    liven_active_positions();
 				update_move_infos();
-				cache_board_image_paths();
+				// cache_board_image_paths();
 				resume_polling();
 				update_hey();
 			};
