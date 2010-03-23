@@ -82,6 +82,19 @@ class Game < ActiveRecord::Base
       valid_move_hashes
     end.call(self.current_board.legal_moves_for(self.to_play))
   end
+  def last_action_updated_i
+    (__126929667352862__ = (__126929667375731__ = self.actions.last and __126929667375731__.updated_at) and __126929667352862__.to_i)
+  end
+  def update_notifications(user)
+    return if last_action_updated_i.nil?
+    if ((user == self.black) and (self.last_black_notification.nil? or (self.last_black_notification < last_action_updated_i))) then
+      update_attribute(:last_black_notification, last_action_updated_i)
+    else
+      if ((user == self.white) and (self.last_white_notification.nil? or (self.last_white_notification < last_action_updated_i))) then
+        update_attribute(:last_white_notification, last_action_updated_i)
+      end
+    end
+  end
   state_machine do
     event(:start) { transition(nil => :started) }
     event(:fork) { transition(all => :forked) }

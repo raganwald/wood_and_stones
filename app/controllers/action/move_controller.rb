@@ -6,6 +6,7 @@ class Action::MoveController < Action::GameplayController
       :position => params[:position]
     )
     (render(:status => 403, :text => @move.errors.full_messages.to_sentence) and return) unless @move.valid?
+    @game.update_notifications(current_user)
     self.assemble_info # it has been updated!
     @info[:move] = @move
     respond_to do |format|

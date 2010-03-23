@@ -5,6 +5,7 @@ class Action::PassController < Action::PlayerActionController
       :game => @game
     )
     (render :status => 403 and return) unless @pass.valid?
+    @game.update_notifications(current_user)
     self.assemble_info # it has been updated!
     @info[:move] = @pass
     respond_to do |format|

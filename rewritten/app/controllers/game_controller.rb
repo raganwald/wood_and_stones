@@ -30,7 +30,7 @@ class GameController < ApplicationController
     end
   end
   def show
-    # do nothing
+    @game.update_notifications(current_user)
   end
   def new
     # do nothing

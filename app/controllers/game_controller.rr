@@ -36,6 +36,7 @@ class GameController < ApplicationController
   end
   
   def show
+    @game.update_notifications(current_user)
   end
   
   def new

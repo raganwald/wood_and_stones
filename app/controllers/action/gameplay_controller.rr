@@ -4,6 +4,7 @@ class Action::GameplayController < Action::PlayerActionController
     @cardinality = params[:cardinality]
     @game = params[:game_id].andand { Game.find(it) }
     if @move
+      @game.update_notifications(current_user)
     elsif @cardinality && @game
       if @cardinality == 0
         @move = nil
@@ -16,6 +17,7 @@ class Action::GameplayController < Action::PlayerActionController
         @previous_cardinality = @move.lower_item.andand.cardinality #TODO use simple math instead of fetching objects
         @next_cardinality = @move.higher_item.andand.cardinality
       end
+      @game.update_notifications(current_user)
     else
       render :status => 404
     end

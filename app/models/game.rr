@@ -95,6 +95,20 @@ class Game < ActiveRecord::Base
     end
   end
   
+  # TODO: Denormalize this into a column
+  def last_action_updated_i
+    self.actions.last.andand.updated_at.andand.to_i
+  end
+    
+  def update_notifications(user)
+    return if last_action_updated_i.nil?
+    if (user == self.black) && (self.last_black_notification.nil? || self.last_black_notification < last_action_updated_i)
+      update_attribute(:last_black_notification, last_action_updated_i)
+    elsif (user == self.white) && (self.last_white_notification.nil? || self.last_white_notification < last_action_updated_i)
+      update_attribute(:last_white_notification, last_action_updated_i)
+    end
+  end
+  
   state_machine do
     
     event :start do

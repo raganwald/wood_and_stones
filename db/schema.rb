@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100219024704) do
+ActiveRecord::Schema.define(:version => 20100322210847) do
 
   create_table "actions", :force => true do |t|
     t.string   "type"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(:version => 20100219024704) do
     t.integer  "captured_blacks",                            :default => 0
     t.integer  "current_move_number",                        :default => 0
     t.text     "current_removed_serialized", :limit => 3249
+    t.integer  "last_black_notification"
+    t.integer  "last_white_notification"
   end
 
   add_index "games", ["id"], :name => "index_games_on_id"

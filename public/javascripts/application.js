@@ -393,28 +393,54 @@ var GO = function () {
 					$(move_el).find('.toolbar .gravatar').empty();
 					$(move_el).find('.info .news').text('');
 				});
+				console.log("done updating move_infos");
 			};
 
+			var timer = function () {
+				var seconds_since_midnight = function () {
+					var d = new Date();
+					return (d.getHours() * 3600) + (d.getMinutes() * 60) + (d.getSeconds());
+				};
+				var base = 0;
+				return function () {
+					var now = seconds_since_midnight();
+					if (base == 0) {
+						base = now;
+						return 0;
+					}
+					else {
+						return now - base;
+					}
+				};
+			};
+			
 			var get_history_up_to = function (current_move_number) {
 				if (current_move_number > 1) {
+					var secs = timer();
+					console.log("getting history " + secs());
 					progress_dialog('open');
 				  $.ajax({
 				    url: info.get_history_f(current_move_number),
 				    type: 'GET',
 				    dataType: 'html',
 				    success: function (html) {
+							console.log("gotten history from the server " + secs());
 							stop_polling();
 			      	update_moves = $(html).filter('.move');
 			      	if (update_moves.size() > 0) {
+								console.log("inserting history in the DOM " + secs());
 								update_moves.each(function (i, el) {
 									$(el).data('number', i + 1);
 								});
 				      	update_moves.insertAfter('#m0');
+								console.log("* adding navigation handlers to history in the DOM " + secs());
 								update_elements_with_navigation_handlers(update_moves);
+								console.log("* adding heys to the history in the DOM " + secs());
 								update_hey();
 								resume_polling();
 							}
 							progress_dialog('close');
+							console.log("done with getting history " + secs());
 				    },
 				    error: function (error_response) {
 				      console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
@@ -489,35 +515,48 @@ var GO = function () {
 					var target = this_move.prev('.move')
 					return goto_move(target, MOVE_ANIMATION, true);
 				};
+				
+				var swiper = function(event, data) {
+		      if (data.direction == 'left') {
+		        swipeBoardLeft(event.currentTarget);
+		        return false;
+		      }
+		      else {
+		        swipeBoardRight(event.currentTarget);
+		        return false;
+		      }
+		    };
+				
+				var gesturer = function (gs) {
+					if (gs.getName() == 'left') {
+						return swipeBoardLeft(this);
+					}
+					else if (gs.getName() == 'right') {
+						return swipeBoardRight(this);
+					}
+					return true;
+				};
+				
 				return function (selector) {
-					elements = $(selector).find('*');
+					var secs = function () { return '<<<<<'; } // timer();
+					elements = $(selector);
+					console.log("updating " + elements.size() + " elements " + secs());
 					if (elements.size() == 0) {
 						console.warn("unable to update navigation: no elements for " + selector);
 					}
 					else if ($.support.touch) {
-						var swiper = function(event, data) {
-				      if (data.direction == 'left') {
-				        swipeBoardLeft(event.currentTarget);
-				        return false;
-				      }
-				      else {
-				        swipeBoardRight(event.currentTarget);
-				        return false;
-				      }
-				    };
-						elements.filter('.board .intersection').bind('swipe.navigation', swiper);
+						console.log("filtering intersection elements");
+						var ee = elements.find('.board .intersection');
+						console.log( "binding " + ee.size() + " intersections using touch events " + secs());
+						ee.bind('swipe.navigation', swiper);
 					}
 					else {
-						elements.filter('.board').gesture(function (gs) {
-							if (gs.getName() == 'left') {
-								return swipeBoardLeft(this);
-							}
-							else if (gs.getName() == 'right') {
-								return swipeBoardRight(this);
-							}
-							return true;
-						});
+						console.log("filtering board elements");
+						var ee = elements.find('.board');
+						console.log( "updating " + ee.size() + " boards with gesture events " + secs());
+						ee.gesture(gesturer);
 					}
+					console.log("done updating elements " + secs());
 				};
 			}();
 			
