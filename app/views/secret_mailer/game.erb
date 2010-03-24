@@ -1,6 +1,6 @@
 Hello!
 
-Good news, you have been invited to play a game of Go with <%= @opponent_email %>. Go to <%= secret_url(@secret, :only_path => false)  %> to start playing!
+Good news, you have been invited to play a game of Go with <%= @opponent_email %>. Go to <%= show_game_url(:secret => @secret, :only_path => false)  %> to start playing!
 
 Sincerely,
 

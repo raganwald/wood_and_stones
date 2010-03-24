@@ -538,25 +538,19 @@ var GO = function () {
 				};
 				
 				return function (selector) {
-					var secs = function () { return '<<<<<'; } // timer();
-					elements = $(selector);
-					console.log("updating " + elements.size() + " elements " + secs());
+					// var secs = timer();
+					elements = $(selector).find('.board');
+					// console.log("updating " + elements.size() + " elements " + secs());
 					if (elements.size() == 0) {
 						console.warn("unable to update navigation: no elements for " + selector);
 					}
 					else if ($.support.touch) {
-						console.log("filtering intersection elements");
-						var ee = elements.find('.board .intersection');
-						console.log( "binding " + ee.size() + " intersections using touch events " + secs());
-						ee.bind('swipe.navigation', swiper);
+						elements.bind('swipe.navigation', swiper);
 					}
 					else {
-						console.log("filtering board elements");
-						var ee = elements.find('.board');
-						console.log( "updating " + ee.size() + " boards with gesture events " + secs());
-						ee.gesture(gesturer);
+						elements.gesture(gesturer);
 					}
-					console.log("done updating elements " + secs());
+					// console.log("done updating elements " + secs());
 				};
 			}();
 			
@@ -631,7 +625,7 @@ var GO = function () {
 		    liven_playing_positions();
 				update_playing_div()
 				update_move_infos();
-				// cache_board_image_paths();
+				cache_board_image_paths();
 				resume_polling();
 				update_hey();
 			};

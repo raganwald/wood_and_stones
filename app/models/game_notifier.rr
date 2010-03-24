@@ -18,7 +18,7 @@ class GameNotifier < ActionMailer::Base
   
   def mail_to(game, user)
     Rails.logger.info "***** mailing an update about Game #{game.id} to #{user.email}"
-    secret = Secret.first(:conditions => {:target_id => game.id, :target_class => game.class.name, :user_id => user.id})
+    secret = Secret.first(:conditions => {:target_id => game.id, :target_type => game.class.name, :user_id => user.id})
     if game.black == user
       opponents_email = game.white.email
     elsif game.white == secret.user
