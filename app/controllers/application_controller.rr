@@ -58,6 +58,7 @@ class ApplicationController < ActionController::Base
       :opponent => opponent,
       :to_play => @game.to_play,
       :game_state => @game.state,
+      :game_id => @game.id,
       :captured_blacks => @game.captured_blacks,
       :captured_whites => @game.captured_whites
     }

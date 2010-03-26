@@ -141,9 +141,17 @@ var GO = function () {
 			var last_displayed_move_number = function () {
 				return $('.move:last').data('number');
 			};
+			
+			var current_displayed_move_number = function (target) {
+				return $(target).parents('.move').data('number');
+			};
+			
+			var id_by_move_number = function (move_number) {
+			  return 'm' + move_number;
+			};
 
 			var select_move_by_move_number = function (move_number) {
-			  return '#m' + move_number;
+			  return '#' + id_by_move_number(move_number);
 			};
 			
 			var timer = null;
@@ -419,55 +427,146 @@ var GO = function () {
 					var secs = timer();
 					console.log("getting history " + secs());
 					progress_dialog('open');
-				  $.ajax({
-				    url: info.get_history_f(current_move_number),
+					$.ajax({
+				    url: info.get_history_f(current_move_number + 1),
 				    type: 'GET',
-				    dataType: 'html',
-				    success: function (html) {
-							console.log("gotten history from the server " + secs());
-							stop_polling();
-			      	update_moves = $(html).filter('.move');
-			      	if (update_moves.size() > 0) {
-								console.log("inserting history in the DOM " + secs());
-								update_moves.each(function (i, el) {
-									$(el).data('number', i + 1);
-								});
-				      	update_moves.insertAfter('#m0');
-								console.log("* adding navigation handlers to history in the DOM " + secs());
-								update_elements_with_navigation_handlers(update_moves);
-								console.log("* adding heys to the history in the DOM " + secs());
-								update_hey();
-								resume_polling();
-							}
-							progress_dialog('close');
-							console.log("done with getting history " + secs());
-				    },
-				    error: function (error_response) {
-				      console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
-				    }
-				  });
+				    dataType: 'json',
+				    success: function (partial) {
+							var history = {};
+							$.each(partial[info.game_id], function (key, val) {
+								history[key] = {
+									player: val.player,
+									position: val.position,
+									removed: JSON.parse(val.removed)
+								};
+							});
+							$('body').data('moves', history);
+							$('.move').each(function (index, el) {
+								var move = $(el);
+								var number = move.data('number');
+								if (number) {
+									var move_data = history[number];
+									move
+										.data('player', move_data.player)
+										.data('position', move_data.position)
+										.data('removed', move_data.removed);
+								}
+							});
+				  		progress_dialog('close');
+						},
+						error: function (error_response) {
+				  		progress_dialog('close');
+							alert(error_response.responseText);
+						}
+					});
+				  // $.ajax({
+				  //   url: info.get_history_f(current_move_number),
+				  //   type: 'GET',
+				  //   dataType: 'html',
+				  //   success: function (html) {
+				  // 							console.log("gotten history from the server " + secs());
+				  // 							stop_polling();
+				  // 			      	update_moves = $(html).filter('.move');
+				  // 			      	if (update_moves.size() > 0) {
+				  // 								console.log("inserting history in the DOM " + secs());
+				  // 								update_moves.each(function (i, el) {
+				  // 									$(el).data('number', i + 1);
+				  // 								});
+				  //     	update_moves.insertAfter('#m0');
+				  // 								console.log("* adding navigation handlers to history in the DOM " + secs());
+				  // 								update_elements_with_navigation_handlers(update_moves);
+				  // 								console.log("* adding heys to the history in the DOM " + secs());
+				  // 								update_hey();
+				  // 								resume_polling();
+				  // 							}
+				  // 							progress_dialog('close');
+				  // 							console.log("done with getting history " + secs());
+				  //   },
+				  //   error: function (error_response) {
+				  //     console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
+				  //   }
+				  // });
 				}
 			};
-
+					
 			var update_elements_with_navigation_handlers = function () {
-				var MOVE_ANIMATION = ''; // 'slide';
-				var goto_move = function (selector, animation, backwards) {
-					if ($(selector).size() > 0) {
-						if (backwards) {
-							jQT.goTo(selector, animation + '.backwards');
+				var memoized_move = function (target_move_number) {
+					var selector = select_move_by_move_number(target_move_number);
+					if ($(selector).size() == 0) {
+						var move_data = $('body').data('moves')[target_move_number];
+						var next_move = memoized_move(target_move_number + 1);
+						var this_move = next_move
+							.clone(true)
+							.removeClass()
+							.addClass('move')
+							.attr('id', id_by_move_number(target_move_number))
+							.data('number', target_move_number)
+							.data('player', move_data.player)
+							.data('position', move_data.position)
+							.data('removed', move_data.removed);
+						this_move
+							.find('.toolbar h1 .playing')
+								.text('Move ' + target_move_number)
+								.removeClass()
+								.addClass('playing');
+						this_move
+							.find('.board .valid')
+								.removeClass('valid');
+						var position = next_move.data('position');
+						if (position && position != '') {
+							this_move
+								.find('#' + position + '.intersection')
+								.removeClass(next_move.data('player'))
+								.addClass('empty');
+							var other_player = next_move.data('player') =='black' ? 'white' : 'black';
+							var removed_selector = $.map(next_move.data('removed'), function (pos) { 
+								return '#' + pos + '.intersection'; 
+							}).join(', ');
+							this_move
+								.find(removed_selector)
+								.removeClass('empty')
+								.addClass(other_player);
+						}
+						var last_position = this_move.data('position');
+						if (last_position && last_position != '') {
+							this_move
+								.find('#' + last_position + '.intersection')
+								.addClass('last');
+							if (this_move.data('removed').length > 0) {
+								this_move
+									.find('.hey')
+									.text(this_move.data('player')+ ' captured ' + this_move.data('removed').length + ' stones.');
+									// TODO: capitalize and pluralize
+							}
+							else {
+								this_move
+									.find('.hey')
+									.text('');
+							}
 						}
 						else {
-							jQT.goTo(selector, animation);
+							this_move
+								.find('.hey')
+								.text(this_move.data('player') + ' passed.'); // TODO: Titleize
 						}
+						update_elements_with_navigation_handlers(this_move);
+						this_move.insertBefore(next_move);
+					}
+					return $(selector);
+				};
+				var goto_move = function () {
+					return function (from_move_number, to_move_number) {
+						var from_page = $(select_move_by_move_number(from_move_number));
+						var to_page = memoized_move(to_move_number);
+						jQT.animatePages(from_page, to_page, ((from_move_number > to_move_number) ? 'slide.backwards' : 'slide'));
+						
 						return false;
 					}
-					else return true;
-				};
+				}();
 				var swipeBoardLeft = function (target) {
-					var this_move = $(target).parents('.move');
-					if (this_move.next('.move').size() > 0) {
-						var target = this_move.next('.move');
-						return goto_move(target, MOVE_ANIMATION, false);
+					var current_move_number = current_displayed_move_number(target);
+					if (current_move_number < last_displayed_move_number()) {
+						return goto_move(current_move_number, current_move_number + 1);
 					}
 					else {
 						position = position_of_played_stone();
@@ -511,9 +610,10 @@ var GO = function () {
 					}
 				};
 				var swipeBoardRight = function (target) {
-					var this_move = $(target).parents('.move');
-					var target = this_move.prev('.move')
-					return goto_move(target, MOVE_ANIMATION, true);
+					var current_move_number = current_displayed_move_number(target);
+					if (current_move_number > 0) {
+						return goto_move(current_move_number, current_move_number - 1);
+					}
 				};
 				
 				var swiper = function(event, data) {
@@ -634,7 +734,7 @@ var GO = function () {
 				  get_history_up_to: get_history_up_to,
 					document_ready_hook: document_ready_hook,
 					debug: {
-						info: function () { return info; },
+						info: function () { return info; }
 					}
 			};
 		}

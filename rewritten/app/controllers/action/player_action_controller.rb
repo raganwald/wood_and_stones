@@ -3,7 +3,18 @@ class Action::PlayerActionController < Action::BaseController
   before_filter(:assemble_info)
   before_filter(:all_actions, :for_game, :before_play, :after_play, :only => :index)
   def index
-    render(:layout => (false)) if (params[:layout].to_s == "false")
+    respond_to do |format|
+      format.html do ||
+        render(:layout => (false)) if (params[:layout].to_s == "false")
+      end
+      format.json do ||
+        render(:json => (@actions.inject({}) do |games_to_actions, action|
+          games_to_actions[action.game_id] ||= {  }
+          games_to_actions[action.game_id][action.cardinality] = { :player => (action.player), :position => (action.position), :removed => (action.removed_serialized) }
+          games_to_actions
+        end))
+      end
+    end
   end
   def info
     respond_to { |format| format.json { render(:json => (@info)) } }

@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     else
       playing, opponent = "white", "black" if (id == @game.white_id)
     end)
-    @info = { :is_users_turn => (is_active), :move_number => (current_move), :playing => (playing), :opponent => (opponent), :to_play => (@game.to_play), :game_state => (@game.state), :captured_blacks => (@game.captured_blacks), :captured_whites => (@game.captured_whites) }
+    @info = { :is_users_turn => (is_active), :move_number => (current_move), :playing => (playing), :opponent => (opponent), :to_play => (@game.to_play), :game_state => (@game.state), :game_id => (@game.id), :captured_blacks => (@game.captured_blacks), :captured_whites => (@game.captured_whites) }
   end
   def all_tile_paths
     Rails.root.join("public", "images", "board", "temporary").entries.map(&:to_s).select do |e|

@@ -330,6 +330,7 @@
                 id: pageId
             });
         }
+				// updated by reg!
         function animatePages(fromPage, toPage, animation, backwards) {
             if (typeof(animation) === 'string') {
 								var m = animation.match('^(.*)[ _.](reverse|back|backwards)');
