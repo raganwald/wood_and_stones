@@ -550,6 +550,7 @@ var GO = function () {
 								.text(this_move.data('player') + ' passed.'); // TODO: Titleize
 						}
 						update_elements_with_navigation_handlers(this_move);
+						update_hey(this_move);
 						this_move.insertBefore(next_move);
 					}
 					return $(selector);
@@ -666,57 +667,68 @@ var GO = function () {
 				});
 			};
 			
-			var update_hey = function () {
-				$('.hey:not(:empty)').each(function (index, hey_el) {
+			var update_hey = function (selection) {
+				if (selection == null) {
+					selection = $('.hey:not(:empty)');
+				}
+				else {
+					if (typeof(selection) == 'string') {
+						selection = $(selection);
+					}
+					selection = selection.find('.hey:not(:empty)');
+				}
+				selection.each(function (index, hey_el) {
 					var hey = $(hey_el);
 					var heyMove = hey.parents('.move');
-					heyMove.find('.toolbar #heyButton').each(function (index, heyButton_el) {
-						var heyButton = $(heyButton_el);
-						heyButton
-							.attr('src', '/images/tools/hey-text-green.png')
-							.qtip({
-								content:  hey.text(),
-								position: {
-								   corner: {
-								      target: 'bottomMiddle',
-								      tooltip: 'topRight'
-								   },
-									container: heyMove
-								},
-								show: {
-									when: { 
-										event: SELECTION_EVENT, 
-										target: heyButton 
+					heyMove
+						.find('.toolbar #heyButton')
+						.each(function (index, heyButton_el) {
+							var heyButton = $(heyButton_el);
+							heyButton
+								.attr('src', '/images/tools/hey-text-green.png')
+								.qtip({
+									content:  hey.text(),
+									position: {
+									   corner: {
+									      target: 'bottomMiddle',
+									      tooltip: 'topRight'
+									   },
+										container: heyMove
 									},
-									effect: { type: 'fade' }
-								},
-								hide: { 
-									when: { 
-										target: heyMove,
-										event: SELECTION_EVENT
+									show: {
+										when: { 
+											event: SELECTION_EVENT, 
+											target: heyButton 
+										},
+										effect: { type: 'fade' }
 									},
-									effect: { type: 'fade' }
-								},
-								hide: {
-									delay: 1000,
-									event: 'inactive'
-								},
-								style: {
-								   border: {
-								      width: 5,
-								      radius: 5
-								   },
-								   padding: 10, 
-									 tip: { corner: 'topRight' },
-								   textAlign: 'center',
-								   name: 'green' 
-								}
-							})
-							.click(function (event) {
-								this.qtip('show');
-							})
-							;
-					});
+									hide: { 
+										when: { 
+											target: heyMove,
+											event: SELECTION_EVENT
+										},
+										effect: { type: 'fade' }
+									},
+									hide: {
+										delay: 1000,
+										event: 'inactive'
+									},
+									style: {
+									   border: {
+									      width: 5,
+									      radius: 5
+									   },
+									   padding: 10, 
+										 tip: { corner: 'topRight' },
+									   textAlign: 'center',
+									   name: 'green' 
+									}
+								})
+								.click(function (event) {
+									$(this).qtip('show');
+								})
+								;
+						});
 				});
 			};
 			
