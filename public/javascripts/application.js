@@ -512,6 +512,12 @@ var GO = function () {
 						this_move
 							.find('.board .valid')
 								.removeClass('valid');
+						this_move
+							.find('.toolbar #heyButton')
+								.attr('src', '/images/tools/empty-text-green.png')
+						var hey = this_move
+							.find('.hey')
+								.empty();
 						var position = next_move.data('position');
 						if (position && position != '') {
 							this_move
@@ -524,30 +530,21 @@ var GO = function () {
 							}).join(', ');
 							this_move
 								.find(removed_selector)
-								.removeClass('empty')
-								.addClass(other_player);
+									.removeClass('empty')
+									.addClass(other_player);
 						}
 						var last_position = this_move.data('position');
 						if (last_position && last_position != '') {
 							this_move
 								.find('#' + last_position + '.intersection')
-								.addClass('last');
+									.addClass('last');
 							if (this_move.data('removed').length > 0) {
-								this_move
-									.find('.hey')
-									.text(this_move.data('player')+ ' captured ' + this_move.data('removed').length + ' stones.');
+								hey.text(this_move.data('player')+ ' captured ' + this_move.data('removed').length + ' stones.');
 									// TODO: capitalize and pluralize
-							}
-							else {
-								this_move
-									.find('.hey')
-									.text('');
 							}
 						}
 						else {
-							this_move
-								.find('.hey')
-								.text(this_move.data('player') + ' passed.'); // TODO: Titleize
+							hey.text(this_move.data('player') + ' passed.'); // TODO: Titleize
 						}
 						update_elements_with_navigation_handlers(this_move);
 						update_hey(this_move);
@@ -680,6 +677,7 @@ var GO = function () {
 				selection.each(function (index, hey_el) {
 					var hey = $(hey_el);
 					var heyMove = hey.parents('.move');
+					var heyText = hey.text();
 					heyMove
 						.find('.toolbar #heyButton')
 						.each(function (index, heyButton_el) {
@@ -687,7 +685,7 @@ var GO = function () {
 							heyButton
 								.attr('src', '/images/tools/hey-text-green.png')
 								.qtip({
-									content:  hey.text(),
+									content: heyText,
 									position: {
 									   corner: {
 									      target: 'bottomMiddle',
