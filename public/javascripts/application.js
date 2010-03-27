@@ -537,7 +537,7 @@ var GO = function () {
 						if (last_position && last_position != '') {
 							this_move
 								.find('#' + last_position + '.intersection')
-									.addClass('last');
+									.addClass('last latest');
 							if (this_move.data('removed').length > 0) {
 								hey.text(this_move.data('player')+ ' captured ' + this_move.data('removed').length + ' stones.');
 									// TODO: capitalize and pluralize
