@@ -437,7 +437,7 @@ var GO = function () {
 								history[key] = {
 									player: val.player,
 									position: val.position,
-									removed: JSON.parse(val.removed)
+									removed: jQuery.parseJSON(val.removed)
 								};
 							});
 							$('body').data('moves', history);
@@ -644,6 +644,10 @@ var GO = function () {
 					}
 					else if ($.support.touch) {
 						elements.bind('swipe.navigation', swiper);
+						// elements.gesture(gesturer, {
+						// 	startgesture: "touchstart",
+						// 	stopgesture: "touchend"
+						// });
 					}
 					else {
 						elements.gesture(gesturer);
