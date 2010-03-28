@@ -331,6 +331,14 @@
             });
         }
 				// updated by reg!
+				
+				function swapPages(fromPage, toPage, animation, backwards) {
+					if (hist.length > 0 && hist[0].id == fromPage.attr('id'))
+						hist.shift;
+					addPageToHistory(toPage, animation);
+					animatePages(fromPage, toPage, animation, backwards);
+				}
+				
         function animatePages(fromPage, toPage, animation, backwards) {
             if (typeof(animation) === 'string') {
 								var m = animation.match('^(.*)[ _.](reverse|back|backwards)');
@@ -632,6 +640,7 @@
         
         publicObj = {
             animatePages: animatePages,
+						swapPages: swapPages,
             getOrientation: getOrientation,
             goBack: goBack,
             goTo: goTo,

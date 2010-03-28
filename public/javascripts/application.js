@@ -513,6 +513,9 @@ var GO = function () {
 							.find('.board .valid')
 								.removeClass('valid');
 						this_move
+							.find('h1 .gravatar')
+								.empty();
+						this_move
 							.find('.toolbar #heyButton')
 								.attr('src', '/images/tools/empty-text-green.png')
 						var hey = this_move
@@ -556,7 +559,7 @@ var GO = function () {
 					return function (from_move_number, to_move_number) {
 						var from_page = $(select_move_by_move_number(from_move_number));
 						var to_page = memoized_move(to_move_number);
-						jQT.animatePages(from_page, to_page, ((from_move_number > to_move_number) ? 'slide.backwards' : 'slide'));
+						jQT.swapPages(from_page, to_page, ((from_move_number > to_move_number) ? 'slide.backwards' : 'slide'));
 						
 						return false;
 					}
