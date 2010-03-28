@@ -12,7 +12,7 @@ var GO = function () {
 	var progress_dialog_instance;
 	var progress_count = 0;
 	var progress_dialog = function (cmd) {
-		console.log("Progress " + cmd + " with level " + progress_count);
+		// console.log("Progress " + cmd + " with level " + progress_count);
 		if (cmd == 'open') {
 			if (progress_count == 0) {
 				progress_count = 1;
@@ -249,18 +249,18 @@ var GO = function () {
 				  var move_to_bind_selector = (info.is_users_turn ? select_move_by_move_number(info.move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
 					if ($(places_to_unbind_selector).not(places_to_bind_selector).size() > 0) {
-						console.log('unbinding ' + $(places_to_unbind_selector).not(places_to_bind_selector).size() + ' intersections');
+						// console.log('unbinding ' + $(places_to_unbind_selector).not(places_to_bind_selector).size() + ' intersections');
 					}
 					$(places_to_unbind_selector).not(places_to_bind_selector).removeClass('black').removeClass('white');
 					if ($(move_to_unbind_selector).not(move_to_bind_selector).size() > 0) {
-						console.log('unbinding ' + $(move_to_unbind_selector).not(move_to_bind_selector).size() + ' moves');
+						// console.log('unbinding ' + $(move_to_unbind_selector).not(move_to_bind_selector).size() + ' moves');
 					}
 					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() > 0) {
-						console.log('restoring ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() + ' stones');
+						// console.log('restoring ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() + ' stones');
 					}
 					$(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).addClass(info.opponent).removeClass('empty');
 					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size() > 0) {
-						console.log('re-lasting ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size());
+						// console.log('re-lasting ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size());
 					}
 					$('.move').not(move_to_bind_selector).find(lasts_to_reclassify_finder).addClass('latest');
 					
@@ -339,7 +339,7 @@ var GO = function () {
 					return $(this).attr('id') == ('m' + (was_current_move_number + i + 1));
 				});
 	      if (update_moves.size() > 0) {
-					console.log('processing ' + update_moves.size() + ' updated moves');
+					// console.log('processing ' + update_moves.size() + ' updated moves');
 	        update_moves.insertAfter('.move:last');
 					update_elements_with_navigation_handlers(update_moves);
 	      }
@@ -353,7 +353,7 @@ var GO = function () {
 	        update_move_infos();
 					update_hey();
 	        if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
-						console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
+						// console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
 	          jQT.goTo($('.move:last'), 'fade');
 	        }
 				}
@@ -361,7 +361,7 @@ var GO = function () {
 		
 			var update_move_infos = function () {
 				var selector = select_move_by_move_number(info.move_number);
-				console.log('update_move_infos given ' + $(selector).size() + ' move ' + info.move_number);
+				// console.log('update_move_infos given ' + $(selector).size() + ' move ' + info.move_number);
 				if (info.game_state != 'ended') {
 					var text;
 					if (info.playing && info.playing != '') {
@@ -392,16 +392,16 @@ var GO = function () {
 						.text('End');
 					$(selector).find('.toolbar .gravatar').empty();
 				}
-				console.log('looking for outdated moves that are not ' + selector);
+				// console.log('looking for outdated moves that are not ' + selector);
 				$('.move').not(selector).has('.toolbar .playing.current').each(function (index, move_el) {
-					console.log('found an outdated move ' + $(move_el).attr('id'));
+					// console.log('found an outdated move ' + $(move_el).attr('id'));
 					$(move_el).find('.toolbar .playing')
 						.removeClass('current')
 						.text('Move ' + $(move_el).data('number'));
 					$(move_el).find('.toolbar .gravatar').empty();
 					$(move_el).find('.info .news').text('');
 				});
-				console.log("done updating move_infos");
+				// console.log("done updating move_infos");
 			};
 
 			var timer = function () {
@@ -425,7 +425,7 @@ var GO = function () {
 			var get_history_up_to = function (current_move_number) {
 				if (current_move_number > 1) {
 					var secs = timer();
-					console.log("getting history " + secs());
+					// console.log("getting history " + secs());
 					progress_dialog('open');
 					$.ajax({
 				    url: info.get_history_f(current_move_number + 1),
@@ -642,16 +642,17 @@ var GO = function () {
 					if (elements.size() == 0) {
 						console.warn("unable to update navigation: no elements for " + selector);
 					}
-					else if ($.support.touch) {
-						elements.bind('swipe.navigation', swiper);
-						// elements.gesture(gesturer, {
-						// 	startgesture: "touchstart",
-						// 	stopgesture: "touchend"
-						// });
-					}
-					else {
-						elements.gesture(gesturer);
-					}
+					else // if ($.support.touch) {
+						// elements.bind('swipe.navigation', swiper);
+						elements.gesture(gesturer, {
+							startgesture: "touchstart mousedown",
+							stopgesture: "touchend mouseup",
+							intragesture: "touchmove mousemove"
+						});
+					// }
+					// else {
+					// 	elements.gesture(gesturer);
+					// }
 					// console.log("done updating elements " + secs());
 				};
 			}();

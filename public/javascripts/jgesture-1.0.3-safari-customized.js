@@ -87,6 +87,7 @@ jQuery.fn.gesture = function(fn, settings) {
   settings = jQuery.extend({
      startgesture: "mousedown",
      stopgesture: "mouseup",
+			intragesture: "mousemove",
      button: "012",
      mindistance: 10,
      continuesmode: false,
@@ -111,15 +112,22 @@ jQuery.fn.gesture = function(fn, settings) {
     gesture.y = -1;
     gesture.continuesmode = settings.continuesmode;
     
-    $(this).bind("mousemove", function(e){
+    $(this).bind(settings.intragesture, function(e){
+			var x = typeof(e.screenX) == 'number' ? e.screenX : event.targetTouches[0].pageX;
+			var y = typeof(e.screenY) == 'number' ? e.screenY : event.targetTouches[0].pageY;
+			
+console.log('entering intragesture with coördinates of ' + x + ' and ' + y);
       if ((gesture.x == -1) && (gesture.y == -1)){
-        gesture.x = e.screenX;
-        gesture.y = e.screenY;
+console.log('initializing and bailing from intragesture');
+        gesture.x = x;
+        gesture.y = y;
         return;
       }
-      var distance = Math.sqrt(Math.pow(e.screenX - gesture.x,2)+Math.pow(e.screenY - gesture.y,2));
+console.log('getting distance ');
+      var distance = Math.sqrt(Math.pow(x - gesture.x,2)+Math.pow(y - gesture.y,2));
       if( distance > settings.mindistance){
-        var angle = Math.atan2(e.screenX - gesture.x, e.screenY - gesture.y) / Math.PI + 1;
+console.log('distance of ' + distance + ' exceeds ' + settings.mindistance);
+        var angle = Math.atan2(x - gesture.x, y - gesture.y) / Math.PI + 1;
         var dir = 0;
         if (3/8  < angle && angle < 5/8 ) dir = 8;
         if (5/8  < angle && angle < 7/8 ) dir = 7;
@@ -130,34 +138,42 @@ jQuery.fn.gesture = function(fn, settings) {
         if (15/8 < angle || angle < 1/8 ) dir = 2;
         if (1/8  < angle && angle < 3/8 ) dir = 1;
 
-        gesture.x = e.screenX;
-        gesture.y = e.screenY;
+console.log('direction is ' + dir);
+
+        gesture.x = x;
+        gesture.y = y;
         
         if(gesture.moves.length == 0) {
+console.log('first move ');
           gesture.moves += dir;
           gesture.lastmove = "" + dir;
         }
         else {
           if (settings.repeat || (gesture.moves.charAt(gesture.moves.length - 1) != dir) ){
-	    gesture.moves += dir;
-	    gesture.lastmove = "" + dir;
-	  }
+console.log('subsequent move is a repeat or new direction');
+				    gesture.moves += dir;
+				    gesture.lastmove = "" + dir;
+				  }
         }
         if (settings.continuesmode){
           var t = $(this);
-	  t.hfn = fn;
+	  			t.hfn = fn;
           t.hfn(gesture);
         }
       }
+else {
+console.log('distance of ' + distance + ' does not exceed ' + settings.mindistance);
+}
     });
   });
 
   $(this).bind(settings.stopgesture, function(e){
     if (e.button != null && settings.button.indexOf("" + e.button) == -1) return;
+
     if (!settings.disablecontextmenu) {
       $(this).unbind("contextmenu");
     }
-    $(this).unbind("mousemove");
+    $(this).unbind(settings.intragesture);
     if (gesture.moves.length != 0) {
       var t = $(this);
       t.hfn = fn;
