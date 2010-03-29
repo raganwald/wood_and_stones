@@ -11,4 +11,22 @@ The current approach is lifted directly from [Dave Peck's Go](http://go.davepeck
 
 **help with the server**
 
-You need to run the Rails server and also to run DelayedJob with `rake jobs:work`.
+Configure `config/environments/production.rb` with whatever you need to run the Rails server and to run ActiveMailer. Run the rails server to host games and run [delayed\_job](http://github.com/tobi/delayed_job "Delayed Job") with `rake jobs:work` to actually send notification emails. 
+
+**help with the client**
+
+The web client is written *specifically* for the iPhone/iPod Touch at this time. I also test it on OS X Safari. I have made no attempt to test it on any other OS or browser. To start a new game, go to the web server's root, e.g. `http://localhost:3000`. Put your email and your opponent's email in, choose a board size, colour to play, and a handicap. 9x9 looks fine on an iPhone, but that's up to you. You and your opponents should receive emails with game invitations. Click the link in the email and you can play.
+
+When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you wish to make a different play, simply tap another intersection. When you are satisfied with your choice, swipe the board from right to left. This is called moving forwards in time. If you don't place a stone, moving forwards in time is a pass. You can 'undo' a placed stone by tapping it again.
+
+If it's your opponent's turn to play, you can update the board whenever you like by moving forwards in time (swiping from right to left). If your opponent has moved or passed the board will be updated. I am experimenting with various mechanisms for automatically polling for an update.
+
+If you would like to see a history of the game, you move backwards in time by swiping from left to right. Each swipe from left to right moves back one move. You can move forward a move by swiping from right to left. Once you have returned to the current move, swiping right to left is once again either making a play or updating.
+
+There's a bit more, but this should get you started until I add a little more to the documentation.
+
+**code confessions, a/k/a estimating the WTFs per LOC**
+
+This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins for things like gravatars and polling. Right now I'm playing with [jGesture](http://plugins.jquery.com/project/jGesture) to support a gestural UX. I've modified it to work on Mobile Safari and to support a custom event architecture instead of a callback architecture. jQTouch handles swiping left and right, but I wanted a richer set of gestures for more advanced users. I'm experimenting with [qtip](http://craigsworks.com/projects/qtip/ "qTip - The jQuery tooltip plugin  - Home") for displaying messages and having some trouble with it on iPhone, so we'll see how that goes.
+
+Embarrassingly, I thought supporting SGF was overly complicated and I should stick to simple page generation, but I've ended up re-inventing it in JSON format. What can I say, vote for [issue #108](https://github.com/raganwald/go/issues/#issue/108)!
