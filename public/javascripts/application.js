@@ -4,9 +4,9 @@ var GO = function () {
     message_dialog_instance
 			.text(text)
 			.dialog({
-				title: title,
-				buttons: { "Ok": function() { $(this).dialog("close"); } }
-			})
+					title: title,
+					buttons: { "Ok": function() { $(this).dialog("close"); } }
+				})
 			.dialog('open');
 	};
 	var progress_dialog_instance;
@@ -49,6 +49,7 @@ var GO = function () {
 			var document_ready_hook = function () {
 				message_dialog_instance = $('<div></div>')
 					.dialog({
+						dialogClass: 'close_gesture message',
 						autoOpen: false,
 						height: 'auto',
 						title: 'Hey!',
@@ -63,6 +64,10 @@ var GO = function () {
 						height: 72
 					});
 				progress_dialog_instance.parent().detach().appendTo('body > .current');
+				$('.message.close_gesture').bind('gesture_close', function (event) {
+					message_dialog_instance.dialog("close");
+					return false;
+				});
 			};
 			return {
 				document_ready_hook: document_ready_hook

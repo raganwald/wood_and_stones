@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 // This code modified from jGesture, http://plugins.jquery.com/project/jGesture,
-// (©)c) 2008 Nico Goeminne and released under Apache License 2.0
+// (c) 2008 Nico Goeminne and released under Apache License 2.0
 
 // Mods (so far) include support for mobile touch events under Mobile Safari,
 // storing the target for creating custom events, and expanding the predefined

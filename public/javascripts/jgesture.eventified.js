@@ -25,20 +25,36 @@
 //
 // See jGesture
 
-$(function () {
-	$('body')
-		.gesture(function (gesture_data) {
-			var name = gesture_data.getName();
-			if (name != null && name != '') {
-				var event = jQuery.Event("gesture_" + name);
-				event.gesture_data = gesture_data;
-				$(gesture_data.target).trigger(event);
-			}
-			return false;
-		}, {
-			startgesture: "touchstart mousedown",
-			stopgesture: "touchend mouseup",
-			intragesture: "touchmove mousemove"
-		}
-	);
-});
+(function () {
+	
+	var class_that_wants_close_gestures = 'close_gesture';
+
+	$(function () {
+		$('body')
+			.gesture(function (gesture_data) {
+					var name = gesture_data.getName();
+					if (name != null && name != '') {
+						var event = jQuery.Event("gesture_" + name);
+						event.gesture_data = gesture_data;
+						event.unhandled = true;
+						$(gesture_data.target).trigger(event);
+					}
+					return false;
+				}, {
+					startgesture: "touchstart mousedown",
+					stopgesture: "touchend mouseup",
+					intragesture: "touchmove mousemove"
+				})
+			.bind('gesture_close', function (event) {
+					if (event.unhandled) {
+						event.unhandled = false;
+						$(event.target)
+							.parents('body > *')
+								.find('.' + class_that_wants_close_gestures)
+									.trigger(event);
+					}
+					return false;
+				});
+	});
+	
+})();
