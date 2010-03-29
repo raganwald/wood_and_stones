@@ -269,50 +269,55 @@ var GO = function () {
 			  };
 			}();
 			
-			var liven_playing_positions = function () {
-				
-				var set_played_stone = function (target, play_p) {
-					// restore all other plays
-					$('.move.playing .board .valid.' + info.playing).not(target).removeClass(info.playing);
-					// make the play or remove the play
-					if (play_p) {
-						target.addClass(info.playing);
-						$('.move.playing .last').removeClass('latest');
-					}
-					else {
-						target.removeClass(info.playing);
-						$('.move.playing .last').addClass('latest');
-					}
-				};
-			
-				var set_killed_stones = function (target, kill_p) {
+			var set_played_stone = function (target, play_p) {
+				// restore all other plays
+				$('.move.playing .board .valid.' + info.playing).not(target).removeClass(info.playing);
+				// make the play or remove the play
+				if (play_p) {
+					target.addClass(info.playing);
+					$('.move.playing .last').removeClass('latest');
+				}
+				else {
+					target.removeClass(info.playing);
+					$('.move.playing .last').addClass('latest');
+				}
+			};
+		
+			var set_killed_stones = function (target, kill_p) {
+				// restore all atari stones
+				$('.move.playing .board .atari' ).addClass(info.opponent).removeClass('empty');
+				// maybe kill some stones
+				if (kill_p) {
 					var killed_selector = '.move.playing .board .atari.killed_by_' + target.attr('id');
-					// restore all atari stones
-					$('.move.playing .board .atari' ).addClass(info.opponent).removeClass('empty');
-					// maybe kill some stones
-					if (kill_p) {
-						$(killed_selector)
-							.each(function (i,e) {
-								e = $(e);
-								$(new Image(e.height(), e.width()))
-									.attr('src', /^url\((.*)\)/.exec(e.css('background-image'))[1])
-									.css({
-										position: 'absolute',
-										top: e.position().top,
-										left: e.position().left,
-										'z-index': (e.css('z-index') + 1)
-									})
-									.addClass('fade_animation')
-									.appendTo(e.parent())
-									.show();
-							})
-							.removeClass(info.opponent)
-							.addClass('empty');
-						$('.fade_animation').fadeOut(1000, function () {
-							$('.fade_animation').remove();
-						});
-					}
-				};
+					$(killed_selector)
+						.each(function (i,e) {
+							e = $(e);
+							$(new Image(e.height(), e.width()))
+								.attr('src', /^url\((.*)\)/.exec(e.css('background-image'))[1])
+								.css({
+									position: 'absolute',
+									top: e.position().top,
+									left: e.position().left,
+									'z-index': (e.css('z-index') + 1)
+								})
+								.addClass('fade_animation')
+								.appendTo(e.parent())
+								.show();
+						})
+						.removeClass(info.opponent)
+						.addClass('empty');
+					$('.fade_animation').fadeOut(1000, function () {
+						$('.fade_animation').remove();
+					});
+				}
+			};
+			
+			var clear_current_play = function (target) {
+				set_played_stone($(target).find('.intersection.latest'), false);
+				set_killed_stones(null, false)
+			};
+				
+			var liven_playing_positions = function () {
 				
 				var toggle_placed_stone = function (event_data) {
 					var target = $(event_data.currentTarget);
@@ -424,8 +429,6 @@ var GO = function () {
 			
 			var get_history_up_to = function (current_move_number) {
 				if (current_move_number > 1) {
-					var secs = timer();
-					// console.log("getting history " + secs());
 					progress_dialog('open');
 					$.ajax({
 				    url: info.get_history_f(current_move_number + 1),
@@ -459,33 +462,6 @@ var GO = function () {
 							alert(error_response.responseText);
 						}
 					});
-				  // $.ajax({
-				  //   url: info.get_history_f(current_move_number),
-				  //   type: 'GET',
-				  //   dataType: 'html',
-				  //   success: function (html) {
-				  // 							console.log("gotten history from the server " + secs());
-				  // 							stop_polling();
-				  // 			      	update_moves = $(html).filter('.move');
-				  // 			      	if (update_moves.size() > 0) {
-				  // 								console.log("inserting history in the DOM " + secs());
-				  // 								update_moves.each(function (i, el) {
-				  // 									$(el).data('number', i + 1);
-				  // 								});
-				  //     	update_moves.insertAfter('#m0');
-				  // 								console.log("* adding navigation handlers to history in the DOM " + secs());
-				  // 								update_elements_with_navigation_handlers(update_moves);
-				  // 								console.log("* adding heys to the history in the DOM " + secs());
-				  // 								update_hey();
-				  // 								resume_polling();
-				  // 							}
-				  // 							progress_dialog('close');
-				  // 							console.log("done with getting history " + secs());
-				  //   },
-				  //   error: function (error_response) {
-				  //     console.error('unable to load the game history before ' + current_move_number + ' because: ' + error_response.responseText);
-				  //   }
-				  // });
 				}
 			};
 					
@@ -565,7 +541,7 @@ var GO = function () {
 						return false;
 					}
 				}();
-				var swipeBoardLeft = function (target) {
+				var forwards_in_time = function (target) {
 					var current_move_number = current_displayed_move_number(target);
 					if (current_move_number < last_displayed_move_number()) {
 						return goto_move(current_move_number, current_move_number + 1);
@@ -611,7 +587,7 @@ var GO = function () {
 						return false;
 					}
 				};
-				var swipeBoardRight = function (target) {
+				var backwards_in_time = function (target) {
 					var current_move_number = current_displayed_move_number(target);
 					if (current_move_number > 0) {
 						return goto_move(current_move_number, current_move_number - 1);
@@ -622,11 +598,15 @@ var GO = function () {
 					$(selector)
 						.find('.board')
 							.bind('gesture_left', function (event) {
-									return swipeBoardLeft(this);
+									return forwards_in_time(this);
 								})
 							.bind('gesture_right', function (event) {
-									return swipeBoardRight(this);
+									return backwards_in_time(this);
 								})
+							.bind('gesture_close', function (event) {
+									return clear_current_play(this);
+								})
+								
 				};
 			}();
 			

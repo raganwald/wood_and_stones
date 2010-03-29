@@ -1,6 +1,15 @@
 jQuery.fn.gesture = function(fn, settings) {
 	
   return this.each( function () {
+	
+		var topleft = 1;
+		var top = 2;
+		var topright = 3;
+		var right = 4;
+		var bottomright = 5;
+		var bottom = 6;
+		var bottomleft = 7;
+		var left = 8;
 
 	  var gesture = {
 			target: null,
@@ -49,10 +58,22 @@ jQuery.fn.gesture = function(fn, settings) {
 	             (Number(this.moves.charAt(this.moves.length-1)) == 4) &&
 	             (this.moves.indexOf("1") != -1)
 	           ) return "open";
-	        if ( (Number(this.moves.charAt(0))== 5) &&
-	             (Number(this.moves.charAt(this.moves.length-1)) == 7) &&
-	             (this.moves.indexOf("2") != -1)
-	           ) return "close";
+					var g = this;
+					var half_close_gestures = [
+						{ start: bottomright, connect: top, finish: bottomleft }, { start: topleft, connect: bottom, finish: topright },
+						{ start: bottomright, connect: left, finish: topright }, { start: topleft, connect: right, finish: bottomleft }
+					];
+					for (i in half_close_gestures) {
+						var e = half_close_gestures[i];
+		        if ( (Number(g.moves.charAt(0))== e.start) &&
+		             (Number(g.moves.charAt(g.moves.length-1)) == e.finish) &&
+		             (g.moves.indexOf('' + e.connect) != -1)
+		           ) {console.log('!'); return 'close';}
+		        if ( (Number(g.moves.charAt(0))== e.finish) &&
+		             (Number(g.moves.charAt(g.moves.length-1)) == e.start) &&
+		             (g.moves.indexOf('' + e.connect) != -1)
+		           ) return 'close';
+					};
 	   //   }
 
 	      if (this.moves.length >= 7) {
