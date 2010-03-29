@@ -27,7 +27,7 @@
 
 (function () {
 	
-	var class_that_wants_close_gestures = 'close_gesture';
+	var class_that_wants_close_gestures = 'wants_close';
 
 	$(function () {
 		$('body')

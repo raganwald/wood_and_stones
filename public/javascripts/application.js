@@ -49,7 +49,7 @@ var GO = function () {
 			var document_ready_hook = function () {
 				message_dialog_instance = $('<div></div>')
 					.dialog({
-						dialogClass: 'close_gesture message',
+						dialogClass: 'wants_close message',
 						autoOpen: false,
 						height: 'auto',
 						title: 'Hey!',
@@ -64,7 +64,7 @@ var GO = function () {
 						height: 72
 					});
 				progress_dialog_instance.parent().detach().appendTo('body > .current');
-				$('.message.close_gesture').bind('gesture_close', function (event) {
+				$('.message.wants_close').bind('gesture_close', function (event) {
 					message_dialog_instance.dialog("close");
 					return false;
 				});
@@ -643,53 +643,57 @@ var GO = function () {
 					var heyText = hey.text();
 					heyMove
 						.find('.toolbar #heyButton')
-						.each(function (index, heyButton_el) {
-							var heyButton = $(heyButton_el);
-							heyButton
-								.attr('src', '/images/tools/hey-text-green.png')
-								.qtip({
-									content: heyText,
-									position: {
-									   corner: {
-									      target: 'bottomMiddle',
-									      tooltip: 'topRight'
-									   },
-										container: heyMove
-									},
-									show: {
-										when: { 
-											event: SELECTION_EVENT, 
-											target: heyButton 
+							.addClass('wants_close')
+							.each(function (index, heyButton_el) {
+								var heyButton = $(heyButton_el);
+								heyButton
+									.attr('src', '/images/tools/hey-text-green.png')
+									.bind('gesture_close', function (event) {
+											$(this).qtip('hide');
+										})
+									.qtip({
+										content: heyText,
+										position: {
+										   corner: {
+										      target: 'bottomMiddle',
+										      tooltip: 'topRight'
+										   },
+											container: heyMove
 										},
-										effect: { type: 'fade' }
-									},
-									hide: { 
-										when: { 
-											target: heyMove,
-											event: SELECTION_EVENT
+										show: {
+											when: { 
+												event: SELECTION_EVENT, 
+												target: heyButton 
+											},
+											effect: { type: 'fade' }
 										},
-										effect: { type: 'fade' }
-									},
-									hide: {
-										delay: 1000,
-										event: 'inactive'
-									},
-									style: {
-									   border: {
-									      width: 5,
-									      radius: 5
-									   },
-									   padding: 10, 
-										 tip: { corner: 'topRight' },
-									   textAlign: 'center',
-									   name: 'green' 
-									}
-								})
-								.click(function (event) {
-									$(this).qtip('show');
-								})
-								;
-						});
+										hide: { 
+											when: { 
+												target: heyButton,
+												event: SELECTION_EVENT
+											},
+											effect: { type: 'fade' }
+										},
+										hide: {
+											delay: 10000,
+											event: 'inactive'
+										},
+										style: {
+										   border: {
+										      width: 5,
+										      radius: 5
+										   },
+										   padding: 10, 
+											 tip: { corner: 'topRight' },
+										   textAlign: 'center',
+										   name: 'green' 
+										}
+									})
+									.click(function (event) {
+										$(this).qtip('show');
+									})
+									;
+							});
 				});
 			};
 			

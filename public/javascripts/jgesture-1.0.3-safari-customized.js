@@ -98,7 +98,7 @@ jQuery.fn.gesture = function(fn, settings) {
 		        if ( (Number(g.moves.charAt(0))== e.start) &&
 		             (Number(g.moves.charAt(g.moves.length-1)) == e.finish) &&
 		             (g.moves.indexOf('' + e.connect) != -1)
-		           ) {console.log('!'); return 'close';}
+		           ) return 'close';
 		        if ( (Number(g.moves.charAt(0))== e.finish) &&
 		             (Number(g.moves.charAt(g.moves.length-1)) == e.start) &&
 		             (g.moves.indexOf('' + e.connect) != -1)
