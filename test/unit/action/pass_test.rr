@@ -1,5 +1,0 @@
-require File.dirname(__FILE__) + '/../../test_helper'
-
-class Action::PassTest < ActiveRecord::TestCase
-  
-end
