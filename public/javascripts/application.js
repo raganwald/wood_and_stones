@@ -639,24 +639,23 @@ var GO = function () {
 				};
 				
 				return function (selector) {
-					// var secs = timer();
-					elements = $(selector).find('.board');
-					// console.log("updating " + elements.size() + " elements " + secs());
-					if (elements.size() == 0) {
-						console.warn("unable to update navigation: no elements for " + selector);
-					}
-					else // if ($.support.touch) {
-						// elements.bind('swipe.navigation', swiper);
-						elements.gesture(gesturer, {
-							startgesture: "touchstart mousedown",
-							stopgesture: "touchend mouseup",
-							intragesture: "touchmove mousemove"
-						});
+					// elements = $(selector).find('.board');
+					// if (elements.size() == 0) {
+					// 	console.warn("unable to update navigation: no elements for " + selector);
 					// }
-					// else {
-					// 	elements.gesture(gesturer);
-					// }
-					// console.log("done updating elements " + secs());
+					// else elements.gesture(gesturer, {
+					// 		startgesture: "touchstart mousedown",
+					// 		stopgesture: "touchend mouseup",
+					// 		intragesture: "touchmove mousemove"
+					// 	});
+					$(selector)
+						.find('.board')
+							.bind('gesture_left', function (event) {
+									return swipeBoardLeft(this);
+								})
+							.bind('gesture_right', function (event) {
+									return swipeBoardRight(this);
+								})
 				};
 			}();
 			
