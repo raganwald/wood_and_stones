@@ -490,6 +490,7 @@ var GO = function () {
 			};
 					
 			var update_elements_with_navigation_handlers = function () {
+				
 				var memoized_move = function (target_move_number) {
 					var selector = select_move_by_move_number(target_move_number);
 					if ($(selector).size() == 0) {
@@ -617,37 +618,7 @@ var GO = function () {
 					}
 				};
 				
-				var swiper = function(event, data) {
-		      if (data.direction == 'left') {
-		        swipeBoardLeft(event.currentTarget);
-		        return false;
-		      }
-		      else {
-		        swipeBoardRight(event.currentTarget);
-		        return false;
-		      }
-		    };
-				
-				var gesturer = function (gs) {
-					if (gs.getName() == 'left') {
-						return swipeBoardLeft(this);
-					}
-					else if (gs.getName() == 'right') {
-						return swipeBoardRight(this);
-					}
-					return true;
-				};
-				
 				return function (selector) {
-					// elements = $(selector).find('.board');
-					// if (elements.size() == 0) {
-					// 	console.warn("unable to update navigation: no elements for " + selector);
-					// }
-					// else elements.gesture(gesturer, {
-					// 		startgesture: "touchstart mousedown",
-					// 		stopgesture: "touchend mouseup",
-					// 		intragesture: "touchmove mousemove"
-					// 	});
 					$(selector)
 						.find('.board')
 							.bind('gesture_left', function (event) {
