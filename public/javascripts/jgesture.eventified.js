@@ -1,5 +1,6 @@
 $(function () {
-	$('body').gesture(function (gesture_data) {
+	$('body')
+		.gesture(function (gesture_data) {
 			var name = gesture_data.getName();
 			if (name != null && name != '') {
 				var event = jQuery.Event("gesture_" + name);
