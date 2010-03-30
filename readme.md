@@ -17,25 +17,17 @@ Configure `config/environments/production.rb` with whatever you need to run the 
 
 The web client is written *specifically* for the iPhone/iPod Touch at this time. I also test it on OS X Safari. I have made no attempt to test it on any other OS or browser. To start a new game, go to the web server's root, e.g. `http://localhost:3000`. Put your email and your opponent's email in, choose a board size, colour to play, and a handicap. 9x9 looks fine on an iPhone, but that's up to you. You and your opponents should receive emails with game invitations. Click the link in the email and you can play.
 
-When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you wish to make a different play, simply tap another intersection. When you are satisfied with your choice, swipe the board from right to left. This is called moving forwards in time. If you don't place a stone, moving forwards in time is a pass. You can 'undo' a placed stone by tapping it again.
+In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), I am experimenting with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping the screen or drawing simple symbols.
 
-If it's your opponent's turn to play, you can update the board whenever you like by moving forwards in time (swiping from right to left). If your opponent has moved or passed the board will be updated. I am experimenting with various mechanisms for automatically polling for an update.
+When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you wish to make a different play, simply tap another intersection. You can 'undo' a placed stone by tapping it again. This will restore any killed stones, of course. When you are satisfied with your choice, swipe the board from right to left. This is called moving forwards in time. If you don't place a stone, moving forwards in time is a pass.
 
-If you would like to see a history of the game, you move backwards in time by swiping from left to right. Each swipe from left to right moves back one move. You can move forward a move by swiping from right to left. Once you have returned to the current move, swiping right to left is once again either making a play or updating.
+Why swipe right to left. Imagine that the game is played on a long strip of film, with the past to the left and the future to the right. What you are looking at is just one 'frame' in the film. Swiping right to left is like moving the film so that the next frame (the future) becomes visible.
 
-There's a bit more, but this should get you started until I add a little more to the documentation.
+It's the same thing when it's your opponent's turn to play, you can update the board whenever you like by moving forwards in time (swiping from right to left). If your opponent has moved or passed the board will be updated. I am experimenting with various mechanisms for automatically polling for an update. But the basic idea is the same: "Let's see what the future holds."
 
-**gesture this, ass----!**
+If you would like to see a history of the game, you move backwards in time by swiping from left to right. This is like moving the film so that the past becomes visible. Each swipe from left to right moves back one move. You can move forward a move by swiping from right to left. Once you have returned to the current move, swiping right to left is once again either making a play or updating.
 
-In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), I am experimenting with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping teh screen or drawing simple symbols. So far, these are:
-
-*Swipe right to left*: Moves forward in time, playing a stone, passing, or checking the server for an update.
-
-*Swipe left to right*: Moves backwards in time, displaying the previous board position.
-
-*Draw an 'X' without lifting your finger from the screen*: Close or cancel operation. Lifts your current played stone, closes a dialog without performing an action, or dismisses a 'Hey' speech bubble.
-
-*Draw a circle clockwise or counterclockwise*: Flips to the back of the screen, showing statistics and more game information.
+Pro tip: Sometimes you will see a dialog box or a speech bubble and you want them to go away. Or you have placed a stone on your turn and you want to undo it without tapping the stone. Draw an X on the screen without lifting your finger it will go away.
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
