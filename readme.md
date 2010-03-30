@@ -25,6 +25,18 @@ If you would like to see a history of the game, you move backwards in time by sw
 
 There's a bit more, but this should get you started until I add a little more to the documentation.
 
+**gesture this, ass----!**
+
+In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), I am experimenting with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping teh screen or drawing simple symbols. So far, these are:
+
+*Swipe right to left*: Moves forward in time, playing a stone, passing, or checking the server for an update.
+
+*Swipe left to right*: Moves backwards in time, displaying the previous board position.
+
+*Draw an 'X' without lifting your finger from the screen*: Close or cancel operation. Lifts your current played stone, closes a dialog without performing an action, or dismisses a 'Hey' speech bubble.
+
+*Draw a circle clockwise or counterclockwise*: Flips to the back of the screen, showing statistics and more game information.
+
 **code confessions, a/k/a estimating the WTFs per LOC**
 
 This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins for things like gravatars and polling. Right now I'm playing with [jGesture](http://plugins.jquery.com/project/jGesture) to support a gestural UX. I've modified it to work on Mobile Safari and to support a custom event architecture instead of a callback architecture. jQTouch handles swiping left and right, but I wanted a richer set of gestures for more advanced users. I'm experimenting with [qtip](http://craigsworks.com/projects/qtip/ "qTip - The jQuery tooltip plugin  - Home") for displaying messages and having some trouble with it on iPhone, so we'll see how that goes.

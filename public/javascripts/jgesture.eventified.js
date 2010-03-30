@@ -26,8 +26,6 @@
 // See jGesture
 
 (function () {
-	
-	var class_that_wants_close_gestures = 'wants_close';
 
 	$(function () {
 		$('body')
@@ -45,12 +43,32 @@
 					stopgesture: "touchend mouseup",
 					intragesture: "touchmove mousemove"
 				})
-			.bind('gesture_close', function (event) {
+			.bind('gesture_' + 'close', function (event) {
 					if (event.unhandled) {
 						event.unhandled = false;
 						$(event.target)
 							.parents('body > *')
-								.find('.' + class_that_wants_close_gestures)
+								.find('.wants_' + 'close')
+									.trigger(event);
+					}
+					return false;
+				});
+			.bind('gesture_' + 'rotateclockwise', function (event) {
+					if (event.unhandled) {
+						event.unhandled = false;
+						$(event.target)
+							.parents('body > *')
+								.find('.wants_' + 'rotateclockwise')
+									.trigger(event);
+					}
+					return false;
+				});
+			.bind('gesture_' + 'rotatecounterclockwise', function (event) {
+					if (event.unhandled) {
+						event.unhandled = false;
+						$(event.target)
+							.parents('body > *')
+								.find('.wants_' + 'rotatecounterclockwise')
 									.trigger(event);
 					}
 					return false;
