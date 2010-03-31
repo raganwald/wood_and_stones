@@ -318,7 +318,7 @@ var GO = function () {
 			};
 			
 			var clear_current_play = function (target) {
-				set_played_stone($(target).find('.intersection.latest'), false);
+				set_played_stone($(target).find('.intersection.latest:not(.last)'), false);
 				set_killed_stones(null, false)
 			};
 				
