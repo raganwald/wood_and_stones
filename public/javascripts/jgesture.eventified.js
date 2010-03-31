@@ -52,7 +52,7 @@
 									.trigger(event);
 					}
 					return false;
-				});
+				})
 			.bind('gesture_' + 'rotateclockwise', function (event) {
 					if (event.unhandled) {
 						event.unhandled = false;
@@ -62,7 +62,7 @@
 									.trigger(event);
 					}
 					return false;
-				});
+				})
 			.bind('gesture_' + 'rotatecounterclockwise', function (event) {
 					if (event.unhandled) {
 						event.unhandled = false;

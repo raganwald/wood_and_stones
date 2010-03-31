@@ -485,21 +485,21 @@ var GO = function () {
 							.data('number', target_move_number)
 							.data('player', move_data.player)
 							.data('position', move_data.position)
-							.data('removed', move_data.removed);
-						this_move
+							.data('removed', move_data.removed)
 							.find('.toolbar h1 .playing')
 								.text('Move ' + target_move_number)
 								.removeClass()
-								.addClass('playing');
-						this_move
+								.addClass('playing')
+								.end()
 							.find('.board .valid')
-								.removeClass('valid');
-						this_move
+								.removeClass('valid')
+								.end()
 							.find('h1 .gravatar')
-								.empty();
-						this_move
+								.empty()
+								.end()
 							.find('.toolbar #heyButton')
 								.attr('src', '/images/tools/empty-text-green.png')
+								.end()
 						var hey = this_move
 							.find('.hey')
 								.empty();

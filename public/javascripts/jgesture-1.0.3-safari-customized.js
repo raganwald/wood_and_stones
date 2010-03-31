@@ -93,6 +93,18 @@ jQuery.fn.gesture = function(fn, settings) {
 						{ start: bottomright, connect: top, finish: bottomleft }, { start: topleft, connect: bottom, finish: topright },
 						{ start: bottomright, connect: left, finish: topright }, { start: topleft, connect: right, finish: bottomleft }
 					];
+					
+					// jQuery.each(half_close_gestures, function (e, i) {
+					// 		        if ( (Number(g.moves.charAt(0))== e.start) &&
+					// 		             (Number(g.moves.charAt(g.moves.length-1)) == e.finish) &&
+					// 		             (g.moves.indexOf('' + e.connect) != -1)
+					// 		           ) return 'close';
+					// 		        if ( (Number(g.moves.charAt(0))== e.finish) &&
+					// 		             (Number(g.moves.charAt(g.moves.length-1)) == e.start) &&
+					// 		             (g.moves.indexOf('' + e.connect) != -1)
+					// 		           ) return 'close';
+					// });
+					
 					for (i in half_close_gestures) {
 						var e = half_close_gestures[i];
 		        if ( (Number(g.moves.charAt(0))== e.start) &&
