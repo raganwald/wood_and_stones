@@ -611,7 +611,7 @@ var GO = function () {
 							.bind('gesture_close', function (event) {
 									return clear_current_play(this);
 								})
-								
+							.end()
 				};
 			}();
 			
@@ -697,7 +697,21 @@ var GO = function () {
 				});
 			};
 			
+			var initialize_gesture_support = function() {
+				$('body')
+					.gesture(['left', 'right'])
+					.gesture({
+						close: function(target) {
+							console.log('in close ' + $(target).size() + "-" + $(target).parents('body > *').size() + "-" + $(target).parents('body > *').find('.wants_close').size());
+							return $(target)
+								.parents('body > *')
+									.find('.wants_close');
+						}
+					});
+			};
+			
 			var document_ready_hook = function () {
+				initialize_gesture_support();
 		    update_elements_with_navigation_handlers('body');
 		    liven_playing_positions();
 				update_playing_div()
