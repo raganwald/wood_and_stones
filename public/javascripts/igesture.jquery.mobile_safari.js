@@ -80,29 +80,33 @@ jQuery.fn.gesture = function(fn, settings) {
 		        return this.getMoveNameAt(0) + "_" + this.getMoveNameAt(1);
 		      }
 
-		   //   if (this.moves.length < 7) {
-		        if ( (Number(this.moves.charAt(0))== 6) &&
-		             (Number(this.moves.charAt(this.moves.length-1)) == 4) &&
-		             (this.moves.indexOf("1") != -1)
-		           ) return "open";
-						var g = this;
-						var half_close_gestures = [
-							{ start: bottomright, connect: top, finish: bottomleft }, { start: topleft, connect: bottom, finish: topright },
-							{ start: bottomright, connect: left, finish: topright }, { start: topleft, connect: right, finish: bottomleft }
-						];
-				
-						for (i in half_close_gestures) {
-							var e = half_close_gestures[i];
-			        if ( (Number(g.moves.charAt(0))== e.start) &&
-			             (Number(g.moves.charAt(g.moves.length-1)) == e.finish) &&
-			             (g.moves.indexOf('' + e.connect) != -1)
-			           ) return 'close';
-			        if ( (Number(g.moves.charAt(0))== e.finish) &&
-			             (Number(g.moves.charAt(g.moves.length-1)) == e.start) &&
-			             (g.moves.indexOf('' + e.connect) != -1)
-			           ) return 'close';
-						};
-		   //   }
+	        if ( (Number(this.moves.charAt(0))== 4) &&
+	             (Number(this.moves.charAt(this.moves.length-1)) == 4) &&
+	             (this.moves.indexOf("8") != -1)
+	           ) return "scrub";
+	        
+	        if ( (Number(this.moves.charAt(0))== 8) &&
+	             (Number(this.moves.charAt(this.moves.length-1)) == 8) &&
+	             (this.moves.indexOf("4") != -1)
+	           ) return "scrub";
+	
+					var g = this;
+					var half_close_gestures = [
+						{ start: bottomright, connect: top, finish: bottomleft }, { start: topleft, connect: bottom, finish: topright },
+						{ start: bottomright, connect: left, finish: topright }, { start: topleft, connect: right, finish: bottomleft }
+					];
+			
+					for (i in half_close_gestures) {
+						var e = half_close_gestures[i];
+		        if ( (Number(g.moves.charAt(0))== e.start) &&
+		             (Number(g.moves.charAt(g.moves.length-1)) == e.finish) &&
+		             (g.moves.indexOf('' + e.connect) != -1)
+		           ) return 'close';
+		        if ( (Number(g.moves.charAt(0))== e.finish) &&
+		             (Number(g.moves.charAt(g.moves.length-1)) == e.start) &&
+		             (g.moves.indexOf('' + e.connect) != -1)
+		           ) return 'close';
+					};
 
 		      if (this.moves.length >= 7) {
 		        if( (function (str){
@@ -303,7 +307,7 @@ jQuery.fn.gesture = function(fn, settings) {
 			});
 			$(this).gesture(function (gesture_data) {
 					var name = gesture_data.getName();
-					if (name != null && jQuery.inArray( name, gesture_names )) {
+					if (name != null && jQuery.inArray(name, gesture_names) != -1) {
 						var event = jQuery.Event("gesture_" + name);
 						event.gesture_data = gesture_data;
 						event.unhandled = true;
