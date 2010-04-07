@@ -699,15 +699,13 @@ var GO = function () {
 			
 			var initialize_gesture_support = function() {
 				$('body')
-					.gesture(['left', 'right'])
-					.gesture({
-						close: function(target) {
-							console.log('in close ' + $(target).size() + "-" + $(target).parents('body > *').size() + "-" + $(target).parents('body > *').find('.wants_close').size());
+					.gesture(['left', 'right', { close: function(target) {
 							return $(target)
 								.parents('body > *')
 									.find('.wants_close');
-						}
-					});
+								}
+							}
+					]);
 			};
 			
 			var document_ready_hook = function () {
