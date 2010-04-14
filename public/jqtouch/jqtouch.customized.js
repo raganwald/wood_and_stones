@@ -645,7 +645,8 @@
             goBack: goBack,
             goTo: goTo,
             addAnimation: addAnimation,
-            submitForm: submitForm
+            submitForm: submitForm,
+history: hist
         }
 
         return publicObj;

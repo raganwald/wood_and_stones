@@ -4,3 +4,4 @@ tmp/**/*
 doc/api
 doc/app
 doc/plugins
+config/environments/development.rb

@@ -49,7 +49,7 @@ var GO = function () {
 			var document_ready_hook = function () {
 				message_dialog_instance = $('<div></div>')
 					.dialog({
-						dialogClass: 'wants_close message',
+						dialogClass: 'scrub message',
 						autoOpen: false,
 						height: 'auto',
 						title: 'Hey!',
@@ -64,7 +64,7 @@ var GO = function () {
 						height: 72
 					});
 				progress_dialog_instance.parent().detach().appendTo('body > .current');
-				$('.message.wants_close').bind('gesture_close', function (event) {
+				$('.message.scrub').bind('gesture_scrub', function (event) {
 					message_dialog_instance.dialog("close");
 					return false;
 				});
@@ -316,11 +316,6 @@ var GO = function () {
 					});
 				}
 			};
-			
-			var clear_current_play = function (target) {
-				set_played_stone($(target).find('.intersection.latest:not(.last)'), false);
-				set_killed_stones(null, false)
-			};
 				
 			var liven_playing_positions = function () {
 				
@@ -351,7 +346,7 @@ var GO = function () {
 	      if (update_moves.size() > 0) {
 					// console.log('processing ' + update_moves.size() + ' updated moves');
 	        update_moves.insertAfter('.move:last');
-					update_elements_with_navigation_handlers(update_moves);
+					update_boards_with_navigation_handlers(update_moves);
 	      }
 				$(html).filter('script').each(function (i, el) {
 					$.extend(info, jQuery.parseJSON($(el).text()));
@@ -470,7 +465,7 @@ var GO = function () {
 				}
 			};
 					
-			var update_elements_with_navigation_handlers = function () {
+			var update_boards_with_navigation_handlers = function () {
 				
 				var memoized_move = function (target_move_number) {
 					var selector = select_move_by_move_number(target_move_number);
@@ -478,7 +473,7 @@ var GO = function () {
 						var move_data = $('body').data('moves')[target_move_number];
 						var next_move = memoized_move(target_move_number + 1);
 						var this_move = next_move
-							.clone(true)
+							.clone(false)
 							.removeClass()
 							.addClass('move')
 							.attr('id', id_by_move_number(target_move_number))
@@ -531,22 +526,20 @@ var GO = function () {
 						else {
 							hey.text(this_move.data('player') + ' passed.'); // TODO: Titleize
 						}
-						update_elements_with_navigation_handlers(this_move);
+						update_boards_with_navigation_handlers(this_move);
 						update_hey(this_move);
 						this_move.insertBefore(next_move);
 					}
 					return $(selector);
 				};
-				var goto_move = function () {
-					return function (from_move_number, to_move_number) {
-						var from_page = $(select_move_by_move_number(from_move_number));
-						var to_page = memoized_move(to_move_number);
-						jQT.swapPages(from_page, to_page, ((from_move_number > to_move_number) ? 'slide.backwards' : 'slide'));
-						
-						return false;
-					}
-				}();
-				var forwards_in_time = function (target) {
+				var goto_move = function (from_move_number, to_move_number) {
+					var from_page = $(select_move_by_move_number(from_move_number));
+					var to_page = memoized_move(to_move_number);
+					jQT.swapPages(from_page, to_page, ((from_move_number > to_move_number) ? 'slide.backwards' : 'slide'));
+					return false;
+				};
+				var forwards_in_time = function (event) {
+					var target = $(event.target);
 					var current_move_number = current_displayed_move_number(target);
 					if (current_move_number < last_displayed_move_number()) {
 						return goto_move(current_move_number, current_move_number + 1);
@@ -592,25 +585,33 @@ var GO = function () {
 						return false;
 					}
 				};
-				var backwards_in_time = function (target) {
+				var backwards_in_time = function (event) {
+					var target = $(event.target);
 					var current_move_number = current_displayed_move_number(target);
 					if (current_move_number > 0) {
 						return goto_move(current_move_number, current_move_number - 1);
 					}
 				};
+				var show_game_info = function (event) {
+					jQT.goTo($('#info'), 'slideup.reverse');
+				};
+
+				var clear_current_play = function (event) {
+					var target = $(event.target);
+					set_played_stone(target.find('.intersection.latest:not(.last)'), false);
+					set_killed_stones(null, false)
+				};
+			
+				var debug_bindings = 0;
 				
 				return function (selector) {
+					var c = debug_bindings++;
 					$(selector)
 						.find('.board')
-							.bind('gesture_left', function (event) {
-									return forwards_in_time(this);
-								})
-							.bind('gesture_right', function (event) {
-									return backwards_in_time(this);
-								})
-							.bind('gesture_close', function (event) {
-									return clear_current_play(this);
-								})
+							.bind('gesture_left.navigation', forwards_in_time)
+							.bind('gesture_right.navigation', backwards_in_time)
+							.bind('gesture_scrub.navigation', clear_current_play)
+							.bind('gesture_bottom.navigation', show_game_info)
 							.end()
 				};
 			}();
@@ -643,12 +644,12 @@ var GO = function () {
 					var heyText = hey.text();
 					heyMove
 						.find('.toolbar #heyButton')
-							.addClass('wants_close')
+							.addClass('scrub')
 							.each(function (index, heyButton_el) {
 								var heyButton = $(heyButton_el);
 								heyButton
 									.attr('src', '/images/tools/hey-text-green.png')
-									.bind('gesture_close', function (event) {
+									.bind('gesture_scrub', function (event) {
 											$(this).qtip('hide');
 										})
 									.qtip({
@@ -699,18 +700,30 @@ var GO = function () {
 			
 			var initialize_gesture_support = function() {
 				$('body')
-					.gesture(['left', 'right', { close: function(target) {
+					.gesture([
+						'left', 'right', 'top', 'bottom',
+						{ scrub: function(target) {
 							return $(target)
 								.parents('body > *')
-									.find('.wants_close');
+									.find('.scrub');
 								}
-							}
+							},
+						{ bottomright_topright: function(target) {
+							return $(target)
+								.parents('body > *')
+									.find('.ok');
+								}
+							}	
 					]);
+				$('#info')
+					.bind('gesture_top', function(event) { jQT.goBack(); });
 			};
 			
 			var document_ready_hook = function () {
 				initialize_gesture_support();
-		    update_elements_with_navigation_handlers('body');
+				$('.move').each(function(i, e) {
+					update_boards_with_navigation_handlers($(e));
+				});
 		    liven_playing_positions();
 				update_playing_div()
 				update_move_infos();
