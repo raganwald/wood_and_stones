@@ -701,7 +701,7 @@ var GO = function () {
 			var initialize_gesture_support = function() {
 				$('body')
 					.gesture([
-						'left', 'right', 'top', 'bottom',
+						'left', 'right', 'top', 'bottom', 'hold',
 						{ scrub: function(target) {
 							return $(target)
 								.parents('body > *')
@@ -714,7 +714,36 @@ var GO = function () {
 									.find('.ok');
 								}
 							}	
-					]);
+					])
+					.bind({
+						gesture_hold: function (event) {
+							$('.board')
+								.dragscrollable()
+								.bind('mouseup.drag', function (event) {
+									$('.board')
+										.removedragscrollable()
+										.unbind(event);
+									return false;
+								})
+							$(event.target)
+								.parents('.dragger')
+									.effect("shake", { times:3 }, 100, function () {
+										$(this)
+											.trigger(event.gesture_data.originalEvent);
+									})
+									.end();
+						},
+						turn:  function (event, data) {
+							$('.board')
+								.removeClass('portrait landscape')
+								.addClass(data.orientation);
+						}
+					});
+				$('.board').addClass(
+					window.orientation !== undefined 
+						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
+						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
+				);
 				$('#info')
 					.bind('gesture_top', function(event) { jQT.goBack(); });
 			};
@@ -724,7 +753,7 @@ var GO = function () {
 				$('.move').each(function(i, e) {
 					update_boards_with_navigation_handlers($(e));
 				});
-		    liven_playing_positions();
+		    	liven_playing_positions();
 				update_playing_div()
 				update_move_infos();
 				cache_board_image_paths();

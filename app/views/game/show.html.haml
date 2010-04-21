@@ -79,10 +79,12 @@
   .current.move#m0
     = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
     .board
-      = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
+      .dragger
+        = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
 -else
   .move#m0
     = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
     .board
-      = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
+      .dragger
+        = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
   = render :partial => 'action/gameplay/action', :locals => { :action => @game.actions.last, :current => true }
