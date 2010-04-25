@@ -1,7 +1,9 @@
 .board {
   overflow: hidden;
-  margin-left: auto;
-  margin-right: auto; }
+  position: relative;
+  left: 50%;
+  margin-left: -135px;
+  margin-top: 10px; }
   .board.profile {
     height: 270px;
     width: 270px; }

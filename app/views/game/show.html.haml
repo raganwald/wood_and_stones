@@ -1,18 +1,6 @@
 - black_gravatar_url = gravatar_url(@game.black.email, :size=>20, :default=>'monsterid')
 - white_gravatar_url = gravatar_url(@game.white.email, :size=>20, :default=>'monsterid')
 %style{:type=>"text/css", :media=>"screen"}
-  :sass
-    .board
-      :width #{@game.dimension * 30}px
-      :height #{@game.dimension * 30}px
-      .row
-        :width #{@game.dimension * 30}px
-        :height 30px
-      :position absolute
-      :left -#{@game.dimension * 15}px
-      :top  60px
-      :margin
-        :left 50%
 :javascript
   $(document).ready( function () {
     var info = #{@info.to_json};

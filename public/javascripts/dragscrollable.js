@@ -51,39 +51,100 @@
  *  would not interfere as acceptPropagatedEvent is set to false.
  *		
  */
-$.fn.dragscrollable = function( options ){
+
+var append_namespace = function (string_of_events, ns) {
+	return string_of_events
+		.split(' ')
+			.map(function (name) { return name + ns; })
+				.join(' ');
+};
+
+var left_top = function(event) {
+	
+	var x;
+	var y;
+	if (typeof(event.clientX) != 'undefined') {
+		x = event.clientX;
+		y = event.clientY;
+	}
+	else if (typeof(event.screenX) != 'undefined') {
+		x = event.screenX;
+		y = event.screenY;
+	}
+	else if (typeof(event.targetTouches) != 'undefined') {
+		x = event.targetTouches[0].pageX;
+		y = event.targetTouches[0].pageY;
+	}
+	else if (typeof(event.originalEvent) == 'undefined') {
+		var str = '';
+		for (i in event) {
+			str += ', ' + i + ': ' + event[i];
+		}
+		console.error("don't understand x and y for " + event.type + ' event: ' + str);
+	}
+	else if (typeof(event.originalEvent.clientX) != 'undefined') {
+		x = event.originalEvent.clientX;
+		y = event.originalEvent.clientY;
+	}
+	else if (typeof(event.originalEvent.screenX) != 'undefined') {
+		x = event.originalEvent.screenX;
+		y = event.originalEvent.screenY;
+	}
+	else if (typeof(event.originalEvent.targetTouches) != 'undefined') {
+		x = event.originalEvent.targetTouches[0].pageX;
+		y = event.originalEvent.targetTouches[0].pageY;
+	}
+	
+	return {left: x, top:y};
+};
+
+$.fn.dragscrollable = function( options ) {
+	
+	var handling_element = $(this);
    
 	var settings = $.extend(
 		{   
 			dragSelector:'>:first',
 			acceptPropagatedEvent: true,
-            preventDefault: true
+            preventDefault: true,
+			dragstart: 'mousedown touchstart',
+			dragcontinue: 'mousemove touchmove',
+			dragend: 'mouseup touchend',
+			namespace: '.ds'
 		},options || {});
+	
+	settings.dragstart = append_namespace(settings.dragstart, settings.namespace);
+	settings.dragcontinue = append_namespace(settings.dragcontinue, settings.namespace);
+	settings.dragend = append_namespace(settings.dragend, settings.namespace);
 
 	var dragscroll= {
-		mouseDownHandler : function(event) {
+		dragStartHandler : function(event) {
+			
 			// mousedown, left click, check propagation
-			if (event.which!=1 ||
+			if (event.which > 1 ||
 				(!event.data.acceptPropagatedEvent && event.target != this)){ 
 				return false; 
 			}
 			
 			// Initial coordinates will be the last when dragging
-			event.data.lastCoord = {left: event.clientX, top: event.clientY}; 
+			event.data.lastCoord = left_top(event); 
+			
+			handling_element
+				.bind(settings.dragcontinue, event.data, dragscroll.dragContinueHandler)
+				.bind(settings.dragend, event.data, dragscroll.dragEndHandler);
 		
-			$.event.add( document, "mouseup.ds", 
-						 dragscroll.mouseUpHandler, event.data );
-			$.event.add( document, "mousemove.ds", 
-						 dragscroll.mouseMoveHandler, event.data );
 			if (event.data.preventDefault) {
                 event.preventDefault();
                 return false;
             }
 		},
-		mouseMoveHandler : function(event) { // User is dragging
+		dragContinueHandler : function(event) { // User is dragging
+			
+			var lt = left_top(event);
+			
 			// How much did the mouse move?
-			var delta = {left: (event.clientX - event.data.lastCoord.left),
-						 top: (event.clientY - event.data.lastCoord.top)};
+			var delta = {left: (lt.left - event.data.lastCoord.left),
+						 top: (lt.top - event.data.lastCoord.top)};
 			
 			// Set the scroll position relative to what ever the scroll is now
 			event.data.scrollable.scrollLeft(
@@ -92,16 +153,18 @@ $.fn.dragscrollable = function( options ){
 							event.data.scrollable.scrollTop() - delta.top);
 			
 			// Save where the cursor is
-			event.data.lastCoord={left: event.clientX, top: event.clientY}
+			event.data.lastCoord = lt;
+			
 			if (event.data.preventDefault) {
                 event.preventDefault();
                 return false;
             }
 
 		},
-		mouseUpHandler : function(event) { // Stop scrolling
-			$.event.remove( document, "mousemove.ds", dragscroll.mouseMoveHandler);
-			$.event.remove( document, "mouseup.ds", dragscroll.mouseUpHandler);
+		dragEndHandler : function(event) { // Stop scrolling
+			handling_element
+				.unbind(settings.dragcontinue)
+				.unbind(settings.dragend);
 			if (event.data.preventDefault) {
                 event.preventDefault();
                 return false;
@@ -117,13 +180,15 @@ $.fn.dragscrollable = function( options ){
                     preventDefault : settings.preventDefault }
 		// Set mouse initiating event on the desired descendant
 		$(this).find(settings.dragSelector).
-						bind('mousedown.ds', data, dragscroll.mouseDownHandler);
+						bind(settings.dragstart, data, dragscroll.dragStartHandler);
 	});
 }; //end plugin dragscrollable
 
-$.fn.removedragscrollable = function () {
+$.fn.removedragscrollable = function (namespace) {
+	if (typeof(namespace) == 'undefined')
+		namespace = '.ds';
 	return this.each(function() {
-		var x = $(document).find('*').andSelf().unbind('.ds');
+		var x = $(document).find('*').andSelf().unbind(namespace);
 	});
 };
 
