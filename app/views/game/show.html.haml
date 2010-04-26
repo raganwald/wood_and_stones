@@ -66,13 +66,13 @@
 -if @game.current_move_number == 0
   .current.move#m0
     = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
-    .board
+    #div{:class => "board zoomout size#{@game.current_board.dimension}"}
       .dragger
         = render :partial => "board/board", :locals => { :game => @game, :latest => nil }
 -else
   .move#m0
     = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => 'Initial Position' }
-    .board
+    #div{:class => "board zoomout size#{@game.current_board.dimension}"}
       .dragger
         = render :partial => "board/board", :locals => { :board => @game.initial_board, :latest => nil }
   = render :partial => 'action/gameplay/action', :locals => { :action => @game.actions.last, :current => true }

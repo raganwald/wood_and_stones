@@ -9,4 +9,4 @@
 - (0..(board.dimension - 1)).each do |down|
   .row
     - (0..(board.dimension - 1)).each do |across|
-      %img{ :id => "#{Board::LETTERS[across].downcase}#{Board::LETTERS[down].downcase}", :src => '/images/dot_clear.gif', :class => tile_classes[across][down], :height => 30, :width => 30 }>
+      %img{ :id => "#{Board::LETTERS[across].downcase}#{Board::LETTERS[down].downcase}", :src => '/images/dot_clear.gif', :class => tile_classes[across][down] }>

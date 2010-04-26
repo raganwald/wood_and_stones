@@ -5,11 +5,12 @@
     %h1
       %span.gravatar
       %span.playing Move #{action.cardinality}
-  .board
-    -if action.cardinality < action.game.current_move_number
-      = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
-    -else
-      = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
+  .board.zoomout
+    .dragger
+      -if action.cardinality < action.game.current_move_number
+        = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
+      -else
+        = render :partial => "board/board", :locals => { :game => action.game, :latest => action.position }
   .heyThere
     -if action.kind_of?(Action::Pass)
       #{action.player.titleize} passed.
