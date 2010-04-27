@@ -19,19 +19,19 @@ The web client is written *specifically* for the iPhone/iPod Touch at this time.
 
 In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), I am experimenting with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping the screen or drawing simple symbols.
 
-When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you wish to make a different play, simply tap another intersection. You can 'undo' a placed stone by tapping it again. This will restore any killed stones, of course. When you are satisfied with your choice, swipe the board from right to left. This is called moving forwards in time. If you don't place a stone, moving forwards in time is a pass.
+When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you wish to make a different play, simply tap another intersection. You can 'undo' a placed stone by tapping it again *or* you can make a "scrub" gesture: swipe your finger from side-to-side a few times. This will restore any killed stones, of course. When you are satisfied with your choice, swipe the board from right to left. This is called *moving forwards in time*. If you don't place a stone, moving forwards in time is a pass.
 
-Why swipe right to left. Imagine that the game is played on a long strip of film, with the past to the left and the future to the right. What you are looking at is just one 'frame' in the film. Swiping right to left is like moving the film so that the next frame (the future) becomes visible.
+Why swipe right to left? Imagine that the game is played on a long strip of film, with the past to the left and the future to the right. What you are looking at is just one 'frame' in the film. Swiping right to left is like moving the film so that the next frame (the future) becomes visible.
 
 It's the same thing when it's your opponent's turn to play, you can update the board whenever you like by moving forwards in time (swiping from right to left). If your opponent has moved or passed the board will be updated. I am experimenting with various mechanisms for automatically polling for an update. But the basic idea is the same: "Let's see what the future holds."
 
 If you would like to see a history of the game, you move backwards in time by swiping from left to right. This is like moving the film so that the past becomes visible. Each swipe from left to right moves back one move. You can move forward a move by swiping from right to left. Once you have returned to the current move, swiping right to left is once again either making a play or updating.
 
-Pro tip: Sometimes you will see a dialog box or a speech bubble and you want them to go away. Or you have placed a stone on your turn and you want to undo it without tapping the stone. Draw an X on the screen without lifting your finger it will go away.
+Pro tip: Sometimes you will see a dialog box or a speech bubble and you want them to go away. Once again, you can scrub your finger from left to right a few times, and the dialog will go away.
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
-This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins for things like gravatars and polling. Right now I'm playing with [jGesture](http://plugins.jquery.com/project/jGesture) to support a gestural UX. I've modified it to work on Mobile Safari and to support a custom event architecture instead of a callback architecture. jQTouch handles swiping left and right, but I wanted a richer set of gestures for more advanced users. I'm experimenting with [qtip](http://craigsworks.com/projects/qtip/ "qTip - The jQuery tooltip plugin  - Home") for displaying messages and having some trouble with it on iPhone, so we'll see how that goes.
+This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins for things like gravatars and polling. I use my own [iGesture][igesture] for gestures like swipes and scrubs. I'm experimenting with [qtip](http://craigsworks.com/projects/qtip/ "qTip - The jQuery tooltip plugin  - Home") for displaying messages and having some trouble with it on iPhone, so we'll see how that goes.
 
 Embarrassingly, I thought supporting SGF was overly complicated and I should stick to simple page generation, but I've ended up re-inventing it in JSON format. What can I say, vote for [issue #108](https://github.com/raganwald/go/issues/#issue/108)!
 
@@ -58,3 +58,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+[igesture]: http://github.com/raganwald/iGesture

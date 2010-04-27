@@ -1,36 +1,72 @@
+.board.size19.zoomin .row {
+  height: 30px;
+  width: 570px; }
+  .board.size19.zoomin .row img {
+    height: 30px;
+    width: 30px; }
 .board.size19.zoomout .row {
   height: 13px; }
   .board.size19.zoomout .row img {
     height: 13px;
     width: 13px; }
 
+.board.size17.zoomin .row {
+  height: 30px;
+  width: 510px; }
+  .board.size17.zoomin .row img {
+    height: 30px;
+    width: 30px; }
 .board.size17.zoomout .row {
   height: 15px; }
   .board.size17.zoomout .row img {
     height: 15px;
     width: 15px; }
 
+.board.size15.zoomin .row {
+  height: 30px;
+  width: 450px; }
+  .board.size15.zoomin .row img {
+    height: 30px;
+    width: 30px; }
 .board.size15.zoomout .row {
   height: 18px; }
   .board.size15.zoomout .row img {
     height: 18px;
     width: 18px; }
 
+.board.size13.zoomin .row {
+  height: 30px;
+  width: 390px; }
+  .board.size13.zoomin .row img {
+    height: 30px;
+    width: 30px; }
 .board.size13.zoomout .row {
   height: 20px; }
   .board.size13.zoomout .row img {
     height: 20px;
     width: 20px; }
 
+.board.size11.zoomin .row {
+  height: 30px;
+  width: 330px; }
+  .board.size11.zoomin .row img {
+    height: 30px;
+    width: 30px; }
 .board.size11.zoomout .row {
   height: 24px; }
   .board.size11.zoomout .row img {
     height: 24px;
     width: 24px; }
 
-.board.size9.zoomout .row, .board.zoomin .row {
+.board.size9.zoomin .row {
+  height: 30px;
+  width: 270px; }
+  .board.size9.zoomin .row img {
+    height: 30px;
+    width: 30px; }
+.board.size9.zoomout .row {
   height: 30px; }
-  .board.size9.zoomout .row img, .board.zoomin .row img {
+  .board.size9.zoomout .row img {
     height: 30px;
     width: 30px; }
 
