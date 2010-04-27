@@ -64,10 +64,11 @@ var GO = function () {
 						height: 72
 					});
 				progress_dialog_instance.parent().detach().appendTo('body > .current');
-				$('.message.scrub').bind('gesture_scrub', function (event) {
-					message_dialog_instance.dialog("close");
-					return false;
-				});
+				$('.message.scrub')
+					.bind('gesture_scrub', function (event) {
+				        message_dialog_instance.dialog("close");
+				        return false;
+					});
 			};
 			return {
 				document_ready_hook: document_ready_hook
@@ -588,6 +589,8 @@ var GO = function () {
 			
 			return {
 				update_hey: update_hey,
+				set_played_stone: set_played_stone,
+				set_killed_stones: set_killed_stones,
 				info: info,
 				get_history_up_to: get_history_up_to,
 				document_ready_hook: document_ready_hook

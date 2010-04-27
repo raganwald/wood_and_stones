@@ -1,6 +1,6 @@
 ;(function ($) {
 	
-	var handler_maker = function (info, update_hey) {
+	var handler_maker = function (info, update_hey, set_played_stone, set_killed_stones) {
 		
 		var update_boards_with_navigation_handlers = function () {
 			
@@ -196,7 +196,11 @@
 			return function (info) {
 				var game_show_helper = old_game_show_helper(info);
 				var old_document_ready_hook = game_show_helper.document_ready_hook;
-				var update_moves = handler_maker(info, game_show_helper.update_hey);
+				var update_moves = handler_maker(
+					info, 
+					game_show_helper.update_hey, 
+					game_show_helper.set_played_stone,
+					game_show_helper.set_killed_stones);
 				return $.extend(game_show_helper, {
 					document_ready_hook: function () {
 						old_document_ready_hook();

@@ -1,5 +1,5 @@
 = render :partial => 'action/gameplay/toolbar', :locals => { :playing_text => "Move #{action.cardinality}", :info => false }
-#div{:class => "board zoomout size#{action.after.dimension}"}
+#div{:class => "board zoomout size#{action.after.dimension} scrub"}
   .dragger
     -if action.cardinality < action.game.current_move_number
       = render :partial => "board/board", :locals => { :board => action.after, :latest => action.position }
