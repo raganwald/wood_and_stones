@@ -133,7 +133,7 @@ jQuery.fn.gesture = function (events) {
 				x: -1,
 				y: -1,
 				lastmove: "",
-				continuesmode: false,
+				continuesmode: settings.continuesmode,
 				getMoveNameAt: function (i) {
 					switch (Number(this.moves.charAt(i))) {
 					case 1:
@@ -289,6 +289,13 @@ jQuery.fn.gesture = function (events) {
 					y = e.originalEvent.screenY;
 				}
 				else if (typeof(e.originalEvent.targetTouches) != 'undefined') {
+					if (typeof(e.originalEvent.targetTouches[0]) == 'undefined') {
+						var str = '';
+						for (i in e.originalEvent) {
+							str += ', ' + i + ': ' + e.originalEvent[i];
+						}
+						console.error("don't understand x and y for " + e.originalEvent.type + ' event: ' + str);
+					}
 					x = e.originalEvent.targetTouches[0].pageX;
 					y = e.originalEvent.targetTouches[0].pageY;
 					if (e.originalEvent.targetTouches.length > 1) {
@@ -382,9 +389,11 @@ jQuery.fn.gesture = function (events) {
 		
 		var gesture_handler = function (e) {
 			
-			var gesture = {};
-		
-			gesture.target = e.target;
+			var gesture = {
+				target: $(e.target),
+				originalEvent: e,
+				continuesmode: settings.continuesmode
+			};
 
 			// disable browser context menu.
 			if (settings.disablecontextmenu) {
@@ -399,55 +408,59 @@ jQuery.fn.gesture = function (events) {
 			gesture.scale = 1.0;
 			gesture.rotation = 0;
 
-			handling_element.bind(settings.continueGesture + settings.namespace,
-			function (e) {
-				e.preventDefault();
-				e.stopPropagation();
-				var scale_diff = e.originalEvent.scale - 1.0;
-				gesture.scale += scale_diff;
-				var rotation_diff = e.originalEvent.rotation - gesture.rotation
-				gesture.rotation = e.originalEvent.rotation
-				if (settings.continuesmode) {
-					if (Math.abs(gesture.scale - 1.0) >= settings.minScale && gesture_events['scale']) {
-						var gesture_event = jQuery.Event('gesture_scale');
-						gesture_event.gesture_data = jQuery.extend(gesture, { name: 'scale' });
-						gesture_event.scale = gesture.scale;
-						gesture_events['scale'](gesture.target).trigger(gesture_event);
-						gesture.scale = 1.0;
-					}
-					if (Math.abs(rotation_diff % 360) >= settings.minRotation && gesture_events['rotate']) {
-						var gesture_event = jQuery.Event('gesture_rotate');
-						gesture_event.gesture_data = jQuery.extend(gesture, { name: 'rotate' });
-						gesture_event.rotation = rotation_diff;
-						gesture_events['rotate'](gesture.target).trigger(gesture_event);
-						gesture.rotation = 0;
-					}
-				}
-				e.preventDefault();
-			});
-
-			handling_element.bind(settings.stopGesture + settings.namespace, function (e) {
-				if (Math.abs(gesture.scale - 1.0) >= settings.minScale && gesture_events['scale']) {
-					var gesture_event = jQuery.Event('gesture_scale');
-					gesture_event.gesture_data = jQuery.extend(gesture, { name: 'scale' });
-					gesture_event.scale = gesture.scale;
-					gesture_events['scale'](gesture.target).trigger(gesture_event);
-				}
-				if (Math.abs(gesture.rotation % 360) >= settings.minRotation && gesture_events['rotate']) {
-					var gesture_event = jQuery.Event('gesture_rotate');
-					gesture_event.gesture_data = jQuery.extend(gesture, { name: 'rotate' });
-					gesture_event.rotation = gesture.rotation;
-					gesture_events['rotate'](gesture.target).trigger(gesture_event);
-				}
-				e.preventDefault();
-				e.stopPropagation();
-				handling_element.unbind(settings.continueGesture + settings.namespace);
-				handling_element.unbind(e);
-			});
+			handling_element
+				.filter(':not(.in_gesture)')
+					.addClass('in_gesture')
+						.bind(settings.continueGesture + settings.namespace, function (e) {
+							e.preventDefault();
+							e.stopPropagation();
+							var scale_diff = e.originalEvent.scale - 1.0;
+							gesture.scale += scale_diff;
+							var rotation_diff = e.originalEvent.rotation - gesture.rotation
+							gesture.rotation = e.originalEvent.rotation
+							if (settings.continuesmode) {
+								if (Math.abs(gesture.scale - 1.0) >= settings.minScale && gesture_events['scale']) {
+									var gesture_event = jQuery.Event('gesture_scale');
+									gesture_event.gesture_data = jQuery.extend(gesture, { name: 'scale' });
+									gesture_event.scale = gesture.scale;
+									gesture_events['scale'](gesture.target).trigger(gesture_event);
+									gesture.scale = 1.0;
+								}
+								if (Math.abs(rotation_diff % 360) >= settings.minRotation && gesture_events['rotate']) {
+									var gesture_event = jQuery.Event('gesture_rotate');
+									gesture_event.gesture_data = jQuery.extend(gesture, { name: 'rotate' });
+									gesture_event.rotation = rotation_diff;
+									gesture_events['rotate'](gesture.target).trigger(gesture_event);
+									gesture.rotation = 0;
+								}
+							}
+							e.preventDefault();
+						})
+						.bind(settings.stopGesture + settings.namespace, function (e) {
+							if (Math.abs(gesture.scale - 1.0) >= settings.minScale && gesture_events['scale']) {
+								var gesture_event = jQuery.Event('gesture_scale');
+								gesture_event.gesture_data = jQuery.extend(gesture, { name: 'scale' });
+								gesture_event.scale = gesture.scale;
+								gesture_events['scale'](gesture.target).trigger(gesture_event);
+							}
+							if (Math.abs(gesture.rotation % 360) >= settings.minRotation && gesture_events['rotate']) {
+								var gesture_event = jQuery.Event('gesture_rotate');
+								gesture_event.gesture_data = jQuery.extend(gesture, { name: 'rotate' });
+								gesture_event.rotation = gesture.rotation;
+								gesture_events['rotate'](gesture.target).trigger(gesture_event);
+							}
+							e.preventDefault();
+							e.stopPropagation();
+							handling_element
+								.unbind(settings.continueGesture + settings.namespace)
+								.unbind(settings.stopGesture + settings.namespace)
+								.removeClass('in_gesture');
+						});
 	
 		};
 		
-		this.bind(settings.startGesture + settings.namespace, gesture_handler);
+		this
+			.bind(settings.startGesture + settings.namespace, gesture_handler);
 		
 	};
 	

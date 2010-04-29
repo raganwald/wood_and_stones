@@ -547,7 +547,7 @@ var GO = function () {
 			var initialize_gesture_support = function() {
 				$('body')
 					.gesture([
-						'left', 'right', 'top', 'bottom', 'hold',
+						'left', 'right', 'top', 'bottom', 'hold', 'scale',
 						{ scrub: function(target) {
 							return $(target)
 								.parents('body > *')
@@ -559,7 +559,7 @@ var GO = function () {
 								.parents('body > *')
 									.find('.ok');
 								}
-							}	
+							}
 					])
 					.bind({
 						turn:  function (event, data) {
@@ -568,11 +568,25 @@ var GO = function () {
 								.addClass(data.orientation);
 						}
 					});
-				$('.board').addClass(
-					window.orientation !== undefined 
-						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
-						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
-				);
+				$('.board')
+					.addClass(
+						window.orientation !== undefined 
+							? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
+							: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
+					)
+					.bind({
+						gesture_scale: function(event, data) {
+							if (event.scale <= 0.75)
+								$('.board')
+									.removeClass('zoomin')
+									.addClass('zoomout');
+							else if (event.scale >= 1.5)
+								$('.board')
+									.removeClass('zoomout')
+									.addClass('zoomin');
+							return false;
+						}
+					});
 				$('#info')
 					.bind('gesture_top', function(event) { jQT.goBack(); });
 			};
