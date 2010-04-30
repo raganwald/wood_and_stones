@@ -157,6 +157,8 @@
 		
 			var drag_and_scroll = function (event) {
 				$(this)
+					.removeClass('zoomout')
+					.addClass('zoomin')
 					.dragscrollable()
 					.bind('mouseup.navigation touchend.navigation', function (event) {
 						$(this)
