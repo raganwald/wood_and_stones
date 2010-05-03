@@ -6,9 +6,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter(:decode_secret, :set_instance)
   def decode_secret
-    (its = Secret.find_by_secret(params[:secret]) and (self.current_user = its.user
+    (secret = params[:secret] and (its = Secret.find_by_secret(secret) and (self.current_user = its.user
     name = its.target.class.name.demodulize.underscore
-    params["#{name}_id"] ||= its.target.id))
+    params["#{name}_id"] ||= its.target.id)))
   end
   def set_instance(name = self.class.name.demodulize.underscore[/^(.*)_controller$/, 1], model_class = (it = self.class.name[/^(.*)Controller$/, 1] and get_const_for(it)))
     (it = (params["#{name}_id"] or params[:id]) and instance_variable_set(("@" + name), model_class.find(it)))

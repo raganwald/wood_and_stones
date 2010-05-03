@@ -12,9 +12,7 @@
 		var update_boards_with_navigation_handlers = (function () {
 		
 			var zoomed_out_p = function() {
-				var dragger = $('.dragger');
-				var board = $('.board');
-				return dragger.outerHeight() <= board.innerHeight() && dragger.outerWidth() <= board.innerWidth();
+				return $('.board:first').is('.zoomout');
 			};
 			
 			var remove_zoomout = function(selection) {
@@ -191,15 +189,15 @@
 					.filter('.board:not(.zoomin)')
 						.into(remove_zoomout)
 						.addClass('zoomin')
-						.dragscrollable();
+						.dragscrollable({ preventDefault: false });
 			};
 			
 			var	handle_scaling = (function () {
 				
 				var toggle_zoom_and_mousedown = function (event) {
-					var toggler = zoomed_out_p() ? do_zoomin : do_zoomout;
+					$('.board')
+						.into(zoomed_out_p() ? do_zoomin : do_zoomout);
 					$(this)
-						.into(toggler)
 						.children(':first')
 							.trigger(event.gesture_data.originalEvent);
 					return false;
@@ -211,9 +209,11 @@
 							.bind({
 								'gesture_scale': function(event, data) {
 									if (event.scale <= 0.75)
-										do_zoomout();
+										$('.board')
+											.into(do_zoomout);
 									else if (event.scale >= 1.5)
-										do_zoomin();
+										$('.board')
+											.into(do_zoomin);
 									return false;
 								},
 								'gesture_hold': toggle_zoom_and_mousedown
