@@ -18,10 +18,12 @@ class ApplicationController < ActionController::Base
   before_filter :decode_secret, :set_instance
   
   def decode_secret
-    Secret.find_by_secret(params[:secret]).andand do |its|
-      self.current_user = its.user
-      name = its.target.class.name.demodulize.underscore
-      params["#{name}_id"] ||= its.target.id
+    params[:secret].andand do |secret|
+      Secret.find_by_secret(secret).andand do |its|
+        self.current_user = its.user
+        name = its.target.class.name.demodulize.underscore
+        params["#{name}_id"] ||= its.target.id
+      end
     end
   end
   
