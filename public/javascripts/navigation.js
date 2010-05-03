@@ -198,9 +198,11 @@
 				
 				var toggle_zoom_and_mousedown = function (event) {
 					var toggler = zoomed_out_p() ? do_zoomin : do_zoomout;
-					return $(this)
+					$(this)
 						.into(toggler)
-						.trigger(event.gesture_data.originalEvent);
+						.children(':first')
+							.trigger(event.gesture_data.originalEvent);
+					return false;
 				};
 				
 				return function (selection) {
@@ -209,9 +211,9 @@
 							.bind({
 								'gesture_scale': function(event, data) {
 									if (event.scale <= 0.75)
-										zoomout();
+										do_zoomout();
 									else if (event.scale >= 1.5)
-										zoomin();
+										do_zoomin();
 									return false;
 								},
 								'gesture_hold': toggle_zoom_and_mousedown
