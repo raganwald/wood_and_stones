@@ -106,17 +106,19 @@
 						}
 						this_move
 							.into(update_boards_with_navigation_handlers)
-						update_hey(this_move);
-						this_move.insertBefore(next_move);
+							.into(update_hey)
+							.insertBefore(next_move);
 					}
 					return $(selector);
 				};
+				
 				var goto_move = function (from_move_number, to_move_number) {
 					var from_page = $(select_move_by_move_number(from_move_number));
 					var to_page = memoized_move(to_move_number);
 					jQT.swapPages(from_page, to_page, ((from_move_number > to_move_number) ? 'slide.backwards' : 'slide'));
 					return false;
 				};
+				
 				var forwards_in_time = function (event) {
 					var target = $(event.target);
 					var current_move_number = current_displayed_move_number(target);
@@ -164,6 +166,7 @@
 						return false;
 					}
 				};
+				
 				var backwards_in_time = function (event) {
 					var target = $(event.target);
 					var current_move_number = current_displayed_move_number(target);
@@ -180,23 +183,63 @@
 							.bind({
 								'gesture_left.zoomout': forwards_in_time,
 								'gesture_right.zoomout': backwards_in_time
-							})
+							});
 				};
 			})();
 			
-			var do_zoomin = function(selection) {
-				return $(selection)
-					.filter('.board:not(.zoomin)')
-						.into(remove_zoomout)
-						.addClass('zoomin')
-						.dragscrollable({ preventDefault: false });
+			var zoomin_maker = function (target) {
+				var across;
+				var down;
+				var board;
+				var half_width;
+				var half_height;
+				if (typeof(target) == 'undefined') {
+					across = 0;
+					down = 0;
+					half_width = 0;
+					half_height = 0;
+					board = null;
+				}
+				else {
+					down = parseInt(
+						/down_([0-9]+)/
+							.exec(
+								$(target)
+									.closest('.row')
+										.attr('class')
+							)[1]
+					);
+					across = parseInt(
+						/across_([0-9]+)/
+							.exec(
+								$(target)
+									.attr('class')
+							)[1]
+					);
+					board = $(target).closest('.board');
+					half_width = board.width() / 2;
+					half_height = board.height() / 2;
+				}
+				return function(selection) {
+					$(selection)
+						.filter('.board:not(.zoomin)')
+							.into(remove_zoomout)
+							.addClass('zoomin')
+							.dragscrollable({ preventDefault: false });
+					if (typeof(board) != 'undefined') {
+						var new_target = (across == 0 && down == 0) ? null : board.find('.down_'+down + ' .across_'+across);
+						board
+							.scrollLeft(across == 0 ? 0 : (new_target.width() * across) - (board.width() / 2)) // handles min and max for us
+							.scrollTop(down == 0 ? 0 : (new_target.height() * down) - (board.height() / 2));
+					}
+				};
 			};
 			
 			var	handle_scaling = (function () {
 				
 				var toggle_zoom_and_mousedown = function (event) {
 					$('.board')
-						.into(zoomed_out_p() ? do_zoomin : do_zoomout);
+						.into(zoomed_out_p() ? zoomin_maker(event.target) : do_zoomout);
 					$(this)
 						.children(':first')
 							.trigger(event.gesture_data.originalEvent);
@@ -213,7 +256,7 @@
 											.into(do_zoomout);
 									else if (event.scale >= 1.5)
 										$('.board')
-											.into(do_zoomin);
+											.into(zoomin_maker(event.target));
 									return false;
 								},
 								'gesture_hold': toggle_zoom_and_mousedown
@@ -248,7 +291,7 @@
 			})();
 	
 			var initialize_zoom = function(selection) {
-				var doer = zoomed_out_p() ? do_zoomout : do_zoomin;
+				var doer = zoomed_out_p() ? do_zoomout : zoomin_maker();
 				return $(selection)
 					.filter('.board')
 						.into(remove_zoomout)
