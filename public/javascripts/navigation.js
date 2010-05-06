@@ -191,13 +191,9 @@
 				var across;
 				var down;
 				var board;
-				var half_width;
-				var half_height;
 				if (typeof(target) == 'undefined') {
 					across = 0;
 					down = 0;
-					half_width = 0;
-					half_height = 0;
 					board = null;
 				}
 				else {
@@ -217,8 +213,6 @@
 							)[1]
 					);
 					board = $(target).closest('.board');
-					half_width = board.width() / 2;
-					half_height = board.height() / 2;
 				}
 				return function(selection) {
 					$(selection)

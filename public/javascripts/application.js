@@ -53,22 +53,28 @@ var GO = function () {
 						autoOpen: false,
 						height: 'auto',
 						title: 'Hey!',
-						open: function (event, ui) { message_dialog_instance.parent().detach().appendTo('body > .current'); }
+						open: function (event, ui) { 
+							message_dialog_instance
+								.parent()
+									.detach()
+									.appendTo('body > .current'); 
+						}
+					})
+					.bind('gesture_scrub', function (event) {
+				        message_dialog_instance.dialog("close");
+				        return false;
 					});
 				progress_dialog_instance = $('.ajax_load')
 					.dialog({
 						dialogClass: 'progress',
 						autoOpen: false,
 						draggable: false,
-						width: 100,
-						height: 72
-					});
-				progress_dialog_instance.parent().detach().appendTo('body > .current');
-				$('.message.scrub')
-					.bind('gesture_scrub', function (event) {
-				        message_dialog_instance.dialog("close");
-				        return false;
-					});
+						width: 150, // 100,
+						height: 72 // 72
+					})
+					.parent()
+						.detach()
+						.appendTo('body > .current');
 			};
 			return {
 				document_ready_hook: document_ready_hook
@@ -336,30 +342,30 @@ var GO = function () {
 			
 			var process_update = function (html) {
 				var was_current_move_number = last_displayed_move_number();
-	      var update_moves = $(html).filter('.move').filter(function (i) {
+	      		var update_moves = $(html).filter('.move').filter(function (i) {
 					$(this).data('number', was_current_move_number + i + 1); // BOO! updates in a select!!
 					return $(this).attr('id') == ('m' + (was_current_move_number + i + 1));
 				});
-	      if (update_moves.size() > 0) {
+	      		if (update_moves.size() > 0) {
 					// console.log('processing ' + update_moves.size() + ' updated moves');
-	        update_moves.insertAfter('.move:last');
+	        		update_moves.insertAfter('.move:last');
 					update_boards_with_navigation_handlers(update_moves);
-	      }
-				$(html).filter('script').each(function (i, el) {
+	      		}
+				$(html).filter('script').each(function (i, el) { // could .each be replaced with ::last here?
 					$.extend(info, jQuery.parseJSON($(el).text()));
 					$('.info .captured_blacks').text(info.captured_blacks);
 					$('.info .captured_whites').text(info.captured_whites);
 				});
 				if (update_moves.size() > 0) {
-	        update_playing_div();
-	        update_move_infos();
+	        		update_playing_div();
+	        		update_move_infos();
 					update_hey();
-	        if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
+	        		if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
 						// console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
-	          jQT.goTo($('.move:last'), 'fade');
-	        }
+	          			jQT.goTo($('.move:last'), 'fade');
+	        		}
 				}
-	    };
+	    	};
 		
 			var update_move_infos = function () {
 				var selector = select_move_by_move_number(info.move_number);
