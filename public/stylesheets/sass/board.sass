@@ -1,100 +1,155 @@
+
 .board.size19
+  !full_cells = 19
+  !zoom_out_size = 14px
+  !zoom_out_cells = !full_cells
+  !zoom_in_size = 30px
+  !zoom_in_cells = 9
   &.zoomin
+    width = !zoom_in_size * !zoom_in_cells
+    height = !zoom_in_size * !zoom_in_cells
     .row
-      height: 30px
-      width: 570px
+      height = !zoom_in_size
+      width = !zoom_in_size * !full_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_in_size
+        width = !zoom_in_size
   &.zoomout
+    width = !zoom_out_size * !full_cells
+    height = !zoom_out_size * !full_cells
     .row
-      height: 13px
+      height = !zoom_out_size
+      width = !zoom_out_size * !zoom_out_cells
       img
-        height: 13px
-        width: 13px
+        height = !zoom_out_size
+        width = !zoom_out_size
 
 .board.size17
+  !full_cells = 17
+  !zoom_out_size = 15px
+  !zoom_out_cells = !full_cells
+  !zoom_in_size = 30px
+  !zoom_in_cells = 9
   &.zoomin
+    width = !zoom_in_size * !zoom_in_cells
+    height = !zoom_in_size * !zoom_in_cells
     .row
-      height: 30px
-      width: 510px
+      height = !zoom_in_size
+      width = !zoom_in_size * !full_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_in_size
+        width = !zoom_in_size
   &.zoomout
+    width = !zoom_out_size * !full_cells
+    height = !zoom_out_size * !full_cells
     .row
-      height: 15px
+      height = !zoom_out_size
+      width = !zoom_out_size * !zoom_out_cells
       img
-        height: 15px
-        width: 15px
+        height = !zoom_out_size
+        width = !zoom_out_size
     
 .board.size15
+  !full_cells = 15
+  !zoom_out_size = 18px
+  !zoom_out_cells = !full_cells
+  !zoom_in_size = 30px
+  !zoom_in_cells = 9
   &.zoomin
+    width = !zoom_in_size * !zoom_in_cells
+    height = !zoom_in_size * !zoom_in_cells
     .row
-      height: 30px
-      width: 450px
+      height = !zoom_in_size
+      width = !zoom_in_size * !full_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_in_size
+        width = !zoom_in_size
   &.zoomout
+    width = !zoom_out_size * !full_cells
+    height = !zoom_out_size * !full_cells
     .row
-      height: 18px
+      height = !zoom_out_size
+      width = !zoom_out_size * !zoom_out_cells
       img
-        height: 18px
-        width: 18px
+        height = !zoom_out_size
+        width = !zoom_out_size
 
 .board.size13
+  !full_cells = 13
+  !zoom_out_size = 20px
+  !zoom_out_cells = !full_cells
+  !zoom_in_size = 30px
+  !zoom_in_cells = 9
   &.zoomin
+    width = !zoom_in_size * !zoom_in_cells
+    height = !zoom_in_size * !zoom_in_cells
     .row
-      height: 30px
-      width: 390px
+      height = !zoom_in_size
+      width = !zoom_in_size * !full_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_in_size
+        width = !zoom_in_size
   &.zoomout
+    width = !zoom_out_size * !full_cells
+    height = !zoom_out_size * !full_cells
     .row
-      height: 20px
+      height = !zoom_out_size
+      width = !zoom_out_size * !zoom_out_cells
       img
-        height: 20px
-        width: 20px
+        height = !zoom_out_size
+        width = !zoom_out_size
 
 .board.size11
+  !full_cells = 11
+  !zoom_out_size = 24px
+  !zoom_out_cells = !full_cells
+  !zoom_in_size = 30px
+  !zoom_in_cells = 9
   &.zoomin
+    width = !zoom_in_size * !zoom_in_cells
+    height = !zoom_in_size * !zoom_in_cells
     .row
-      height: 30px
-      width: 330px
+      height = !zoom_in_size
+      width = !zoom_in_size * !full_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_in_size
+        width = !zoom_in_size
   &.zoomout
+    width = !zoom_out_size * !full_cells
+    height = !zoom_out_size * !full_cells
     .row
-      height: 24px
+      height = !zoom_out_size
+      width = !zoom_out_size * !zoom_out_cells
       img
-        height: 24px
-        width: 24px
+        height = !zoom_out_size
+        width = !zoom_out_size
     
 .board.size9
+  !full_cells = 9
+  !zoom_out_size = 30px
+  !zoom_out_cells = !full_cells
+  !zoom_in_size = 30px
+  !zoom_in_cells = 9
   &.zoomin
+    width = !zoom_in_size * !zoom_in_cells
+    height = !zoom_in_size * !zoom_in_cells
     .row
-      height: 30px
-      width: 270px
+      height = !zoom_in_size
+      width = !zoom_in_size * !full_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_in_size
+        width = !zoom_in_size
   &.zoomout
+    width = !zoom_out_size * !full_cells
+    height = !zoom_out_size * !full_cells
     .row
-      height: 30px
+      height = !zoom_out_size
+      width = !zoom_out_size * !zoom_out_cells
       img
-        height: 30px
-        width: 30px
+        height = !zoom_out_size
+        width = !zoom_out_size
 
 .board
-  &.profile
-    height: 270px
-    width: 270px
-  &.landscape
-    height: 270px
-    width: 270px
   overflow: hidden
   position: relative
   left: 50%
@@ -109,156 +164,156 @@
   .row
     .top.left
       &.black
-        :background url('/images/board/temporary/tile1nw.png')
+        background: url('/images/board/temporary/tile1nw.png')
         &.valid
-          :background url('/images/board/temporary/tile1nwd.png') !important
+          background: url('/images/board/temporary/tile1nwd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1nwd.png') !important
+          background: url('/images/board/temporary/tile1nwd.png') !important
       &.white
-        :background url('/images/board/temporary/tile2nw.png')
+        background: url('/images/board/temporary/tile2nw.png')
         &.valid
-          :background url('/images/board/temporary/tile2nwd.png') !important
+          background: url('/images/board/temporary/tile2nwd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2nwd.png') !important
+          background: url('/images/board/temporary/tile2nwd.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0nw.png')
+        background: url('/images/board/temporary/tile0nw.png')
     .top.right
       &.black
-        :background url('/images/board/temporary/tile1ne.png')
+        background: url('/images/board/temporary/tile1ne.png')
         &.valid
-          :background url('/images/board/temporary/tile1ned.png') !important
+          background: url('/images/board/temporary/tile1ned.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1ned.png') !important
+          background: url('/images/board/temporary/tile1ned.png') !important
       &.white
-        :background url('/images/board/temporary/tile2ne.png')
+        background: url('/images/board/temporary/tile2ne.png')
         &.valid
-          :background url('/images/board/temporary/tile2ned.png') !important
+          background: url('/images/board/temporary/tile2ned.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2ned.png') !important
+          background: url('/images/board/temporary/tile2ned.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0ne.png')
+        background: url('/images/board/temporary/tile0ne.png')
     .bottom.left
       &.black
-        :background url('/images/board/temporary/tile1sw.png')
+        background: url('/images/board/temporary/tile1sw.png')
         &.valid
-          :background url('/images/board/temporary/tile1swd.png') !important
+          background: url('/images/board/temporary/tile1swd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1swd.png') !important
+          background: url('/images/board/temporary/tile1swd.png') !important
       &.white
-        :background url('/images/board/temporary/tile2sw.png')
+        background: url('/images/board/temporary/tile2sw.png')
         &.valid
-          :background url('/images/board/temporary/tile2swd.png') !important
+          background: url('/images/board/temporary/tile2swd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2swd.png') !important
+          background: url('/images/board/temporary/tile2swd.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0sw.png')
+        background: url('/images/board/temporary/tile0sw.png')
     .bottom.right
       &.black
-        :background url('/images/board/temporary/tile1se.png')
+        background: url('/images/board/temporary/tile1se.png')
         &.valid
-          :background url('/images/board/temporary/tile1sed.png') !important
+          background: url('/images/board/temporary/tile1sed.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1sed.png') !important
+          background: url('/images/board/temporary/tile1sed.png') !important
       &.white
-        :background url('/images/board/temporary/tile2se.png')
+        background: url('/images/board/temporary/tile2se.png')
         &.valid
-          :background url('/images/board/temporary/tile2sed.png') !important
+          background: url('/images/board/temporary/tile2sed.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2sed.png') !important
+          background: url('/images/board/temporary/tile2sed.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0se.png')
+        background: url('/images/board/temporary/tile0se.png')
     .top.middle
       &.black
-        :background url('/images/board/temporary/tile1n.png')
+        background: url('/images/board/temporary/tile1n.png')
         &.valid
-          :background url('/images/board/temporary/tile1nd.png') !important
+          background: url('/images/board/temporary/tile1nd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1nd.png') !important
+          background: url('/images/board/temporary/tile1nd.png') !important
       &.white
-        :background url('/images/board/temporary/tile2n.png')
+        background: url('/images/board/temporary/tile2n.png')
         &.valid
-          :background url('/images/board/temporary/tile2nd.png') !important
+          background: url('/images/board/temporary/tile2nd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2nd.png') !important
+          background: url('/images/board/temporary/tile2nd.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0n.png')
+        background: url('/images/board/temporary/tile0n.png')
     .left.middle
       &.black
-        :background url('/images/board/temporary/tile1w.png')
+        background: url('/images/board/temporary/tile1w.png')
         &.valid
-          :background url('/images/board/temporary/tile1wd.png') !important
+          background: url('/images/board/temporary/tile1wd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1wd.png') !important
+          background: url('/images/board/temporary/tile1wd.png') !important
       &.white
-        :background url('/images/board/temporary/tile2w.png')
+        background: url('/images/board/temporary/tile2w.png')
         &.valid
-          :background url('/images/board/temporary/tile2wd.png') !important
+          background: url('/images/board/temporary/tile2wd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2wd.png') !important
+          background: url('/images/board/temporary/tile2wd.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0w.png')
+        background: url('/images/board/temporary/tile0w.png')
     .bottom.middle
       &.black
-        :background url('/images/board/temporary/tile1s.png')
+        background: url('/images/board/temporary/tile1s.png')
         &.valid
-          :background url('/images/board/temporary/tile1sd.png') !important
+          background: url('/images/board/temporary/tile1sd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1sd.png') !important
+          background: url('/images/board/temporary/tile1sd.png') !important
       &.white
-        :background url('/images/board/temporary/tile2s.png')
+        background: url('/images/board/temporary/tile2s.png')
         &.valid
-          :background url('/images/board/temporary/tile2sd.png') !important
+          background: url('/images/board/temporary/tile2sd.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2sd.png') !important
+          background: url('/images/board/temporary/tile2sd.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0s.png')
+        background: url('/images/board/temporary/tile0s.png')
     .right.middle
       &.black
-        :background url('/images/board/temporary/tile1e.png')
+        background: url('/images/board/temporary/tile1e.png')
         &.valid
-          :background url('/images/board/temporary/tile1ed.png') !important
+          background: url('/images/board/temporary/tile1ed.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1ed.png') !important
+          background: url('/images/board/temporary/tile1ed.png') !important
       &.white
-        :background url('/images/board/temporary/tile2e.png')
+        background: url('/images/board/temporary/tile2e.png')
         &.valid
-          :background url('/images/board/temporary/tile2ed.png') !important
+          background: url('/images/board/temporary/tile2ed.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2ed.png') !important
+          background: url('/images/board/temporary/tile2ed.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0e.png')
+        background: url('/images/board/temporary/tile0e.png')
     .interior
       &.black
-        :background url('/images/board/temporary/tile1.png')
+        background: url('/images/board/temporary/tile1.png')
         &.valid
-          :background url('/images/board/temporary/tile1d.png') !important
+          background: url('/images/board/temporary/tile1d.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1d.png') !important
+          background: url('/images/board/temporary/tile1d.png') !important
       &.white
-        :background url('/images/board/temporary/tile2.png')
+        background: url('/images/board/temporary/tile2.png')
         &.valid
-          :background url('/images/board/temporary/tile2d.png') !important
+          background: url('/images/board/temporary/tile2d.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2d.png') !important
+          background: url('/images/board/temporary/tile2d.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0.png')
+        background: url('/images/board/temporary/tile0.png')
     .star
       &.black
-        :background url('/images/board/temporary/tile1.png')
+        background: url('/images/board/temporary/tile1.png')
         &.valid
-          :background url('/images/board/temporary/tile1d.png') !important
+          background: url('/images/board/temporary/tile1d.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile1d.png') !important
+          background: url('/images/board/temporary/tile1d.png') !important
       &.white
-        :background url('/images/board/temporary/tile2.png')
+        background: url('/images/board/temporary/tile2.png')
         &.valid
-          :background url('/images/board/temporary/tile2d.png') !important
+          background: url('/images/board/temporary/tile2d.png') !important
         &.last.latest
-          :background url('/images/board/temporary/tile2d.png') !important
+          background: url('/images/board/temporary/tile2d.png') !important
       &.empty
-        :background url('/images/board/temporary/tile0c.png')
+        background: url('/images/board/temporary/tile0c.png')
       &.valid
-        :background url('/images/board/temporary/tile0c.png')
+        BEFORE: URL('/images/board/temporary/tile0c.png')
 
 .playing .board .valid
   cursor: pointer
@@ -272,3 +327,9 @@
   .actions 
     .send
       :display inline !important
+
+.intersection
+  -o-background-size: 100%
+  -webkit-background-size: 100%
+  -khtml-background-size: 100%
+  -moz-background-size: 100%
