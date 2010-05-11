@@ -49,7 +49,7 @@ var GO = function () {
 			var document_ready_hook = function () {
 				message_dialog_instance = $('<div></div>')
 					.dialog({
-						dialogClass: 'scrub message',
+						dialogClass: 'scrub accept message',
 						autoOpen: false,
 						height: 'auto',
 						title: 'Hey!',
@@ -62,6 +62,10 @@ var GO = function () {
 					})
 					.bind('gesture_scrub', function (event) {
 				        message_dialog_instance.dialog("close");
+				        return false;
+					})
+					.bind('gesture_accept', function (event) {
+				        alert('TODO: Implement accepting a dialog');
 				        return false;
 					});
 				progress_dialog_instance = $('.ajax_load')
@@ -165,34 +169,14 @@ var GO = function () {
 			var timer = null;
 			
 			var resume_polling = function () {
-				// if (!timer) {
-				// 	timer = $.PeriodicalUpdater(info.plays_url, 
-				// 		{
-				// 		  method: 'get',          // method; get or post
-				// 		  data: function () {
-				// 				return { after_play: info.move_number, layout: false };
-				// 			},
-				// 		  minTimeout: 10000,       // starting value for the timeout in milliseconds
-				// 		  maxTimeout: 80000,       // maximum length of time between requests
-				// 		  type: 'html',           // response type - text, xml, json, etc.  See $.ajax config options
-				// 		  maxCalls: 0,            // maximum number of calls. 0 = no limit.
-				// 		  autoStop: 0             // automatically stop requests after this many returns of the same data. 0 = disabled.
-				// 		}, 
-				// 		process_update // Handle the new data (only called when there was a change)
-				// 	);
-				// }
 			};
 			
 			var stop_polling = function () {
-				// if (timer) {
-				// 	clearTimeout(timer);
-				// 	timer = null;
-				// }
 			};
 			
 			var select_current_image_by_position  = function (position) {
 				return '.move.playing .board #' + position;
-			}
+			};
 			
 			var position_of_played_stone = function () {
 				var target = $('.move.playing .board .empty.' + info.playing);
@@ -248,32 +232,33 @@ var GO = function () {
 			};
 			
 			var update_playing_div = function () {
-			  var move_to_unbind_selector = '.move.playing';
-			  var places_to_unbind_selector = '.move.playing .board .valid';
+			  	var move_to_unbind_selector = '.move.playing';
+			  	var places_to_unbind_selector = '.move.playing .board .valid';
 				var lasts_to_reclassify_finder = '.board .last';
 				var killed_finder = '.board .atari.empty';
 			
 			  return function () {
-				  var move_to_bind_selector = (info.is_users_turn ? select_move_by_move_number(info.move_number) : NULL_SELECTOR);
+				var move_to_bind_selector = (info.is_users_turn ? select_move_by_move_number(info.move_number) : NULL_SELECTOR);
 			    var places_to_bind_selector = (info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
-					if ($(places_to_unbind_selector).not(places_to_bind_selector).size() > 0) {
-						// console.log('unbinding ' + $(places_to_unbind_selector).not(places_to_bind_selector).size() + ' intersections');
-					}
-					$(places_to_unbind_selector).not(places_to_bind_selector).removeClass('black').removeClass('white');
-					if ($(move_to_unbind_selector).not(move_to_bind_selector).size() > 0) {
-						// console.log('unbinding ' + $(move_to_unbind_selector).not(move_to_bind_selector).size() + ' moves');
-					}
-					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() > 0) {
-						// console.log('restoring ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).size() + ' stones');
-					}
-					$(move_to_unbind_selector).not(move_to_bind_selector).find(killed_finder).addClass(info.opponent).removeClass('empty');
-					if ($(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size() > 0) {
-						// console.log('re-lasting ' + $(move_to_unbind_selector).not(move_to_bind_selector).find(lasts_to_reclassify_finder).size());
-					}
-					$('.move').not(move_to_bind_selector).find(lasts_to_reclassify_finder).addClass('latest');
-					
-					$('.move').not(move_to_bind_selector).removeClass('playing');
-					$(move_to_bind_selector).addClass('playing');
+			
+				$(places_to_unbind_selector)
+					.not(places_to_bind_selector)
+						.removeClass('black')
+						.removeClass('white');
+						
+				$(move_to_unbind_selector)
+					.not(move_to_bind_selector)
+						.find(killed_finder)
+							.addClass(info.opponent)
+							.removeClass('empty');
+				$('.move')
+					.not(move_to_bind_selector)
+						.removeClass('playing')
+						.find(lasts_to_reclassify_finder)
+							.addClass('latest');
+				
+				$(move_to_bind_selector)
+					.addClass('playing');
 			  };
 			}();
 			
@@ -336,8 +321,9 @@ var GO = function () {
 					play_stone(target.attr('id'));
 				};
 
-				$('.move.playing .board .valid').live(SELECTION_EVENT, toggle_placed_stone);
-				$('.move.playing .board .valid').live('dblclick', place_and_play_stone);
+				$('.move.playing .board .valid')
+					.live(SELECTION_EVENT, toggle_placed_stone)
+					.live('dblclick', place_and_play_stone);
 			};
 			
 			var process_update = function (html) {
@@ -550,39 +536,160 @@ var GO = function () {
 				});
 			};
 			
-			var initialize_gesture_support = function() {
-				$('body')
-					.gesture([
-						'top', 'bottom',
-						{ scrub: function(target) {
-							return $(target)
-								.parents('body > *')
-									.find('.scrub');
-								}
-							},
-						{ bottomright_topright: function(target) {
-							return $(target)
-								.parents('body > *')
-									.find('.ok');
-								}
-							}
-					])
-					.bind({
-						turn:  function (event, data) {
-							$('.board')
-								.removeClass('portrait landscape')
-								.addClass(data.orientation);
+			var initialize_gesture_support = (function () {
+		
+				var clear_current_play = function (event) {
+					var target = $(event.target);
+					set_played_stone(target.find('.intersection.latest:not(.last)'), false);
+					set_killed_stones(null, false);
+					return false;
+				};
+/*
+				var forwards_in_time = function (event) {
+					var target = $(event.target);
+					var current_move_number = current_displayed_move_number(target);
+					if (current_move_number < last_displayed_move_number()) {
+						return goto_move(current_move_number, current_move_number + 1);
+					}
+					else {
+						position = position_of_played_stone();
+						if (position != null) {
+							play_stone(position);
 						}
-					});
-				$('.board')
-					.addClass(
-						window.orientation !== undefined 
-							? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
-							: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
-					);
-				$('#info')
-					.bind('gesture_top', function(event) { jQT.goBack(); });
-			};
+						else if (info.is_users_turn) {
+							var text;
+							if (info.game_state == 'passed') {
+								text = 'Since ' + info.opponent + ' just passed, passing will end the game.';
+							}
+							else {
+								text = 'If ' + info.opponent + ' passes, the game will end.';
+							}
+					    	message_dialog_instance
+								.text(text)
+								.dialog({
+									title: "Really pass?",
+									buttons: { 
+										"Pass": function() { 
+											pass(function () { $(this).dialog("close"); });
+										},
+										"No": function() { $(this).dialog("close"); } 
+									}
+								})
+								.dialog('open');
+						}
+						else {
+							progress_dialog('open');
+							$.get(
+								info.plays_url, 
+								{ after_play: info.move_number, layout: false },
+								function (html) {
+									process_update(html);
+									progress_dialog('close');
+								}
+							);
+							return true;
+						}
+						return false;
+					}
+				};
+*/
+				var do_play = function () {
+					var position = position_of_played_stone();
+					if (position != null) {
+						play_stone(position);
+						return false;
+					}
+				};
+				
+				var do_pass = function() {
+					var text;
+					if (info.game_state == 'passed') {
+						text = 'Since ' + info.opponent + ' just passed, passing will end the game.';
+					}
+					else {
+						text = 'If ' + info.opponent + ' passes, the game will end.';
+					}
+			    	message_dialog_instance
+						.text(text)
+						.dialog({
+							title: "Really pass?",
+							buttons: { 
+								"Pass": function() { 
+									pass(function () { $(this).dialog("close"); });
+								},
+								"No": function() { $(this).dialog("close"); } 
+							}
+						})
+						.dialog('open');
+				};
+				
+				var do_manual_poll = (function () {
+					var current_displayed_move_number = function (target) {
+						return $(target).parents('.move').data('number');
+					};
+
+					var last_displayed_move_number = function () {
+						return $('.move:last').data('number');
+					};
+					return function() {
+						var target = $(event.target);
+						// work around distinction between selection and predicate behaviour
+						if (current_displayed_move_number(target) == last_displayed_move_number()) {
+							progress_dialog('open');
+							$.get(
+								info.plays_url, 
+								{ after_play: info.move_number, layout: false },
+								function (html) {
+									process_update(html);
+									progress_dialog('close');
+								}
+							);
+							return false;
+						}
+					};
+				})();
+				
+				return function() {
+					$('body')
+						.gesture([
+							'top', 'bottom', 'ok',
+							{ scrub: function(target) {
+								return $(target)
+									.parents('body > *')
+										.find('.scrub');
+									}
+								},
+							{ accept: function(target) {
+								return $(target)
+									.parents('body > *')
+										.find('.accept');
+									}
+								}
+						])
+						.bind({
+							turn:  function (event, data) {
+								$('.board')
+									.removeClass('portrait landscape')
+									.addClass(data.orientation);
+							}
+						});
+					$('.board')
+						.addClass(
+							window.orientation !== undefined 
+								? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
+								: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
+						)
+						.live('gesture_scrub', clear_current_play);
+					$('.move.playing .board:has(.valid.black,.valid.white)')
+						.live('gesture_left', do_play);
+					$('.move.playing .board:not(:has(.valid.black,.valid.white))')
+						.live('gesture_left', do_pass);
+					$('.move:not(.playing)')
+						.live('gesture_left', do_manual_poll);
+					$('#info')
+						.bind('gesture_top', function(event) { jQT.goBack(); });
+				};
+			})();
 			
 			var document_ready_hook = function () {
 				initialize_gesture_support();
