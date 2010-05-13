@@ -127,7 +127,7 @@
 				var move_data = $('body').data('moves')[target_move_number];
 				var next_move = memoized_move(target_move_number + 1);
 				var this_move = next_move
-					.clone(false)
+					.clone(true)
 					.removeClass()
 					.addClass('move')
 					.attr('id', id_by_move_number(target_move_number))
