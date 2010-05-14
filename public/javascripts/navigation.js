@@ -1,11 +1,4 @@
 ;(function ($) {
-	$.fn.into = function (fn) {
-		fn(this);
-		return this;
-	};
-})(jQuery);
-
-;(function ($) {
 		
 	var zoomed_out_p = function() {
 		return $('.board:first').is('.zoomout');

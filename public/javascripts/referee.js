@@ -1,8 +1,12 @@
-;(function ($) {
+;(function ($, undefined) {
 	
-	var adjacents = function (dimension) {
+	var referee = function (dimension) {
 		
-	    if (11 == dimension) return {
+		var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, dimension);
+		
+		var adjacents;
+		
+	    if (11 == dimension) adjacents = {
 	        'dj': '#cj,#ej,#di,#dk',
 	        'jg': '#ig,#kg,#jf,#jh',
 	        'gh': '#fh,#hh,#gg,#gi',
@@ -125,7 +129,7 @@
 	        'jf': '#if,#kf,#je,#jg',
 	        'gg': '#fg,#hg,#gf,#gh'
 	    };
-	    if (17 == dimension) return {
+	    if (17 == dimension) adjacents = {
 	        'nd': '#md,#od,#nc,#ne',
 	        'eo': '#do,#fo,#en,#ep',
 	        'hk': '#gk,#ik,#hj,#hl',
@@ -416,7 +420,7 @@
 	        'hj': '#gj,#ij,#hi,#hk',
 	        'kg': '#jg,#lg,#kf,#kh'
 	    };
-	    if (13 == dimension) return {
+	    if (13 == dimension) adjacents = {
 	        'me': '#le,#md,#mf',
 	        'jg': '#ig,#kg,#jf,#jh',
 	        'dj': '#cj,#ej,#di,#dk',
@@ -587,7 +591,7 @@
 	        'ak': '#bk,#aj,#al',
 	        'gg': '#fg,#hg,#gf,#gh'
 	    };
-	    if (19 == dimension) return {
+	    if (19 == dimension) adjacents = {
 	        'nd': '#md,#od,#nc,#ne',
 	        'bs': '#as,#cs,#br',
 	        'eo': '#do,#fo,#en,#ep',
@@ -950,7 +954,7 @@
 	        'hj': '#gj,#ij,#hi,#hk',
 	        'kg': '#jg,#lg,#kf,#kh'
 	    },
-	   if ( 9 == dimension) return {
+	   if ( 9 == dimension) adjacents = {
 	        'ie': '#he,#id,#if',
 	        'cb': '#bb,#db,#ca,#cc',
 	        'ec': '#dc,#fc,#eb,#ed',
@@ -1033,7 +1037,7 @@
 	        'eb': '#db,#fb,#ea,#ec',
 	        'gc': '#fc,#hc,#gb,#gd'
 	    };
-	    if (15 == dimension) return {
+	    if (15 == dimension) adjacents = {
 	        'eo': '#do,#fo,#en',
 	        'hk': '#gk,#ik,#hj,#hl',
 	        'kh': '#jh,#lh,#kg,#ki',
@@ -1261,6 +1265,162 @@
 	        'nc': '#mc,#oc,#nb,#nd'
 	    };
 		
+		var colour_of = function(intersection) {
+			if (intersection.hasClass('black'))
+				return 'black';
+			else if (intersection.hasClass('white'))
+				return 'white';
+		};
+		
+		var is_blank = function(intersection ) {
+			return !intersection.hasClass('black') && !intersection.hasClass('white');
+		};
+		
+		var before = function (a, b) {
+			// returns whether a is before b
+			var a_id = a.attr('id');
+			var b_id = b.attr('id');
+			var a_across = a_id[0];
+			var a_down = a_id[1];
+			var b_across = b_id[0];
+			var b_down = b_id[1];
+			
+			return (a_across < b_across || (a_across == b_across && a_down < b_down));
+		};
+		
+		var analyze_board = function(board, debug) {
+			debug = (debug == undefined ? false : debug);
+			if (typeof(board) == 'string')
+				board = $(board);
+			board
+				.find('.intersection')
+					.data('group', null)
+					.data('liberties', null)
+					.end()
+				.find('.black,.white')
+					.removeClass(function (i, clazz) {
+						return [
+							'group',
+							clazz.match(/group_../),
+							clazz.match(/killed_by_../)
+						].join(' ');
+					})
+					.end();
+					
+			// first pass, assemble groups
+			$.each(letters, function (i, across) {
+				$.each(letters, function (j, down) {
+					var id = across + down;
+					var intersection = board.find('#' + id);
+					if (intersection.is('.black,.white')) {
+						var colour = colour_of(intersection);
+
+						intersection
+							.data('group', intersection)
+							.addClass('group_' + id)
+							.addClass('group')
+							.data('liberties', []);
+							
+						board
+							.find(adjacents[id])
+								.filter(':not(.black,.white)')
+									.each(function (i, adj) {
+										adj = $(adj)
+										var group = intersection.data('group');
+										if (debug) console.info(intersection.attr('id') + ' belongs to ' + group.attr('id'));
+										var liberties = group.data('liberties');
+										if (liberties == null) {
+											console.error('no liberties for group ' + group.attr('id') + ' of ' + intersection.attr('id'));
+										}
+										if (-1 == $.inArray(adj, liberties))
+											liberties.push(adj);
+									})
+									.end()
+								.filter('.black,.white')
+									.each(function (i, adj) {
+										adj = $(adj)
+										if (colour_of(adj) == colour && before(adj, intersection)) {
+											var adj_bt = adj.data('group');
+											var this_bt = intersection.data('group');
+										
+											if (adj_bt.attr('id') != this_bt.attr('id')) {
+												if (debug) console.info('merging group for ' + intersection.attr('id') + ' into group for ' + adj.attr('id'));
+												var from;
+												var to;
+												if (before(adj_bt, this_bt)) {
+													from = this_bt
+													to = adj_bt
+												}
+												else if (before(this_bt, adj_bt)) {
+													from = adj_bt
+													to = this_bt
+												}
+												// merge liberties
+		                    					if (debug) console.info('merging ' + from.attr('id') + ' into ' + to.attr('id'));
+
+												var from_liberties = from.data('liberties');
+												var to_liberties = to.data('liberties')
+												$.each(from_liberties, function (i, liberty) {
+													if ($.inArray(liberty, to_liberties) == -1)
+														to_liberties.push(liberty);
+												});
+										
+												from
+													.removeClass('group')
+													.data('liberties', null);
+										
+												if (debug) console.info('now ' + to_liberties.length + ' liberties for ' + to.attr('id'));
+											
+												board
+													.find('.group_' + from.attr('id'))
+														.removeClass('group_' + from.attr('id'))
+														.addClass('group_' + to.attr('id'))
+														.data('group', to);
+											}
+										}
+									});
+					}
+				});
+			});
+			
+			// second pass, update killed and atari
+			board
+				.find('.group')
+					.each(function (i, group) {
+						group = $(group);
+						var group_id = group.attr('id');
+						var members = board
+							.find('.group_' + group_id);
+						var liberties = group.data('liberties');
+						if (liberties.length == 0) {
+							members
+								.addClass('dead');
+						}
+						else if (liberties.length == 1) {
+							members
+								.addClass('killed_by_' + liberties[0].attr('id'));
+						}
+					});
+			
+			// third pass, liberties for empty intersections
+			board
+				.find('.intersection:not(.black,.white)')
+					.each(function (i, intersection) {
+						intersection = $(intersection);
+						if (0 != board
+							.find(adjacents[intersection.attr('id')])
+								.filter(':not(.black,.white)')
+									.size())
+							intersection.addClass('at_liberty');
+					});
+		};
+		
+		return {
+			analyze_board: analyze_board,
+			letters: letters,
+			adjacents: adjacents
+		};
+	
 	};
 	
 	GO = $.extend(GO, {
@@ -1268,10 +1428,10 @@
 			return function (info) {
 				var game_show_helper = old_game_show_helper(info);
 				var old_document_ready_hook = game_show_helper.document_ready_hook;
+				var ref = referee($('.board:first .row:first .intersection').size());
 				return $.extend(game_show_helper, {
 					document_ready_hook: function () {
-						info.adjacents = adjacents($('.board:first .row:first .intersection').size()); // test?
-						$('body').data('adjacents', info.adjacents); // test?
+						$('body').data('ref', ref); // test?
 						old_document_ready_hook();
 					}
 				});
