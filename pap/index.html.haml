@@ -9,27 +9,30 @@
     
     %script{:src=>"http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/jquery.timers-1.2.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"/jqtouch/jqtouch.customized.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/jquery.qtip-1.0.0-rc3-customized.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/igesture.jquery.mobile_safari.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/jquery.periodicalupdater.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/jquery.timers-1.2.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/jqtouch.customized.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/jquery.qtip-1.0.0-rc3-customized.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/igesture.jquery.mobile_safari.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/jquery.periodicalupdater.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
     
     // our stuff
     
-    %script{:src=>"/j/jquery.into.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/dragscrollable.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"/j/application.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"/j/navigation.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"/j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/jquery.into.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/dragscrollable.js", :type=>"text/javascript", :charset=>"utf-8"}
     
-    %style{:type=>"text/css", :media=>"screen"} @import "/c/jqtouch.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "/c/theme.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "/c/application.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "/c/board.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "/c/dark-hive/jquery-ui-1.8rc3.custom.css";
+    // must be first!
+    %script{:src=>"j/go.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/navigation.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    
+    %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "c/theme.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "c/application.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "c/board.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "c/dark-hive/jquery-ui-1.8rc3.custom.css";
     
     :javascript
       var jQT = new $.jQTouch({
@@ -37,9 +40,9 @@
           statusBar: 'black-translucent',
           touchSelector: '.board .intersection, .board, .touch',
           preloadImages: [
-              '/i/back_button_clicked.png',
-              '/i/button_clicked.png',
-              '/i/ajax-loader-black.gif'
+              'i/back_button_clicked.png',
+              'i/button_clicked.png',
+              'i/ajax-loader-black.gif'
               ]
       });
       $(function(){
@@ -48,12 +51,40 @@
               selector: '.slideback'
           });
       });
-      var iphone_layout_helper = GO.iphone_layout_helper();
-      $(document).ready( function () {
-        iphone_layout_helper.document_ready_hook();
-      }); 
   %body
     %div#useful_stuff
       .ajax_load
-        %img{:src=>'/images/ajax-loader-black.gif',:height=>66,:width=>66}
-    = yield
+        %img{:src=>'i/ajax-loader-black.gif',:height=>66,:width=>66}
+    #new.current
+      .toolbar 
+        %h1 New Game
+      %form#form.new_game
+        %ul.edit.rounded
+          %li.email
+            %img.label{:src=>'/images/dot_clear.gif'}>
+            %input#player{:name=>'player', :placeholder=>"Your optional email address", :type=>'text'}/
+          %li.email
+            %img.label{:src=>'/images/dot_clear.gif'}>
+            %input#opponent{:name=>'opponent', :placeholder=>"Opponent's optional email address", :type=>'text'}/
+          %li.size
+            .label Size: 
+            %select#dimension{:name=>'dimension'}
+              - [9, 11, 13, 15, 17, 19].each do |dim|
+                %option{:value=>dim} #{dim}x#{dim}
+          %li.you_play
+            .label You play:
+            .toggle
+              %input#colour{:name=>'colour', :type=>'checkbox', :checked=>"checked"}
+          %li.handicap
+            .label Handicap:
+            %select#handicap{:name=>'handicap'}
+              %option{:value=>0} Black plays first
+              %option{:value=>2} Two stones
+              %option{:value=>3} Three stones
+              %option{:value=>4} Four stones
+              %option{:value=>5} Five stones
+              %option{:value=>6} Six stones
+              %option{:value=>7} Seven stones
+              %option{:value=>8} Eight stones
+              %option{:value=>9} Nine stones
+        %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Invite

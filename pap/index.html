@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <meta content='black' name='apple-mobile-web-app-status-bar-style' />
+    <meta content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0' name='viewport' />
+    <!-- / their stuff -->
+    <script charset='utf-8' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js' type='text/javascript'></script>
+    <script charset='utf-8' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jquery.timers-1.2.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jqtouch.customized.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jquery.qtip-1.0.0-rc3-customized.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/igesture.jquery.mobile_safari.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jquery.periodicalupdater.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/md5.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jquery.gravatar.js' type='text/javascript'></script>
+    <!-- / our stuff -->
+    <script charset='utf-8' src='j/jquery.into.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/dragscrollable.js' type='text/javascript'></script>
+    <!-- / must be first! -->
+    <script charset='utf-8' src='j/go.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/start.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/navigation.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/referee.js' type='text/javascript'></script>
+    <style media='screen' type='text/css'>@import "c/jqtouch.css";</style>
+    <style media='screen' type='text/css'>@import "c/theme.css";</style>
+    <style media='screen' type='text/css'>@import "c/application.css";</style>
+    <style media='screen' type='text/css'>@import "c/board.css";</style>
+    <style media='screen' type='text/css'>@import "c/dark-hive/jquery-ui-1.8rc3.custom.css";</style>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var jQT = new $.jQTouch({
+            icon: 'i/black_white.png',
+            statusBar: 'black-translucent',
+            touchSelector: '.board .intersection, .board, .touch',
+            preloadImages: [
+                'i/back_button_clicked.png',
+                'i/button_clicked.png',
+                'i/ajax-loader-black.gif'
+                ]
+        });
+        $(function(){
+            jQT.addAnimation({
+                name: 'slideback',
+                selector: '.slideback'
+            });
+        });
+      //]]>
+    </script>
+  </head>
+  <body>
+    <div id='useful_stuff'>
+      <div class='ajax_load'>
+        <img height='66' src='i/ajax-loader-black.gif' width='66' />
+      </div>
+    </div>
+    <div class='current' id='new'>
+      <div class='toolbar'>
+        <h1>New Game</h1>
+      </div>
+      <form class='new_game' id='form'>
+        <ul class='edit rounded'>
+          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='player' name='player' placeholder='Your optional email address' type='text' />
+          </li>
+          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='opponent' name='opponent' placeholder="Opponent's optional email address" type='text' />
+          </li>
+          <li class='size'>
+            <div class='label'>Size:</div>
+            <select id='dimension' name='dimension'>
+              <option value='9'>9x9</option>
+              <option value='11'>11x11</option>
+              <option value='13'>13x13</option>
+              <option value='15'>15x15</option>
+              <option value='17'>17x17</option>
+              <option value='19'>19x19</option>
+            </select>
+          </li>
+          <li class='you_play'>
+            <div class='label'>You play:</div>
+            <div class='toggle'>
+              <input checked='checked' id='colour' name='colour' type='checkbox' />
+            </div>
+          </li>
+          <li class='handicap'>
+            <div class='label'>Handicap:</div>
+            <select id='handicap' name='handicap'>
+              <option value='0'>Black plays first</option>
+              <option value='2'>Two stones</option>
+              <option value='3'>Three stones</option>
+              <option value='4'>Four stones</option>
+              <option value='5'>Five stones</option>
+              <option value='6'>Six stones</option>
+              <option value='7'>Seven stones</option>
+              <option value='8'>Eight stones</option>
+              <option value='9'>Nine stones</option>
+            </select>
+          </li>
+        </ul>
+        <a class='submit whiteButton' href='#' style='margin:0 10px;color:rgba(0,0,0,.9)'>Invite</a>
+      </form>
+    </div>
+  </body>
+</html>

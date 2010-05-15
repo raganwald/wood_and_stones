@@ -13,6 +13,8 @@
 .slideback.out.reverse {
   -webkit-animation-name: slideinfromleft; }
 
+.in_progress:before {
+  content: url(../i/in_progress.gif); }
 
 .center {
   margin-left: auto;
@@ -38,7 +40,7 @@
     position: relative;
     float: right; }
     .new_game .you_play .toggle input[type="checkbox"] {
-      background: #fff url(/images/black_white.png) 0 0 no-repeat !important; }
+      background: #fff url(../i/black_white.png) 0 0 no-repeat !important; }
 .new_game .handicap {
   padding-left: 110px !important; }
 
