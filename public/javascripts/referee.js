@@ -1289,23 +1289,39 @@
 		};
 		
 		var analyze_board = function(board, debug) {
+			
+			// Class decorations:
+			//
+			// group: this is the head stone of a group. Holds its data.
+			//
+			// group_xx: identifies a stone as belonging to the group where
+			// intersection xx has the group class. The head stoen also has this class.
+			//
+			// killed_by_xx: identifies a stone as belomnging to a group with a single
+			// liberty at xx.
+			//
+			// at_liberty: identifies an empty intersection with at least one liberty.
+			
 			debug = (debug == undefined ? false : debug);
 			if (typeof(board) == 'string')
 				board = $(board);
 			board
 				.find('.intersection')
+					.removeClass('group at_liberty atari')
 					.data('group', null)
 					.data('liberties', null)
 					.end()
 				.find('.black,.white')
 					.removeClass(function (i, clazz) {
 						return [
-							'group',
+							'empty',
 							clazz.match(/group_../),
 							clazz.match(/killed_by_../)
 						].join(' ');
 					})
-					.end();
+					.end()
+				.find(':not(.black,.white,.empty)')
+					.addClass('empty');
 					
 			// first pass, assemble groups
 			$.each(letters, function (i, across) {
@@ -1323,7 +1339,7 @@
 							
 						board
 							.find(adjacents[id])
-								.filter(':not(.black,.white)')
+								.filter('.empty')
 									.each(function (i, adj) {
 										adj = $(adj)
 										var group = intersection.data('group');
@@ -1398,27 +1414,90 @@
 						}
 						else if (liberties.length == 1) {
 							members
-								.addClass('killed_by_' + liberties[0].attr('id'));
+								.addClass('atari killed_by_' + liberties[0].attr('id'));
 						}
 					});
 			
 			// third pass, liberties for empty intersections
 			board
-				.find('.intersection:not(.black,.white)')
+				.find('.intersection.empty')
 					.each(function (i, intersection) {
 						intersection = $(intersection);
 						if (0 != board
 							.find(adjacents[intersection.attr('id')])
-								.filter(':not(.black,.white)')
+								.filter('.empty')
 									.size())
 							intersection.addClass('at_liberty');
-					});
+					})
+					.end();
+					
+			return board;
 		};
 		
+		var options = (function () {
+			
+			var everything_invalid = function (board) {
+				return board
+					.find('.intersection.valid')
+						.removeClass('valid')
+						.end();
+			};
+			
+			var at_liberty_valid = function (board) {
+				return board
+					.find('.intersection.at_liberty:not(.white,.black)')
+						.addClass('valid')
+						.end();
+			};
+			
+			
+			// this is the rule that permits suicide in Go, so removing this
+			// rule prohibits suicide!
+			
+			var killers_valid = function (board) {
+				var opponent = board.is('.black_to_play') ? 'white' : 'black';
+				
+				return board
+					.find('.group.atari.' + opponent)
+						.each(function (i, el) {
+							el = $(el);
+							m = el.attr('class').match(/killed_by_(..)/);
+							if (m)
+								board
+									.find('#' + m[1])
+										.addClass('valid');
+						})
+						.end()
+			}
+			
+			var extend_group_valid = function (board) {
+				var player = board.is('.white_to_play') ? 'white' : 'black';
+				
+				return board
+					.find('.intersection:not(.valid):not(.white,.black)')
+						.each(function (i, el) {
+							el = $(el);
+							var id = el.attr('id');
+							if (board.find(adjacents[id]).is('.' + player + ':not(.atari)'))
+								el
+									.addClass('valid');
+						})
+						.end();
+			}
+			
+			return {
+				history_free_validity_rules: {
+					everything_invalid: everything_invalid,
+					at_liberty_valid: at_liberty_valid,
+					killers_valid: killers_valid,
+					extend_group_valid: extend_group_valid
+				}
+			};
+		})();
+		
 		return {
-			analyze_board: analyze_board,
-			letters: letters,
-			adjacents: adjacents
+			options: options,
+			analyze_board: analyze_board
 		};
 	
 	};
