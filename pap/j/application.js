@@ -1,4 +1,4 @@
-var GO = function () {
+var go = function () {
 	var message_dialog_instance;
 	var message_dialog = function (title, text) {
     message_dialog_instance

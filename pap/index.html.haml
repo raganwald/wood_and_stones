@@ -87,4 +87,38 @@
               %option{:value=>7} Seven stones
               %option{:value=>8} Eight stones
               %option{:value=>9} Nine stones
-        %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Invite
+        %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Play
+    #info
+      .toolbar 
+        %h1
+          %span.gravatar
+          %span.playing
+      %h2 Players
+      %ul.rounded
+        %li
+          %img{ }
+          You are playing black
+        %li
+          %img{ }
+          White
+      %h2 Game State
+      %ul.rounded
+        %li
+          Fixme
+      %h2 Captured Stones
+      %ul.rounded
+        %li
+          Black has captured
+          %span.captured_whites
+          stones
+        %li
+          White has captured
+          %span.captured_blacks
+          stones
+    .move#m0
+      .toolbar 
+        %h1
+          %span.gravatar
+          %span.playing
+      #div{:class => "board zoomout scrub"}
+        .dragger

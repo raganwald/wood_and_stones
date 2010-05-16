@@ -69,7 +69,8 @@
 				.appendTo('body > .current');
 	};
 	
-	GO = {
+	go = {
+		letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
 		message: message_dialog,
 		progress_dialog: progress_dialog,
 		on_document_ready: function (new_document_ready) {

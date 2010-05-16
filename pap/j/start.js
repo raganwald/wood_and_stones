@@ -32,11 +32,29 @@
     	$('form.new_game').submit(function (e) {
 			update_emails();
 			var form = $(e.currentTarget);
-		  	// TODO: Set up the new game RIGHT HERE!!!
+		  	go.dimension = $('form.new_game #dimension').val();
+			go.letters = go.letters.slice(0, go.dimension);
+			$('.move#m0 .board')
+				.addClass('size' + go.dimension)
+			$.each(go.letters, function (down_index, down_letter) {
+				$('<div></div>')
+					.addClass('row')
+					.into(function (row) {
+						$.each(go.letters, function (across_index, across_letter) {
+							$('<img/>')
+								.addClass('intersection empty')
+								.attr('id', across_letter + down_letter)
+								.attr('src', 'i/dot_clear.gif')
+								.appendTo(row);
+						});
+					})
+					.appendTo($('.move#m0 .board .dragger'));
+			});
+			jQT.swapPages($('#new'), $('#m0'));
       		return false;
     	});
 	};
 	
-	GO.on_document_ready(setup_new_game);
+	go.on_document_ready(setup_new_game);
 	
 })(jQuery);

@@ -1,12 +1,10 @@
 ;(function ($, undefined) {
 	
-	var referee = function (dimension) {
-		
-		var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, dimension);
+	var referee = function () {
 		
 		var adjacents;
 		
-	    if (11 == dimension) adjacents = {
+	    if (11 == go.dimension) adjacents = {
 	        'dj': '#cj,#ej,#di,#dk',
 	        'jg': '#ig,#kg,#jf,#jh',
 	        'gh': '#fh,#hh,#gg,#gi',
@@ -129,7 +127,7 @@
 	        'jf': '#if,#kf,#je,#jg',
 	        'gg': '#fg,#hg,#gf,#gh'
 	    };
-	    if (17 == dimension) adjacents = {
+	    if (17 == go.dimension) adjacents = {
 	        'nd': '#md,#od,#nc,#ne',
 	        'eo': '#do,#fo,#en,#ep',
 	        'hk': '#gk,#ik,#hj,#hl',
@@ -420,7 +418,7 @@
 	        'hj': '#gj,#ij,#hi,#hk',
 	        'kg': '#jg,#lg,#kf,#kh'
 	    };
-	    if (13 == dimension) adjacents = {
+	    if (13 == go.dimension) adjacents = {
 	        'me': '#le,#md,#mf',
 	        'jg': '#ig,#kg,#jf,#jh',
 	        'dj': '#cj,#ej,#di,#dk',
@@ -591,7 +589,7 @@
 	        'ak': '#bk,#aj,#al',
 	        'gg': '#fg,#hg,#gf,#gh'
 	    };
-	    if (19 == dimension) adjacents = {
+	    if (19 == go.dimension) adjacents = {
 	        'nd': '#md,#od,#nc,#ne',
 	        'bs': '#as,#cs,#br',
 	        'eo': '#do,#fo,#en,#ep',
@@ -954,7 +952,7 @@
 	        'hj': '#gj,#ij,#hi,#hk',
 	        'kg': '#jg,#lg,#kf,#kh'
 	    },
-	   if ( 9 == dimension) adjacents = {
+	   if ( 9 == go.dimension) adjacents = {
 	        'ie': '#he,#id,#if',
 	        'cb': '#bb,#db,#ca,#cc',
 	        'ec': '#dc,#fc,#eb,#ed',
@@ -1037,7 +1035,7 @@
 	        'eb': '#db,#fb,#ea,#ec',
 	        'gc': '#fc,#hc,#gb,#gd'
 	    };
-	    if (15 == dimension) adjacents = {
+	    if (15 == go.dimension) adjacents = {
 	        'eo': '#do,#fo,#en',
 	        'hk': '#gk,#ik,#hj,#hl',
 	        'kh': '#jh,#lh,#kg,#ki',
@@ -1324,8 +1322,8 @@
 					.addClass('empty');
 					
 			// first pass, assemble groups
-			$.each(letters, function (i, across) {
-				$.each(letters, function (j, down) {
+			$.each(go.letters, function (i, across) {
+				$.each(go.letters, function (j, down) {
 					var id = across + down;
 					var intersection = board.find('#' + id);
 					if (intersection.is('.black,.white')) {
@@ -1502,12 +1500,12 @@
 	
 	};
 	
-	GO = $.extend(GO, {
+	go = $.extend(go, {
 		game_show_helper: (function (old_game_show_helper) {
 			return function (info) {
 				var game_show_helper = old_game_show_helper(info);
 				var old_document_ready_hook = game_show_helper.document_ready_hook;
-				var ref = referee($('.board:first .row:first .intersection').size());
+				var ref = referee();
 				return $.extend(game_show_helper, {
 					document_ready_hook: function () {
 						$('body').data('ref', ref); // test?
@@ -1515,7 +1513,7 @@
 					}
 				});
 			}
-		})(GO.game_show_helper)
+		})(go.game_show_helper)
 	});
 	
 })(jQuery);	

@@ -249,7 +249,7 @@
 		
 	};
 	
-	GO = $.extend(GO, {
+	go = $.extend(go, {
 		game_show_helper: (function (old_game_show_helper) {
 			return function (info) {
 				var game_show_helper = old_game_show_helper(info);
@@ -269,6 +269,6 @@
 					}
 				});
 			}
-		})(GO.game_show_helper)
+		})(go.game_show_helper)
 	});
 })(jQuery);	

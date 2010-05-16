@@ -95,8 +95,57 @@
             </select>
           </li>
         </ul>
-        <a class='submit whiteButton' href='#' style='margin:0 10px;color:rgba(0,0,0,.9)'>Invite</a>
+        <a class='submit whiteButton' href='#' style='margin:0 10px;color:rgba(0,0,0,.9)'>Play</a>
       </form>
+    </div>
+    <div id='info'>
+      <div class='toolbar'>
+        <h1>
+          <span class='gravatar'></span>
+          <span class='playing'></span>
+        </h1>
+      </div>
+      <h2>Players</h2>
+      <ul class='rounded'>
+        <li>
+          <img />
+          You are playing black
+        </li>
+        <li>
+          <img />
+          White
+        </li>
+      </ul>
+      <h2>Game State</h2>
+      <ul class='rounded'>
+        <li>
+          Fixme
+        </li>
+      </ul>
+      <h2>Captured Stones</h2>
+      <ul class='rounded'>
+        <li>
+          Black has captured
+          <span class='captured_whites'></span>
+          stones
+        </li>
+        <li>
+          White has captured
+          <span class='captured_blacks'></span>
+          stones
+        </li>
+      </ul>
+    </div>
+    <div class='move' id='m0'>
+      <div class='toolbar'>
+        <h1>
+          <span class='gravatar'></span>
+          <span class='playing'></span>
+        </h1>
+      </div>
+      <div class='board zoomout scrub' id='div'>
+        <div class='dragger'></div>
+      </div>
     </div>
   </body>
 </html>
