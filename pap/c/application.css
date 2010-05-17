@@ -26,7 +26,7 @@
     position: absolute;
     left: 10px; }
 .new_game .email {
-  height: 40px       !important;
+  height: 40px !important;
   padding-left: 60px !important; }
   .new_game .email img {
     position: absolute;
@@ -40,9 +40,11 @@
     position: relative;
     float: right; }
     .new_game .you_play .toggle input[type="checkbox"] {
-      background: #fff url(../i/black_white.png) 0 0 no-repeat !important; }
+      background: white url(../i/black_white.png) 0 0 no-repeat !important; }
 .new_game .handicap {
   padding-left: 110px !important; }
+.new_game .rules {
+  padding-left: 80px !important; }
 
 .move .toolbar .gravatar img {
   vertical-align: middle; }

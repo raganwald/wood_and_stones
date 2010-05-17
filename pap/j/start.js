@@ -42,7 +42,7 @@
 					.into(function (row) {
 						$.each(go.letters, function (across_index, across_letter) {
 							$('<img/>')
-								.addClass('intersection empty')
+								.addClass('intersection')
 								.attr('id', across_letter + down_letter)
 								.attr('src', 'i/dot_clear.gif')
 								.appendTo(row);
@@ -51,7 +51,6 @@
 					.appendTo($('.move#m0 .board .dragger'));
 			});
 			var setup = $.parseJSON($('form.new_game #handicap').val());
-			console.log(setup);
 			var handicap = setup.handicap;
 			if (handicap > 0) {
 		        var corner = go.dimension <= 11 ? 3 : 4;
@@ -72,8 +71,14 @@
 				)
 					.addClass('black');
 			}
+			// console.log($('form.new_game #rules').val());
+			go.referee.set_rules($.parseJSON($('form.new_game #rules').val()));
 			$('#m0')
-				.addClass(setup.to_play+'_to_play');
+				.addClass(setup.to_play + '_to_play')
+				.into(go.referee.intialize_move)
+				// .into(go.ui.intialize_move)
+				// .into(go.navigation.initialize_move)
+				;
 			jQT.swapPages($('#new'), $('#m0'));
       		return false;
     	});
