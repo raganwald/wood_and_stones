@@ -50,7 +50,9 @@
 					})
 					.appendTo($('.move#m0 .board .dragger'));
 			});
-			var handicap = $('form.new_game #handicap').val();
+			var setup = $.parseJSON($('form.new_game #handicap').val());
+			console.log(setup);
+			var handicap = setup.handicap;
 			if (handicap > 0) {
 		        var corner = go.dimension <= 11 ? 3 : 4;
 		        var half = Math.floor(go.dimension / 2) + 1;
@@ -70,6 +72,8 @@
 				)
 					.addClass('black');
 			}
+			$('#m0')
+				.addClass(setup.to_play+'_to_play');
 			jQT.swapPages($('#new'), $('#m0'));
       		return false;
     	});
