@@ -50,6 +50,26 @@
 					})
 					.appendTo($('.move#m0 .board .dragger'));
 			});
+			var handicap = $('form.new_game #handicap').val();
+			if (handicap > 0) {
+		        var corner = go.dimension <= 11 ? 3 : 4;
+		        var half = Math.floor(go.dimension / 2) + 1;
+		        var left = ' .intersection:nth-child(' + corner + ')';
+		        var center = ' .intersection:nth-child(' + half + ')';
+		        var right = ' .intersection:nth-last-child(' + corner + ')';
+		        var top = '.row:nth-child(' + corner + ')';
+		        var middle = '.row:nth-child(' + half + ')';
+		        var bottom = '.row:nth-last-child(' + corner + ')';
+				
+				$(
+					[
+						(bottom + left), (top + right), (bottom + right), (top + left), 
+						(middle + left), (middle + right), (top + center), (bottom + center), 
+	 					(middle + center)
+					].slice(0, handicap).join(',')
+				)
+					.addClass('black');
+			}
 			jQT.swapPages($('#new'), $('#m0'));
       		return false;
     	});
