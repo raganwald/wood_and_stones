@@ -1,0 +1,60 @@
+(;FF[4]GM[1]SZ[19]AP[SGFC:1.13b]
+
+PB[troy]BR[12k*]
+PW[john]WR[11k*]
+KM[0.5]RE[W+12.5]
+DT[1998-06-15]
+TM[600]
+
+;B[pd];W[dp];B[pq];W[dd];B[qk];W[jd];B[fq];W[dj];B[jp];W[jj]
+;B[cn]LB[dn:A][po:B]C[dada: other ideas are 'A' (d6) or 'B' (q5)]
+;W[eo](;B[dl]C[dada: hm - looks troublesome.
+Usually B plays the 3,3 invasion - see variation];W[qo];B[qp]
+...
+;W[sr];B[sk];W[sg];B[pa];W[gc];B[pi];W[ph];B[de];W[ed];B[kn]
+;W[dh];B[eh];W[se];B[sd];W[af];B[ie];W[id];B[hf];W[hd];B[if]
+;W[fp];B[gq];W[qj];B[sj];W[rh];B[sn];W[so];B[sm];W[ep];B[mn])
+...
+(;W[dq]N[wrong direction];B[qo];W[qp]))
+
+Loks like:
+
+Parentheses govern the tree
+Semicolons separate consecutive instances
+XX[...] are pairings within a node
+
+Idea: Arrays of trees.
+
+See also: http://www.red-bean.com/sgf/user_guide/ http://senseis.xmp.net/?SmartGameFormat
+
+AB: Add Black: locations of Black stones to be placed on the board prior to the first move.
+AW: Add White: locations of White stones to be placed on the board prior to the first move.
+AN: Annotations: name of the person commenting the game.
+AP: Application: application that was used to create the SGF file (e.g. CGOban2,...).
+B: a move by Black at the location specified by the property value.
+BR: Black Rank: rank of the Black player.
+BT: Black Team: name of the Black team.
+C: Comment: a comment.
+CP: Copyright: copyright information. See Kifu Copyright Discussion.
+DT: Date: date of the game.
+EV: Event: name of the event (e.g. 58th Honinbo Title Match).
+FF: File format: version of SGF specification governing this SGF file.
+GM: Game: type of game represented by this SGF file. A property value of 1 refers to Go.
+GN: Game Name: name of the game record.
+HA: Handicap: the number of handicap stones given to Black. Placment of the handicap stones are set using the AB property.
+KM: Komi: komi.
+ON: Opening: information about the opening (fuseki), rarely used in any file.
+OT: Overtime: overtime system.
+PB: Black Name: name of the black player.
+PC: Place: place where the game was played (e.g.: Tokyo).
+PW: White Name: name of the white player.
+RE: Result: result, usually in the format "B+R" (Black wins by resign) or "B+3.5" (black wins by 3.5 moku).
+RO: Round: round (e.g.: 5th game).
+RU: Rules: ruleset (e.g.: Japanese).
+SO: Source: source of the SGF file.
+SZ: Size: size of the board, non square boards are supported.
+TM: Time limit: time limit in seconds.
+US: User: name of the person who created the SGF file.
+W: a move by White at the location specified by the property value.
+WR: White Rank: rank of the White player.
+WT: White Team: name of the White team.

@@ -13,13 +13,16 @@
     <script charset='utf-8' src='j/jquery.periodicalupdater.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/md5.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/jquery.gravatar.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/to-function.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/functional.js' type='text/javascript'></script>
     <!-- / our stuff -->
     <script charset='utf-8' src='j/jquery.into.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/dragscrollable.js' type='text/javascript'></script>
     <!-- / must be first! -->
     <script charset='utf-8' src='j/go.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/sgf.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/start.js' type='text/javascript'></script>
-    <script charset='utf-8' src='j/navigation.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/ui.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/referee.js' type='text/javascript'></script>
     <style media='screen' type='text/css'>@import "c/jqtouch.css";</style>
     <style media='screen' type='text/css'>@import "c/theme.css";</style>
@@ -59,9 +62,9 @@
       </div>
       <form class='new_game' id='form'>
         <ul class='edit rounded'>
-          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='player' name='player' placeholder='Your optional email address' type='text' />
+          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='black' name='black' placeholder="Black's name or email address" type='text' />
           </li>
-          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='opponent' name='opponent' placeholder="Opponent's optional email address" type='text' />
+          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='white' name='white' placeholder="White's name or email address" type='text' />
           </li>
           <li class='size'>
             <div class='label'>Size:</div>
@@ -73,12 +76,6 @@
               <option value='17'>17x17</option>
               <option value='19'>19x19</option>
             </select>
-          </li>
-          <li class='you_play'>
-            <div class='label'>You play:</div>
-            <div class='toggle'>
-              <input checked='checked' id='colour' name='colour' type='checkbox' />
-            </div>
           </li>
           <li class='handicap'>
             <div class='label'>Handicap:</div>
@@ -97,8 +94,8 @@
           <li class='rules'>
             <div class='label'>Rules:</div>
             <select id='rules' name='rules'>
-              <option value='{"history_free_validity_rules": [ "everything_invalid", "at_liberty_valid", "killers_valid", "extend_group_valid" ]}'>Classic Go</option>
-              <option value='{"history_free_validity_rules": [ "everything_invalid", "at_liberty_valid", "extend_group_valid" ]}'>One Eye Go</option>
+              <option value='{"GM": 1, "history_free_validity_rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid" ]}'>Classic Go</option>
+              <option value='{"GM": 2, "history_free_validity_rules": [ "at_liberty_valid", "extend_group_valid" ]}'>One Eye Go</option>
             </select>
           </li>
         </ul>
@@ -116,7 +113,7 @@
       <ul class='rounded'>
         <li>
           <img />
-          You are playing black
+          Black
         </li>
         <li>
           <img />

@@ -63,7 +63,8 @@ jQuery.fn.gesture = function (events) {
 		disablecontextmenu: true,
 		hold_time: '2s',
 		gestures: {},
-		namespace: '.g'
+		namespace: '.g',
+		preventDefault: true
 	};
 	var settings = {
 		gestures: {}
@@ -123,8 +124,8 @@ jQuery.fn.gesture = function (events) {
 	
 		var stroke_handler = function (e) {
 			
-			e.preventDefault();
-			e.stopPropagation();
+			if (settings.preventDefault) e.preventDefault();
+			if (settings.preventDefault) e.stopPropagation();
 
 			var gesture = {
 				target: $(e.target),
@@ -360,7 +361,7 @@ jQuery.fn.gesture = function (events) {
 				
 				trigger_events();
 			
-				return false;
+				if (settings.preventDefault) return false;
 			};
 
 			handling_element.bind(settings.continueStroke + settings.namespace, stroke_continuer);
@@ -377,7 +378,7 @@ jQuery.fn.gesture = function (events) {
 				});
 			}
 			
-			return false;
+			if (settings.preventDefault) return false;
 			
 		};
 	
@@ -412,8 +413,8 @@ jQuery.fn.gesture = function (events) {
 				.filter(':not(.in_gesture)')
 					.addClass('in_gesture')
 						.bind(settings.continueGesture + settings.namespace, function (e) {
-							e.preventDefault();
-							e.stopPropagation();
+							if (settings.preventDefault) e.preventDefault();
+							if (settings.preventDefault) e.stopPropagation();
 							var scale_diff = e.originalEvent.scale - 1.0;
 							gesture.scale += scale_diff;
 							var rotation_diff = e.originalEvent.rotation - gesture.rotation
@@ -434,7 +435,7 @@ jQuery.fn.gesture = function (events) {
 									gesture.rotation = 0;
 								}
 							}
-							e.preventDefault();
+							if (settings.preventDefault) e.preventDefault();
 						})
 						.bind(settings.stopGesture + settings.namespace, function (e) {
 							if (Math.abs(gesture.scale - 1.0) >= settings.minScale && gesture_events['scale']) {
@@ -449,8 +450,8 @@ jQuery.fn.gesture = function (events) {
 								gesture_event.rotation = gesture.rotation;
 								gesture_events['rotate'](gesture.target).trigger(gesture_event);
 							}
-							e.preventDefault();
-							e.stopPropagation();
+							if (settings.preventDefault) e.preventDefault();
+							if (settings.preventDefault) e.stopPropagation();
 							handling_element
 								.unbind(settings.continueGesture + settings.namespace)
 								.unbind(settings.stopGesture + settings.namespace)

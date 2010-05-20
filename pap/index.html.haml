@@ -17,6 +17,9 @@
     %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
     
+    %script{:src=>"j/to-function.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/functional.js", :type=>"text/javascript", :charset=>"utf-8"}
+    
     // our stuff
     
     %script{:src=>"j/jquery.into.js", :type=>"text/javascript", :charset=>"utf-8"}
@@ -24,8 +27,9 @@
     
     // must be first!
     %script{:src=>"j/go.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/sgf.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"j/navigation.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.css";
@@ -62,19 +66,15 @@
         %ul.edit.rounded
           %li.email
             %img.label{:src=>'/images/dot_clear.gif'}>
-            %input#player{:name=>'player', :placeholder=>"Your optional email address", :type=>'text'}/
+            %input#black{:name=>'black', :placeholder=>"Black's name or email address", :type=>'text'}/
           %li.email
             %img.label{:src=>'/images/dot_clear.gif'}>
-            %input#opponent{:name=>'opponent', :placeholder=>"Opponent's optional email address", :type=>'text'}/
+            %input#white{:name=>'white', :placeholder=>"White's name or email address", :type=>'text'}/
           %li.size
             .label Size: 
             %select#dimension{:name=>'dimension'}
               - [9, 11, 13, 15, 17, 19].each do |dim|
                 %option{:value=>dim} #{dim}x#{dim}
-          %li.you_play
-            .label You play:
-            .toggle
-              %input#colour{:name=>'colour', :type=>'checkbox', :checked=>"checked"}
           %li.handicap
             .label Handicap:
             %select#handicap{:name=>'handicap'}
@@ -90,8 +90,8 @@
           %li.rules
             .label Rules:
             %select#rules{:name=>'rules'}
-              %option{:value=>'{"history_free_validity_rules": [ "everything_invalid", "at_liberty_valid", "killers_valid", "extend_group_valid" ]}'} Classic Go
-              %option{:value=>'{"history_free_validity_rules": [ "everything_invalid", "at_liberty_valid", "extend_group_valid" ]}'} One Eye Go
+              %option{:value=>'{"GM": 1, "history_free_validity_rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid" ]}'} Classic Go
+              %option{:value=>'{"GM": 2, "history_free_validity_rules": [ "at_liberty_valid", "extend_group_valid" ]}'} One Eye Go
         %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Play
     #info
       .toolbar 
@@ -102,7 +102,7 @@
       %ul.rounded
         %li
           %img{ }
-          You are playing black
+          Black
         %li
           %img{ }
           White

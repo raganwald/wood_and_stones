@@ -1327,21 +1327,17 @@
 				board = $(board);
 			board
 				.find('.intersection')
-					.removeClass('group at_liberty atari')
 					.data('group', null)
 					.data('liberties', null)
-					.end()
-				.find('.black,.white')
 					.removeClass(function (i, clazz) {
 						return [
+							'group at_liberty atari valid',
 							clazz.match(/group_../),
-							clazz.match(/killed_by_../)
+							clazz.match(/killed_by_../),
+							clazz.match(/debug_\w+/)
 						].join(' ');
 					})
 					.end()
-				// .find(':not(.black,.white,.empty)')
-				// 	.addClass('empty')
-					;
 					
 			// first pass, assemble groups
 			$.each(go.letters, function (i, across) {
@@ -1456,19 +1452,11 @@
 		
 		var rules = (function () {
 			
-			var everything_invalid = function (board) {
-				// console.log('everything_invalid');
-				return board
-					.find('.intersection.valid')
-						.removeClass('valid')
-						.end();
-			};
-			
 			var at_liberty_valid = function (board) {
 				// console.log('at_liberty_valid');
 				return board
 					.find('.intersection.at_liberty:not(.white):not(.black)')
-						.addClass('valid')
+						.addClass('valid debug_at_liberty_valid')
 						.end();
 			};
 			
@@ -1478,7 +1466,7 @@
 			
 			var killers_valid = function (board) {
 				// console.log('killers_valid');
-				var opponent = board.closest('.move').is('.black_to_play') ? 'white' : 'black';
+				var opponent = board.closest('.move').is('.black') ? 'white' : 'black';
 				
 				return board
 					.find('.group.atari.' + opponent)
@@ -1488,30 +1476,30 @@
 							if (m)
 								board
 									.find('#' + m[1])
-										.addClass('valid');
+										.addClass('valid debug_killers_valid');
 						})
 						.end()
 			}
 			
 			var extend_group_valid = function (board) {
 				// console.log('extend_group_valid');
-				var player = board.closest('.move').is('.white_to_play') ? 'white' : 'black';
+				var player = board.closest('.move').is('.white') ? 'white' : 'black';
+				var adjacents = get_adjacents();
 				
 				return board
-					.find('.intersection:not(.valid):not(.white,.black)')
+					.find('.intersection:not(.valid):not(.white):not(.black)')
 						.each(function (i, el) {
 							el = $(el);
 							var id = el.attr('id');
 							if (board.find(adjacents[id]).is('.' + player + ':not(.atari)'))
 								el
-									.addClass('valid');
+									.addClass('valid debug_extend_group_valid');
 						})
 						.end();
 			}
 			
 			return {
 				history_free_validity_rules: {
-					everything_invalid: everything_invalid,
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
 					extend_group_valid: extend_group_valid
@@ -1544,7 +1532,7 @@
 		
 		// validate all legal moves
 		var intialize_move = function (move_div) {
-			// console.log('intialize_move');
+			if (undefined == move_div) move_div = $('.move:last');
 			$(move_div)
 				.find('.board')
 					.into(analyze_board)
@@ -1554,6 +1542,7 @@
 		
 		return {
 			set_rules: set_rules,
+			analyze_board: analyze_board,
 			intialize_move: intialize_move
 		};
 	

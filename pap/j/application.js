@@ -175,11 +175,11 @@ var go = function () {
 			};
 			
 			var select_current_image_by_position  = function (position) {
-				return '.move.playing .board #' + position;
+				return '.move:last .board #' + position;
 			};
 			
 			var position_of_played_stone = function () {
-				var target = $('.move.playing .board .empty.' + info.playing);
+				var target = $('.move:last .board .intersection:not(.black):not(.white).' + playing());
 				if (target.size() == 1) {
 					return target.attr('id');
 				}
@@ -187,7 +187,7 @@ var go = function () {
 			};
 			
 			var stone_has_been_legally_placed = function () {
-				return info.is_users_turn && ($('.move.playing .board .empty.' + info.playing).size() == 1);
+				return info.is_users_turn && ($('.move:last .board .intersection:not(.black):not(.white).' + playing()).size() == 1);
 			};
 			
 			var process_update_and_resume_polling = function (html) {
@@ -232,14 +232,14 @@ var go = function () {
 			};
 			
 			var update_playing_div = function () {
-			  	var move_to_unbind_selector = '.move.playing';
-			  	var places_to_unbind_selector = '.move.playing .board .valid';
+			  	var move_to_unbind_selector = '.move:last';
+			  	var places_to_unbind_selector = '.move:last .board .valid';
 				var lasts_to_reclassify_finder = '.board .last';
 				var killed_finder = '.board .atari.empty';
 			
 			  return function () {
 				var move_to_bind_selector = (info.is_users_turn ? select_move_by_move_number(info.move_number) : NULL_SELECTOR);
-			    var places_to_bind_selector = (info.is_users_turn ? move_to_bind_selector + ' .board .empty.valid' : NULL_SELECTOR);
+			    var places_to_bind_selector = (info.is_users_turn ? move_to_bind_selector + ' .board .intersection:not(.black):not(.white).valid' : NULL_SELECTOR);
 			
 				$(places_to_unbind_selector)
 					.not(places_to_bind_selector)
@@ -249,7 +249,7 @@ var go = function () {
 				$(move_to_unbind_selector)
 					.not(move_to_bind_selector)
 						.find(killed_finder)
-							.addClass(info.opponent)
+							.addClass(opponent())
 							.removeClass('empty');
 				$('.move')
 					.not(move_to_bind_selector)
@@ -264,24 +264,24 @@ var go = function () {
 			
 			var set_played_stone = function (target, play_p) {
 				// restore all other plays
-				$('.move.playing .board .valid.' + info.playing).not(target).removeClass(info.playing);
+				$('.move:last .board .valid.' + playing()).not(target).removeClass(playing());
 				// make the play or remove the play
 				if (play_p) {
-					target.addClass(info.playing);
-					$('.move.playing .last').removeClass('latest');
+					target.addClass(playing());
+					$('.move:last .last').removeClass('latest');
 				}
 				else {
-					target.removeClass(info.playing);
-					$('.move.playing .last').addClass('latest');
+					target.removeClass(playing());
+					$('.move:last .last').addClass('latest');
 				}
 			};
 		
 			var set_killed_stones = function (target, kill_p) {
 				// restore all atari stones
-				$('.move.playing .board .atari' ).addClass(info.opponent).removeClass('empty');
+				$('.move:last .board .atari' ).addClass(opponent()).removeClass('empty');
 				// maybe kill some stones
 				if (kill_p) {
-					var killed_selector = '.move.playing .board .atari.killed_by_' + target.attr('id');
+					var killed_selector = '.move:last .board .atari.killed_by_' + target.attr('id');
 					$(killed_selector)
 						.each(function (i,e) {
 							e = $(e);
@@ -297,7 +297,7 @@ var go = function () {
 								.appendTo(e.parent())
 								.show();
 						})
-						.removeClass(info.opponent)
+						.removeClass(opponent())
 						.addClass('empty');
 					$('.fade_animation').fadeOut(1000, function () {
 						$('.fade_animation').remove();
@@ -309,7 +309,7 @@ var go = function () {
 				
 				var toggle_placed_stone = function (event_data) {
 					var target = $(event_data.currentTarget);
-					var playing_stone_p = !target.hasClass(info.playing);
+					var playing_stone_p = !target.hasClass(playing());
 					set_played_stone(target, playing_stone_p);
 					set_killed_stones(target, playing_stone_p);
 				};
@@ -321,7 +321,7 @@ var go = function () {
 					play_stone(target.attr('id'));
 				};
 
-				$('.move.playing .board .valid')
+				$('.move:last .board .valid')
 					.live(SELECTION_EVENT, toggle_placed_stone)
 					.live('dblclick', place_and_play_stone);
 			};
@@ -358,12 +358,12 @@ var go = function () {
 				// console.log('update_move_infos given ' + $(selector).size() + ' move ' + info.move_number);
 				if (info.game_state != 'ended') {
 					var text;
-					if (info.playing && info.playing != '') {
+					if (playing() && playing() != '') {
 						if (info.is_users_turn) {
 							text = "your turn"
 						}
 						else {
-							text = info.opponent + "'s turn"
+							text = opponent() + "'s turn"
 						}
 					}
 					else {
@@ -376,7 +376,7 @@ var go = function () {
 					gspan.empty();
 					gspan.append(
 						$('<img/>').attr('src',
-							info.playing == 'black' ? info.black_gravatar_url : info.white_gravatar_url
+							playing() == 'black' ? info.black_gravatar_url : info.white_gravatar_url
 						)
 					);
 				}
@@ -544,55 +544,7 @@ var go = function () {
 					set_killed_stones(null, false);
 					return false;
 				};
-/*
-				var forwards_in_time = function (event) {
-					var target = $(event.target);
-					var current_move_number = current_displayed_move_number(target);
-					if (current_move_number < last_displayed_move_number()) {
-						return goto_move(current_move_number, current_move_number + 1);
-					}
-					else {
-						position = position_of_played_stone();
-						if (position != null) {
-							play_stone(position);
-						}
-						else if (info.is_users_turn) {
-							var text;
-							if (info.game_state == 'passed') {
-								text = 'Since ' + info.opponent + ' just passed, passing will end the game.';
-							}
-							else {
-								text = 'If ' + info.opponent + ' passes, the game will end.';
-							}
-					    	message_dialog_instance
-								.text(text)
-								.dialog({
-									title: "Really pass?",
-									buttons: { 
-										"Pass": function() { 
-											pass(function () { $(this).dialog("close"); });
-										},
-										"No": function() { $(this).dialog("close"); } 
-									}
-								})
-								.dialog('open');
-						}
-						else {
-							progress_dialog('open');
-							$.get(
-								info.plays_url, 
-								{ after_play: info.move_number, layout: false },
-								function (html) {
-									process_update(html);
-									progress_dialog('close');
-								}
-							);
-							return true;
-						}
-						return false;
-					}
-				};
-*/
+				
 				var do_play = function () {
 					var position = position_of_played_stone();
 					if (position != null) {
@@ -604,10 +556,10 @@ var go = function () {
 				var do_pass = function() {
 					var text;
 					if (info.game_state == 'passed') {
-						text = 'Since ' + info.opponent + ' just passed, passing will end the game.';
+						text = 'Since ' + opponent() + ' just passed, passing will end the game.';
 					}
 					else {
-						text = 'If ' + info.opponent + ' passes, the game will end.';
+						text = 'If ' + opponent() + ' passes, the game will end.';
 					}
 			    	message_dialog_instance
 						.text(text)
@@ -680,9 +632,9 @@ var go = function () {
 								: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 						)
 						.live('gesture_scrub', clear_current_play);
-					$('.move.playing .board:has(.valid.black,.valid.white)')
+					$('.move:last .board:has(.valid.black,.valid.white)')
 						.live('gesture_left', do_play);
-					$('.move.playing .board:not(:has(.valid.black,.valid.white))')
+					$('.move:last .board:not(:has(.valid.black,.valid.white))')
 						.live('gesture_left', do_pass);
 					$('.move:not(.playing)')
 						.live('gesture_left', do_manual_poll);
