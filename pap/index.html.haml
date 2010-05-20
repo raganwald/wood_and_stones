@@ -14,8 +14,9 @@
     %script{:src=>"j/jquery.qtip-1.0.0-rc3-customized.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/igesture.jquery.mobile_safari.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.periodicalupdater.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
+    
+    %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
     
     %script{:src=>"j/to-function.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/functional.js", :type=>"text/javascript", :charset=>"utf-8"}
@@ -38,6 +39,9 @@
     %style{:type=>"text/css", :media=>"screen"} @import "c/board.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/dark-hive/jquery-ui-1.8rc3.custom.css";
     
+    %style
+    %style
+    
     :javascript
       var jQT = new $.jQTouch({
           icon: 'i/black_white.png',
@@ -56,9 +60,11 @@
           });
       });
   %body
+      
     %div#useful_stuff
       .ajax_load
         %img{:src=>'i/ajax-loader-black.gif',:height=>66,:width=>66}
+        
     #new.current
       .toolbar 
         %h1 Start
@@ -91,6 +97,7 @@
             .label Games:
             %select#rules{:name=>'rules'}
         %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Play
+        
     #info
       .toolbar 
         %h1
@@ -118,7 +125,8 @@
           White has captured
           %span.captured_blacks
           stones
-    .move#m0
+          
+    .move
       .toolbar 
         %h1
           %span.gravatar

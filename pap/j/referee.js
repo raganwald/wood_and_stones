@@ -1524,6 +1524,19 @@
 				return board
 			};
 			
+			var two_passes_invalidate_everything = function (board) {
+				if (go.sgf.current.length > 1) {
+					var ultimate = go.sgf.current[go.sgf.current.length - 1][board.closest('.move').is('.black') ? 'W' : 'B'];
+					var penultimate = go.sgf.current[go.sgf.current.length - 2][board.closest('.move').is('.black') ? 'B' : 'W'];
+					if (ultimate && penultimate && !board.has('#' + ultimate) && !board.has('#' + penultimate))
+						board
+							.find('.intersection.valid')
+								.addClass('two_passes_invalidate_everything')
+								.removeClass('valid');
+				}
+				return board;
+			};
+			
 			return {
 				steps: {
 					at_liberty_valid: at_liberty_valid,
@@ -1532,8 +1545,8 @@
 					simple_ko_invalid: simple_ko_invalid
 				},
 				games: {
-					"Classic Go": '{"GM": 1, "rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 2, "rules": [ "at_liberty_valid", "extend_group_valid" ]}'
+					"Classic Go": '{"GM": 1, "rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "two_passes_invalidate_everything" ]}',
+					"One Eye Go": '{"GM": 2, "rules": [ "at_liberty_valid", "extend_group_valid", "two_passes_invalidate_everything" ]}'
 				}
 			};
 		})();

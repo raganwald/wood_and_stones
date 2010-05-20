@@ -51,7 +51,7 @@
 			go.referee.set_rules(rule_setup);
 			var setup = $.parseJSON($('form.new_game #handicap').val());
 			go.sgf = {
-				root: [{
+				game_info: {
 					FF: 4,
 					GM: rule_setup.GM,
 					SZ: go.dimension,
@@ -61,9 +61,13 @@
 					PW: $('form.new_game #white').val(),
 					PL: setup.to_play,
 					MN: 0
-				}]
+				}
 			};
-			go.sgf.current = go.sgf.root
+			go.sgf.root = [go.sgf.game_info];
+			go.sgf.current = go.sgf.root;
+			$('style:last')
+				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
+				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
 			var handicap = setup.handicap;
 			if (handicap > 0) {
 		        var corner = go.dimension <= 11 ? 3 : 4;
