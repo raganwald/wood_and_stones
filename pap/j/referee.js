@@ -1479,7 +1479,7 @@
 										.addClass('valid debug_killers_valid');
 						})
 						.end()
-			}
+			};
 			
 			var extend_group_valid = function (board) {
 				// console.log('extend_group_valid');
@@ -1496,13 +1496,44 @@
 									.addClass('valid debug_extend_group_valid');
 						})
 						.end();
-			}
+			};
+			
+			var simple_ko_invalid = function (board) {
+				var opponent = board.closest('.move').is('.black') ? 'white' : 'black';
+				var last_sgf_node = go.sgf.current[go.sgf.current.length - 1];
+				var last_id = last_sgf_node[opponent[0].toUpperCase()];
+				
+				if (last_id && last_id.length == 2 && board.has('#' + last_id)) {
+					var comment = last_sgf_node['C'];
+					 if (comment) {
+						var m = comment.match(/^killed: ([^,]*)$/);
+						if (m) {
+							var captured_id = m[1];
+							var captured = $('#' + captured_id);
+							if (captured.size() == 1 && captured.is('valid')) {
+								var recaptured = board
+									.find('.killed_by_' + captured_id);
+								if (recaptured.size() == 1 && recaptured.attr('id') == last_id)
+									captured
+										.removeClass('valid')
+										.addClass('debug_simple_ko_invalid');
+							}
+						}
+					}
+				}
+				return board
+			};
 			
 			return {
-				history_free_validity_rules: {
+				steps: {
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
-					extend_group_valid: extend_group_valid
+					extend_group_valid: extend_group_valid,
+					simple_ko_invalid: simple_ko_invalid
+				},
+				games: {
+					"Classic Go": '{"GM": 1, "rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"One Eye Go": '{"GM": 2, "rules": [ "at_liberty_valid", "extend_group_valid" ]}'
 				}
 			};
 		})();
@@ -1516,16 +1547,16 @@
 		// sets the rules to be used in this game
 		var set_rules = function (hash_of_strings) {
 			// console.log(hash_of_strings);
-			var history_free_validity_rules = $.map(
-				hash_of_strings.history_free_validity_rules,
+			var steps = $.map(
+				hash_of_strings.rules,
 				function (name, i) {
-					return rules.history_free_validity_rules[name]
+					return rules.steps[name]
 				});
 			history_free_validate = function (board) {
-				// console.log('history_free_validate: ' + history_free_validity_rules.length + ' rules');
-				$.each(history_free_validity_rules, function (i, rule) {
+				// console.log('history_free_validate: ' + rules.length + ' rules');
+				$.each(steps, function (i, step) {
 					board
-						.into(rule);
+						.into(step);
 				});
 			}
 		};
@@ -1543,11 +1574,20 @@
 		return {
 			set_rules: set_rules,
 			analyze_board: analyze_board,
-			intialize_move: intialize_move
+			intialize_move: intialize_move,
+			rules: rules
 		};
 	
 	})();
 	
-	go.on_document_ready(function () { go.referee = referee; });
+	go.on_document_ready(function () { 
+		go.referee = referee; 
+		$.each(referee.rules.games, function (game, serialized_rules) {
+			$('<option></option>')
+				.text(game)
+				.attr('value', serialized_rules)
+				.appendTo($('form.new_game #rules'));
+		});
+	});
 	
 })(jQuery);	

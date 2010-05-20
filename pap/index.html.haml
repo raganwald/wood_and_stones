@@ -88,10 +88,8 @@
               %option{:value=>'{ "to_play": "white", "handicap": 8 }'} Eight stones
               %option{:value=>'{ "to_play": "white", "handicap": 9 }'} Nine stones
           %li.rules
-            .label Rules:
+            .label Games:
             %select#rules{:name=>'rules'}
-              %option{:value=>'{"GM": 1, "history_free_validity_rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid" ]}'} Classic Go
-              %option{:value=>'{"GM": 2, "history_free_validity_rules": [ "at_liberty_valid", "extend_group_valid" ]}'} One Eye Go
         %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Play
     #info
       .toolbar 
