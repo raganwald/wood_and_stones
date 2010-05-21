@@ -66,7 +66,25 @@
 		};
 		
 		var do_pass = function() {
-			console.error('implement me, already!')
+			var to_play = playing();
+			var was_playing = opponent();
+			var was_playing_index = was_playing[0].toUpperCase();
+			var last_move = go.sgf.current[go.sgf.current.length - 1];
+			if (last_move != undefined) {
+				var position = last_move[was_playing_index];
+				if (position != undefined && !position) {
+					alert('this pass ends the game!');
+					go.sgf.game_info['R'] = 'Two passes';
+					$('.move:last')
+						.removeClass(to_play);
+					return;
+				}
+			}
+			var annotation = {};
+			annotation[to_play[0].toUpperCase()] = '';
+			go.sgf.current.push(annotation);
+		
+			switch_turns();
 		};
 		
 		var do_play = function (event_data) {
