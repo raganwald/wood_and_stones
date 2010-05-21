@@ -20,10 +20,18 @@
 			$('.move:last').is('.black') ? 'white' : null
 		);
 	};
+	
+	var switch_turns = function() {
+		var to_play = playing();
+		$('.move:last')
+			.addClass(to_play == 'white' ? 'black' : 'white')
+			.removeClass(to_play)
+			.into(go.referee.intialize_move);
+	};
 			
 	var initialize_gesture_support = (function () {
 		
-		var undo = function (event) {
+		var do_undo = function (event) {
 			if (go.sgf.game_info['R'] != undefined) return;
 			var last_move = go.sgf.current[go.sgf.current.length - 1];
 			var to_play = playing();
@@ -33,7 +41,6 @@
 				var position = last_move[was_playing_index];
 				if (position != undefined) {
 					if (position) {
-						// checks for blank
 						$('.move:last .board #' + position)
 							.removeClass('latest')
 							.removeClass(was_playing);
@@ -53,41 +60,46 @@
 							$('.move:last .board #' + previous_position)
 								.addClass('latest');
 					}
-					$('.move:last')
-						.removeClass(playing())
-						.addClass(was_playing);
-					go.referee.intialize_move();
-					//TODO: Check blue dot
+					switch_turns();
 				}
 			}
 		};
 		
 		var do_pass = function() {
-			var text;
-			if (info.game_state == 'passed') {
-				text = 'Since ' + opponent() + ' just passed, passing will end the game.';
+			console.error('implement me, already!')
+		};
+		
+		var do_play = function (event_data) {
+			target = $(event_data.currentTarget);
+			var now_playing = playing();
+			if (!target.is('.intersection')) target = target.closest('.intersection');
+			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
+			target
+				.closest('.board')
+					.find('.latest')
+						.removeClass('latest')
+						.end()
+					.end()
+				.addClass('latest')
+				.addClass(now_playing);
+			var killed_stones = $('.move:last .intersection.killed_by_'+target.attr('id'));
+			var annotation = {};
+			annotation[now_playing[0].toUpperCase()] = target.attr('id');
+			if (killed_stones.size() > 0) {
+				annotation['C'] = 'killed: ' + $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
+				killed_stones.removeClass(opponent());
 			}
-			else {
-				text = 'If ' + opponent() + ' passes, the game will end.';
-			}
-	    	message_dialog_instance
-				.text(text)
-				.dialog({
-					title: "Really pass?",
-					buttons: { 
-						"Pass": function() { 
-							pass(function () { $(this).dialog("close"); });
-						},
-						"No": function() { $(this).dialog("close"); } 
-					}
-				})
-				.dialog('open');
+			var last_move = go.sgf.current[go.sgf.current.length - 1];
+			if (last_move['MN'] != undefined) annotation['MN'] = last_move['MN'] + 1;
+			go.sgf.current.push(annotation);
+		
+			switch_turns();
 		};
 		
 		return function() {
 			$('.move')
 				.gesture([
-					'bottom', 'circle',
+					'bottom', 'circle', 'click',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')
@@ -111,102 +123,14 @@
 			$('.move:last .board:not(:has(.valid.black,.valid.white))')
 				.live('gesture_circle', do_pass);
 			$('.move:last .board')
-				.live('gesture_scrub', undo);
+				.live('gesture_scrub', do_undo);
 			$('#info')
 				.bind('gesture_top', function(event) { jQT.goBack(); });
+			$('.move:last .board .valid')
+				.live('gesture_click', do_play);
 		};
 	})();
-			
-	var set_played_stone = function (target, play_p) {
-		// restore all other plays
-		$('.move:last .board .valid.' + playing()).not(target).removeClass(playing());
-		// make the play or remove the play
-		if (play_p) {
-			target.addClass(playing());
-			$('.move:last .last').removeClass('latest');
-		}
-		else {
-			target.removeClass(playing());
-			$('.move:last .last').addClass('latest');
-		}
-	};
-
-	var set_killed_stones = function (target, kill_p) {
-		// restore all atari stones
-		$('.move:last .board .atari' ).addClass(opponent()).removeClass('empty');
-		// maybe kill some stones
-		if (kill_p) {
-			var killed_selector = '.move:last .board .atari.killed_by_' + target.attr('id');
-			$(killed_selector)
-				.each(function (i,e) {
-					e = $(e);
-					$(new Image(e.height(), e.width()))
-						.attr('src', /^url\((.*)\)/.exec(e.css('background-image'))[1])
-						.css({
-							position: 'absolute',
-							top: e.position().top,
-							left: e.position().left,
-							'z-index': (e.css('z-index') + 1)
-						})
-						.addClass('fade_animation')
-						.appendTo(e.parent())
-						.show();
-				})
-				.removeClass(opponent())
-				.addClass('empty');
-			$('.fade_animation').fadeOut(1000, function () {
-				$('.fade_animation').remove();
-			});
-		}
-	};
 	
-	var liven_playing_positions = function () {
-		
-		// TODO: This needs a major re-think, since clicking a stone should actually
-		// play it unless you scrub, which should un-play it.
-		var play_stone = function (event_data) {
-			var now_playing = playing();
-			var target = $(event_data.currentTarget);
-			if (!target.is('.intersection')) target = target.closest('.intersection');
-			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
-			target
-				.closest('.board')
-					.find('.latest')
-						.removeClass('latest')
-						.end()
-					.end()
-				.addClass('latest')
-				.addClass(now_playing);
-			var killed_stones = $('.move:last .intersection.killed_by_'+target.attr('id'));
-			var annotation = {};
-			annotation[now_playing[0].toUpperCase()] = target.attr('id');
-			if (killed_stones.size() > 0) {
-				annotation['C'] = 'killed: ' + $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
-				killed_stones.removeClass(opponent());
-			}
-			var last_move = go.sgf.current[go.sgf.current.length - 1];
-			if (last_move['MN'] != undefined) annotation['MN'] = last_move['MN'] + 1;
-			go.sgf.current.push(annotation);
-			//TODO: Allow moves that don't alternate. but not now
-			$('.move:last')
-				.addClass(opponent())
-				.removeClass(now_playing)
-				.into(go.referee.intialize_move);
-		};
-
-		$('.move:last .board .valid')
-			.live(SELECTION_EVENT, play_stone);
-	};
-	
-	go.on_document_ready(function () {
-		initialize_gesture_support();
-		liven_playing_positions();
-		// TODO: Migrate this to the code that actually performs a move
-		// update_playing_div()
-		// TODO: Complete rewrite to set the title
-		// update_move_infos();
-		// TODO: Set the hey when making a move? Might need a special case for the first move?
-		// update_hey();
-	});
+	go.on_document_ready(initialize_gesture_support);
 	
 })(jQuery);

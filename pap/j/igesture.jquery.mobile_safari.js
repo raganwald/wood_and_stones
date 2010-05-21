@@ -160,7 +160,7 @@ jQuery.fn.gesture = function (events) {
 				getName: function () {
 					
 					if (this.moves.length == 0) {
-						return;
+						return 'click';
 					}
 		
 					if (this.continuesmode || this.moves.length == 1) {
@@ -226,8 +226,6 @@ jQuery.fn.gesture = function (events) {
 			var stroke_continuer;
 			
 			var trigger_events = function () {
-				
-				if (gesture.moves.length == 0) return;
 				
 				var canonical_name = gesture.getName();
 				
@@ -369,8 +367,9 @@ jQuery.fn.gesture = function (events) {
 				if (settings.preventDefault) return false;
 			};
 
-			handling_element.bind(settings.continueStroke + settings.namespace, stroke_continuer);
-			handling_element.bind(settings.stopStroke + settings.namespace, stroke_stopper);
+			handling_element
+				.bind(settings.continueStroke + settings.namespace, stroke_continuer)
+				.bind(settings.stopStroke + settings.namespace, stroke_stopper);
 			
 			var checking_for_hold_on_this_stroke = care_about_holds_in_general;
 			
