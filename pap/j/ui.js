@@ -43,7 +43,7 @@
 				to_play = 'black';
 				was_playing = 'white';
 			}
-			else console.error('dagnabbit!');
+			else return; // not undoable
 			var was_playing_index = was_playing[0].toUpperCase();
 			if (last_move != undefined) {
 				var position = last_move[was_playing_index];
@@ -68,13 +68,15 @@
 							$('.move:last .board #' + previous_position)
 								.addClass('latest');
 					}
+					if (go.sgf.game_info['R'])
+						go.sgf.game_info['R'] = null;
 					switch_turns(was_playing);
 				}
 			}
 		};
 		
 		var do_pass = function() {
-			if (go.sgf.game_info['R'] != undefined) return;
+			if (go.sgf.game_info['R']) return;
 			
 			var to_play = playing();
 			var was_playing = opponent();
@@ -95,12 +97,13 @@
 					return;
 				}
 			}
-		
+			$('.move:last .board .latest')
+				.removeClass('latest');
 			switch_turns();
 		};
 		
 		var do_play = function (event_data) {
-			if (go.sgf.game_info['R'] != undefined) return;
+			if (go.sgf.game_info['R']) return;
 			
 			target = $(event_data.currentTarget);
 			var now_playing = playing();
