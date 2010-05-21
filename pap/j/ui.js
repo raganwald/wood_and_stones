@@ -1,5 +1,4 @@
 ;(function ($, undefined) {
-	var SELECTION_EVENT = ($.support.touch ? 'tap' : 'click');
 	
 	var intialize_move = function (move) {
 		
@@ -131,10 +130,87 @@
 			switch_turns();
 		};
 		
+		var zoomed_out_p = function() {
+			return $('.board:last').is('.zoomout');
+		};
+			
+		var remove_zoomout = function(selection) {
+			return $(selection)
+				.removeClass('zoomout')
+				.unbind('.zoomout');
+		};
+	
+		var remove_zoomin = function(selection) {
+			return $(selection)
+				.removeClass('zoomin')
+				.unbind('.zoomin')
+				.removedragscrollable();
+		};
+			
+		var do_zoomout = function(selection) {
+			return $(selection)
+				.filter('.board:not(.zoomout)')
+					.into(remove_zoomin)
+					.addClass('zoomout');
+		};
+	
+		var zoomin_maker = function (target) {
+			var across;
+			var down;
+			var board;
+			if (typeof(target) == 'undefined') {
+				across = 0;
+				down = 0;
+				board = null;
+			}
+			else {
+				down = $(target)
+					.closest('.row')
+						.prevAll('.row')
+							.size();
+				across = $(target)
+					.prevAll('.intersection')
+						.size();
+				board = $(target).closest('.board');
+			}
+			return function(selection) {
+				$(selection)
+					.filter('.board:not(.zoomin)')
+						.into(remove_zoomout)
+						.addClass('zoomin')
+						.dragscrollable({ preventDefault: false });
+				if (typeof(board) != 'undefined') {
+					var new_target = (across == 0 && down == 0) ? null : board.find('.down_'+down + ' .across_'+across);
+					board
+						.scrollLeft(across == 0 ? 0 : (new_target.width() * across) - (board.width() / 2)) // handles min and max for us
+						.scrollTop(down == 0 ? 0 : (new_target.height() * down) - (board.height() / 2));
+				}
+			};
+		};
+				
+		var toggle_zoom_and_mousedown = function (event) {
+			$('.board')
+				.into(zoomed_out_p() ? zoomin_maker(event.target) : do_zoomout);
+			$(this)
+				.children(':first')
+					.trigger(event.gesture_data.originalEvent);
+			return false;
+		};
+		
+		var do_scale = function(event, data) {
+			if (event.scale <= 0.75)
+				$('.board')
+					.into(do_zoomout);
+			else if (event.scale >= 1.5)
+				$('.board')
+					.into(zoomin_maker(event.target));
+			return false;
+		};
+		
 		return function() {
 			$('.move')
 				.gesture([
-					'bottom', 'circle', 'click',
+					'bottom', 'circle', 'click', 'hold', 'scale',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')
@@ -150,6 +226,8 @@
 					}
 				});
 			$('.board')
+				.live('gesture_hold', toggle_zoom_and_mousedown)
+				.live('gesture_scale', do_scale)
 				.addClass(
 					window.orientation !== undefined 
 						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
