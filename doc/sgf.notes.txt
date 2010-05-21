@@ -17,7 +17,7 @@ Usually B plays the 3,3 invasion - see variation];W[qo];B[qp]
 ...
 (;W[dq]N[wrong direction];B[qo];W[qp]))
 
-Loks like:
+Looks like:
 
 Parentheses govern the tree
 Semicolons separate consecutive instances

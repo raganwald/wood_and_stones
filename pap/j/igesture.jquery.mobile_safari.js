@@ -174,8 +174,9 @@ jQuery.fn.gesture = function (events) {
 					if (this.moves.length < 7) {
 
 						for (var gesture_name in settings.gestures) {
-							if (this.moves.match(settings.gestures[gesture_name]))
+							if (this.moves.match(settings.gestures[gesture_name])) {
 								return gesture_name;
+							}
 						}
 
 					}
@@ -225,6 +226,9 @@ jQuery.fn.gesture = function (events) {
 			var stroke_continuer;
 			
 			var trigger_events = function () {
+				
+				if (gesture.moves.length == 0) return;
+				
 				var canonical_name = gesture.getName();
 				
 				if (typeof(canonical_name) == 'undefined') {
@@ -264,6 +268,7 @@ jQuery.fn.gesture = function (events) {
 			};
 			
 			stroke_continuer = function (e) {
+			
 				if (checking_for_hold_on_this_stroke && gesture.moves.length > 0) {
 					checking_for_hold_on_this_stroke = false;
 					gesture.target.stopTime('hold_detection');
@@ -338,7 +343,7 @@ jQuery.fn.gesture = function (events) {
 						}
 					}
 					if (settings.continuesmode)
-					 trigger_events(); // I believe this is broken and that we only care about the last stroke.
+						trigger_events(); // I believe this is broken and that we only care about the last stroke.
 				}
 					
 			};

@@ -22,12 +22,44 @@
 	};
 			
 	var initialize_gesture_support = (function () {
-
-		var clear_current_play = function (event) {
-			var target = $(event.target);
-			set_played_stone(target.find('.intersection.latest:not(.last)'), false);
-			set_killed_stones(null, false);
-			return false;
+		
+		var undo = function (event) {
+			if (go.sgf.game_info['R'] != undefined) return;
+			var last_move = go.sgf.current[go.sgf.current.length - 1];
+			var to_play = playing();
+			var was_playing = opponent();
+			var was_playing_index = was_playing[0].toUpperCase();
+			if (last_move != undefined) {
+				var position = last_move[was_playing_index];
+				if (position != undefined) {
+					if (position) {
+						// checks for blank
+						$('.move:last .board #' + position)
+							.removeClass('latest')
+							.removeClass(was_playing);
+						var m = last_move['C'] && last_move['C'].match(/killed: (..(?:,..)*)/);
+						if (m != undefined) {
+							$('.move:last .board')
+								.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
+									.addClass(was_playing == 'black' ? 'white' : 'black');
+						}
+					}
+					go.sgf.current.pop();
+					var penultimate_move = go.sgf.current[go.sgf.current.length - 1];
+					var to_play_index = to_play[0].toUpperCase();
+					if (penultimate_move != undefined) {
+						var previous_position = penultimate_move[to_play_index];
+						if (previous_position)
+							$('.move:last .board #' + previous_position)
+								.addClass('latest');
+					}
+					$('.move:last')
+						.removeClass(playing())
+						.addClass(was_playing);
+					go.referee.intialize_move();
+					//TODO: Check blue dot
+				}
+			}
 		};
 		
 		var do_pass = function() {
@@ -53,22 +85,15 @@
 		};
 		
 		return function() {
-			$('body')
+			$('.move')
 				.gesture([
-					'top', 'bottom', 'ok', 'circle',
+					'bottom', 'circle',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')
 								.find('.scrub');
 							}
-						},
-					{ accept: function(target) {
-						return $(target)
-							.parents('body > *')
-								.find('.accept');
-							}
-						},
-					{ preventDefault: false }
+						}
 				])
 				.bind({
 					turn:  function (event, data) {
@@ -82,10 +107,11 @@
 					window.orientation !== undefined 
 						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
 						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
-				)
-				.live('gesture_scrub', clear_current_play);
+				);
 			$('.move:last .board:not(:has(.valid.black,.valid.white))')
 				.live('gesture_circle', do_pass);
+			$('.move:last .board')
+				.live('gesture_scrub', undo);
 			$('#info')
 				.bind('gesture_top', function(event) { jQT.goBack(); });
 		};
@@ -143,7 +169,14 @@
 			var target = $(event_data.currentTarget);
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
-			target.addClass(now_playing);
+			target
+				.closest('.board')
+					.find('.latest')
+						.removeClass('latest')
+						.end()
+					.end()
+				.addClass('latest')
+				.addClass(now_playing);
 			var killed_stones = $('.move:last .intersection.killed_by_'+target.attr('id'));
 			var annotation = {};
 			annotation[now_playing[0].toUpperCase()] = target.attr('id');
@@ -168,7 +201,6 @@
 	go.on_document_ready(function () {
 		initialize_gesture_support();
 		liven_playing_positions();
-
 		// TODO: Migrate this to the code that actually performs a move
 		// update_playing_div()
 		// TODO: Complete rewrite to set the title
