@@ -21,21 +21,29 @@
 		);
 	};
 	
-	var switch_turns = function() {
-		var to_play = playing();
+	var switch_turns = function(new_player) {
+		if (new_player == undefined) new_player = opponent();
 		$('.move:last')
-			.addClass(to_play == 'white' ? 'black' : 'white')
-			.removeClass(to_play)
+			.addClass(new_player)
+			.removeClass(new_player == 'white' ? 'black' : 'white')
 			.into(go.referee.intialize_move);
 	};
 			
 	var initialize_gesture_support = (function () {
 		
 		var do_undo = function (event) {
-			if (go.sgf.game_info['R'] != undefined) return;
+			var to_play;
+			var was_playing;
 			var last_move = go.sgf.current[go.sgf.current.length - 1];
-			var to_play = playing();
-			var was_playing = opponent();
+			if (last_move['B'] != undefined) {
+				to_play = 'white';
+				was_playing = 'black';
+			}
+			else if (last_move['W'] != undefined) {
+				to_play = 'black';
+				was_playing = 'white';
+			}
+			else console.error('dagnabbit!');
 			var was_playing_index = was_playing[0].toUpperCase();
 			if (last_move != undefined) {
 				var position = last_move[was_playing_index];
@@ -60,16 +68,23 @@
 							$('.move:last .board #' + previous_position)
 								.addClass('latest');
 					}
-					switch_turns();
+					switch_turns(was_playing);
 				}
 			}
 		};
 		
 		var do_pass = function() {
+			if (go.sgf.game_info['R'] != undefined) return;
+			
 			var to_play = playing();
 			var was_playing = opponent();
 			var was_playing_index = was_playing[0].toUpperCase();
 			var last_move = go.sgf.current[go.sgf.current.length - 1];
+			
+			var annotation = {};
+			annotation[to_play[0].toUpperCase()] = '';
+			go.sgf.current.push(annotation);
+			
 			if (last_move != undefined) {
 				var position = last_move[was_playing_index];
 				if (position != undefined && !position) {
@@ -80,14 +95,13 @@
 					return;
 				}
 			}
-			var annotation = {};
-			annotation[to_play[0].toUpperCase()] = '';
-			go.sgf.current.push(annotation);
 		
 			switch_turns();
 		};
 		
 		var do_play = function (event_data) {
+			if (go.sgf.game_info['R'] != undefined) return;
+			
 			target = $(event_data.currentTarget);
 			var now_playing = playing();
 			if (!target.is('.intersection')) target = target.closest('.intersection');
