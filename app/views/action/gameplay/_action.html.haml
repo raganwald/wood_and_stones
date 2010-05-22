@@ -1,7 +1,0 @@
--current ||= false
--if current
-  .current.move{:id=>"m#{action.cardinality}"}
-    = render :partial => 'action/gameplay/action_inner', :locals => { :action => action }
--else
-  .move{:id=>"m#{action.cardinality}"}
-    = render :partial => 'action/gameplay/action_inner', :locals => { :action => action }
