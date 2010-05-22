@@ -1,3 +1,7 @@
+// (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
+// the exception of specific files otherwise licensed. Other licenses apply only to the files where
+// they appear.
+
 ;(function ($, undefined) {
 	
 	var intialize_move = function (move) {
@@ -9,20 +13,20 @@
 	};
 	
 	var playing = function () {
-		return $('.move:last').is('.black') ? 'black' : (
-			$('.move:last').is('.white') ? 'white' : null
+		return $('.move.play').is('.black') ? 'black' : (
+			$('.move.play').is('.white') ? 'white' : null
 		);
 	};
 	
 	var opponent = function () {
-		return $('.move:last').is('.white') ? 'black' : (
-			$('.move:last').is('.black') ? 'white' : null
+		return $('.move.play').is('.white') ? 'black' : (
+			$('.move.play').is('.black') ? 'white' : null
 		);
 	};
 	
 	var switch_turns = function(new_player) {
 		if (new_player == undefined) new_player = opponent();
-		$('.move:last')
+		$('.move.play')
 			.addClass(new_player)
 			.removeClass(new_player == 'white' ? 'black' : 'white')
 			.into(go.referee.intialize_move);
@@ -48,12 +52,12 @@
 				var position = last_move[was_playing_index];
 				if (position != undefined) {
 					if (position) {
-						$('.move:last .board #' + position)
+						$('.move.play .board #' + position)
 							.removeClass('latest')
 							.removeClass(was_playing);
 						var m = last_move['C'] && last_move['C'].match(/killed: (..(?:,..)*)/);
 						if (m != undefined) {
-							$('.move:last .board')
+							$('.move.play .board')
 								.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
 									.addClass(was_playing == 'black' ? 'white' : 'black');
 						}
@@ -64,7 +68,7 @@
 					if (penultimate_move != undefined) {
 						var previous_position = penultimate_move[to_play_index];
 						if (previous_position)
-							$('.move:last .board #' + previous_position)
+							$('.move.play .board #' + previous_position)
 								.addClass('latest');
 					}
 					if (go.sgf.game_info['R'])
@@ -91,12 +95,12 @@
 				if (position != undefined && !position) {
 					alert('this pass ends the game!');
 					go.sgf.game_info['R'] = 'Two passes';
-					$('.move:last')
+					$('.move.play')
 						.removeClass(to_play);
 					return;
 				}
 			}
-			$('.move:last .board .latest')
+			$('.move.play .board .latest')
 				.removeClass('latest');
 			switch_turns();
 		};
@@ -116,7 +120,7 @@
 					.end()
 				.addClass('latest')
 				.addClass(now_playing);
-			var killed_stones = $('.move:last .intersection.killed_by_'+target.attr('id'));
+			var killed_stones = $('.move.play .intersection.killed_by_'+target.attr('id'));
 			var annotation = {};
 			annotation[now_playing[0].toUpperCase()] = target.attr('id');
 			if (killed_stones.size() > 0) {
@@ -233,13 +237,13 @@
 						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
 						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 				);
-			$('.move:last .board:not(:has(.valid.black,.valid.white))')
+			$('.move.play .board:not(:has(.valid.black,.valid.white))')
 				.live('gesture_circle', do_pass);
-			$('.move:last .board')
+			$('.move.play .board')
 				.live('gesture_scrub', do_undo);
 			$('#info')
 				.bind('gesture_top', function(event) { jQT.goBack(); });
-			$('.move:last .board .valid')
+			$('.move.play .board .valid')
 				.live('gesture_click', do_play);
 		};
 	})();

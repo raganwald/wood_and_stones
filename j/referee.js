@@ -1,3 +1,7 @@
+// (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
+// the exception of specific files otherwise licensed. Other licenses apply only to the files where
+// they appear.
+
 ;(function ($, undefined) {
 	
 	var referee = (function () {
@@ -1576,7 +1580,7 @@
 		
 		// validate all legal moves
 		var intialize_move = function (move_div) {
-			if (undefined == move_div) move_div = $('.move:last');
+			if (undefined == move_div) move_div = $('.move.play');
 			$(move_div)
 				.find('.board')
 					.into(analyze_board)

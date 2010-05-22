@@ -20,16 +20,15 @@
     <script charset='utf-8' src='j/dragscrollable.js' type='text/javascript'></script>
     <!-- / must be first! -->
     <script charset='utf-8' src='j/go.js' type='text/javascript'></script>
-    <script charset='utf-8' src='j/sgf.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/start.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/ui.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/referee.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/history.js' type='text/javascript'></script>
     <style media='screen' type='text/css'>@import "c/jqtouch.css";</style>
     <style media='screen' type='text/css'>@import "c/theme.css";</style>
     <style media='screen' type='text/css'>@import "c/application.css";</style>
     <style media='screen' type='text/css'>@import "c/board.css";</style>
     <style media='screen' type='text/css'>@import "c/dark-hive/jquery-ui-1.8rc3.custom.css";</style>
-    <style></style>
     <style></style>
     <script type='text/javascript'>
       //<![CDATA[
@@ -139,7 +138,25 @@
         </li>
       </ul>
     </div>
-    <div class='move'>
+    <div class='move history this'>
+      <div class='toolbar'>
+        <h1>
+          <span class='gravatar'></span>
+          <span class='playing'></span>
+        </h1>
+      </div>
+      <div class='board zoomout scrub' id='div'></div>
+    </div>
+    <div class='move history that'>
+      <div class='toolbar'>
+        <h1>
+          <span class='gravatar'></span>
+          <span class='playing'></span>
+        </h1>
+      </div>
+      <div class='board zoomout scrub' id='div'></div>
+    </div>
+    <div class='move play'>
       <div class='toolbar'>
         <h1>
           <span class='gravatar'></span>

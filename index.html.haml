@@ -1,3 +1,7 @@
+// (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
+// the exception of specific files otherwise licensed. Other licenses apply only to the files where
+// they appear.
+
 !!!Strict
 %html{html_attrs('en')}
   %head
@@ -42,6 +46,9 @@
     %style
     
     :javascript
+      // (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
+      // the exception of specific files otherwise licensed. Other licenses apply only to the files where
+      // they appear.
       var jQT = new $.jQTouch({
           icon: 'i/black_white.png',
           statusBar: 'black-translucent',
@@ -125,7 +132,21 @@
           %span.captured_blacks
           stones
           
-    .move
+    .move.history.this
+      .toolbar 
+        %h1
+          %span.gravatar
+          %span.playing
+      #div{:class => "board zoomout scrub"}
+          
+    .move.history.that
+      .toolbar 
+        %h1
+          %span.gravatar
+          %span.playing
+      #div{:class => "board zoomout scrub"}
+    
+    .move.play
       .toolbar 
         %h1
           %span.gravatar

@@ -155,7 +155,7 @@ var go = function () {
 			info = $.extend({}, info);
 			
 			var last_displayed_move_number = function () {
-				return $('.move:last').data('number');
+				return $('.move.play').data('number');
 			};
 			
 			var id_by_move_number = function (move_number) {
@@ -175,11 +175,11 @@ var go = function () {
 			};
 			
 			var select_current_image_by_position  = function (position) {
-				return '.move:last .board #' + position;
+				return '.move.play .board #' + position;
 			};
 			
 			var position_of_played_stone = function () {
-				var target = $('.move:last .board .intersection:not(.black):not(.white).' + playing());
+				var target = $('.move.play .board .intersection:not(.black):not(.white).' + playing());
 				if (target.size() == 1) {
 					return target.attr('id');
 				}
@@ -187,7 +187,7 @@ var go = function () {
 			};
 			
 			var stone_has_been_legally_placed = function () {
-				return info.is_users_turn && ($('.move:last .board .intersection:not(.black):not(.white).' + playing()).size() == 1);
+				return info.is_users_turn && ($('.move.play .board .intersection:not(.black):not(.white).' + playing()).size() == 1);
 			};
 			
 			var process_update_and_resume_polling = function (html) {
@@ -232,8 +232,8 @@ var go = function () {
 			};
 			
 			var update_playing_div = function () {
-			  	var move_to_unbind_selector = '.move:last';
-			  	var places_to_unbind_selector = '.move:last .board .valid';
+			  	var move_to_unbind_selector = '.move.play';
+			  	var places_to_unbind_selector = '.move.play .board .valid';
 				var lasts_to_reclassify_finder = '.board .last';
 				var killed_finder = '.board .atari.empty';
 			
@@ -264,24 +264,24 @@ var go = function () {
 			
 			var set_played_stone = function (target, play_p) {
 				// restore all other plays
-				$('.move:last .board .valid.' + playing()).not(target).removeClass(playing());
+				$('.move.play .board .valid.' + playing()).not(target).removeClass(playing());
 				// make the play or remove the play
 				if (play_p) {
 					target.addClass(playing());
-					$('.move:last .last').removeClass('latest');
+					$('.move.play .last').removeClass('latest');
 				}
 				else {
 					target.removeClass(playing());
-					$('.move:last .last').addClass('latest');
+					$('.move.play .last').addClass('latest');
 				}
 			};
 		
 			var set_killed_stones = function (target, kill_p) {
 				// restore all atari stones
-				$('.move:last .board .atari' ).addClass(opponent()).removeClass('empty');
+				$('.move.play .board .atari' ).addClass(opponent()).removeClass('empty');
 				// maybe kill some stones
 				if (kill_p) {
-					var killed_selector = '.move:last .board .atari.killed_by_' + target.attr('id');
+					var killed_selector = '.move.play .board .atari.killed_by_' + target.attr('id');
 					$(killed_selector)
 						.each(function (i,e) {
 							e = $(e);
@@ -321,7 +321,7 @@ var go = function () {
 					play_stone(target.attr('id'));
 				};
 
-				$('.move:last .board .valid')
+				$('.move.play .board .valid')
 					.live(SELECTION_EVENT, toggle_placed_stone)
 					.live('dblclick', place_and_play_stone);
 			};
@@ -334,7 +334,7 @@ var go = function () {
 				});
 	      		if (update_moves.size() > 0) {
 					// console.log('processing ' + update_moves.size() + ' updated moves');
-	        		update_moves.insertAfter('.move:last');
+	        		update_moves.insertAfter('.move.play');
 					update_boards_with_navigation_handlers(update_moves);
 	      		}
 				$(html).filter('script').each(function (i, el) { // could .each be replaced with ::last here?
@@ -348,7 +348,7 @@ var go = function () {
 					update_hey();
 	        		if ($(select_move_by_move_number(was_current_move_number)).is('.current')) {
 						// console.log('fading from ' + was_current_move_number + ' to ' + last_displayed_move_number());
-	          			jQT.goTo($('.move:last'), 'fade');
+	          			jQT.goTo($('.move.play'), 'fade');
 	        		}
 				}
 	    	};
@@ -581,7 +581,7 @@ var go = function () {
 					};
 
 					var last_displayed_move_number = function () {
-						return $('.move:last').data('number');
+						return $('.move.play').data('number');
 					};
 					return function() {
 						var target = $(event.target);
@@ -632,9 +632,9 @@ var go = function () {
 								: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 						)
 						.live('gesture_scrub', clear_current_play);
-					$('.move:last .board:has(.valid.black,.valid.white)')
+					$('.move.play .board:has(.valid.black,.valid.white)')
 						.live('gesture_left', do_play);
-					$('.move:last .board:not(:has(.valid.black,.valid.white))')
+					$('.move.play .board:not(:has(.valid.black,.valid.white))')
 						.live('gesture_left', do_pass);
 					$('.move:not(.playing)')
 						.live('gesture_left', do_manual_poll);

@@ -111,7 +111,7 @@
 		};
 	
 		var last_displayed_move_number = function () {
-			return $('.move:last').data('number');
+			return $('.move.play').data('number');
 		};
 
 		var memoized_move = function (target_move_number) {

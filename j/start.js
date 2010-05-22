@@ -1,3 +1,7 @@
+// (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
+// the exception of specific files otherwise licensed. Other licenses apply only to the files where
+// they appear.
+
 ;(function ($, undefined) {
 	
 	var assign_gravatar = function (event) {
@@ -93,7 +97,7 @@
 			$('.move')
 				.addClass(setup.to_play)
 				.into(go.referee.intialize_move);
-			jQT.swapPages($('#new'), $('.move:last'));
+			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
     	});
 	};
