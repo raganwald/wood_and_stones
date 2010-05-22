@@ -1,9 +1,0 @@
-.floaty {
-    -webkit-border-radius: 10px;
-    -webkit-box-shadow: rgba(0,0,0, .5) 0px 1px 1px;
-    width: 90%;
-    margin: 0 5%;
-    padding: 5px 10px;
-    background: rgba(255,255,255,.7);
-    color: #000;
-}
