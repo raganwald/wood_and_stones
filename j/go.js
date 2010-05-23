@@ -88,6 +88,13 @@
 			return index;
 		},
 		
+		ceiling: function(index) {
+			while (go.sgf.current[index] && !go.sgf.current[index]['MN']) {
+				++index;
+			}
+			return index;
+		},
+		
 		doit: function (board, this_move) {
 			board
 				.find('.latest')

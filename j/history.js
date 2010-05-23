@@ -91,7 +91,44 @@
 	})();
 	
 	var forwards_in_history = function (event) {
-		console.errors('Implement me');
+		
+		var this_page = $('.move.history.this');
+		var that_page;
+		
+		var this_index = $('.move.history.this .board')
+			.data('index');
+		var that_index = go.sgf.ceiling(this_index + 1);
+		
+		var last_index = go.sgf.floor(go.sgf.current.length - 1);
+		
+		if (that_index == -1) 
+			return; // may be a fencepost error when dealing with the start position
+		else if (that_index == last_index) {
+			that_page = $('.move.play');
+		}
+		else {
+			that_page = $('.move.history.that');
+			$('.move.history.that .board')
+				.empty()
+				.append(
+					$('.move.history.this .board')
+						.children()
+							.clone(false)
+				)
+				.data('index', that_index);
+			
+			go.sgf.doit($('.move.history.that .board'), go.sgf.current[that_index]);
+		
+			this_page
+				.addClass('that')
+				.removeClass('this');
+			that_page
+				.addClass('this')
+				.removeClass('that');
+		}
+		
+		jQT.swapPages(this_page, that_page, 'slide');
+		
 	};
 	
 	var backwards_in_history = function (event) {
