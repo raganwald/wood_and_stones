@@ -54,18 +54,16 @@
 			var rule_setup = $.parseJSON($('form.new_game #rules').val());
 			go.referee.set_rules(rule_setup);
 			var setup = $.parseJSON($('form.new_game #handicap').val());
-			go.sgf = {
-				game_info: {
-					FF: 4,
-					GM: rule_setup.GM,
-					SZ: go.dimension,
-					AP: "World of Go Alpha 2",
-					// TODO: DT and TM?
-					PB: $('form.new_game #black').val(),
-					PW: $('form.new_game #white').val(),
-					PL: setup.to_play,
-					MN: 0
-				}
+			go.sgf.game_info = {
+				FF: 4,
+				GM: rule_setup.GM,
+				SZ: go.dimension,
+				AP: "World of Go Alpha 2",
+				// TODO: DT and TM?
+				PB: $('form.new_game #black').val(),
+				PW: $('form.new_game #white').val(),
+				PL: setup.to_play,
+				MN: 0
 			};
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;

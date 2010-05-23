@@ -73,10 +73,78 @@
 				.appendTo('body > .current');
 	};
 	
+	var sgf = {
+		
+		game_info: undefined,
+		
+		current: undefined,
+		
+		root: undefined,
+		
+		floor: function(index) {
+			while (index >= 0 && !go.sgf.current[index]['MN']) {
+				--index;
+			}
+			return index;
+		},
+		
+		doit: function (board, t, t_plus_1) {
+			
+		},
+		
+		undoit: function (board, this_move, optional_previous_move) {
+			
+			// TODO: Handle other undoables such as placements
+			// optional previous move is only useful for hilighting the dot to play at this point
+			// it could be eliminated if we use a comment to annotate it.
+			
+			if (this_move['B'] != undefined) {
+				to_play = 'white';
+				was_playing = 'black';
+			}
+			else if (this_move['W'] != undefined) {
+				to_play = 'black';
+				was_playing = 'white';
+			}
+			else return; // not undoable
+			var was_playing_index = was_playing[0].toUpperCase();
+			if (this_move != undefined) {
+				var position = this_move[was_playing_index];
+				if (position != undefined) {
+					if (position) {
+						board
+							.find('#' + position)
+								.removeClass('latest')
+								.removeClass(was_playing);
+						var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
+						if (m != undefined) {
+							board
+								.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
+									.addClass(was_playing == 'black' ? 'white' : 'black');
+						}
+					}
+					var to_play_index = to_play[0].toUpperCase();
+					if (optional_previous_move != undefined) {
+						var previous_position = optional_previous_move[to_play_index];
+						if (previous_position)
+							board
+								.find('#' + previous_position)
+									.addClass('latest');
+					}
+				// TODO: Deal with titles
+				}
+			}
+		
+		}
+		
+	};
+	
 	go = {
 		letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+		dimension: undefined,
 		message: message_dialog,
 		progress_dialog: progress_dialog,
+		sgf: sgf,
 		on_document_ready: function (new_document_ready) {
 			document_ready = (function (old_document_ready) {
 				return function () {

@@ -4,15 +4,8 @@
 
 ;(function ($, undefined) {
 	
-	var fix_index = function(index) {
-		while (index >= 0 && !go.sgf.current[index]['MN']) {
-			--index;
-		}
-		return index;
-	};
-	
 	var last_move_index = function () {
-		return fix_index(go.sgf.current.length-1);
+		return go.sgf.floor(go.sgf.current.length-1);
 	};
 	
 	var this_history_index = function () {
@@ -108,10 +101,8 @@
 		
 		var this_index = $('.move.history.this .board')
 			.data('index');
-		var that_index = fix_index(this_index - 1);
+		var that_index = go.sgf.floor(this_index - 1);
 		if (that_index == -1) return; // may be a fencepost error when dealing with the start position
-		
-		console.log('!');
 		
 		$('.move.history.that .board')
 			.empty()
@@ -122,42 +113,7 @@
 			)
 			.data('index', that_index);
 			
-		var this_move = go.sgf.current[this_index];
-		if (this_move['B'] != undefined) {
-			to_play = 'white';
-			was_playing = 'black';
-		}
-		else if (this_move['W'] != undefined) {
-			to_play = 'black';
-			was_playing = 'white';
-		}
-		else return; // not undoable
-		var was_playing_index = was_playing[0].toUpperCase();
-		if (this_move != undefined) {
-			var position = this_move[was_playing_index];
-			if (position != undefined) {
-				if (position) {
-					$('.move.history.that .board #' + position)
-						.removeClass('latest')
-						.removeClass(was_playing);
-					var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
-					if (m != undefined) {
-						$('.move.history.that .board')
-							.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
-								.addClass(was_playing == 'black' ? 'white' : 'black');
-					}
-				}
-				var penultimate_move = go.sgf.current[that_index];
-				var to_play_index = to_play[0].toUpperCase();
-				if (penultimate_move != undefined) {
-					var previous_position = penultimate_move[to_play_index];
-					if (previous_position)
-						$('.move.history.that .board #' + previous_position)
-							.addClass('latest');
-				}
-			// TODO: Deal with titles
-			}
-		}
+		go.sgf.undoit($('.move.history.that .board'), go.sgf.current[this_index], go.sgf.current[that_index]);
 		
 		this_page
 			.addClass('that')
