@@ -88,7 +88,32 @@
 			return index;
 		},
 		
-		doit: function (board, t, t_plus_1) {
+		doit: function (board, this_move) {
+			board
+				.find('.latest')
+					.removeClass('latest');
+					
+			var placement = this_move['B'];
+			if (placement != undefined) {
+				board
+					.find('#' + placement)
+						.addClass('black latest');
+			}
+			else {
+				placement = this_move['W'];
+				if (placement != undefined) {
+					board
+						.find('#' + placement)
+							.addClass('white latest');
+				}
+				else return; // not doable yet
+			}
+			var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
+			if (m != undefined) {
+				board
+					.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
+						.removeClass('white black');
+			}
 			
 		},
 		

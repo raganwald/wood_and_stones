@@ -85,14 +85,6 @@
 			var now_playing = playing();
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
-			target
-				.closest('.board')
-					.find('.latest')
-						.removeClass('latest')
-						.end()
-					.end()
-				.addClass('latest')
-				.addClass(now_playing);
 			var killed_stones = $('.move.play .intersection.killed_by_'+target.attr('id'));
 			var annotation = {};
 			annotation[now_playing[0].toUpperCase()] = target.attr('id');
@@ -103,6 +95,8 @@
 			var last_move = go.sgf.current[go.sgf.current.length - 1];
 			if (last_move['MN'] != undefined) annotation['MN'] = last_move['MN'] + 1;
 			go.sgf.current.push(annotation);
+			
+			go.sgf.doit($('.move.play .board'), annotation);
 		
 			switch_turns();
 		};
