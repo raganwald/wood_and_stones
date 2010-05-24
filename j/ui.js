@@ -4,12 +4,12 @@
 
 ;(function ($, undefined) {
 	
-	var intialize_move = function (move) {
+	var validate = function (move) {
 		
 	};
 	
 	go.ui = {
-		intialize_move: intialize_move
+		validate: validate
 	};
 	
 	var playing = function () {
@@ -29,7 +29,7 @@
 		$('.move.play')
 			.addClass(new_player)
 			.removeClass(new_player == 'white' ? 'black' : 'white')
-			.into(go.referee.intialize_move);
+			.into(go.referee.validate);
 	};
 			
 	var initialize_ui_support = (function () {
@@ -45,14 +45,14 @@
 			
 			go.sgf.current.pop();
 			
-			if (go.sgf.game_info['R'])
-				go.sgf.game_info['R'] = null;
+			if (go.sgf.game_info['RE'])
+				go.sgf.game_info['RE'] = null;
 			switch_turns(was_playing);
 			
 		};
 		
 		var do_pass = function() {
-			if (go.sgf.game_info['R']) return;
+			if (go.sgf.game_info['RE']) return;
 			
 			var to_play = playing();
 			var was_playing = opponent();
@@ -67,7 +67,7 @@
 				var position = last_move[was_playing_index];
 				if (position != undefined && !position) {
 					alert('this pass ends the game!');
-					go.sgf.game_info['R'] = 'Two passes';
+					go.sgf.game_info['RE'] = 'Two passes';
 					$('.move.play')
 						.removeClass(to_play);
 					return;
@@ -79,13 +79,13 @@
 		};
 		
 		var do_play = function (event_data) {
-			if (go.sgf.game_info['R']) return;
+			if (go.sgf.game_info['RE']) return;
 			
 			target = $(event_data.currentTarget);
 			var now_playing = playing();
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
-			var killed_stones = $('.move.play .intersection.killed_by_'+target.attr('id'));
+			var killed_stones = $('.move.play .intersection.'+opponent()+'.last_liberty_is_'+target.attr('id'));
 			var annotation = {};
 			annotation[now_playing[0].toUpperCase()] = target.attr('id');
 			if (killed_stones.size() > 0) {

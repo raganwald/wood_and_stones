@@ -1310,7 +1310,10 @@
 			return (a_across < b_across || (a_across == b_across && a_down < b_down));
 		};
 		
-		var analyze_board = function(board, debug) {
+		var analyze = function(board, debug) {
+			
+			if (board == undefined)
+				board = $('.move.play .board');
 			
 			var adjacents = get_adjacents();
 			
@@ -1319,9 +1322,9 @@
 			// group: this is the head stone of a group. Holds its data.
 			//
 			// group_xx: identifies a stone as belonging to the group where
-			// intersection xx has the group class. The head stoen also has this class.
+			// intersection xx has the group class. The head stone also has this class.
 			//
-			// killed_by_xx: identifies a stone as belomnging to a group with a single
+			// last_liberty_is_xx: identifies a stone as belomnging to a group with a single
 			// liberty at xx.
 			//
 			// at_liberty: identifies an empty intersection with at least one liberty.
@@ -1337,7 +1340,7 @@
 						return [
 							'group at_liberty atari valid',
 							clazz.match(/group_../),
-							clazz.match(/killed_by_../),
+							clazz.match(/last_liberty_is_../),
 							clazz.match(/debug_\w+/)
 						].join(' ');
 					})
@@ -1434,7 +1437,7 @@
 						}
 						else if (liberties.length == 1) {
 							members
-								.addClass('atari killed_by_' + liberties[0].attr('id'));
+								.addClass('atari last_liberty_is_' + liberties[0].attr('id'));
 						}
 					});
 			
@@ -1476,7 +1479,7 @@
 					.find('.group.atari.' + opponent)
 						.each(function (i, el) {
 							el = $(el);
-							m = el.attr('class').match(/killed_by_(..)/);
+							m = el.attr('class').match(/last_liberty_is_(..)/);
 							if (m)
 								board
 									.find('#' + m[1])
@@ -1516,7 +1519,7 @@
 							var captured = $('#' + captured_id);
 							if (captured.size() == 1 && captured.is('valid')) {
 								var recaptured = board
-									.find('.killed_by_' + captured_id);
+									.find('.last_liberty_is_' + captured_id);
 								if (recaptured.size() == 1 && recaptured.attr('id') == last_id)
 									captured
 										.removeClass('valid')
@@ -1579,19 +1582,19 @@
 		};
 		
 		// validate all legal moves
-		var intialize_move = function (move_div) {
+		var validate = function (move_div) {
 			if (undefined == move_div) move_div = $('.move.play');
 			$(move_div)
 				.find('.board')
-					.into(analyze_board)
+					.into(analyze)
 					.into(history_free_validate)
 					.end()
 		};
 		
 		return {
 			set_rules: set_rules,
-			analyze_board: analyze_board,
-			intialize_move: intialize_move,
+			analyze: analyze,
+			validate: validate,
 			rules: rules
 		};
 	

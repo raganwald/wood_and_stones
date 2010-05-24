@@ -94,7 +94,7 @@
 			}
 			$('.move')
 				.addClass(setup.to_play)
-				.into(go.referee.intialize_move);
+				.into(go.referee.validate);
 			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
     	});

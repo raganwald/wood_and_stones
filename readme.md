@@ -15,7 +15,7 @@ To start a new game, open [index.html][index]:
 
 ![Start][start]
 
-If you want, you can give nicknames or email addresses for each player. If you don't, you willbe "Black" and "white" respectively. Email addresses are used to fetch gravatar images only, there is no email notification at this time.
+If you want, you can give nicknames or email addresses for each player. If you don't, you will be "Black" and "white" respectively. Email addresses are used to fetch gravatar images only, there is no email notification at this time.
 
 Choose a board size, handicap, and game to play. "Classic Go" is exactly what you think it is. The other options are why I had the stones to call this "World of Go." Click "play" and you can start your game.
 
