@@ -124,7 +124,10 @@
 				.removeClass('this');
 			that_page
 				.addClass('this')
-				.removeClass('that');
+				.removeClass('that')
+				.find('.toolbar h1')
+					.text("Move " + go.sgf.current[that_index]["MN"])
+					.end();
 		}
 		
 		jQT.swapPages(this_page, that_page, 'slide');
@@ -157,20 +160,25 @@
 			.removeClass('this');
 		that_page
 			.addClass('this')
-			.removeClass('that');
+			.removeClass('that')
+			.find('.toolbar h1')
+				.text("Move " + go.sgf.current[that_index]["MN"])
+				.end();
 		
 		jQT.swapPages(this_page, that_page, 'slide.backwards');
 	};
 	
 	var enter_history = function() {
-		$('.move.history.this .board')
+		$('.move.history.this')
 			.empty()
 			.append(
-				$('.move.play .board')
+				$('.move.play')
 					.children()
 						.clone(false)
 			)
-			.data('index', last_move_index());
+			.find('.board')
+				.data('index', last_move_index())
+				.end();
 		jQT.swapPages($('.move.play'), $('.move.history.this'), '');
 		backwards_in_history();
 	}
