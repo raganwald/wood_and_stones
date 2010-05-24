@@ -38,6 +38,7 @@ If you would like to see a history of the game, you move backwards in time by sw
 The application is specifically written to support other games, including:
 
 * [One Eyed Go][oneeye]
+* [Atari Go][atari]
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
@@ -55,3 +56,4 @@ Exemptions include iGesture and Dragscrollable.
 [white_to_play]: http://raganwald.github.com/go/i/about/white_to_play.png
 [pass]: http://raganwald.github.com/go/i/about/pass.png
 [oneeye]: http://senseis.xmp.net/?OneEyedGo
+[atari]: http://senseis.xmp.net/?AtariGo
