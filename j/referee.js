@@ -1365,14 +1365,15 @@
 								.filter(':not(.black):not(.white)')
 									.each(function (i, adj) {
 										adj = $(adj)
+										var adj_id = adj.attr('id');
 										var group = intersection.data('group');
 										if (debug) console.info(intersection.attr('id') + ' belongs to ' + group.attr('id'));
 										var liberties = group.data('liberties');
 										if (liberties == null) {
 											console.error('no liberties for group ' + group.attr('id') + ' of ' + intersection.attr('id'));
 										}
-										if (-1 == $.inArray(adj, liberties))
-											liberties.push(adj);
+										if (-1 == $.inArray(adj_id, liberties))
+											liberties.push(adj_id);
 									})
 									.end()
 								.filter('.black,.white')
@@ -1437,7 +1438,7 @@
 						}
 						else if (liberties.length == 1) {
 							members
-								.addClass('atari last_liberty_is_' + liberties[0].attr('id'));
+								.addClass('atari last_liberty_is_' + liberties[0]);
 						}
 					});
 			
