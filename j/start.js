@@ -18,10 +18,26 @@
 				    }));
 	};
 	
+	var handicap_options = function	(event) {
+		$('form.new_game #handicap')
+			.empty();
+		var rule_setup = $.parseJSON($('form.new_game #rules').val());
+		$.each(go.referee.rules.handicaps[rule_setup.handicaps], function (index, handicap) {
+			$('<option></option>')
+				.text(handicap.text)
+				.attr('value', handicap.text)
+				.appendTo($('form.new_game #handicap'));
+			}
+		);
+	};
+	
 	var setup_new_game = function () {
-		$('.email input')
+		$('form.new_game .email input')
 			.each(assign_gravatar)
 			.blur(assign_gravatar);
+		$('form.new_game .rules select')
+			.each(handicap_options)
+			.blur(handicap_options);
     	$('form.new_game').submit(function (e) {
 			var form = $(e.currentTarget);
 		  	go.dimension = $('form.new_game #dimension').val();
@@ -53,7 +69,12 @@
 			});
 			var rule_setup = $.parseJSON($('form.new_game #rules').val());
 			go.referee.set_rules(rule_setup);
-			var setup = $.parseJSON($('form.new_game #handicap').val());
+			var setup_text = $('form.new_game #handicap').val();
+			var setup;
+			$.each(go.referee.rules.handicaps[rule_setup.handicaps], function (i, handicap) {
+				if (handicap.text == setup_text)
+					setup = handicap;
+			});
 			go.sgf.game_info = {
 				FF: 4,
 				GM: rule_setup.GM,
@@ -69,28 +90,9 @@
 			$('style:last')
 				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
-			var handicap = setup.handicap;
-			if (handicap > 0) {
-		        var corner = go.dimension <= 11 ? 3 : 4;
-		        var half = Math.floor(go.dimension / 2);
-		
-		
-		        var left = go.letters[ corner - 1 ];
-		        var center = go.letters[ half ];
-		        var right = go.letters[ go.dimension - corner ];
-		        var top = left;
-		        var middle = center;
-		        var bottom = right;
-				go.sgf.game_info['AB'] = [
-					(bottom + left), (top + right), (bottom + right), (top + left), 
-					(middle + left), (middle + right), (top + center), (bottom + center), 
- 					(middle + center)
-				].slice(0, handicap).join(',');
-				go.sgf.game_info['HA'] = handicap;
-				
-				$($.map(go.sgf.game_info['AB'].split(','), "'#' + _".lambda()).join(','))
-					.addClass('black');
-			}
+			setup.setup($('.move.play .board'));
+			if (setup.HA)
+				go.sgf.game_info.HA = setup.HA;
 			$('.move')
 				.addClass(setup.to_play)
 				.into(go.referee.validate);

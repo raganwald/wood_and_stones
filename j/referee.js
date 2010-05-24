@@ -1551,7 +1551,7 @@
 				return board;
 			};
 			
-			var capture = function (board) {
+			var any_capture = function (board) {
 				if (go.sgf.current.length > 1) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
 					if (go.sgf.current[ultimate_index]['C'] &&  go.sgf.current[ultimate_index]['C'].match(/^killed:/)) {
@@ -1569,7 +1569,154 @@
 				return board;
 			};
 			
+			var connect_sides = function(board) {
+				left_groups = board
+					.find('.intersection:first-child')
+						.map(function(i, el) {
+							var m = $(el).attr('class').match(/group_../);
+							if (m)
+								return '.' + m[0];
+						})
+							.get()
+								.join(',');
+				top_groups = board
+					.find('.row:first-child .intersection')
+						.map(function(i, el) {
+							var m = $(el).attr('class').match(/group_../);
+							if (m)
+								return '.' + m[0];
+						})
+							.get()
+								.join(',');
+				connectors = board
+					.find('.intersection:last-child')
+						.filter(left_groups)
+					.add(
+						board
+							.find('.row:last-child .intersection')
+								.filter(top_groups)
+					);
+				if (connectors.is('.black') && connectors.is('.white')) {
+					alert('Weird, it is a tie!?');
+					go.sgf.game_info['RE'] = '0';
+				}
+				else if (connectors.is('.black')) {
+					alert('Black connects and wins');
+					go.sgf.game_info['RE'] = 'B+1';
+				}
+				else if (connectors.is('.white')) {
+					alert('White connects and wins');
+					go.sgf.game_info['RE'] = 'W+1';
+				}
+			};
+			
+			var star_points = function (handicap) {
+				
+				if (handicap > 0)
+				
+					return function (board) {
+					
+				        var corner = go.dimension <= 11 ? 3 : 4;
+				        var half = Math.floor(go.dimension / 2);
+				        var left = go.letters[ corner - 1 ];
+				        var center = go.letters[ half ];
+				        var right = go.letters[ go.dimension - corner ];
+				        var top = left;
+				        var middle = center;
+				        var bottom = right;
+						go.sgf.game_info['AB'] = [
+							(bottom + left), (top + right), (bottom + right), (top + left), 
+							(middle + left), (middle + right), (top + center), (bottom + center), 
+		 					(middle + center)
+						].slice(0, handicap).join(',');
+						go.sgf.game_info['HA'] = handicap;
+				
+						return board
+							.find($.map(go.sgf.game_info['AB'].split(','), "'#' + _".lambda()).join(','))
+								.addClass('black')
+								.end();
+					};
+					
+				else return function (board) { return board; };
+				
+			};
+			
 			return {
+				handicaps: {
+					classic: [
+						{
+							text: "Black plays first",
+							to_play: "black",
+							setup: star_points(0),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Two Stones",
+							to_play: "white",
+							setup: star_points(2),
+							free_plays: 0,
+							HA: 2,
+							pie: false
+						},
+						{
+							text: "Three Stones",
+							to_play: "white",
+							setup: star_points(3),
+							HA: 3,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Four Stones",
+							to_play: "white",
+							setup: star_points(4),
+							HA: 4,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Five Stones",
+							to_play: "white",
+							setup: star_points(5),
+							HA: 5,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Six Stones",
+							to_play: "white",
+							setup: star_points(6),
+							HA: 6,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Seven Stones",
+							to_play: "black",
+							setup: star_points(7),
+							HA: 7,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Eight Stones",
+							to_play: "white",
+							setup: star_points(8),
+							HA: 8,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Nine Stones",
+							to_play: "white",
+							setup: star_points(9),
+							HA: 9,
+							free_plays: 0,
+							pie: false
+						}
+					]
+				},
 				validations: {
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
@@ -1578,12 +1725,14 @@
 				},
 				endings: {
 					two_passes: two_passes,
-					capture: capture
+					any_capture: any_capture,
+					connect_sides: connect_sides
 				},
 				games: {
-					"Classic Go": '{"GM": 1, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Atari Go": '{"GM": 12, "endings": ["two_passes", "capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 11, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
+					"Classic Go": '{"GM": 1, "handicaps": "classic", "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Atari Go": '{"GM": 12, "handicaps": "classic", "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Gonnect": '{"GM": 13, "handicaps": "classic", "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"One Eye Go": '{"GM": 11, "handicaps": "classic", "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
 				}
 			};
 		})();
@@ -1601,7 +1750,6 @@
 						.removeClass('valid');
 			}
 		};
-		
 		
 		// sets the rules to be used in this game
 		var set_rules = function (hash_of_strings) {

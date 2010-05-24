@@ -39,6 +39,7 @@ The application is specifically written to support other games, including:
 
 * [One Eyed Go][oneeye]
 * [Atari Go][atari]
+* [Gonnect][gonnect]
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
@@ -57,3 +58,4 @@ Exemptions include iGesture and Dragscrollable.
 [pass]: http://raganwald.github.com/go/i/about/pass.png
 [oneeye]: http://senseis.xmp.net/?OneEyedGo
 [atari]: http://senseis.xmp.net/?AtariGo
+[gonnect]: http://senseis.xmp.net/?Gonnect

@@ -32,9 +32,9 @@
     
     // must be first!
     %script{:src=>"j/go.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/history.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.css";
@@ -82,11 +82,12 @@
           %li.email
             %img.label{:src=>'/images/dot_clear.gif'}>
             %input#white{:name=>'white', :placeholder=>"White's name or email address", :type=>'text'}/
+          %li.rules
+            .label Games:
+            %select#rules{:name=>'rules'}
           %li.size
             .label Size: 
             %select#dimension{:name=>'dimension'}
-              - [9, 11, 13, 15, 17, 19].each do |dim|
-                %option{:value=>dim} #{dim}x#{dim}
           %li.handicap
             .label Handicap:
             %select#handicap{:name=>'handicap'}
@@ -99,9 +100,6 @@
               %option{:value=>'{ "to_play": "white", "handicap": 7 }'} Seven stones
               %option{:value=>'{ "to_play": "white", "handicap": 8 }'} Eight stones
               %option{:value=>'{ "to_play": "white", "handicap": 9 }'} Nine stones
-          %li.rules
-            .label Games:
-            %select#rules{:name=>'rules'}
         %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Play
         
     #info
