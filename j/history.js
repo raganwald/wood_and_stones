@@ -141,8 +141,8 @@
 		
 		var this_index = $('.move.history.this .board')
 			.data('index');
+		if (this_index == -1) return;
 		var that_index = go.sgf.floor(this_index - 1);
-		if (that_index == -1) return; // may be a fencepost error when dealing with the start position
 		
 		$('.move.history.that .board')
 			.empty()
@@ -152,7 +152,8 @@
 						.clone(false)
 			)
 			.data('index', that_index);
-			
+		
+		
 		go.sgf.undoit($('.move.history.that .board'), go.sgf.current[this_index], go.sgf.current[that_index]);
 		
 		this_page
@@ -162,7 +163,7 @@
 			.addClass('this')
 			.removeClass('that')
 			.find('.toolbar h1')
-				.text("Move " + go.sgf.current[that_index]["MN"])
+				.text(that_index >= 0 ? ("Move " + go.sgf.current[that_index]["MN"]) : 'Initial Position')
 				.end();
 		
 		jQT.swapPages(this_page, that_page, 'slide.backwards');
@@ -179,8 +180,10 @@
 			.find('.board')
 				.data('index', last_move_index())
 				.end();
-		jQT.swapPages($('.move.play'), $('.move.history.this'), '');
-		backwards_in_history();
+		if (last_move_index() >= 0) {
+			jQT.swapPages($('.move.play'), $('.move.history.this'), '');
+			backwards_in_history();
+		}
 	}
 	
 	var initialize_history_support = function() {
