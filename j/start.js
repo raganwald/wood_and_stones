@@ -62,8 +62,7 @@
 				// TODO: DT and TM?
 				PB: $('form.new_game #black').val(),
 				PW: $('form.new_game #white').val(),
-				PL: setup.to_play,
-				MN: 0
+				PL: setup.to_play
 			};
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;

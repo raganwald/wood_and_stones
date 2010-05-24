@@ -57,29 +57,29 @@
 			var to_play = playing();
 			var was_playing = opponent();
 			var was_playing_index = was_playing[0].toUpperCase();
-			var last_move = go.sgf.current[go.sgf.current.length - 1];
+			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			
 			var annotation = {};
 			annotation[to_play[0].toUpperCase()] = '';
-			go.sgf.current.push(annotation);
 			
-			if (last_move != undefined) {
+			if (last_move_index >= 0) {
+				var last_move = go.sgf.current[last_move_index];
 				var position = last_move[was_playing_index];
-				if (position != undefined && !position) {
-					alert('this pass ends the game!');
-					go.sgf.game_info['RE'] = 'Two passes';
-					$('.move.play')
-						.removeClass(to_play);
-					return;
+				if (position != undefined && (position == '' || !$('.move.play .board').has('#' + position))) {
+					var end_game_p = confirm('end the game?');
+					if (!end_game_p) return;
 				}
 			}
+			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN']+ 1 : 1;
+
+			go.sgf.current.push(annotation);
+			go.sgf.doit($('.move.play .board'), annotation);
 			$('.move.play .board .latest')
 				.removeClass('latest');
 			switch_turns();
 		};
 		
 		var do_play = function (event_data) {
-			if (go.sgf.game_info['RE']) return;
 			
 			target = $(event_data.currentTarget);
 			var now_playing = playing();
@@ -92,8 +92,8 @@
 				annotation['C'] = 'killed: ' + $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
 				killed_stones.removeClass(opponent());
 			}
-			var last_move = go.sgf.current[go.sgf.current.length - 1];
-			if (last_move['MN'] != undefined) annotation['MN'] = last_move['MN'] + 1;
+			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
+			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN'] + 1 : 1;
 			go.sgf.current.push(annotation);
 			
 			go.sgf.doit($('.move.play .board'), annotation);
@@ -181,7 +181,7 @@
 		return function() {
 			$('.move')
 				.gesture([
-					'bottom', 'circle', 'click', 'hold', 'scale', 'left', 'right',
+					'bottom', 'close', 'click', 'hold', 'scale', 'left', 'right',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')
@@ -205,7 +205,7 @@
 						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 				);
 			$('.move.play .board:not(:has(.valid.black,.valid.white))')
-				.live('gesture_circle', do_pass);
+				.live('gesture_close', do_pass);
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo);
 			$('#info')

@@ -82,14 +82,14 @@
 		root: undefined,
 		
 		floor: function(index) {
-			while (index >= 0 && !go.sgf.current[index]['MN']) {
+			while (index >= 0 && (go.sgf.current[index]['MN'] == undefined)) {
 				--index;
 			}
 			return index;
 		},
 		
 		ceiling: function(index) {
-			while (go.sgf.current[index] && !go.sgf.current[index]['MN']) {
+			while (go.sgf.current[index] && (go.sgf.current[index]['MN'] == undefined)) {
 				++index;
 			}
 			return index;
@@ -101,19 +101,19 @@
 					.removeClass('latest');
 					
 			var placement = this_move['B'];
-			if (placement != undefined) {
+			if (placement) {
 				board
 					.find('#' + placement)
 						.addClass('black latest');
 			}
 			else {
 				placement = this_move['W'];
-				if (placement != undefined) {
+				if (placement) {
 					board
 						.find('#' + placement)
 							.addClass('white latest');
 				}
-				else return; // not doable yet
+				else return; // looks like a pass
 			}
 			var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
 			if (m != undefined) {

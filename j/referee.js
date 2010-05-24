@@ -1532,29 +1532,49 @@
 				return board
 			};
 			
-			var two_passes_invalidate_everything = function (board) {
-				if (go.sgf.current.length > 1) {
-					var ultimate = go.sgf.current[go.sgf.current.length - 1][board.closest('.move').is('.black') ? 'W' : 'B'];
-					var penultimate = go.sgf.current[go.sgf.current.length - 2][board.closest('.move').is('.black') ? 'B' : 'W'];
-					if (ultimate && penultimate && !board.has('#' + ultimate) && !board.has('#' + penultimate))
-						board
-							.find('.intersection.valid')
-								.addClass('two_passes_invalidate_everything')
-								.removeClass('valid');
+			var game_over = function(board) {
+				if (go.sgf.game_info['RE'] != undefined) {
+					board
+						.find('.intersection.valid')
+							.addClass('debug_game_over')
+							.removeClass('valid');
+				}
+			};
+			
+			var two_passes = function (board) {
+				if (go.sgf.current.length > 2) {
+					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
+					if (ultimate_index < 2) return board;
+					var penultimate_index = go.sgf.floor(ultimate_index - 1);
+					if (penultimate_index < 1) return board;
+					var ultimate = go.sgf.current[ultimate_index][board.closest('.move').is('.black') ? 'W' : 'B'];
+					var penultimate = go.sgf.current[penultimate_index][board.closest('.move').is('.black') ? 'B' : 'W'];
+					console.log(ultimate_index + ', ' + penultimate_index);
+					if (
+						(ultimate == '' && penultimate == '') ||
+						ultimate != undefined && penultimate != undefined && !board.has('#' + ultimate) && !board.has('#' + penultimate)
+					) {
+						go.sgf.game_info['RE'] = '0';
+						alert('The game is over!');
+					}
 				}
 				return board;
 			};
 			
 			return {
-				steps: {
+				validations: {
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
 					extend_group_valid: extend_group_valid,
-					simple_ko_invalid: simple_ko_invalid
+					simple_ko_invalid: simple_ko_invalid,
+					game_over: game_over
+				},
+				endings: {
+					two_passes: two_passes
 				},
 				games: {
-					"Classic Go": '{"GM": 1, "rules": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "two_passes_invalidate_everything" ]}',
-					"One Eye Go": '{"GM": 2, "rules": [ "at_liberty_valid", "extend_group_valid", "two_passes_invalidate_everything" ]}'
+					"Classic Go": '{"GM": 1, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "game_over" ]}',
+					"One Eye Go": '{"GM": 2, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid", "game_over" ]}'
 				}
 			};
 		})();
@@ -1568,14 +1588,19 @@
 		// sets the rules to be used in this game
 		var set_rules = function (hash_of_strings) {
 			// console.log(hash_of_strings);
-			var steps = $.map(
-				hash_of_strings.rules,
+			var validations = $.map(
+				hash_of_strings.validations,
 				function (name, i) {
-					return rules.steps[name]
+					return rules.validations[name]
+				});
+			var endings = $.map(
+				hash_of_strings.endings,
+				function (name, i) {
+					return rules.endings[name]
 				});
 			history_free_validate = function (board) {
 				// console.log('history_free_validate: ' + rules.length + ' rules');
-				$.each(steps, function (i, step) {
+				$.each($.merge(endings, validations), function (i, step) {
 					board
 						.into(step);
 				});
