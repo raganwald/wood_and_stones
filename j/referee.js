@@ -1532,15 +1532,6 @@
 				return board
 			};
 			
-			var game_over = function(board) {
-				if (go.sgf.game_info['RE'] != undefined) {
-					board
-						.find('.intersection.valid')
-							.addClass('debug_game_over')
-							.removeClass('valid');
-				}
-			};
-			
 			var two_passes = function (board) {
 				if (go.sgf.current.length > 2) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
@@ -1549,7 +1540,6 @@
 					if (penultimate_index < 1) return board;
 					var ultimate = go.sgf.current[ultimate_index][board.closest('.move').is('.black') ? 'W' : 'B'];
 					var penultimate = go.sgf.current[penultimate_index][board.closest('.move').is('.black') ? 'B' : 'W'];
-					console.log(ultimate_index + ', ' + penultimate_index);
 					if (
 						(ultimate == '' && penultimate == '') ||
 						ultimate != undefined && penultimate != undefined && !board.has('#' + ultimate) && !board.has('#' + penultimate)
@@ -1561,20 +1551,39 @@
 				return board;
 			};
 			
+			var capture = function (board) {
+				if (go.sgf.current.length > 1) {
+					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
+					if (go.sgf.current[ultimate_index]['C'] &&  go.sgf.current[ultimate_index]['C'].match(/^killed:/)) {
+						if (go.sgf.current[ultimate_index]['W']) {
+							alert('White wins');
+							go.sgf.game_info['RE'] = 'W+1';
+						}
+						else if (go.sgf.current[ultimate_index]['B']) {
+							alert('Black wins');
+							go.sgf.game_info['RE'] = 'B+1';
+						}
+						else console.error('confused about who actually won')
+					}
+				}
+				return board;
+			};
+			
 			return {
 				validations: {
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
 					extend_group_valid: extend_group_valid,
-					simple_ko_invalid: simple_ko_invalid,
-					game_over: game_over
+					simple_ko_invalid: simple_ko_invalid
 				},
 				endings: {
-					two_passes: two_passes
+					two_passes: two_passes,
+					capture: capture
 				},
 				games: {
-					"Classic Go": '{"GM": 1, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "game_over" ]}',
-					"One Eye Go": '{"GM": 2, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid", "game_over" ]}'
+					"Classic Go": '{"GM": 1, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Atari Go": '{"GM": 12, "endings": ["two_passes", "capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"One Eye Go": '{"GM": 11, "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
 				}
 			};
 		})();
@@ -1582,6 +1591,15 @@
 		var history_free_validate = function (board) {
 			console.error('should not run this default');
 			return board;
+		};
+			
+		var game_over = function(board) {
+			if (go.sgf.game_info['RE'] != undefined) {
+				board
+					.find('.intersection.valid')
+						.addClass('debug_game_over')
+						.removeClass('valid');
+			}
 		};
 		
 		
@@ -1592,15 +1610,16 @@
 				hash_of_strings.validations,
 				function (name, i) {
 					return rules.validations[name]
-				});
+			});
 			var endings = $.map(
 				hash_of_strings.endings,
 				function (name, i) {
 					return rules.endings[name]
-				});
+			});
+			var steps = $.merge(endings, validations);
+			steps.push(game_over);
 			history_free_validate = function (board) {
-				// console.log('history_free_validate: ' + rules.length + ' rules');
-				$.each($.merge(endings, validations), function (i, step) {
+				$.each(steps, function (i, step) {
 					board
 						.into(step);
 				});
