@@ -18,15 +18,24 @@
 				    }));
 	};
 	
-	var handicap_options = function	(event) {
+	var game_specific_options = function	(event) {
+		var rule_setup = $.parseJSON($('form.new_game #rules').val());
 		$('form.new_game #handicap')
 			.empty();
-		var rule_setup = $.parseJSON($('form.new_game #rules').val());
 		$.each(go.referee.rules.handicaps[rule_setup.handicaps], function (index, handicap) {
 			$('<option></option>')
 				.text(handicap.text)
 				.attr('value', handicap.text)
 				.appendTo($('form.new_game #handicap'));
+			}
+		);
+		$('form.new_game #dimension')
+			.empty();
+		$.each(rule_setup.sizes, function (index, size) {
+			$('<option></option>')
+				.text('' + size + 'x' + size)
+				.attr('value', size)
+				.appendTo($('form.new_game #dimension'));
 			}
 		);
 	};
@@ -36,8 +45,8 @@
 			.each(assign_gravatar)
 			.blur(assign_gravatar);
 		$('form.new_game .rules select')
-			.each(handicap_options)
-			.blur(handicap_options);
+			.each(game_specific_options)
+			.blur(game_specific_options);
     	$('form.new_game').submit(function (e) {
 			var form = $(e.currentTarget);
 		  	go.dimension = $('form.new_game #dimension').val();

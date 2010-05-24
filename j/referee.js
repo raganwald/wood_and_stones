@@ -1715,6 +1715,15 @@
 							free_plays: 0,
 							pie: false
 						}
+					],
+					none: [
+						{
+							text: "Black plays first",
+							to_play: "black",
+							setup: star_points(0),
+							free_plays: 0,
+							pie: false
+						}
 					]
 				},
 				validations: {
@@ -1729,10 +1738,10 @@
 					connect_sides: connect_sides
 				},
 				games: {
-					"Classic Go": '{"GM": 1, "handicaps": "classic", "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Atari Go": '{"GM": 12, "handicaps": "classic", "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Gonnect": '{"GM": 13, "handicaps": "classic", "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 11, "handicaps": "classic", "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
+					"Classic Go": '{"GM": 1, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Atari Go": '{"GM": 12, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Gonnect": '{"GM": 13, "handicaps": "none", "sizes": [13], "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"One Eye Go": '{"GM": 11, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
 				}
 			};
 		})();
