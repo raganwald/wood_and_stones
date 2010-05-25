@@ -1431,14 +1431,16 @@
 						var group_id = group.attr('id');
 						var members = board
 							.find('.group_' + group_id);
-						var liberties = group.data('liberties');
-						if (liberties.length == 0) {
-							members
-								.addClass('dead');
-						}
-						else if (liberties.length == 1) {
-							members
-								.addClass('atari last_liberty_is_' + liberties[0]);
+						if (!members.is('.safe')) {
+							var liberties = group.data('liberties');
+							if (liberties.length == 0) {
+								members
+									.addClass('dead');
+							}
+							else if (liberties.length == 1) {
+								members
+									.addClass('atari last_liberty_is_' + liberties[0]);
+							}
 						}
 					});
 			
@@ -1551,6 +1553,14 @@
 				return board;
 			};
 			
+			var no_whites = function (board) {
+				if (!board.has('.white')) {
+					go.sgf.game_info['RE'] = 'B+1';
+					alert('Black wins by eliminating all whites!');
+				}
+				return board;
+			}
+			
 			var any_capture = function (board) {
 				if (go.sgf.current.length > 1) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
@@ -1641,6 +1651,12 @@
 				
 			};
 			
+			var corner = function (board) {
+				board
+					.find('.row:first-child .intersection,.intersection:last-child')
+						.addClass('black safe');
+			};
+			
 			return {
 				handicaps: {
 					classic: [
@@ -1724,6 +1740,15 @@
 							free_plays: 0,
 							pie: false
 						}
+					],
+					corners: [
+						{
+							text: "White plays first",
+							to_play: "white",
+							setup: corner,
+							free_plays: 0,
+							pie: false
+						}
 					]
 				},
 				validations: {
@@ -1741,7 +1766,8 @@
 					"Classic Go": '{"GM": 1, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Atari Go": '{"GM": 12, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Gonnect": '{"GM": 13, "handicaps": "none", "sizes": [13], "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 11, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
+					"One Eye Go": '{"GM": 11, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}',
+					"Corner Go": '{"GM": 14, "handicaps": "corners", "sizes": [9,11,13], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}'
 				}
 			};
 		})();
