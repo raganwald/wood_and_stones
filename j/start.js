@@ -20,6 +20,7 @@
 	
 	var game_specific_options = function	(event) {
 		var rule_setup = $.parseJSON($('form.new_game #rules').val());
+		var setup_text = $('form.new_game #setup').val();
 		$('form.new_game #setup')
 			.empty();
 		$.each(go.referee.rules.setups[rule_setup.setups], function (index, setup) {
@@ -29,6 +30,13 @@
 				.appendTo($('form.new_game #setup'));
 			}
 		);
+		console.log(setup_text);
+		if ($('form.new_game #setup').has('option:text('+setup_text+')').size() > 0)
+			$('form.new_game #setup')
+				.val(setup_text);
+		else if (setup_text)
+			$('form.new_game #setup')
+				.val($('form.new_game #setup option:first').text());
 		$('form.new_game #dimension')
 			.empty();
 		$.each(rule_setup.sizes, function (index, size) {
@@ -46,7 +54,8 @@
 			.blur(assign_gravatar);
 		$('form.new_game .rules select')
 			.each(game_specific_options)
-			.blur(game_specific_options);
+			.blur(game_specific_options)
+			.change(game_specific_options);
     	$('form.new_game').submit(function (e) {
 			var form = $(e.currentTarget);
 		  	go.dimension = $('form.new_game #dimension').val();
