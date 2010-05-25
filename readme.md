@@ -35,11 +35,16 @@ If you would like to see a history of the game, you move backwards in time by sw
 
 **world of go**
 
-The application is specifically written to support other games, including:
+The application is specifically written to support other games, most of which are documented on [Sensei's Go Varient Page][sgv], including:
 
-* [One Eyed Go][oneeye]
-* [Atari Go][atari]
-* [Gonnect][gonnect]
+* [One Eyed Go][oneeye]: In this game, suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
+* [Atari Go][atari]: This game uses normal rules, however the winner is the first to capture an opponent's stone. Obviously, there are no Kos or snapbacks. There are other positional implications.
+* [Gonnect][gonnect]: In this game, the winner is the first to connect either pair of opposite sides of the board with a single group.
+* [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns.
+* **White to Live**: Several variations on a theme of giving black an overwhelming advantage and white playing to make a safe group. Black wins by eliminating all of white's stones. [Corner Go][corner] gives black the first row and column. To forestall futile thought experiments, these stones are unkillable. This is corner invasion exercise. Larger boards give white a larger advantage, the reverse of the usual handicap style. The [Shape Game][shape] gives Black unkillable stones on the first row and column all the way around the board. Probably best on larger boards.
+* **Unusual Setups**: A few other ways to set up the initial board, including [Influence Go][influence], where each player gets two opposing edges of the board, and [Dots Go][dots], where the initial position consists of stones on alternate intersections of the board. In all unusual setup games, the normal rules of Go apply and any stone can be captured.
+
+Note: The application does not attempt to score games that are won on the basis of territory, nor does it adjudicate games that end with two passes. It's up to you to decide who won and by how much.
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
@@ -59,3 +64,9 @@ Exemptions include iGesture and Dragscrollable.
 [oneeye]: http://senseis.xmp.net/?OneEyedGo
 [atari]: http://senseis.xmp.net/?AtariGo
 [gonnect]: http://senseis.xmp.net/?Gonnect
+[sgv]: http://senseis.xmp.net/?GoVariant
+[wild]: http://senseis.xmp.net/?WildFuseki
+[corner]: http://senseis.xmp.net/?BiggestCorner
+[shape]: http://senseis.xmp.net/?ShapeGameSolid
+[influence]: http://senseis.xmp.net/?InfluenceGo
+[dots]: http://senseis.xmp.net/?DotsGo
