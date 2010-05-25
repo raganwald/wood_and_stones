@@ -1651,10 +1651,77 @@
 				
 			};
 			
+			var random_points = function (black_stones, white_stones) {
+				
+				if (black_stones > 0 && white_stones > 0)
+				
+					return function (board) {
+					
+				        do {
+							while (board.find('.intersection.black').size() < black_stones) {
+								board
+									.find('#' +
+										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
+										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
+										'.intersection:not(.black):not(.white)'
+									)
+										.addClass('black');		
+							}
+							while (board.find('.intersection.white').size() < white_stones) {
+								board
+									.find('#' +
+										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
+										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
+										'.intersection:not(.black):not(.white)'
+									)
+										.addClass('white');
+							}
+						} while (
+							board
+								.into(analyze)
+								.has('.intersection.atari,.intersection.dead')
+									.size() > 0
+						)
+				
+						return board;
+					};
+					
+				else return function (board) { return board; };
+				
+			};
+			
 			var corner = function (board) {
-				board
+				return board
 					.find('.row:first-child .intersection,.intersection:last-child')
-						.addClass('black safe');
+						.addClass('black safe')
+						.end();
+			};
+			
+			var box = function (board) {
+				return board
+					.find('.row:first-child .intersection,.intersection:last-child,.row:last-child .intersection,.intersection:first-child')
+						.addClass('black safe')
+						.end();
+			};
+			
+			var influences = function (board) {
+				return board
+					.find('.row:first-child .intersection:not(:last-child),.row:last-child .intersection:not(:first-child)')
+						.addClass('white')
+						.end()
+					.find('.row:not(:first-child) .intersection:first-child,.row:not(:last-child) .intersection:last-child')
+						.addClass('black')
+						.end();
+			};
+			
+			var dots = function (board) {
+				return board
+					.find('.row:odd .intersection:nth-child(2n+1)')
+						.addClass('black')
+						.end()
+					.find('.row:even .intersection:nth-child(2n)')
+						.addClass('white')
+						.end();
 			};
 			
 			return {
@@ -1732,6 +1799,73 @@
 							pie: false
 						}
 					],
+					challenges: [
+						{
+							text: "Dots Game",
+							to_play: "black",
+							setup: dots,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Influence Go",
+							to_play: "black",
+							setup: influences,
+							free_plays: 0,
+							pie: false
+						}
+					],
+					wild_fuseki: [
+						{
+							text: "Black plays first",
+							to_play: "black",
+							setup: random_points(3,3),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Two Stones",
+							to_play: "white",
+							setup: random_points(5,3),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Three Stones",
+							to_play: "white",
+							setup: random_points(6,3),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Four Stones",
+							to_play: "white",
+							setup: random_points(7,3),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Five Stones",
+							to_play: "white",
+							setup: random_points(8,3),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Six Stones",
+							to_play: "white",
+							setup: random_points(5,3),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Really Wild",
+							to_play: "black",
+							setup: random_points(12,12),
+							free_plays: 0,
+							pie: false
+						}
+					],
 					none: [
 						{
 							text: "Black plays first",
@@ -1741,14 +1875,21 @@
 							pie: false
 						}
 					],
-					corners: [
+					to_live: [
 						{
-							text: "White plays first",
+							text: "Corner Go",
 							to_play: "white",
 							setup: corner,
 							free_plays: 0,
 							pie: false
-						}
+						},
+						{
+							text: "Shape Game",
+							to_play: "box",
+							setup: corner,
+							free_plays: 0,
+							pie: false
+						},
 					]
 				},
 				validations: {
@@ -1763,11 +1904,13 @@
 					connect_sides: connect_sides
 				},
 				games: {
-					"Classic Go": '{"GM": 1, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Classic": '{"GM": 1, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Wild Fuseki": '{"GM": 1, "handicaps": "wild_fuseki", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Unusual": '{"GM": 1, "handicaps": "challenges", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Atari Go": '{"GM": 12, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"White to Live": '{"GM": 14, "handicaps": "to_live", "sizes": [9,11,13], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Gonnect": '{"GM": 13, "handicaps": "none", "sizes": [13], "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 11, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}',
-					"Corner Go": '{"GM": 14, "handicaps": "corners", "sizes": [9,11,13], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}'
+					"One Eye Go": '{"GM": 11, "handicaps": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
 				}
 			};
 		})();
