@@ -29,13 +29,21 @@ To pass, draw an "X" using three continuous strokes of your finger:
 
 ![Pass Gesture][pass]
 
-If it is the second pass, you will be asked to confirm that you wish to end the game. Yes, you can scrub to undo a pass. Once a game of classic go ends, it's up to you to figure out who won.
+If it is the second pass, you will be asked to confirm that you wish to end the game. Yes, you can scrub to undo a pass. If a game ends with two passes, it's up to you and your opponent to figure out who won.
+
+**history**
 
 If you would like to see a history of the game, you move backwards in time by swiping from left to right. This is like moving the film so that the past becomes visible. Each swipe from left to right moves back one move. You can move forward in the history by swiping from right to left. Once you have returned to the current move, swiping right to left does nothing further.
 
+**zooming and dragging**
+
+With larger boards, it can be a challenge to tap the correct stone location on an iPhone or iPod Touch. To zoom in, hold your finger or mouse down on the board. After a moment, the board will zoom. While zoomed in, you can tap to place a stone or drag the board to pan it around. When zoomed in, you cannot go back or forward in the history as the swipe becomes a pan. To zoom back out, hold your finger or mouse down again.
+
+On multi-touch devices, you can also use the pinch gesture to zoom in or out.
+
 **world of go**
 
-The application is specifically written to support other games, most of which are documented on [Sensei's Go Varient Page][sgv], including:
+The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv], including:
 
 * [One Eyed Go][oneeye]: In this game, suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
 * [Atari Go][atari]: This game uses normal rules, however the winner is the first to capture an opponent's stone. Obviously, there are no Kos or snapbacks. There are other positional implications.
