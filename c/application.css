@@ -41,8 +41,8 @@
     float: right; }
     .new_game .you_play .toggle input[type="checkbox"] {
       background: white url(../i/black_white.png) 0 0 no-repeat !important; }
-.new_game .handicap {
-  padding-left: 110px !important; }
+.new_game .setup {
+  padding-left: 80px !important; }
 .new_game .rules {
   padding-left: 80px !important; }
 

@@ -20,13 +20,13 @@
 	
 	var game_specific_options = function	(event) {
 		var rule_setup = $.parseJSON($('form.new_game #rules').val());
-		$('form.new_game #handicap')
+		$('form.new_game #setup')
 			.empty();
-		$.each(go.referee.rules.handicaps[rule_setup.handicaps], function (index, handicap) {
+		$.each(go.referee.rules.setups[rule_setup.setups], function (index, setup) {
 			$('<option></option>')
-				.text(handicap.text)
-				.attr('value', handicap.text)
-				.appendTo($('form.new_game #handicap'));
+				.text(setup.text)
+				.attr('value', setup.text)
+				.appendTo($('form.new_game #setup'));
 			}
 		);
 		$('form.new_game #dimension')
@@ -78,11 +78,11 @@
 			});
 			var rule_setup = $.parseJSON($('form.new_game #rules').val());
 			go.referee.set_rules(rule_setup);
-			var setup_text = $('form.new_game #handicap').val();
+			var setup_text = $('form.new_game #setup').val();
 			var setup;
-			$.each(go.referee.rules.handicaps[rule_setup.handicaps], function (i, handicap) {
-				if (handicap.text == setup_text)
-					setup = handicap;
+			$.each(go.referee.rules.setups[rule_setup.setups], function (i, each_setup) {
+				if (each_setup.text == setup_text)
+					setup = each_setup;
 			});
 			go.sgf.game_info = {
 				FF: 4,

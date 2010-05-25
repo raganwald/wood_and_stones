@@ -88,18 +88,9 @@
           %li.size
             .label Size: 
             %select#dimension{:name=>'dimension'}
-          %li.handicap
-            .label Handicap:
-            %select#handicap{:name=>'handicap'}
-              %option{:value=>'{ "to_play": "black", "handicap": 0 }'} Black plays first
-              %option{:value=>'{ "to_play": "white", "handicap": 2 }'} Two stones
-              %option{:value=>'{ "to_play": "white", "handicap": 3 }'} Three stones
-              %option{:value=>'{ "to_play": "white", "handicap": 4 }'} Four stones
-              %option{:value=>'{ "to_play": "white", "handicap": 5 }'} Five stones
-              %option{:value=>'{ "to_play": "white", "handicap": 6 }'} Six stones
-              %option{:value=>'{ "to_play": "white", "handicap": 7 }'} Seven stones
-              %option{:value=>'{ "to_play": "white", "handicap": 8 }'} Eight stones
-              %option{:value=>'{ "to_play": "white", "handicap": 9 }'} Nine stones
+          %li.setup
+            .label Setup:
+            %select#setup{:name=>'setup'}
         %a.submit.whiteButton{:style=>"margin:0 10px;color:rgba(0,0,0,.9)", :href=>"#"} Play
         
     #info
