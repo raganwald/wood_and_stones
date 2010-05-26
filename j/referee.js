@@ -1653,40 +1653,43 @@
 			
 			var random_points = function (black_stones, white_stones) {
 				
-				if (black_stones > 0 && white_stones > 0)
-				
-					return function (board) {
+				return function (board) {
 					
-				        do {
-							while (board.find('.intersection.black').size() < black_stones) {
-								board
-									.find('#' +
-										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
-										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
-										'.intersection:not(.black):not(.white)'
-									)
-										.addClass('black');		
-							}
-							while (board.find('.intersection.white').size() < white_stones) {
-								board
-									.find('#' +
-										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
-										go.letters[2 + Math.floor(Math.random() * (go.dimension - 5))] +
-										'.intersection:not(.black):not(.white)'
-									)
-										.addClass('white');
-							}
-						} while (
+					if ($.isFunction(black_stones))
+						black_stones = black_stones();
+						
+					if ($.isFunction(white_stones))
+						white_stones = white_stones();
+					
+					var eligible_letters = go.letters.slice(2, go.dimension - 2);
+					var deck = [];
+					$.each(eligible_letters, function (i, across) {
+						$.each(eligible_letters, function (j, down) {
+							deck.push(across + down);
+						});
+					});
+				
+			        do {
+						deck.sort('Math.random() - 0.5'.lambda());
+						for (i = 0; i < black_stones; ++i) {
 							board
-								.into(analyze)
-								.has('.intersection.atari,.intersection.dead')
-									.size() > 0
-						)
-				
-						return board;
-					};
-					
-				else return function (board) { return board; };
+								.find('#' + deck[i] + '.intersection')
+									.addClass('black');
+						}
+						for (j = black_stones; j < (white_stones+black_stones); ++j) {
+							board
+								.find('#' + deck[j] + '.intersection')
+									.addClass('white');
+						}
+					} while (
+						board
+							.into(analyze)
+							.has('.intersection.atari,.intersection.dead')
+								.size() > 0
+					)
+			
+					return board;
+				};
 				
 			};
 			
@@ -1861,7 +1864,10 @@
 						{
 							text: "Really Wild",
 							to_play: "black",
-							setup: random_points(12,12),
+							setup: random_points(
+								function () { return go.dimension - 3; },
+								function () { return go.dimension - 3; }
+							),
 							free_plays: 0,
 							pie: false
 						}

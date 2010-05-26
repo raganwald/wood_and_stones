@@ -19,18 +19,17 @@
 	};
 	
 	var game_specific_options = function	(event) {
-		var rule_setup = $.parseJSON($('form.new_game #rules').val());
+		var game_setup = $.parseJSON($('form.new_game #rules').val());
 		var setup_text = $('form.new_game #setup').val();
 		$('form.new_game #setup')
 			.empty();
-		$.each(go.referee.rules.setups[rule_setup.setups], function (index, setup) {
+		$.each(go.referee.rules.setups[game_setup.setups], function (index, setup) {
 			$('<option></option>')
 				.text(setup.text)
 				.attr('value', setup.text)
 				.appendTo($('form.new_game #setup'));
 			}
 		);
-		console.log(setup_text);
 		if ($('form.new_game #setup').has('option:text('+setup_text+')').size() > 0)
 			$('form.new_game #setup')
 				.val(setup_text);
@@ -39,7 +38,7 @@
 				.val($('form.new_game #setup option:first').text());
 		$('form.new_game #dimension')
 			.empty();
-		$.each(rule_setup.sizes, function (index, size) {
+		$.each(game_setup.sizes, function (index, size) {
 			$('<option></option>')
 				.text('' + size + 'x' + size)
 				.attr('value', size)
@@ -85,17 +84,17 @@
 					})
 					.appendTo($('.move .board .dragger'));
 			});
-			var rule_setup = $.parseJSON($('form.new_game #rules').val());
-			go.referee.set_rules(rule_setup);
+			var game_setup = $.parseJSON($('form.new_game #rules').val());
+			go.referee.set_rules(game_setup);
 			var setup_text = $('form.new_game #setup').val();
 			var setup;
-			$.each(go.referee.rules.setups[rule_setup.setups], function (i, each_setup) {
+			$.each(go.referee.rules.setups[game_setup.setups], function (i, each_setup) {
 				if (each_setup.text == setup_text)
 					setup = each_setup;
 			});
 			go.sgf.game_info = {
 				FF: 4,
-				GM: rule_setup.GM,
+				GM: game_setup.GM,
 				SZ: go.dimension,
 				AP: "World of Go Alpha 2",
 				// TODO: DT and TM?
@@ -108,7 +107,20 @@
 			$('style:last')
 				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
-			setup.setup($('.move.play .board'));
+			$('.move.play .board')
+				.into(setup.setup)
+				.find('.intersection.black')
+					.into(function (blacks) {
+						if (blacks.length > 0)
+							go.sgf.game_info.AB = $.map(blacks,'_.id'.lambda()).join(',');
+					})
+					.end()
+				.find('.intersection.white')
+					.into(function (whites) {
+						if (whites.length > 0)
+							go.sgf.game_info.AW = $.map(whites,'_.id'.lambda()).join(',');
+					})
+					.end()
 			if (setup.HA)
 				go.sgf.game_info.HA = setup.HA;
 			$('.move')
