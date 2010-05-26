@@ -1738,7 +1738,7 @@
 							pie: false
 						},
 						{
-							text: "Two Stones",
+							text: "Two stone handicap",
 							to_play: "white",
 							setup: star_points(2),
 							free_plays: 0,
@@ -1746,7 +1746,7 @@
 							pie: false
 						},
 						{
-							text: "Three Stones",
+							text: "Three stone handicap",
 							to_play: "white",
 							setup: star_points(3),
 							HA: 3,
@@ -1754,7 +1754,7 @@
 							pie: false
 						},
 						{
-							text: "Four Stones",
+							text: "Four stone handicap",
 							to_play: "white",
 							setup: star_points(4),
 							HA: 4,
@@ -1762,7 +1762,7 @@
 							pie: false
 						},
 						{
-							text: "Five Stones",
+							text: "Five stone handicap",
 							to_play: "white",
 							setup: star_points(5),
 							HA: 5,
@@ -1770,7 +1770,7 @@
 							pie: false
 						},
 						{
-							text: "Six Stones",
+							text: "Six stone handicap",
 							to_play: "white",
 							setup: star_points(6),
 							HA: 6,
@@ -1778,7 +1778,7 @@
 							pie: false
 						},
 						{
-							text: "Seven Stones",
+							text: "Seven stone handicap",
 							to_play: "black",
 							setup: star_points(7),
 							HA: 7,
@@ -1786,7 +1786,7 @@
 							pie: false
 						},
 						{
-							text: "Eight Stones",
+							text: "Eight stone handicap",
 							to_play: "white",
 							setup: star_points(8),
 							HA: 8,
@@ -1794,7 +1794,7 @@
 							pie: false
 						},
 						{
-							text: "Nine Stones",
+							text: "Nine stone handicap",
 							to_play: "white",
 							setup: star_points(9),
 							HA: 9,
@@ -1827,35 +1827,35 @@
 							pie: false
 						},
 						{
-							text: "Two Stones",
+							text: "Two stone handicap",
 							to_play: "white",
 							setup: random_points(5,3),
 							free_plays: 0,
 							pie: false
 						},
 						{
-							text: "Three Stones",
+							text: "Three stone handicap",
 							to_play: "white",
 							setup: random_points(6,3),
 							free_plays: 0,
 							pie: false
 						},
 						{
-							text: "Four Stones",
+							text: "Four stone handicap",
 							to_play: "white",
 							setup: random_points(7,3),
 							free_plays: 0,
 							pie: false
 						},
 						{
-							text: "Five Stones",
+							text: "Five stone handicap",
 							to_play: "white",
 							setup: random_points(8,3),
 							free_plays: 0,
 							pie: false
 						},
 						{
-							text: "Six Stones",
+							text: "Six stone handicap",
 							to_play: "white",
 							setup: random_points(5,3),
 							free_plays: 0,
@@ -1891,8 +1891,8 @@
 						},
 						{
 							text: "Shape Game",
-							to_play: "box",
-							setup: corner,
+							to_play: "white",
+							setup: box,
 							free_plays: 0,
 							pie: false
 						},

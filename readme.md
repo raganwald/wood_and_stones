@@ -48,9 +48,28 @@ The application is specifically written to support other games, most of which ar
 * [One Eyed Go][oneeye]: In this game, suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
 * [Atari Go][atari]: This game uses normal rules, however the winner is the first to capture an opponent's stone. Obviously, there are no Kos or snapbacks. There are other positional implications.
 * [Gonnect][gonnect]: In this game, the winner is the first to connect either pair of opposite sides of the board with a single group.
-* [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns.
-* **White to Live**: Several variations on a theme of giving black an overwhelming advantage and white playing to make a safe group. Black wins by eliminating all of white's stones. [Corner Go][corner] gives black the first row and column. To forestall futile thought experiments, these stones are unkillable. This is corner invasion exercise. Larger boards give white a larger advantage, the reverse of the usual handicap style. The [Shape Game][shape] gives Black unkillable stones on the first row and column all the way around the board. Probably best on larger boards.
-* **Unusual Setups**: A few other ways to set up the initial board, including [Influence Go][influence], where each player gets two opposing edges of the board, and [Dots Go][dots], where the initial position consists of stones on alternate intersections of the board. In all unusual setup games, the normal rules of Go apply and any stone can be captured.
+
+Some of the games feature unique starting positions:
+
+[Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns.
+
+![Wild Fuseki][iwild]
+
+**White to Live**: Several variations on a theme of giving black an overwhelming advantage and white playing to make a safe group. Black wins by eliminating all of white's stones. [Corner Go][corner] is a corner invasion exercise: Only one corner is available to White.
+
+![Corner Go][icorner]
+
+[Shape Go][shape] gives Black unkillable stones on the first row and column all the way around the board, and white has to try to make life with no corners or edges. Probably best on larger boards.
+
+![Shape Go][ibox]
+
+**Unusual Setups**: A few other variations have standard rules and scoring, but different ways to set up the initial board. [Influence Go][influence]gives each player gets two opposing edges of the board.
+
+![Influence Go][iinfluence]
+
+[Dots Go][dots] consists of stones on alternate intersections of the board.
+
+![Dots Go][idots]
 
 Note: The application does not attempt to score games that are won on the basis of territory, nor does it adjudicate games that end with two passes. It's up to you to decide who won and by how much.
 
@@ -78,3 +97,8 @@ Exemptions include iGesture and Dragscrollable.
 [shape]: http://senseis.xmp.net/?ShapeGameSolid
 [influence]: http://senseis.xmp.net/?InfluenceGo
 [dots]: http://senseis.xmp.net/?DotsGo
+[ibox]: http://raganwald.github.com/go/i/about/box.png
+[idots]: http://raganwald.github.com/go/i/about/dots.png
+[iinfluence]: http://raganwald.github.com/go/i/about/influence.png
+[icorner]: http://raganwald.github.com/go/i/about/corner.png
+[iwild]: http://raganwald.github.com/go/i/about/wild.png
