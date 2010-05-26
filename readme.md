@@ -15,7 +15,7 @@ To start a new game, open [index.html][index]:
 
 ![Start][start]
 
-If you want, you can give nicknames or email addresses for each player. If you don't, you will be "Black" and "white" respectively. Email addresses are used to fetch gravatar images only, there is no email notification at this time.
+If you want, you can give nicknames or email addresses for each player. If you don't, you will be "Black" and "White" respectively. Email addresses are used to fetch gravatar images only, there is no email notification at this time.
 
 Choose a board size, handicap, and game to play. "Classic Go" is exactly what you think it is. The other options are why I had the stones to call this "World of Go." Click "play" and you can start your game.
 
@@ -63,7 +63,7 @@ Some of the games feature unique starting positions:
 
 ![Shape Go][ibox]
 
-**Unusual Setups**: A few other variations have standard rules and scoring, but different ways to set up the initial board. [Influence Go][influence]gives each player gets two opposing edges of the board.
+**Unusual Setups**: A few other variations have standard rules and scoring, but different ways to set up the initial board. [Influence Go][influence] gives each player opposing edges of the board.
 
 ![Influence Go][iinfluence]
 
