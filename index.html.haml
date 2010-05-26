@@ -97,31 +97,22 @@
         
     #info
       .toolbar 
-        %h1
-          %span.gravatar
-          %span.playing
+        %h1 Game Info
       %h2 Players
-      %ul.rounded
-        %li
-          %img{ }
-          Black
-        %li
-          %img{ }
-          White
-      %h2 Game State
-      %ul.rounded
-        %li
-          Fixme
-      %h2 Captured Stones
+      %ul.rounded.players
+        %li.black
+        %li.white
+      %h2 Setup
+      %ul.rounded.game
+        %li.setup
+      %h2 Captures
       %ul.rounded
         %li
           Black has captured
           %span.captured_whites
-          stones
         %li
           White has captured
           %span.captured_blacks
-          stones
           
     .move.history.this
       .toolbar 

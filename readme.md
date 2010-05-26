@@ -31,9 +31,21 @@ To pass, draw an "X" using three continuous strokes of your finger:
 
 If it is the second pass, you will be asked to confirm that you wish to end the game. Yes, you can scrub to undo a pass. If a game ends with two passes, it's up to you and your opponent to figure out who won.
 
-**history**
+**history and info**
 
 If you would like to see a history of the game, you move backwards in time by swiping from left to right. This is like moving the film so that the past becomes visible. Each swipe from left to right moves back one move. You can move forward in the history by swiping from right to left. Once you have returned to the current move, swiping right to left does nothing further.
+
+You can see the game's current status by swiping towards the bottom of the screen:
+
+![Show Info][bottom]
+
+The game info will slide down from the top of the screen:
+
+![Game Info][info]
+
+To go back to the play of the game, swipe towards the top of the screen:
+
+![Return to Play][top]
 
 **zooming and dragging**
 
@@ -102,3 +114,6 @@ Exemptions include iGesture and Dragscrollable.
 [iinfluence]: http://raganwald.github.com/go/i/about/influence.png
 [icorner]: http://raganwald.github.com/go/i/about/corner.png
 [iwild]: http://raganwald.github.com/go/i/about/wild.png
+[info]: http://raganwald.github.com/go/i/about/info.png
+[bottom]: http://raganwald.github.com/go/i/about/bottom.png
+[top]: http://raganwald.github.com/go/i/about/top.png

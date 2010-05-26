@@ -115,10 +115,9 @@
 				}
 				else return; // looks like a pass
 			}
-			var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
-			if (m != undefined) {
+			if (this_move['K']) {
 				board
-					.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
+					.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
 						.removeClass('white black');
 			}
 			

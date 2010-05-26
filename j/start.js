@@ -100,10 +100,25 @@
 				// TODO: DT and TM?
 				PB: $('form.new_game #black').val(),
 				PW: $('form.new_game #white').val(),
-				PL: setup.to_play
+				PL: setup.to_play,
+				GR: $('form.new_game #rules option:selected').text(),
+				GS: $('form.new_game #setup option:selected').text()
 			};
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;
+			$('#info')
+				.find('.players .black')
+					.text(go.sgf.game_info.PB)
+					.end()
+				.find('.players .white')
+					.text(go.sgf.game_info.PW)
+					.end()
+				.find('h1')
+					.text(go.sgf.game_info.GR)
+					.end()
+				.find('.game .setup')
+					.text(go.sgf.game_info.GS)
+					.end();
 			$('style:last')
 				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );

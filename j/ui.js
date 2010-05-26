@@ -89,7 +89,7 @@
 			var annotation = {};
 			annotation[now_playing[0].toUpperCase()] = target.attr('id');
 			if (killed_stones.size() > 0) {
-				annotation['C'] = 'killed: ' + $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
+				annotation['K'] = $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
 				killed_stones.removeClass(opponent());
 			}
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
@@ -178,6 +178,26 @@
 			return false;
 		};
 		
+		var show_play_info = function (event) {
+			var whites = 0;
+			var blacks = 0;
+			$.each(go.sgf.current, function (index, properties) {
+				if (properties.W && properties.K)
+					blacks = blacks + 1 + ((properties.K.length - 2) / 3);
+				else if (properties.W && properties.K)
+					whites = whites + 1 + ((properties.K.length - 2) / 3);
+			});
+			$('#info')
+				.find('.captured_blacks')
+					.text(blacks == 0 ? 'no stones' : (blacks == 1 ? 'one stone' : '' + blacks + ' stones'))
+					.end()
+				.find('.captured_whites')
+					.text(whites == 0 ? 'no stones' : (whites == 1 ? 'one stone' : '' + whites + ' stones'))
+					.end();
+			jQT.goTo($('#info'), 'slideup.reverse');
+			return false;
+		};
+		
 		return function() {
 			$('.move')
 				.gesture([
@@ -207,8 +227,10 @@
 			$('.move.play .board:not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', do_pass);
 			$('.move.play .board')
-				.live('gesture_scrub', do_undo);
+				.live('gesture_scrub', do_undo)
+				.live('gesture_bottom', show_play_info);
 			$('#info')
+				.gesture(['top'])
 				.bind('gesture_top', function(event) { jQT.goBack(); });
 			$('.move.play .board .valid')
 				.live('gesture_click', do_play);

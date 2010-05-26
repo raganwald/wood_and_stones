@@ -1514,11 +1514,11 @@
 				var last_id = last_sgf_node[opponent[0].toUpperCase()];
 				
 				if (last_id && last_id.length == 2 && board.has('#' + last_id)) {
-					var comment = last_sgf_node['C'];
-					 if (comment) {
-						var m = comment.match(/^killed: ([^,]*)$/);
-						if (m) {
-							var captured_id = m[1];
+					var killed = last_sgf_node['K'];
+					 if (killed) {
+						var a = killed.split(',');
+						if (a.length == 1) {
+							var captured_id = a[0];
 							var captured = $('#' + captured_id);
 							if (captured.size() == 1 && captured.is('valid')) {
 								var recaptured = board
@@ -1564,7 +1564,7 @@
 			var any_capture = function (board) {
 				if (go.sgf.current.length > 1) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
-					if (go.sgf.current[ultimate_index]['C'] &&  go.sgf.current[ultimate_index]['C'].match(/^killed:/)) {
+					if (go.sgf.current[ultimate_index]['K']) {
 						if (go.sgf.current[ultimate_index]['W']) {
 							alert('White wins');
 							go.sgf.game_info['RE'] = 'W+1';
