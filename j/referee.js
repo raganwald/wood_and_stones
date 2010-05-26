@@ -1765,6 +1765,46 @@
 				go.sgf.game_info.AW = whites.join(',');
 			};
 			
+			var korean_baduk = function () {
+					
+		        var corner = go.sgf.game_info.SZ <= 11 ? 3 : 4;
+		        var half = Math.floor(go.sgf.game_info.SZ / 2);
+		        var left = go.letters[ corner - 1 ];
+		        var center = go.letters[ half ];
+		        var right = go.letters[ go.sgf.game_info.SZ - corner ];
+		        var top = left;
+		        var middle = center;
+		        var bottom = right;
+		
+				var leftish = go.letters[ corner - 1 + (half - (corner - 1))  / 2 ];
+				var rightish = go.letters[ half +  (half - (corner - 1))  / 2 ];
+				var topish = leftish
+				var bottomish = rightish;
+		
+				var blacks = [left + top, left + middle, center + middle, right + middle, right + bottom];
+				var whites = [left + bottom, center + top, center + bottom, right + top];
+		
+				if (go.sgf.game_info.SZ >= 17) {
+					blacks = blacks.concat([leftish + top, rightish + top, leftish + bottom, rightish + bottom])
+					whites = whites.concat([left + topish, left + bottomish, right + topish, right + bottomish])
+				}
+				
+				go.sgf.game_info.AB = blacks.join(',');
+				go.sgf.game_info.AW = whites.join(',');
+			}
+			
+			var ancient_chinese = function () {
+					
+		        var corner = go.sgf.game_info.SZ <= 11 ? 3 : 4;
+		        var left = go.letters[ corner - 1 ];
+		        var right = go.letters[ go.sgf.game_info.SZ - corner ];
+		        var top = left;
+		        var bottom = right;
+				
+				go.sgf.game_info.AB = [left + top, right + bottom].join(',');
+				go.sgf.game_info.AW = [left + bottom, right + top].join(',');
+			}
+			
 			return {
 				setups: {
 					classic: [
@@ -1840,72 +1880,49 @@
 							pie: false
 						}
 					],
-					challenges: [
+					other: [
 						{
-							text: "Dots Game",
+							text: "Dots",
 							to_play: "black",
 							setup: dots,
 							free_plays: 0,
 							pie: false
 						},
 						{
-							text: "Influence Go",
+							text: "Influence",
 							to_play: "black",
 							setup: influences,
 							free_plays: 0,
 							pie: false
-						}
-					],
-					wild_fuseki: [
+						},
 						{
-							text: "Black plays first",
+							text: "Wild Fuseki",
 							to_play: "black",
 							setup: random_points(3,3),
 							free_plays: 0,
 							pie: false
 						},
 						{
-							text: "Two stone handicap",
-							to_play: "white",
-							setup: random_points(5,3),
-							free_plays: 0,
-							pie: false
-						},
-						{
-							text: "Three stone handicap",
-							to_play: "white",
-							setup: random_points(6,3),
-							free_plays: 0,
-							pie: false
-						},
-						{
-							text: "Four stone handicap",
-							to_play: "white",
-							setup: random_points(7,3),
-							free_plays: 0,
-							pie: false
-						},
-						{
-							text: "Five stone handicap",
-							to_play: "white",
-							setup: random_points(8,3),
-							free_plays: 0,
-							pie: false
-						},
-						{
-							text: "Six stone handicap",
-							to_play: "white",
-							setup: random_points(5,3),
-							free_plays: 0,
-							pie: false
-						},
-						{
-							text: "Really Wild",
+							text: "Really Wild Fuseki",
 							to_play: "black",
 							setup: random_points(
 								function () { return go.sgf.game_info.SZ - 3; },
 								function () { return go.sgf.game_info.SZ - 3; }
 							),
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Korean Baduk",
+							to_play: "white",
+							setup: korean_baduk,
+							free_plays: 0,
+							pie: false
+						},
+						{
+							text: "Ancient Chinese",
+							to_play: "black",
+							setup: ancient_chinese,
 							free_plays: 0,
 							pie: false
 						}
@@ -1949,8 +1966,7 @@
 				},
 				games: {
 					"Classic": '{"GM": 1, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Wild Fuseki": '{"GM": 1, "setups": "wild_fuseki", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Unusual": '{"GM": 1, "setups": "challenges", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Other Go Setups": '{"GM": 1, "setups": "other", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Gonnect": '{"GM": 13, "setups": "none", "sizes": [13], "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
