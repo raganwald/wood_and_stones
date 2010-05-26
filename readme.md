@@ -91,9 +91,12 @@ This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, J
 
 **license terms**
 
-(c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with the exception of specific files otherwise licensed. Other licenses apply only to the files where they appear. This may change in time, check back.
+(c) 2010 Reg Braithwaite. All rights to the entirety of the program and the parts I have written are reserved with the exception of specific files otherwise licensed. Other licenses apply only to the files where they appear. This may change in time, check back.
 
-Exemptions include iGesture and Dragscrollable.
+Exemptions include iGesture and Dragscrollable, which I have licensed under the MIT license, plus various jquery plugins written by others.
+
+All of the images used in the main game board are modified versions of files Dave Peck found on the Wikimedia Commons. These 
+are distributed with the Creative Commons Attribution 2.0 ShareAlike license. Some other images were hand-drawn by Dave Peck, who put them under the Creative Commons Attribution ShareAlike 2.0 license: http://creativecommons.org/licenses/by-sa/2.0/
 
 [igesture]: http://github.com/raganwald/iGesture
 [index]: http://raganwald.github.com/go/index.html

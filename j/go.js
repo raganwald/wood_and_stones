@@ -100,27 +100,36 @@
 				.find('.latest')
 					.removeClass('latest');
 					
-			var placement = this_move['B'];
-			if (placement) {
+			var placement = this_move.B;
+			if (placement)
 				board
 					.find('#' + placement)
 						.addClass('black latest');
-			}
-			else {
-				placement = this_move['W'];
-				if (placement) {
-					board
-						.find('#' + placement)
-							.addClass('white latest');
-				}
-				else return; // looks like a pass
-			}
-			if (this_move['K']) {
+			placement = this_move.W;
+			if (placement)
+				board
+					.find('#' + placement)
+						.addClass('white latest');
+			var placements = this_move.AB
+			if (placements)
+				board
+					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
+						.addClass('black');
+			placements = this_move.AW
+			if (placements)
+				board
+					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
+						.addClass('white');
+			if (this_move.K) 
 				board
 					.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
 						.removeClass('white black');
-			}
-			
+			var to_play = this_move.PL
+			if (to_play)
+				board
+					.closest('.move')
+						.addClass(to_play);
+			return board;
 		},
 		
 		undoit: function (board, this_move, optional_previous_move) {

@@ -1620,17 +1620,19 @@
 				}
 			};
 			
+			// SETUPS
+			
 			var star_points = function (handicap) {
 				
 				if (handicap > 0)
 				
-					return function (board) {
+					return function () {
 					
-				        var corner = go.dimension <= 11 ? 3 : 4;
-				        var half = Math.floor(go.dimension / 2);
+				        var corner = go.sgf.game_info.SZ <= 11 ? 3 : 4;
+				        var half = Math.floor(go.sgf.game_info.SZ / 2);
 				        var left = go.letters[ corner - 1 ];
 				        var center = go.letters[ half ];
-				        var right = go.letters[ go.dimension - corner ];
+				        var right = go.letters[ go.sgf.game_info.SZ - corner ];
 				        var top = left;
 				        var middle = center;
 				        var bottom = right;
@@ -1640,20 +1642,15 @@
 		 					(middle + center)
 						].slice(0, handicap).join(',');
 						go.sgf.game_info['HA'] = handicap;
-				
-						return board
-							.find($.map(go.sgf.game_info['AB'].split(','), "'#' + _".lambda()).join(','))
-								.addClass('black')
-								.end();
 					};
 					
-				else return function (board) { return board; };
+				else return function () { };
 				
 			};
 			
 			var random_points = function (black_stones, white_stones) {
 				
-				return function (board) {
+				return function () {
 					
 					if ($.isFunction(black_stones))
 						black_stones = black_stones();
@@ -1661,7 +1658,7 @@
 					if ($.isFunction(white_stones))
 						white_stones = white_stones();
 					
-					var eligible_letters = go.letters.slice(2, go.dimension - 2);
+					var eligible_letters = go.letters.slice(2, go.sgf.game_info.SZ - 2);
 					var deck = [];
 					$.each(eligible_letters, function (i, across) {
 						$.each(eligible_letters, function (j, down) {
@@ -1671,6 +1668,25 @@
 				
 			        do {
 						deck.sort('Math.random() - 0.5'.lambda());
+						
+						// This setup actually modifies a test board because
+						// it must check for ataris and dead groups
+						var board = $('<div></div>')
+							.addClass('board');
+						$.each(go.letters, function (down_index, down_letter) {
+							$('<div></div>')
+								.addClass('row')
+								.into(function (row) {
+									$.each(go.letters, function (across_index, across_letter) {
+										$('<img/>')
+											.addClass('intersection')
+											.attr('id', across_letter + down_letter)
+											.attr('src', 'i/dot_clear.gif')
+											.appendTo(row);
+									});
+								})
+								.appendTo(board);
+						});
 						for (i = 0; i < black_stones; ++i) {
 							board
 								.find('#' + deck[i] + '.intersection')
@@ -1688,43 +1704,65 @@
 								.size() > 0
 					)
 			
-					return board;
+					if (black_stones > 0)
+						go.sgf.game_info.AB = deck.slice(0, black_stones).join(',');
+					if (white_stones > 0)
+						go.sgf.game_info.AW = deck.slice(black_stones, black_stones + white_stones).join(',');
 				};
 				
 			};
 			
-			var corner = function (board) {
-				return board
-					.find('.row:first-child .intersection,.intersection:last-child')
-						.addClass('black safe')
-						.end();
+			var corner = function () {
+				var placements = [];
+				$.each(go.letters, function (i,across) {
+					placements.push(across + 'a');
+					if (i > 0)
+						placements.push(go.letters[go.letters.length - 1] + across);
+				});
+				go.sgf.game_info.AB = placements.join(',');
 			};
 			
-			var box = function (board) {
-				return board
-					.find('.row:first-child .intersection,.intersection:last-child,.row:last-child .intersection,.intersection:first-child')
-						.addClass('black safe')
-						.end();
+			var box = function () {
+				var placements = [];
+				$.each(go.letters.slice(1, go.letters.length - 1), function (i, letter) {
+					placements.push(letter + 'a'); // top
+					placements.push(go.letters[go.letters.length - 1] + letter); // right
+					placements.push(letter + go.letters[go.letters.length - 1]); // bottom
+					placements.push('a' + letter); // left
+				});
+				go.sgf.game_info.AB = placements.join(',');
 			};
 			
-			var influences = function (board) {
-				return board
-					.find('.row:first-child .intersection:not(:last-child),.row:last-child .intersection:not(:first-child)')
-						.addClass('white')
-						.end()
-					.find('.row:not(:first-child) .intersection:first-child,.row:not(:last-child) .intersection:last-child')
-						.addClass('black')
-						.end();
+			var influences = function () {
+				var blacks = [];
+				var whites = [];
+				$.each(go.letters.slice(0, go.letters.length - 1), function (i, letter) {
+					whites.push(letter + 'a'); // top
+					blacks.push(go.letters[go.letters.length - 1] + letter); // right
+				});
+				$.each(go.letters.slice(1, go.letters.length), function (i, letter) {
+					whites.push(letter + go.letters[go.letters.length - 1]); // bottom
+					blacks.push('a' + letter); // left
+				});
+				go.sgf.game_info.AB = blacks.join(',');
+				go.sgf.game_info.AW = whites.join(',');
 			};
 			
-			var dots = function (board) {
-				return board
-					.find('.row:odd .intersection:nth-child(2n+1)')
-						.addClass('black')
-						.end()
-					.find('.row:even .intersection:nth-child(2n)')
-						.addClass('white')
-						.end();
+			var dots = function () {
+				var blacks = [];
+				var whites = [];
+				for (i = 0;  i < go.sgf.game_info.SZ; i += 2) {
+					var white_down = go.letters[i];
+					var black_down = go.letters[i + 1];
+					for (j = 0;  j < go.sgf.game_info.SZ; j += 2) {
+						var black_across = go.letters[j];
+						var white_across = go.letters[j + 1];
+						whites.push(white_across + white_down);
+						blacks.push(black_across + black_down);
+					}
+				}
+				go.sgf.game_info.AB = blacks.join(',');
+				go.sgf.game_info.AW = whites.join(',');
 			};
 			
 			return {
@@ -1865,8 +1903,8 @@
 							text: "Really Wild",
 							to_play: "black",
 							setup: random_points(
-								function () { return go.dimension - 3; },
-								function () { return go.dimension - 3; }
+								function () { return go.sgf.game_info.SZ - 3; },
+								function () { return go.sgf.game_info.SZ - 3; }
 							),
 							free_plays: 0,
 							pie: false

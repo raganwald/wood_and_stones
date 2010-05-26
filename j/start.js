@@ -104,6 +104,10 @@
 				GR: $('form.new_game #rules option:selected').text(),
 				GS: $('form.new_game #setup option:selected').text()
 			};
+			if (setup.HA)
+				go.sgf.game_info.HA = setup.HA;
+			setup.setup();
+			go.sgf.doit($('.move.play .board'), go.sgf.game_info);
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;
 			$('#info')
@@ -122,24 +126,7 @@
 			$('style:last')
 				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
-			$('.move.play .board')
-				.into(setup.setup)
-				.find('.intersection.black')
-					.into(function (blacks) {
-						if (blacks.length > 0)
-							go.sgf.game_info.AB = $.map(blacks,'_.id'.lambda()).join(',');
-					})
-					.end()
-				.find('.intersection.white')
-					.into(function (whites) {
-						if (whites.length > 0)
-							go.sgf.game_info.AW = $.map(whites,'_.id'.lambda()).join(',');
-					})
-					.end()
-			if (setup.HA)
-				go.sgf.game_info.HA = setup.HA;
-			$('.move')
-				.addClass(setup.to_play)
+			$('.move.play')
 				.into(go.referee.validate);
 			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
