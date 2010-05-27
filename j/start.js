@@ -56,20 +56,25 @@
 			.blur(game_specific_options)
 			.change(game_specific_options);
     	$('form.new_game').submit(function (e) {
-			var form = $(e.currentTarget);
-		  	go.dimension = $('form.new_game #dimension').val();
-			go.letters = go.letters.slice(0, go.dimension);
-			if (!$('form.new_game #black').val()) $('form.new_game #black').val('Black');
-			if (!$('form.new_game #white').val()) $('form.new_game #white').val('White');
-			$('.move')
+			go.sgf.game_info = {
+				FF: 4,
+				SZ: $('form.new_game #dimension').val(),
+				AP: "World of Go",
+				PB: $('form.new_game #black').val() || 'Black' ,
+				PW: $('form.new_game #white').val() || 'White',
+				GR: $('form.new_game #rules option:selected').text(),
+				GS: $('form.new_game #setup option:selected').text()
+			};
+			go.sgf.root = [go.sgf.game_info];
+			go.sgf.current = go.sgf.root;
+			go.letters = go.letters.slice(0, go.sgf.game_info.SZ);
+			$('.move.play')
 				.removeClass('black white')
 				.find('.board')
 					.removeClass('size9 size11 size13 size15 size17 size19')
-					.addClass('size' + go.dimension)
-					.find('.row')
-						.remove()
-						.end()
-					.end();
+					.addClass('size' + go.sgf.game_info.SZ)
+					.find('.dragger')
+						.empty();
 			$.each(go.letters, function (down_index, down_letter) {
 				$('<div></div>')
 					.addClass('row')
@@ -85,6 +90,7 @@
 					.appendTo($('.move .board .dragger'));
 			});
 			var game_setup = $.parseJSON($('form.new_game #rules').val());
+			go.sgf.game_info.GM = game_setup.GM;
 			go.referee.set_rules(game_setup);
 			var setup_text = $('form.new_game #setup').val();
 			var setup;
@@ -92,22 +98,9 @@
 				if (each_setup.text == setup_text)
 					setup = each_setup;
 			});
-			go.sgf.game_info = {
-				FF: 4,
-				GM: game_setup.GM,
-				SZ: go.dimension,
-				AP: "World of Go Alpha 2",
-				// TODO: DT and TM?
-				PB: $('form.new_game #black').val(),
-				PW: $('form.new_game #white').val(),
-				PL: setup.to_play,
-				GR: $('form.new_game #rules option:selected').text(),
-				GS: $('form.new_game #setup option:selected').text()
-			};
-			go.sgf.root = [go.sgf.game_info];
-			go.sgf.current = go.sgf.root;
 			if (setup.HA)
 				go.sgf.game_info.HA = setup.HA;
+			go.sgf.game_info.PL = setup.to_play;
 			setup.setup();
 			go.sgf.doit($('.move.play .board'), go.sgf.game_info);
 			$('#info')
@@ -126,8 +119,6 @@
 			$('style:last')
 				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
-			$('.move.play .board')
-				.into(go.referee.validate);
 			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
     	});

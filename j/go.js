@@ -7,35 +7,12 @@
 	var message_dialog_instance;
 	var message_dialog = function (title, text) {
     message_dialog_instance
-			.text(text)
-			.dialog({
-					title: title,
-					buttons: { "Ok": function() { $(this).dialog("close"); } }
-				})
-			.dialog('open');
-	};
-	var progress_dialog_instance;
-	var progress_count = 0;
-	var progress_dialog = function (cmd) {
-		// console.log("Progress " + cmd + " with level " + progress_count);
-		if (cmd == 'open') {
-			if (progress_count == 0) {
-				progress_count = 1;
-				progress_dialog_instance.dialog('open');
-			}
-			else {
-				progress_count = progress_count + 1;
-			}
-		}
-		else if (cmd == 'close') {
-			if (progress_count == 1) {
-				progress_count = 0;
-				progress_dialog_instance.dialog('close');
-			}
-			else if (progress_count > 1) {
-				progress_count = progress_count - 1;
-			}
-		}
+		.text(text)
+		.dialog({
+				title: title,
+				buttons: { "Ok": function() { $(this).dialog("close"); } }
+			})
+		.dialog('open');
 	};
 	
 	var document_ready = function () {
@@ -244,12 +221,9 @@
 	
 	go = {
 		letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-		dimension: undefined,
 		message: message_dialog,
-		progress_dialog: progress_dialog,
 		playing: playing,
 		opponent: opponent,
-		switch_turns: switch_turns,
 		sgf: sgf,
 		on_document_ready: function (new_document_ready) {
 			document_ready = (function (old_document_ready) {

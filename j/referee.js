@@ -20,7 +20,7 @@
 					// 15, and 17 will differ when they are
 					// equal to the size of the board
 		
-				    if (11 == go.dimension) memoized_adjacents = {
+				    if (11 == go.sgf.game_info.SZ) memoized_adjacents = {
 				        'dj': '#cj,#ej,#di,#dk',
 				        'jg': '#ig,#kg,#jf,#jh',
 				        'gh': '#fh,#hh,#gg,#gi',
@@ -143,7 +143,7 @@
 				        'jf': '#if,#kf,#je,#jg',
 				        'gg': '#fg,#hg,#gf,#gh'
 				    };
-				    if (17 == go.dimension) memoized_adjacents = {
+				    if (17 == go.sgf.game_info.SZ) memoized_adjacents = {
 				        'nd': '#md,#od,#nc,#ne',
 				        'eo': '#do,#fo,#en,#ep',
 				        'hk': '#gk,#ik,#hj,#hl',
@@ -434,7 +434,7 @@
 				        'hj': '#gj,#ij,#hi,#hk',
 				        'kg': '#jg,#lg,#kf,#kh'
 				    };
-				    if (13 == go.dimension) memoized_adjacents = {
+				    if (13 == go.sgf.game_info.SZ) memoized_adjacents = {
 				        'me': '#le,#md,#mf',
 				        'jg': '#ig,#kg,#jf,#jh',
 				        'dj': '#cj,#ej,#di,#dk',
@@ -605,7 +605,7 @@
 				        'ak': '#bk,#aj,#al',
 				        'gg': '#fg,#hg,#gf,#gh'
 				    };
-				    if (19 == go.dimension) memoized_adjacents = {
+				    if (19 == go.sgf.game_info.SZ) memoized_adjacents = {
 				        'nd': '#md,#od,#nc,#ne',
 				        'bs': '#as,#cs,#br',
 				        'eo': '#do,#fo,#en,#ep',
@@ -968,7 +968,7 @@
 				        'hj': '#gj,#ij,#hi,#hk',
 				        'kg': '#jg,#lg,#kf,#kh'
 				    },
-				   if ( 9 == go.dimension) memoized_adjacents = {
+				   if ( 9 == go.sgf.game_info.SZ) memoized_adjacents = {
 				        'ie': '#he,#id,#if',
 				        'cb': '#bb,#db,#ca,#cc',
 				        'ec': '#dc,#fc,#eb,#ed',
@@ -1051,7 +1051,7 @@
 				        'eb': '#db,#fb,#ea,#ec',
 				        'gc': '#fc,#hc,#gb,#gd'
 				    };
-				    if (15 == go.dimension) memoized_adjacents = {
+				    if (15 == go.sgf.game_info.SZ) memoized_adjacents = {
 				        'eo': '#do,#fo,#en',
 				        'hk': '#gk,#ik,#hj,#hl',
 				        'kh': '#jh,#lh,#kg,#ki',

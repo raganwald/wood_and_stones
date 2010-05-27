@@ -203,7 +203,7 @@
 						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 				);
 				
-			$('.move.play .board.pass:not(:has(.valid.black,.valid.white))')
+			$('.move.play .board.pass.play:not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', do_pass);
 			$('.move.play .board:not(.pass):not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', function () {alert("Sorry, the rules prohibit passing at this time");});
@@ -211,6 +211,7 @@
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo)
 				.live('gesture_bottom', show_play_info);
+				
 			$('#info')
 				.gesture(['top'])
 				.bind('gesture_top', function(event) { jQT.goBack(); });
