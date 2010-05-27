@@ -145,21 +145,13 @@
 			if (placements) {
 				board
 					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-						.addClass('black');
-				if (this_move != go.sgf.game_info)
-					board
-						.find('#'+placements[placements.length-1])
-							.addClass('latest');
+						.addClass('black' + (this_move != go.sgf.game_info ? ' latest' : ''));
 			}
 			placements = this_move.AW;
 			if (placements) {
 				board
 					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-						.addClass('white');
-				if (this_move != go.sgf.game_info)
-					board
-						.find('#'+placements[placements.length-1])
-							.addClass('latest');
+						.addClass('white' + (this_move != go.sgf.game_info ? ' latest' : ''));
 			}
 			if (this_move.K) 
 				board
@@ -192,7 +184,7 @@
 					switch_turns();
 				}
 			}
-			console.log('!');
+
 			return board
 				.into(go.referee.validate);
 		},
