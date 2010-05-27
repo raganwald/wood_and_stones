@@ -1547,7 +1547,7 @@
 						ultimate != undefined && penultimate != undefined && !board.has('#' + ultimate) && !board.has('#' + penultimate)
 					) {
 						go.sgf.game_info['RE'] = '0';
-						alert('The game is over!');
+						go.message('The game is over!');
 					}
 				}
 				return board;
@@ -1556,7 +1556,7 @@
 			var no_whites = function (board) {
 				if (!board.has('.white')) {
 					go.sgf.game_info['RE'] = 'B+1';
-					alert('Black wins by eliminating all whites!');
+					go.message('Black wins by eliminating all whites!');
 				}
 				return board;
 			}
@@ -1566,11 +1566,11 @@
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
 					if (go.sgf.current[ultimate_index]['K']) {
 						if (go.sgf.current[ultimate_index]['W']) {
-							alert('White wins');
+							go.message('White wins');
 							go.sgf.game_info['RE'] = 'W+1';
 						}
 						else if (go.sgf.current[ultimate_index]['B']) {
-							alert('Black wins');
+							go.message('Black wins');
 							go.sgf.game_info['RE'] = 'B+1';
 						}
 						else console.error('confused about who actually won')
@@ -1607,15 +1607,15 @@
 								.filter(top_groups)
 					);
 				if (connectors.is('.black') && connectors.is('.white')) {
-					alert('Weird, it is a tie!?');
+					go.message('Weird, it is a tie!?');
 					go.sgf.game_info['RE'] = '0';
 				}
 				else if (connectors.is('.black')) {
-					alert('Black connects and wins');
+					go.message('Black connects and wins');
 					go.sgf.game_info['RE'] = 'B+1';
 				}
 				else if (connectors.is('.white')) {
-					alert('White connects and wins');
+					go.message('White connects and wins');
 					go.sgf.game_info['RE'] = 'W+1';
 				}
 			};

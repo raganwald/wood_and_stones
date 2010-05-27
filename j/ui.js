@@ -38,20 +38,36 @@
 			var annotation = {};
 			annotation[to_play[0].toUpperCase()] = '';
 			
+			var really_pass = function () {
+				annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN']+ 1 : 1;
+
+				go.sgf.current.push(annotation);
+				go.sgf.doit($('.move.play .board'), annotation);
+				$('.move.play .board .latest')
+					.removeClass('latest');
+			};
+			
 			if (last_move_index >= 0) {
 				var last_move = go.sgf.current[last_move_index];
 				var position = last_move[was_playing_index];
 				if (position != undefined && (position == '' || !$('.move.play .board').has('#' + position))) {
-					var end_game_p = confirm('end the game?');
-					if (!end_game_p) return;
+					go.dialog
+						.text("End the game with a second consecutive pass?")
+						.dialog({
+							title: "End Game",
+							buttons: { 
+								"Pass": function() { 
+									do_pass();
+									$(this).dialog("close");
+								},
+								"No":   function() { $(this).dialog("close"); } 
+							}
+						})
+						.dialog('open');
 				}
+				else really_pass();
 			}
-			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN']+ 1 : 1;
-
-			go.sgf.current.push(annotation);
-			go.sgf.doit($('.move.play .board'), annotation);
-			$('.move.play .board .latest')
-				.removeClass('latest');
+			else really_pass();
 		};
 		
 		var annotate = function (event_data, key) {
@@ -179,7 +195,7 @@
 		return function() {
 			$('.move')
 				.gesture([
-					'bottom', 'close', 'click', 'hold', 'scale', 'left', 'right', 'circle',
+					'bottom', 'close', 'click', 'hold', 'scale', 'left', 'right', 'circle', 'open',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')
@@ -194,6 +210,25 @@
 							.addClass(data.orientation);
 					}
 				});
+			$('.move.play')
+				.bind('gesture_open', 
+					function () {
+						go.dialog
+							.text("Start a new game from scratch?")
+							.dialog({
+								title: "New Game",
+								buttons: { 
+									"New Game": function() { 
+										$(this).dialog("close");
+										jQT.swapPages( $('.move.play'), $('#new'), 'dissolve');
+									},
+									"No":   function() { $(this).dialog("close"); } 
+								}
+							})
+							.dialog('open');
+					}
+				);
+										
 			$('.board')
 				.live('gesture_hold', toggle_zoom_and_mousedown)
 				.live('gesture_scale', do_scale)
@@ -206,7 +241,7 @@
 			$('.move.play .board.pass.play:not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', do_pass);
 			$('.move.play .board:not(.pass):not(:has(.valid.black,.valid.white))')
-				.live('gesture_close', function () {alert("Sorry, the rules prohibit passing at this time");});
+				.live('gesture_close', function () {go.message("Sorry, the rules prohibit passing at this time");});
 				
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo)

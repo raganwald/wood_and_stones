@@ -4,50 +4,39 @@
 
 ;(function ($, undefined) {
 	
-	var message_dialog_instance;
-	var message_dialog = function (title, text) {
-    message_dialog_instance
-		.text(text)
-		.dialog({
-				title: title,
-				buttons: { "Ok": function() { $(this).dialog("close"); } }
-			})
-		.dialog('open');
-	};
-	
 	var document_ready = function () {
-		message_dialog_instance = $('<div></div>')
+		go.dialog = $('<div></div>')
 			.dialog({
 				dialogClass: 'scrub accept message',
 				autoOpen: false,
 				height: 'auto',
 				title: 'Hey!',
 				open: function (event, ui) { 
-					message_dialog_instance
+					go.dialog
 						.parent()
 							.detach()
 							.appendTo('body > .current'); 
 				}
 			})
 			.bind('gesture_scrub', function (event) {
-		        message_dialog_instance.dialog("close");
+		        go.dialog.dialog("close");
 		        return false;
 			})
 			.bind('gesture_accept', function (event) {
-		        alert('TODO: Implement accepting a dialog');
+		        go.message('TODO: Implement accepting a dialog');
 		        return false;
 			});
-		progress_dialog_instance = $('.ajax_load')
-			.dialog({
-				dialogClass: 'progress',
-				autoOpen: false,
-				draggable: false,
-				width: 150, // 100,
-				height: 72 // 72
-			})
-			.parent()
-				.detach()
-				.appendTo('body > .current');
+		go.message = function (say) {
+			go.dialog
+				.text(say)
+				.dialog({
+					title: "Hey!!",
+					buttons: { 
+						"Ok": function() { $(this).dialog("close"); } 
+					}
+				})
+				.dialog('open');
+		};
 	};
 	
 	var playing = function (optional_board) {
@@ -232,7 +221,6 @@
 	
 	go = {
 		letters: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-		message: message_dialog,
 		playing: playing,
 		opponent: opponent,
 		sgf: sgf,
