@@ -89,8 +89,7 @@
 		if (new_player == undefined) new_player = opponent();
 		$('.move.play')
 			.addClass(new_player)
-			.removeClass(new_player == 'white' ? 'black' : 'white')
-			.into(go.referee.validate);
+			.removeClass(new_player == 'white' ? 'black' : 'white');
 	};
 	
 	var sgf = {
@@ -147,12 +146,20 @@
 				board
 					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 						.addClass('black');
+				if (this_move != go.sgf.game_info)
+					board
+						.find('#'+placements[placements.length-1])
+							.addClass('latest');
 			}
 			placements = this_move.AW;
 			if (placements) {
 				board
 					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 						.addClass('white');
+				if (this_move != go.sgf.game_info)
+					board
+						.find('#'+placements[placements.length-1])
+							.addClass('latest');
 			}
 			if (this_move.K) 
 				board
@@ -185,7 +192,9 @@
 					switch_turns();
 				}
 			}
-			return board;
+			console.log('!');
+			return board
+				.into(go.referee.validate);
 		},
 		
 		undoit: function (board, this_move, optional_previous_move) {
@@ -235,7 +244,8 @@
 				// TODO: Deal with titles
 				}
 			}
-		
+			return board
+				.into(go.referee.validate);
 		}
 		
 	};

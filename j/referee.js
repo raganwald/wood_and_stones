@@ -1982,17 +1982,15 @@
 					board
 						.into(step);
 				});
+				return board;
 			}
 		};
 		
 		// validate all legal moves
-		var validate = function (move_div) {
-			if (undefined == move_div) move_div = $('.move.play');
-			$(move_div)
-				.find('.board')
-					.into(analyze)
-					.into(history_free_validate)
-					.end()
+		var validate = function (board) {
+			return board
+				.into(analyze)
+				.into(history_free_validate);
 		};
 		
 		return {
