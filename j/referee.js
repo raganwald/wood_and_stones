@@ -1791,7 +1791,7 @@
 				
 				go.sgf.game_info.AB = blacks.join(',');
 				go.sgf.game_info.AW = whites.join(',');
-			}
+			};
 			
 			var ancient_chinese = function () {
 					
@@ -1803,6 +1803,10 @@
 				
 				go.sgf.game_info.AB = [left + top, right + bottom].join(',');
 				go.sgf.game_info.AW = [left + bottom, right + top].join(',');
+			};
+			
+			var seventeen_free =function () {
+				go.sgf.game_info.HA = 17;
 			}
 			
 			return {
@@ -1811,96 +1815,72 @@
 						{
 							text: "Black plays first",
 							to_play: "black",
-							setup: star_points(0),
-							free_plays: 0,
-							pie: false
+							setup: star_points(0)
 						},
 						{
 							text: "Two stone handicap",
 							to_play: "white",
 							setup: star_points(2),
-							free_plays: 0,
-							HA: 2,
-							pie: false
+							HA: 2
 						},
 						{
 							text: "Three stone handicap",
 							to_play: "white",
 							setup: star_points(3),
-							HA: 3,
-							free_plays: 0,
-							pie: false
+							HA: 3
 						},
 						{
 							text: "Four stone handicap",
 							to_play: "white",
 							setup: star_points(4),
-							HA: 4,
-							free_plays: 0,
-							pie: false
+							HA: 4
 						},
 						{
 							text: "Five stone handicap",
 							to_play: "white",
 							setup: star_points(5),
-							HA: 5,
-							free_plays: 0,
-							pie: false
+							HA: 5
 						},
 						{
 							text: "Six stone handicap",
 							to_play: "white",
 							setup: star_points(6),
-							HA: 6,
-							free_plays: 0,
-							pie: false
+							HA: 6
 						},
 						{
 							text: "Seven stone handicap",
 							to_play: "black",
 							setup: star_points(7),
-							HA: 7,
-							free_plays: 0,
-							pie: false
+							HA: 7
 						},
 						{
 							text: "Eight stone handicap",
 							to_play: "white",
 							setup: star_points(8),
-							HA: 8,
-							free_plays: 0,
-							pie: false
+							HA: 8
 						},
 						{
 							text: "Nine stone handicap",
 							to_play: "white",
 							setup: star_points(9),
-							HA: 9,
-							free_plays: 0,
-							pie: false
+							HA: 9
 						}
 					],
 					other: [
 						{
 							text: "Dots",
 							to_play: "black",
-							setup: dots,
-							free_plays: 0,
-							pie: false
+							setup: dots
 						},
 						{
 							text: "Influence",
 							to_play: "black",
-							setup: influences,
-							free_plays: 0,
-							pie: false
+							setup: influences
 						},
 						{
 							text: "Wild Fuseki",
 							to_play: "black",
-							setup: random_points(3,3),
-							free_plays: 0,
-							pie: false
+							setup: random_points(3,3)
 						},
 						{
 							text: "Really Wild Fuseki",
@@ -1908,49 +1888,42 @@
 							setup: random_points(
 								function () { return go.sgf.game_info.SZ - 3; },
 								function () { return go.sgf.game_info.SZ - 3; }
-							),
-							free_plays: 0,
-							pie: false
+							)
 						},
 						{
 							text: "Korean Baduk",
 							to_play: "white",
-							setup: korean_baduk,
-							free_plays: 0,
-							pie: false
+							setup: korean_baduk
 						},
 						{
 							text: "Ancient Chinese",
 							to_play: "black",
-							setup: ancient_chinese,
-							free_plays: 0,
-							pie: false
+							setup: ancient_chinese
 						}
 					],
 					none: [
 						{
 							text: "Black plays first",
 							to_play: "black",
-							setup: star_points(0),
-							free_plays: 0,
-							pie: false
+							setup: star_points(0)
 						}
 					],
 					to_live: [
 						{
 							text: "Corner Go",
 							to_play: "white",
-							setup: corner,
-							free_plays: 0,
-							pie: false
+							setup: corner
 						},
 						{
 							text: "Shape Game",
 							to_play: "white",
-							setup: box,
-							free_plays: 0,
-							pie: false
+							setup: box
 						},
+						{
+							text: "Kill-all",
+							to_play: "black",
+							setup: seventeen_free
+						}
 					]
 				},
 				validations: {

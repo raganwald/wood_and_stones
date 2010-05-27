@@ -104,12 +104,12 @@
 				GR: $('form.new_game #rules option:selected').text(),
 				GS: $('form.new_game #setup option:selected').text()
 			};
+			go.sgf.root = [go.sgf.game_info];
+			go.sgf.current = go.sgf.root;
 			if (setup.HA)
 				go.sgf.game_info.HA = setup.HA;
 			setup.setup();
 			go.sgf.doit($('.move.play .board'), go.sgf.game_info);
-			go.sgf.root = [go.sgf.game_info];
-			go.sgf.current = go.sgf.root;
 			$('#info')
 				.find('.players .black')
 					.text(go.sgf.game_info.PB)

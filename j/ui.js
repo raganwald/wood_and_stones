@@ -11,26 +11,6 @@
 	go.ui = {
 		validate: validate
 	};
-	
-	var playing = function () {
-		return $('.move.play').is('.black') ? 'black' : (
-			$('.move.play').is('.white') ? 'white' : null
-		);
-	};
-	
-	var opponent = function () {
-		return $('.move.play').is('.white') ? 'black' : (
-			$('.move.play').is('.black') ? 'white' : null
-		);
-	};
-	
-	var switch_turns = function(new_player) {
-		if (new_player == undefined) new_player = opponent();
-		$('.move.play')
-			.addClass(new_player)
-			.removeClass(new_player == 'white' ? 'black' : 'white')
-			.into(go.referee.validate);
-	};
 			
 	var initialize_ui_support = (function () {
 		
@@ -45,17 +25,13 @@
 			
 			go.sgf.current.pop();
 			
-			if (go.sgf.game_info['RE'])
-				go.sgf.game_info['RE'] = null;
-			switch_turns(was_playing);
-			
 		};
 		
 		var do_pass = function() {
 			if (go.sgf.game_info['RE']) return;
 			
-			var to_play = playing();
-			var was_playing = opponent();
+			var to_play = go.playing();
+			var was_playing = go.opponent();
 			var was_playing_index = was_playing[0].toUpperCase();
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			
@@ -76,30 +52,32 @@
 			go.sgf.doit($('.move.play .board'), annotation);
 			$('.move.play .board .latest')
 				.removeClass('latest');
-			switch_turns();
 		};
 		
-		var do_play = function (event_data) {
-			
+		var annotate = function (event_data, key) {
 			target = $(event_data.currentTarget);
-			var now_playing = playing();
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
-			var killed_stones = $('.move.play .intersection.'+opponent()+'.last_liberty_is_'+target.attr('id'));
+			var killed_stones = $('.move.play .intersection.'+go.opponent()+'.last_liberty_is_'+target.attr('id'));
 			var annotation = {};
-			annotation[now_playing[0].toUpperCase()] = target.attr('id');
+			annotation[key] = target.attr('id');
 			if (killed_stones.size() > 0) {
 				annotation['K'] = $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
-				killed_stones.removeClass(opponent());
+				killed_stones.removeClass(go.opponent());
 			}
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN'] + 1 : 1;
 			go.sgf.current.push(annotation);
-			
 			go.sgf.doit($('.move.play .board'), annotation);
-		
-			switch_turns();
 		};
+		
+		var do_play = function (event_data) {
+			annotate(event_data, go.playing()[0].toUpperCase());
+		};
+		
+		var do_place = function (event_data) {
+			annotate(event_data, 'AB');
+		}
 		
 		var zoomed_out_p = function() {
 			return $('.board:last').is('.zoomout');
@@ -201,7 +179,7 @@
 		return function() {
 			$('.move')
 				.gesture([
-					'bottom', 'close', 'click', 'hold', 'scale', 'left', 'right',
+					'bottom', 'close', 'click', 'hold', 'scale', 'left', 'right', 'circle',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')
@@ -224,16 +202,30 @@
 						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
 						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 				);
-			$('.move.play .board:not(:has(.valid.black,.valid.white))')
+				
+			$('.move.play .board.pass:not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', do_pass);
+			$('.move.play .board:not(.pass):not(:has(.valid.black,.valid.white))')
+				.live('gesture_close', function () {alert("Sorry, the rules prohibit passing at this time");});
+				
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo)
 				.live('gesture_bottom', show_play_info);
 			$('#info')
 				.gesture(['top'])
 				.bind('gesture_top', function(event) { jQT.goBack(); });
-			$('.move.play .board .valid')
+				
+			$('.move.play .board.play .valid')
 				.live('gesture_click', do_play);
+				
+			$('.move.play .board.place .valid')
+				.live('gesture_click', do_place);
+			// $('.move.play .board.place')
+			// 	.live('gesture_circle', do_offer_swap);
+			// $('.move.play .board.offer')
+			// 	.live('gesture_circle', do_accept_swap);
+			// $('.move.play .board.offer .valid')
+			// 	.live('gesture_click', do_reject_swap);
 		};
 	})();
 	
