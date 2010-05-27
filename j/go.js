@@ -50,24 +50,29 @@
 				.appendTo('body > .current');
 	};
 	
-	var playing = function () {
-		return $('.move.play').is('.black') ? 'black' : (
-			$('.move.play').is('.white') ? 'white' : null
+	var playing = function (optional_board) {
+		var move = optional_board ? optional_board.closest('.move') : $('.move.play');
+		return move.is('.black') ? 'black' : (
+			move.is('.white') ? 'white' : null
 		);
 	};
 	
-	var opponent = function () {
-		return $('.move.play').is('.white') ? 'black' : (
-			$('.move.play').is('.black') ? 'white' : null
+	var opponent = function (optional_board) {
+		var move = optional_board ? optional_board.closest('.move') : $('.move.play');
+		return move.is('.white') ? 'black' : (
+			move.is('.black') ? 'white' : null
 		);
 	};
 	
-	var switch_turns = function(new_player) {
-		if (new_player == undefined) new_player = opponent();
-		$('.move.play')
-			.addClass(new_player)
-			.removeClass(new_player == 'white' ? 'black' : 'white');
-	};
+	var switch_maker = function (board) {
+		return function(new_player) {
+			if (new_player == undefined) new_player = opponent(board);
+			board
+				.closest('.move')
+					.addClass(new_player)
+					.removeClass(new_player == 'white' ? 'black' : 'white');
+		};
+	}
 	
 	var sgf = {
 		
@@ -92,6 +97,9 @@
 		},
 		
 		doit: function (board, this_move) {
+	
+			var switch_turns = switch_maker(board);
+			
 			board
 				.find('.latest')
 					.removeClass('latest');
@@ -161,7 +169,8 @@
 					switch_turns();
 				}
 			}
-
+			if (this_move.PL)
+				switch_turns(this_move.PL); // wins over all other considerations
 			return board
 				.into(go.referee.validate);
 		},
@@ -174,6 +183,8 @@
 			
 			var to_play;
 			var was_playing;
+	
+			var switch_turns = switch_maker(board);
 			
 			if (this_move['B'] != undefined) {
 				to_play = 'white';

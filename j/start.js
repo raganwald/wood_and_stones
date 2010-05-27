@@ -68,7 +68,7 @@
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;
 			go.letters = go.letters.slice(0, go.sgf.game_info.SZ);
-			$('.move.play')
+			$('.move')
 				.removeClass('black white')
 				.find('.board')
 					.removeClass('size9 size11 size13 size15 size17 size19')
