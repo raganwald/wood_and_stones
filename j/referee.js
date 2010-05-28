@@ -210,6 +210,11 @@
 			
 			// validity rules
 			
+			var no_passing_allowed = function(board) {
+				return board
+					.removeClass('pass');
+			};
+			
 			var at_liberty_valid = function (board) {
 				// console.log('at_liberty_valid');
 				return board
@@ -318,7 +323,7 @@
 			
 			// endings
 			
-			var two_passes = function (board) {
+			var two_passes_p = function(board) {
 				if (go.sgf.current.length > 2) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
 					if (ultimate_index < 2) return board;
@@ -326,16 +331,57 @@
 					if (penultimate_index < 1) return board;
 					var ultimate = go.sgf.current[ultimate_index][board.closest('.move').is('.black') ? 'W' : 'B'];
 					var penultimate = go.sgf.current[penultimate_index][board.closest('.move').is('.black') ? 'B' : 'W'];
-					if (
+					return (
 						(ultimate == '' && penultimate == '') ||
 						ultimate != undefined && penultimate != undefined && !board.has('#' + ultimate) && !board.has('#' + penultimate)
-					) {
+					);
+				}
+				else return false;
+			};
+			
+			var two_passes = function (board) {
+				if (two_passes_p(board)) {
+					go.sgf.game_info['RE'] = '0';
+					go.message('The game is over!');
+				}
+				return board;
+			};
+			
+			var captures_game = function(board) {
+				if (two_passes_p(board)) {
+					var whites = 0;
+					var blacks = 0;
+					$.each(go.sgf.current, function (index, properties) {
+						if (properties.W && properties.K)
+							blacks = blacks + 1 + ((properties.K.length - 2) / 3);
+						else if (properties.W && properties.K)
+							whites = whites + 1 + ((properties.K.length - 2) / 3);
+					});
+					if (whites == blacks) {
 						go.sgf.game_info['RE'] = '0';
-						go.message('The game is over!');
+						go.message('The game is over, you tied with '+whites+' captures each');
+					}
+					else if (whites > blacks) {
+						go.sgf.game_info['RE'] = 'W+'+whites;
+						go.message('The game is over, '+go.sgf.game_info.PW+' wins with '+whites+' captures to '+blacks);
+					}
+					else {
+						go.sgf.game_info['RE'] = 'B+'+blacks;
+						go.message('The game is over, '+go.sgf.game_info.PB+' wins with '+blacks+' captures to '+whites);
 					}
 				}
 				return board;
 			};
+			
+			var no_legal_move_loses = function (board) {
+				if (!board.has('.intersection.valid')) {
+					var p = go.playing()[0].toUpperCase();
+					var o = go.opponent()[0].toUpperCase();
+					go.sgf.game_info['RE'] = o+'+1';
+					go.message('The game is over, '+go.sgf.game_info['P'+o]+' wins because ' + go.sgf.game_info['P'+p]+' has no valid move');
+				}
+				return board;
+			}
 			
 			var no_whites = function (board) {
 				if (!board.has('.white')) {
@@ -719,11 +765,6 @@
 					],
 					pie: [
 						{
-							text: "Black plays first",
-							sgf: { PL: "black" },
-							setup: star_points(0)
-						},
-						{
 							text: "Pie Rule",
 							sgf: { PL: "black", PI: true, HA: 1 },
 							setup: star_points(0)
@@ -747,6 +788,7 @@
 					]
 				},
 				validations: {
+					no_passing_allowed: no_passing_allowed,
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
 					extend_group_valid: extend_group_valid,
@@ -756,14 +798,16 @@
 				endings: {
 					two_passes: two_passes,
 					any_capture: any_capture,
-					connect_sides: connect_sides
+					connect_sides: connect_sides,
+					no_legal_move_loses: no_legal_move_loses,
+					captures_game: captures_game
 				},
 				games: {
 					"Classic": '{"GM": 1, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Other Go Setups": '{"GM": 1, "setups": "other", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Gonnect": '{"GM": 13, "setups": "pie", "sizes": [13], "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
+					"Gonnect": '{"GM": 13, "setups": "pie", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"One Eye Go": '{"GM": 11, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}',
 					"Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "unslidable_invalid" ]}',
 				}
