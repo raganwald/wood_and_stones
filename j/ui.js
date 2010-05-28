@@ -178,7 +178,7 @@
 						.addClass('zoomin')
 						.dragscrollable({ preventDefault: false });
 				if (typeof(board) != 'undefined') {
-					var new_target = (across == 0 && down == 0) ? null : board.find('.down_'+down + ' .across_'+across);
+					var new_target = (across == 0 && down == 0) ? null : board.find('.row:nth-child('+down+') .intersection:nth-child('+across+')');
 					board
 						.scrollLeft(across == 0 ? 0 : (new_target.width() * across) - (board.width() / 2)) // handles min and max for us
 						.scrollTop(down == 0 ? 0 : (new_target.height() * down) - (board.height() / 2));
