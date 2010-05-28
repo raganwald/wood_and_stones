@@ -78,7 +78,7 @@
 			$.each(go.letters, function (down_index, down_letter) {
 				$('<div></div>')
 					.addClass('row')
-					.into(function (row) {
+					.K(function (row) {
 						$.each(go.letters, function (across_index, across_letter) {
 							$('<img/>')
 								.addClass('intersection')
@@ -99,7 +99,7 @@
 					setup = each_setup;
 			});
 			$.extend(go.sgf.game_info, setup.sgf);
-			setup.setup();
+			if (setup.setup) setup.setup();
 			go.sgf.doit($('.move.play .board'), go.sgf.game_info);
 			$('#info')
 				.find('.players .black')

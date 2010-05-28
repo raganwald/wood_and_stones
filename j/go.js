@@ -175,7 +175,7 @@
 			if (this_move.PL)
 				switch_turns(this_move.PL); // wins over all other considerations
 			return board
-				.into(go.referee.validate);
+				.K(go.referee.validate);
 		},
 		
 		undoit: function (board, this_move, optional_previous_move) {
@@ -228,7 +228,7 @@
 				}
 			}
 			return board
-				.into(go.referee.validate);
+				.K(go.referee.validate);
 		}
 		
 	};

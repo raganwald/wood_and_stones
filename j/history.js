@@ -75,8 +75,8 @@
 					hey.text(this_move.data('player') + ' passed.'); // TODO: Titleize
 				}
 				this_move
-					.into(update_boards_with_navigation_handlers)
-					.into(update_hey)
+					.K(update_boards_with_navigation_handlers)
+					.K(update_hey)
 					.insertBefore(next_move);
 			}
 			return $(selector);

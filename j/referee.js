@@ -2,9 +2,36 @@
 // the exception of specific files otherwise licensed. Other licenses apply only to the files where
 // they appear.
 
-;(function ($, undefined) {
+;(function ($, F, undefined) {
 	
 	var referee = (function () {
+		
+		var unique = function(arr, optional_seed) {
+			if (!optional_seed) optional_seed = [];
+			return F.reduce(function (arr, el) {
+				return $.inArray(el, arr) >= 0 ? arr : arr.concat([el]);
+			}, optional_seed, arr);
+		};
+		
+		// usage:
+		//
+		// board
+		//   .find(...)
+		//      .T(their_adjacent_selector)
+		//
+		// Nota bene: $.map integrates flattening, F.map does not.
+		// F.map has string lambdas built it, $.map does not
+		var their_adjacent_selector = function(selection) {
+			var adjacents = go.get_adjacents();
+			return F.reduce(function (unique_arr, arr_to_concat) {
+					return unique(arr_to_concat, unique_arr);
+				},
+				[],
+				F.map(function (_) { 
+					return adjacents[$(_).attr("id")].split(',')
+				}, selection)
+			).join(',');
+		};
 		
 		var colour_of = function(intersection) {
 			if (intersection.hasClass('black'))
@@ -181,6 +208,8 @@
 		
 		var rules = (function () {
 			
+			// validity rules
+			
 			var at_liberty_valid = function (board) {
 				// console.log('at_liberty_valid');
 				return board
@@ -188,7 +217,6 @@
 						.addClass('valid debug_at_liberty_valid')
 						.end();
 			};
-			
 			
 			// this is the rule that permits suicide in Go, so removing this
 			// rule prohibits suicide!
@@ -252,6 +280,43 @@
 				}
 				return board
 			};
+			
+			var unslidable_invalid = function (board) {
+				board
+					.find('.temp_slidable')
+						.removeClass('temp_slidable');
+				var home_intersections = board
+					.find(go.playing() == 'white' ? '.row:first .intersection' : '.row:last .intersection');
+				var home_playing_intersections = home_intersections
+					.filter('.' + go.playing());
+				var home_group_classes = unique(
+					F.reduce('x.concat(y)', [], F.map('$(_).attr("class").match(/group_../)', home_playing_intersections))
+				);
+				var home_group_intersections = board
+					.find(F.map('"." + _', home_group_classes).join(','));
+					
+				var slidables = $(their_adjacent_selector(home_group_intersections))
+					.add(home_intersections)
+						.filter(':not(.black):not(.white)');
+				do {
+					slidables = slidables
+						.addClass('temp_slidable')
+						.T(function (_) { 
+							return $(their_adjacent_selector(_)) 
+								.filter(':not(.black):not(.white):not(.temp_slidable)');
+						})
+				} while (slidables.size() > 0);
+				
+				return board
+					.find('.valid:not(.temp_slidable)')
+						.removeClass('valid')
+						.end()
+					.find('.temp_slidable')
+						.removeClass('temp_slidable')
+						.end();
+			};
+			
+			// endings
 			
 			var two_passes = function (board) {
 				if (go.sgf.current.length > 2) {
@@ -395,7 +460,7 @@
 						$.each(go.letters, function (down_index, down_letter) {
 							$('<div></div>')
 								.addClass('row')
-								.into(function (row) {
+								.T(function (row) {
 									$.each(go.letters, function (across_index, across_letter) {
 										$('<img/>')
 											.addClass('intersection')
@@ -418,7 +483,7 @@
 						}
 					} while (
 						board
-							.into(analyze)
+							.T(analyze)
 							.has('.intersection.atari,.intersection.dead')
 								.size() > 0
 					)
@@ -524,17 +589,12 @@
 				go.sgf.game_info.AW = [left + bottom, right + top].join(',');
 			};
 			
-			var seventeen_free =function () {
-				go.sgf.game_info.HA = 17;
-			}
-			
 			return {
 				setups: {
 					classic: [
 						{
 							text: "Black plays first",
-							sgf: { PL: "black" },
-							setup: star_points(0)
+							sgf: { PL: "black" }
 						},
 						{
 							text: "Two stone handicap",
@@ -575,6 +635,44 @@
 							text: "Nine stone handicap",
 							sgf: { PL: "white", HA: 9 },
 							setup: star_points(9)
+						}
+					],
+					free: [
+						{
+							text: "Black plays first",
+							sgf: { PL: "black" }
+						},
+						{
+							text: "Two free stones",
+							sgf: { PL: "black", HA: 2 }
+						},
+						{
+							text: "Three free stones",
+							sgf: { PL: "black", HA: 3 }
+						},
+						{
+							text: "Four free stones",
+							sgf: { PL: "black", HA: 4 }
+						},
+						{
+							text: "Five free stones",
+							sgf: { PL: "black", HA: 5 }
+						},
+						{
+							text: "Six free stones",
+							sgf: { PL: "black", HA: 6 }
+						},
+						{
+							text: "Seven free stones",
+							sgf: { PL: "black", HA: 7 }
+						},
+						{
+							text: "Eight free stones",
+							sgf: { PL: "black", HA: 8 }
+						},
+						{
+							text: "Nine free stones",
+							sgf: { PL: "black", HA: 9 }
 						}
 					],
 					other: [
@@ -644,8 +742,7 @@
 						},
 						{
 							text: "Kill-all",
-							sgf: { PL: "black" },
-							setup: seventeen_free
+							sgf: { PL: "black", HA: 17 }
 						}
 					]
 				},
@@ -653,7 +750,8 @@
 					at_liberty_valid: at_liberty_valid,
 					killers_valid: killers_valid,
 					extend_group_valid: extend_group_valid,
-					simple_ko_invalid: simple_ko_invalid
+					simple_ko_invalid: simple_ko_invalid,
+					unslidable_invalid: unslidable_invalid
 				},
 				endings: {
 					two_passes: two_passes,
@@ -666,7 +764,8 @@
 					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
 					"Gonnect": '{"GM": 13, "setups": "pie", "sizes": [13], "endings": ["two_passes", "connect_sides"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 11, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}'
+					"One Eye Go": '{"GM": 11, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}',
+					"Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "unslidable_invalid" ]}',
 				}
 			};
 		})();
@@ -703,7 +802,7 @@
 			history_free_validate = function (board) {
 				$.each(steps, function (i, step) {
 					board
-						.into(step);
+						.T(step);
 				});
 				return board;
 			}
@@ -712,8 +811,8 @@
 		// validate all legal moves
 		var validate = function (board) {
 			return board
-				.into(analyze)
-				.into(history_free_validate);
+				.T(analyze)
+				.T(history_free_validate);
 		};
 		
 		return {
@@ -735,4 +834,4 @@
 		});
 	});
 	
-})(jQuery);	
+})(jQuery,Functional);	

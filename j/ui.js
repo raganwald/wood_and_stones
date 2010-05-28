@@ -145,14 +145,14 @@
 				.removedragscrollable();
 		};
 			
-		var do_zoomout = function(selection) {
+		var really_zoomout = function(selection) {
 			return $(selection)
 				.filter('.board:not(.zoomout)')
-					.into(remove_zoomin)
+					.K(remove_zoomin)
 					.addClass('zoomout');
 		};
 	
-		var zoomin_maker = function (target) {
+		var really_zoomin = function (target) {
 			var across;
 			var down;
 			var board;
@@ -174,7 +174,7 @@
 			return function(selection) {
 				$(selection)
 					.filter('.board:not(.zoomin)')
-						.into(remove_zoomout)
+						.K(remove_zoomout)
 						.addClass('zoomin')
 						.dragscrollable({ preventDefault: false });
 				if (typeof(board) != 'undefined') {
@@ -186,22 +186,28 @@
 			};
 		};
 				
-		var toggle_zoom_and_mousedown = function (event) {
+		var do_zoomin = function(event) {
 			$('.board')
-				.into(zoomed_out_p() ? zoomin_maker(event.target) : do_zoomout);
+				.K(really_zoomin(event.target));
 			$(this)
 				.children(':first')
 					.trigger(event.gesture_data.originalEvent);
 			return false;
 		};
 		
+		var do_zoomout = function(event) {
+			$('.board')
+				.K(really_zoomout);
+			return false;
+		};
+		
 		var do_scale = function(event, data) {
 			if (event.scale <= 0.75)
 				$('.board')
-					.into(do_zoomout);
+					.K(really_zoomout);
 			else if (event.scale >= 1.5)
 				$('.board')
-					.into(zoomin_maker(event.target));
+					.K(really_zoomin(event.target));
 			return false;
 		};
 		
@@ -243,7 +249,7 @@
 							.addClass(data.orientation);
 					}
 				});
-			$('.move.play')
+			$('.move.play:has(.zoomout)')
 				.live('gesture_open', 
 					function () {
 						go.dialog
@@ -263,13 +269,17 @@
 				);
 										
 			$('.board')
-				.live('gesture_hold', toggle_zoom_and_mousedown)
 				.live('gesture_scale', do_scale)
 				.addClass(
 					window.orientation !== undefined 
 						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
 						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
 				);
+				
+			$('.board.zoomout')
+				.live('gesture_hold', do_zoomin);
+			$('.board.zoomin')
+				.live('gesture_hold', do_zoomout);
 				
 			$('.move.play .board.pass.play:not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', do_pass);
