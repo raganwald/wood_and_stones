@@ -98,9 +98,7 @@
 				if (each_setup.text == setup_text)
 					setup = each_setup;
 			});
-			if (setup.HA)
-				go.sgf.game_info.HA = setup.HA;
-			go.sgf.game_info.PL = setup.to_play;
+			$.extend(go.sgf.game_info, setup.sgf);
 			setup.setup();
 			go.sgf.doit($('.move.play .board'), go.sgf.game_info);
 			$('#info')
