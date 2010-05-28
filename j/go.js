@@ -61,7 +61,18 @@
 					.addClass(new_player)
 					.removeClass(new_player == 'white' ? 'black' : 'white');
 		};
-	}
+	};
+	
+	var set_titles = function () {
+			// $('style:last')
+			// 	.text('.move.black:has(.board.play) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
+			// 	      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
+		$('style:last')
+			.text('.move.black:not(.swap) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
+			      '.move.white:not(.swap)  .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; } ' +
+			      '.move.black.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play/swap"; } '  +
+			      '.move.white.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play/swap"; }');
+	};
 	
 	var sgf = {
 		
@@ -151,10 +162,13 @@
 						.end();
 				}
 				else if (this_move.AB || this_move.AW) {
+					// this is the last play
 					board
 						.removeClass('place')
 						.addClass('play')
-						.end();
+						.closest('.move')
+							.addClass(go.sgf.game_info.PI ? 'swap' : '')
+							.end()
 					switch_turns();
 				}
 			}
@@ -224,6 +238,7 @@
 		playing: playing,
 		opponent: opponent,
 		sgf: sgf,
+		set_titles: set_titles,
 		on_document_ready: function (new_document_ready) {
 			document_ready = (function (old_document_ready) {
 				return function () {

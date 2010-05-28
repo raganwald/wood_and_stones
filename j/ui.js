@@ -89,10 +89,43 @@
 		
 		var do_play = function (event_data) {
 			annotate(event_data, go.playing()[0].toUpperCase());
+			return false;
+		};
+		
+		var do_reject_swap = function (event_data) {
+			var opponent_name = go.sgf.game_info['P' + go.opponent()[0].toUpperCase()];
+			var player_name = go.sgf.game_info['P' + go.playing()[0].toUpperCase()];
+			$('.move.play')
+				.removeClass('swap');
+			do_play(event_data);
+			go.sgf.current[go.sgf.current.length - 1].C = player_name + " declines to swap places with " + opponent_name;
+			return false;
+		};
+		
+		var do_accept_swap = function (event_data) {
+			var opponent_name = go.sgf.game_info['P' + go.opponent()[0].toUpperCase()];
+			var player_name = go.sgf.game_info['P' + go.playing()[0].toUpperCase()];
+			
+			if (opponent_name.match(/white|black/i) || player_name.match(/white|black/i)) {
+				go.message("Since you've decided to swap, it's your opponent's turn to play " + go.playing());
+			}
+			else {
+				go.message("Since you've decided to swap, " + opponent_name + " will play " + go.playing() + ' (this changes PB and PW.)');
+				go.sgf.game_info['P' + go.opponent()[0].toUpperCase()] = player_name;
+				go.sgf.game_info['P' + go.playing()[0].toUpperCase()] = opponent_name;
+			}
+			go.sgf.current.push({ C: player_name + " swaps places with " + opponent_name });
+			
+			$('.move.play')
+				.removeClass('swap');
+				
+			go.set_titles();
+			return false;
 		};
 		
 		var do_place = function (event_data) {
 			annotate(event_data, 'AB');
+			return false;
 		}
 		
 		var zoomed_out_p = function() {
@@ -211,7 +244,7 @@
 					}
 				});
 			$('.move.play')
-				.bind('gesture_open', 
+				.live('gesture_open', 
 					function () {
 						go.dialog
 							.text("Start a new game from scratch?")
@@ -251,17 +284,17 @@
 				.gesture(['top'])
 				.bind('gesture_top', function(event) { jQT.goBack(); });
 				
-			$('.move.play .board.play .valid')
+			$('.move.play:not(.swap) .board.play .valid')
 				.live('gesture_click', do_play);
+				
+			$('.move.play.swap .board.play .valid')
+				.live('gesture_click', do_reject_swap);
+				
+			$('.move.play.swap .board.play')
+				.live('gesture_circle', do_accept_swap);
 				
 			$('.move.play .board.place .valid')
 				.live('gesture_click', do_place);
-			// $('.move.play .board.place')
-			// 	.live('gesture_circle', do_offer_swap);
-			// $('.move.play .board.offer')
-			// 	.live('gesture_circle', do_accept_swap);
-			// $('.move.play .board.offer .valid')
-			// 	.live('gesture_click', do_reject_swap);
 		};
 	})();
 	

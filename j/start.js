@@ -114,9 +114,7 @@
 				.find('.game .setup')
 					.text(go.sgf.game_info.GS)
 					.end();
-			$('style:last')
-				.text('.move.black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
-				      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
+			go.set_titles();
 			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
     	});
