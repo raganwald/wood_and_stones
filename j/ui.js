@@ -35,16 +35,13 @@
 			var was_playing_index = was_playing[0].toUpperCase();
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			
-			var annotation = {};
-			annotation[to_play[0].toUpperCase()] = '';
 			
 			var really_pass = function () {
+				var annotation = {};
+				annotation[to_play[0].toUpperCase()] = '';
 				annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN']+ 1 : 1;
 
-				go.sgf.current.push(annotation);
-				go.sgf.doit($('.move.play .board'), annotation);
-				$('.move.play .board .latest')
-					.removeClass('latest');
+				go.sgf.push(annotation);
 			};
 			
 			if (last_move_index >= 0) {
@@ -57,7 +54,7 @@
 							title: "End Game",
 							buttons: { 
 								"Pass": function() { 
-									do_pass();
+									really_pass();
 									$(this).dialog("close");
 								},
 								"No":   function() { $(this).dialog("close"); } 
@@ -83,8 +80,7 @@
 			}
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN'] + 1 : 1;
-			go.sgf.current.push(annotation);
-			go.sgf.doit($('.move.play .board'), annotation);
+			go.sgf.push(annotation);
 		};
 		
 		var do_play = function (event_data) {
@@ -281,8 +277,9 @@
 			$('.board.zoomin')
 				.live('gesture_hold', do_zoomout);
 				
-			$('.move.play .board.pass.play:not(:has(.valid.black,.valid.white))')
+			$('.move.play .board.pass:not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', do_pass);
+				
 			$('.move.play .board:not(.pass):not(:has(.valid.black,.valid.white))')
 				.live('gesture_close', function () {go.message("Sorry, the rules prohibit passing at this time");});
 				

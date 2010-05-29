@@ -68,10 +68,213 @@
 			// 	.text('.move.black:has(.board.play) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 			// 	      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
 		$('style:last')
-			.text('.move.black:not(.swap) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
+			.text('.move.black:not(.swap):not(re_black):not(re_white):not(re_draw) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 			      '.move.white:not(.swap)  .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; } ' +
 			      '.move.black.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play/swap"; } '  +
-			      '.move.white.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play/swap"; }');
+			      '.move.white.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play/swap"; } ' +
+				  '.move.re_black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' wins"; } ' +
+				  '.move.re_white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' wins"; } ' +
+				  '.move.re_draw .toolbar span.playing:before{ content: "Game Ended"; }'
+			);
+	};
+	
+	var predoit = function (board, this_move) {
+		return board;
+	};
+	
+	var postdoit = function(board, this_move) {
+		
+		board
+			.K(go.referee.validate);
+			
+		if (!sgf.game_info.RE) {
+			board
+				.closest('.move')
+					.removeClass('re_black re_white re_draw');
+		}
+		else if ('B' == sgf.game_info.RE[0]) {
+			board
+				.closest('.move')
+					.removeClass('black white')
+					.addClass('re_black');
+		}
+		else if ('W' == sgf.game_info.RE[0]) {
+			board
+				.closest('.move')
+					.removeClass('black white')
+					.addClass('re_white');
+		}
+		else {
+			board
+				.closest('.move')
+					.removeClass('black white')
+					.addClass('re_draw');
+		}
+		
+		return board;
+	};
+		
+	var floor = function(index) {
+		while (index >= 0 && (go.sgf.current[index]['MN'] == undefined)) {
+			--index;
+		}
+		return index;
+	};
+	
+	var ceiling = function(index) {
+		while (go.sgf.current[index] && (go.sgf.current[index]['MN'] == undefined)) {
+			++index;
+		}
+		return index;
+	};
+	
+	var push = function (this_move) {
+		go.sgf.current.push(this_move);
+		doit($('.move.play .board'), this_move);
+		return this_move;
+	}
+	
+	var pop = function () {
+		console.error('implement me!');
+	}
+	
+	var doit = function (board, this_move) {
+		
+		board = predoit(board, this_move);
+
+		var switch_turns = switch_maker(board);
+		
+		board
+			.find('.latest')
+				.removeClass('latest');
+				
+		var play = this_move.B;
+		if (play) {
+			board
+				.find('#' + play)
+					.addClass('black latest');
+			switch_turns();
+		}
+		else if (play == '') {
+			switch_turns();
+		}
+		else {
+			play = this_move.W;
+			if (play) {
+				board
+					.find('#' + play)
+						.addClass('white latest');
+				switch_turns();
+			}
+			else if (play == '') {
+				switch_turns();
+			}
+		}
+		var placements = this_move.AB;
+		if (placements) {
+			board
+				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
+					.addClass('black' + (this_move != go.sgf.game_info ? ' latest' : ''));
+		}
+		placements = this_move.AW;
+		if (placements) {
+			board
+				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
+					.addClass('white' + (this_move != go.sgf.game_info ? ' latest' : ''));
+		}
+		if (this_move.K) 
+			board
+				.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
+					.removeClass('white black');
+					
+		var to_play = this_move.PL;
+		if (to_play)
+			board
+				.closest('.move')
+					.addClass(to_play);
+		
+		if (go.sgf.game_info.HA) {
+			var placed = 0;
+			$.each(go.sgf.current, function (i, that_move) {
+				if (that_move.AB)
+					placed = placed + that_move.AB.split(',').length;
+			});			
+			if (placed < go.sgf.game_info.HA) {
+				board
+					.removeClass('play')
+					.addClass('place')
+					.end();
+			}
+			else if (this_move.AB || this_move.AW) {
+				// this is the last play
+				board
+					.removeClass('place')
+					.addClass('play')
+					.closest('.move')
+						.addClass(go.sgf.game_info.PI ? 'swap' : '')
+						.end()
+				switch_turns();
+			}
+		}
+		if (this_move.PL)
+			switch_turns(this_move.PL); // wins over all other considerations
+			
+		return postdoit(board, this_move);
+	};
+	
+	var undoit = function (board, this_move, optional_previous_move) {
+		
+		board = predoit(board, this_move);
+		
+		// TODO: Handle other undoables such as placements
+		// optional previous move is only useful for hilighting the dot to play at this point
+		// it could be eliminated if we use a comment to annotate it.
+		
+		var to_play;
+		var was_playing;
+
+		var switch_turns = switch_maker(board);
+		
+		if (this_move['B'] != undefined) {
+			to_play = 'white';
+			was_playing = 'black';
+			switch_turns(was_playing);
+		}
+		else if (this_move['W'] != undefined) {
+			to_play = 'black';
+			was_playing = 'white';
+			switch_turns(was_playing);
+		}
+		else return; // not undoable
+		var was_playing_index = was_playing[0].toUpperCase();
+		if (this_move != undefined) {
+			var position = this_move[was_playing_index];
+			if (position != undefined) {
+				if (position) {
+					board
+						.find('#' + position)
+							.removeClass('latest')
+							.removeClass(was_playing);
+					var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
+					if (m != undefined) {
+						board
+							.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
+								.addClass(was_playing == 'black' ? 'white' : 'black');
+					}
+				}
+				var to_play_index = to_play[0].toUpperCase();
+				if (optional_previous_move != undefined) {
+					var previous_position = optional_previous_move[to_play_index];
+					if (previous_position)
+						board
+							.find('#' + previous_position)
+								.addClass('latest');
+				}
+			// TODO: Deal with titles
+			}
+		}
+			
+		return postdoit(board, this_move);
 	};
 	
 	var sgf = {
@@ -82,154 +285,17 @@
 		
 		root: undefined,
 		
-		floor: function(index) {
-			while (index >= 0 && (go.sgf.current[index]['MN'] == undefined)) {
-				--index;
-			}
-			return index;
-		},
+		floor: floor,
 		
-		ceiling: function(index) {
-			while (go.sgf.current[index] && (go.sgf.current[index]['MN'] == undefined)) {
-				++index;
-			}
-			return index;
-		},
+		ceiling: ceiling,
 		
-		doit: function (board, this_move) {
-	
-			var switch_turns = switch_maker(board);
-			
-			board
-				.find('.latest')
-					.removeClass('latest');
-					
-			var play = this_move.B;
-			if (play) {
-				board
-					.find('#' + play)
-						.addClass('black latest');
-				switch_turns();
-			}
-			else if (play == '') {
-				switch_turns();
-			}
-			else {
-				play = this_move.W;
-				if (play) {
-					board
-						.find('#' + play)
-							.addClass('white latest');
-					switch_turns();
-				}
-				else if (play == '') {
-					switch_turns();
-				}
-			}
-			var placements = this_move.AB;
-			if (placements) {
-				board
-					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-						.addClass('black' + (this_move != go.sgf.game_info ? ' latest' : ''));
-			}
-			placements = this_move.AW;
-			if (placements) {
-				board
-					.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-						.addClass('white' + (this_move != go.sgf.game_info ? ' latest' : ''));
-			}
-			if (this_move.K) 
-				board
-					.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
-						.removeClass('white black');
-						
-			var to_play = this_move.PL;
-			if (to_play)
-				board
-					.closest('.move')
-						.addClass(to_play);
-			
-			if (go.sgf.game_info.HA) {
-				var placed = 0;
-				$.each(go.sgf.current, function (i, that_move) {
-					if (that_move.AB)
-						placed = placed + that_move.AB.split(',').length;
-				});			
-				if (placed < go.sgf.game_info.HA) {
-					board
-						.removeClass('play')
-						.addClass('place')
-						.end();
-				}
-				else if (this_move.AB || this_move.AW) {
-					// this is the last play
-					board
-						.removeClass('place')
-						.addClass('play')
-						.closest('.move')
-							.addClass(go.sgf.game_info.PI ? 'swap' : '')
-							.end()
-					switch_turns();
-				}
-			}
-			if (this_move.PL)
-				switch_turns(this_move.PL); // wins over all other considerations
-			return board
-				.K(go.referee.validate);
-		},
+		doit: doit,
 		
-		undoit: function (board, this_move, optional_previous_move) {
-			
-			// TODO: Handle other undoables such as placements
-			// optional previous move is only useful for hilighting the dot to play at this point
-			// it could be eliminated if we use a comment to annotate it.
-			
-			var to_play;
-			var was_playing;
-	
-			var switch_turns = switch_maker(board);
-			
-			if (this_move['B'] != undefined) {
-				to_play = 'white';
-				was_playing = 'black';
-				switch_turns(was_playing);
-			}
-			else if (this_move['W'] != undefined) {
-				to_play = 'black';
-				was_playing = 'white';
-				switch_turns(was_playing);
-			}
-			else return; // not undoable
-			var was_playing_index = was_playing[0].toUpperCase();
-			if (this_move != undefined) {
-				var position = this_move[was_playing_index];
-				if (position != undefined) {
-					if (position) {
-						board
-							.find('#' + position)
-								.removeClass('latest')
-								.removeClass(was_playing);
-						var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
-						if (m != undefined) {
-							board
-								.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
-									.addClass(was_playing == 'black' ? 'white' : 'black');
-						}
-					}
-					var to_play_index = to_play[0].toUpperCase();
-					if (optional_previous_move != undefined) {
-						var previous_position = optional_previous_move[to_play_index];
-						if (previous_position)
-							board
-								.find('#' + previous_position)
-									.addClass('latest');
-					}
-				// TODO: Deal with titles
-				}
-			}
-			return board
-				.K(go.referee.validate);
-		}
+		undoit: undoit,
+		
+		push: push,
+		
+		pop: pop
 		
 	};
 	
