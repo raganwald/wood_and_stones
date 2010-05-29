@@ -331,12 +331,12 @@
 					if (penultimate_index < 1) return board;
 					var ultimate = go.sgf.current[ultimate_index][board.closest('.move').is('.black') ? 'W' : 'B'];
 					var penultimate = go.sgf.current[penultimate_index][board.closest('.move').is('.black') ? 'B' : 'W'];
-					return (
-						(ultimate == '' && penultimate == '') ||
-						ultimate != undefined && penultimate != undefined && !board.has('#' + ultimate) && !board.has('#' + penultimate)
-					);
+					if (ultimate == undefined || penultimate == undefined) return false;
+					if (
+						(ultimate == '' || !board.has('#' + ultimate)) && 
+						(penultimate == '' || !board.has('#' + penultimate))) return true;
 				}
-				else return false;
+				return false;
 			};
 			
 			var two_passes = function (board) {

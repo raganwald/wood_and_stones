@@ -35,12 +35,14 @@
 			var was_playing_index = was_playing[0].toUpperCase();
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			
-			
 			var really_pass = function () {
+				// cheatahead
+				$('.move.play .board .latest')
+					.removeClass('latest');
+					
 				var annotation = {};
 				annotation[to_play[0].toUpperCase()] = '';
 				annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN']+ 1 : 1;
-
 				go.sgf.push(annotation);
 			};
 			
@@ -72,6 +74,13 @@
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
 			var killed_stones = $('.move.play .intersection.'+go.opponent()+'.last_liberty_is_'+target.attr('id'));
+			//cheatahead
+			$('.move.play .board .latest')
+				.removeClass('latest');
+			target
+				.addClass('latest ' + go.playing());
+			killed_stones.removeClass(go.opponent());
+			
 			var annotation = {};
 			annotation[key] = target.attr('id');
 			if (killed_stones.size() > 0) {

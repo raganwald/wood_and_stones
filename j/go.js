@@ -83,10 +83,10 @@
 	};
 	
 	var postdoit = function(board, this_move) {
-		
+	
 		board
 			.K(go.referee.validate);
-			
+
 		if (!sgf.game_info.RE) {
 			board
 				.closest('.move')
@@ -147,9 +147,9 @@
 		board
 			.find('.latest')
 				.removeClass('latest');
-				
+		
 		var play = this_move.B;
-		if (play) {
+		if (play && play != '') {
 			board
 				.find('#' + play)
 					.addClass('black latest');
@@ -160,7 +160,7 @@
 		}
 		else {
 			play = this_move.W;
-			if (play) {
+			if (play && play != '') {
 				board
 					.find('#' + play)
 						.addClass('white latest');
@@ -170,6 +170,7 @@
 				switch_turns();
 			}
 		}
+		
 		var placements = this_move.AB;
 		if (placements) {
 			board
