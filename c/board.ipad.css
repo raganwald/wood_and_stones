@@ -1,13 +1,15 @@
 .board.size19.zoomin {
-  width: 270px;
-  height: 270px; }
+  margin-left: -270px;
+  width: 540px;
+  height: 540px; }
   .board.size19.zoomin .row {
-    height: 30px;
-    width: 570px; }
+    height: 45px;
+    width: 855px; }
     .board.size19.zoomin .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 .board.size19.zoomout {
+  margin-left: -285px;
   width: 570px;
   height: 570px; }
   .board.size19.zoomout .row {
@@ -18,106 +20,116 @@
       width: 30px; }
 
 .board.size17.zoomin {
-  width: 270px;
-  height: 270px; }
+  margin-left: -382.5px;
+  width: 765px;
+  height: 765px; }
   .board.size17.zoomin .row {
-    height: 30px;
-    width: 510px; }
+    height: 45px;
+    width: 765px; }
     .board.size17.zoomin .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 .board.size17.zoomout {
-  width: 510px;
-  height: 510px; }
+  margin-left: -382.5px;
+  width: 765px;
+  height: 765px; }
   .board.size17.zoomout .row {
-    height: 30px;
-    width: 510px; }
+    height: 45px;
+    width: 765px; }
     .board.size17.zoomout .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 
 .board.size15.zoomin {
-  width: 270px;
-  height: 270px; }
+  margin-left: -337.5px;
+  width: 675px;
+  height: 675px; }
   .board.size15.zoomin .row {
-    height: 30px;
-    width: 450px; }
+    height: 45px;
+    width: 675px; }
     .board.size15.zoomin .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 .board.size15.zoomout {
-  width: 450px;
-  height: 450px; }
+  margin-left: -337.5px;
+  width: 675px;
+  height: 675px; }
   .board.size15.zoomout .row {
-    height: 30px;
-    width: 450px; }
+    height: 45px;
+    width: 675px; }
     .board.size15.zoomout .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 
 .board.size13.zoomin {
-  width: 270px;
-  height: 270px; }
+  margin-left: -292.5px;
+  width: 585px;
+  height: 585px; }
   .board.size13.zoomin .row {
-    height: 30px;
-    width: 390px; }
+    height: 45px;
+    width: 585px; }
     .board.size13.zoomin .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 .board.size13.zoomout {
-  width: 390px;
-  height: 390px; }
+  margin-left: -292.5px;
+  width: 585px;
+  height: 585px; }
   .board.size13.zoomout .row {
-    height: 30px;
-    width: 390px; }
+    height: 45px;
+    width: 585px; }
     .board.size13.zoomout .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 
 .board.size11.zoomin {
-  width: 270px;
-  height: 270px; }
+  margin-left: -247.5px;
+  width: 495px;
+  height: 495px; }
   .board.size11.zoomin .row {
-    height: 30px;
-    width: 330px; }
+    height: 45px;
+    width: 495px; }
     .board.size11.zoomin .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 .board.size11.zoomout {
-  width: 330px;
-  height: 330px; }
+  margin-left: -247.5px;
+  width: 495px;
+  height: 495px; }
   .board.size11.zoomout .row {
-    height: 30px;
-    width: 330px; }
+    height: 45px;
+    width: 495px; }
     .board.size11.zoomout .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 
 .board.size9.zoomin {
-  width: 270px;
-  height: 270px; }
+  margin-left: -202.5px;
+  width: 405px;
+  height: 405px; }
   .board.size9.zoomin .row {
-    height: 30px;
-    width: 270px; }
+    height: 45px;
+    width: 405px; }
     .board.size9.zoomin .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 .board.size9.zoomout {
-  width: 270px;
-  height: 270px; }
+  margin-left: -202.5px;
+  width: 405px;
+  height: 405px; }
   .board.size9.zoomout .row {
-    height: 30px;
-    width: 270px; }
+    height: 45px;
+    width: 405px; }
     .board.size9.zoomout .row img {
-      height: 30px;
-      width: 30px; }
+      height: 45px;
+      width: 45px; }
 
 .board {
   overflow: hidden;
   position: relative;
-  left: 50%;
-  margin-left: -285px;
-  margin-top: 10px; }
+  left: 350px;
+  margin-top: 25px;
+  margin-bottom: 25px; }
   .board .dragger {
     position: relative;
     background: black; }
