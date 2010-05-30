@@ -36,9 +36,6 @@
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			
 			var really_pass = function () {
-				// cheatahead
-				// $('.move.play .board .latest')
-				// 	.removeClass('latest');
 					
 				var annotation = {};
 				annotation[to_play[0].toUpperCase()] = '';
@@ -74,18 +71,11 @@
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
 			var killed_stones = $('.move.play .intersection.'+go.opponent()+'.last_liberty_is_'+target.attr('id'));
-			//cheatahead
-			// $('.move.play .board .latest')
-			// 	.removeClass('latest');
-			// target
-			// 	.addClass('latest ' + go.playing());
-			// killed_stones.removeClass(go.opponent());
 			
 			var annotation = {};
 			annotation[key] = target.attr('id');
 			if (killed_stones.size() > 0) {
 				annotation['K'] = $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
-				killed_stones.removeClass(go.opponent());
 			}
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN'] + 1 : 1;
@@ -286,10 +276,10 @@
 			$('.board.zoomin')
 				.live('gesture_hold', do_zoomout);
 				
-			$('.move.play .board.pass:not(:has(.valid.black,.valid.white))')
+			$('.move.play .board.pass:not(:has(.playable_black.black,.playable_white.white))')
 				.live('gesture_close', do_pass);
 				
-			$('.move.play .board:not(.pass):not(:has(.valid.black,.valid.white))')
+			$('.move.play .board:not(.pass):not(:has(.playable_black.black,.playable_white.white))')
 				.live('gesture_close', function () {go.message("Sorry, the rules prohibit passing at this time");});
 				
 			$('.move.play .board')
@@ -300,14 +290,20 @@
 				.gesture(['top'])
 				.bind('gesture_top', function(event) { jQT.goBack(); });
 				
-			$('.move.play:not(.swap) .board.play .valid')
-				.live('gesture_click', do_play); // do_play
+			$('.move.play.black:not(.swap) .board.play .playable_black')
+				.live('gesture_click', do_play);
+			$('.move.play.white:not(.swap) .board.play .playable_white')
+				.live('gesture_click', do_play);
 				
-			$('.move.play.swap .board.play .valid')
-				.live('gesture_click', do_reject_swap);
-				
-			$('.move.play .board.place .valid')
+			$('.move.play.black .board.place .playable_black')
 				.live('gesture_click', do_place);
+			$('.move.play.white .board.place .playable_white')
+				.live('gesture_click', do_place);
+				
+			$('.move.play.black.swap .board.play .playable_black')
+				.live('gesture_click', do_reject_swap);
+			$('.move.play.white.swap .board.play .playable_white')
+				.live('gesture_click', do_reject_swap);
 				
 			$('.move.play.swap .board.play')
 				.live('gesture_circle', do_accept_swap);

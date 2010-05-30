@@ -13,6 +13,22 @@
 			}, optional_seed, arr);
 		};
 		
+		
+		// board
+		// 	.T(playing)
+		//
+		// or
+		//
+		// playing(board)
+		//
+		var playing = function(board) {
+			return board.closest('.move').is('.white') ? 'white' : 'black';
+		};
+		
+		var opposing = function(board) {
+			return board.closest('.move').is('.black') ? 'white' : 'black';
+		};
+		
 		// usage:
 		//
 		// board
@@ -84,7 +100,7 @@
 					.data('liberties', null)
 					.removeClass(function (i, clazz) {
 						return [
-							'group at_liberty atari valid',
+							'group at_liberty atari playable_white playable_black',
 							clazz.match(/group_../),
 							clazz.match(/last_liberty_is_../),
 							clazz.match(/debug_\w+/)
@@ -215,20 +231,24 @@
 					.removeClass('pass');
 			};
 			
-			var at_liberty_valid = function (board) {
-				// console.log('at_liberty_valid');
+			var at_liberty_playable = function (board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
 				return board
 					.find('.intersection.at_liberty:not(.white):not(.black)')
-						.addClass('valid debug_at_liberty_valid')
+						.addClass('playable_'+player+' debug_at_liberty_playable')
 						.end();
 			};
 			
 			// this is the rule that permits suicide in Go, so removing this
 			// rule prohibits suicide!
 			
-			var killers_valid = function (board) {
-				// console.log('killers_valid');
-				var opponent = board.closest('.move').is('.black') ? 'white' : 'black';
+			var killers_playable = function (board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
+				var opponent = opposing(board);
 				
 				return board
 					.find('.group.atari.' + opponent)
@@ -238,30 +258,33 @@
 							if (m)
 								board
 									.find('#' + m[1])
-										.addClass('valid debug_killers_valid');
+										.addClass('playable_'+player+' debug_killers_playable');
 						})
 						.end()
 			};
 			
-			var extend_group_valid = function (board) {
-				// console.log('extend_group_valid');
-				var player = board.closest('.move').is('.white') ? 'white' : 'black';
+			var extend_group_playable = function (board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
 				var adjacents = go.get_adjacents();
 				
 				return board
-					.find('.intersection:not(.valid):not(.white):not(.black)')
+					.find('.intersection:not(.playable_'+ player+'):not(.white):not(.black)')
 						.each(function (i, el) {
 							el = $(el);
 							var id = el.attr('id');
 							if (board.find(adjacents[id]).is('.' + player + ':not(.atari)'))
 								el
-									.addClass('valid debug_extend_group_valid');
+									.addClass('playable_'+player+' debug_extend_group_playable');
 						})
 						.end();
 			};
 			
-			var simple_ko_invalid = function (board) {
-				var opponent = board.closest('.move').is('.black') ? 'white' : 'black';
+			var simple_ko_unplayable = function (board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
 				var last_sgf_node = go.sgf.current[go.sgf.current.length - 1];
 				var last_id = last_sgf_node[opponent[0].toUpperCase()];
 				
@@ -272,13 +295,13 @@
 						if (a.length == 1) {
 							var captured_id = a[0];
 							var captured = $('#' + captured_id);
-							if (captured.size() == 1 && captured.is('valid')) {
+							if (captured.size() == 1 && captured.is('playable_'+player)) {
 								var recaptured = board
 									.find('.last_liberty_is_' + captured_id);
 								if (recaptured.size() == 1 && recaptured.attr('id') == last_id)
 									captured
-										.removeClass('valid')
-										.addClass('debug_simple_ko_invalid');
+										.removeClass('playable_'+player)
+										.addClass('debug_simple_ko_unplayable');
 							}
 						}
 					}
@@ -286,14 +309,17 @@
 				return board
 			};
 			
-			var unslidable_invalid = function (board) {
+			var unslidable_unplayable = function (board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
 				board
 					.find('.temp_slidable')
 						.removeClass('temp_slidable');
 				var home_intersections = board
-					.find(go.playing() == 'white' ? '.row:first .intersection' : '.row:last .intersection');
+					.find(player == 'white' ? '.row:first .intersection' : '.row:last .intersection');
 				var home_playing_intersections = home_intersections
-					.filter('.' + go.playing());
+					.filter('.' + player);
 				var home_group_classes = unique(
 					F.reduce('x.concat(y)', [], F.map('$(_).attr("class").match(/group_../)', home_playing_intersections))
 				);
@@ -313,8 +339,8 @@
 				} while (slidables.size() > 0);
 				
 				return board
-					.find('.valid:not(.temp_slidable)')
-						.removeClass('valid')
+					.find('.playable_'+player+':not(.temp_slidable)')
+						.removeClass('.playable_'+player)
 						.end()
 					.find('.temp_slidable')
 						.removeClass('temp_slidable')
@@ -323,14 +349,17 @@
 			
 			// endings
 			
-			var two_passes_p = function(board) {
+			var two_passes_p = function(board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
 				if (go.sgf.current.length > 2) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
-					if (ultimate_index < 2) return board;
+					if (ultimate_index < 2) return false;
 					var penultimate_index = go.sgf.floor(ultimate_index - 1);
-					if (penultimate_index < 1) return board;
-					var ultimate = go.sgf.current[ultimate_index][board.closest('.move').is('.black') ? 'W' : 'B'];
-					var penultimate = go.sgf.current[penultimate_index][board.closest('.move').is('.black') ? 'B' : 'W'];
+					if (penultimate_index < 1) return false;
+					var ultimate = go.sgf.current[ultimate_index][opponent[0].toUpperCase()];
+					var penultimate = go.sgf.current[penultimate_index][player[0].toUpperCase()];
 					if (ultimate == undefined || penultimate == undefined) return false;
 					if (
 						(ultimate == '' || !board.has('#' + ultimate)) && 
@@ -373,12 +402,15 @@
 				return board;
 			};
 			
-			var no_legal_move_loses = function (board) {
-				if (!board.has('.intersection.valid')) {
-					var p = go.playing()[0].toUpperCase();
-					var o = go.opponent()[0].toUpperCase();
+			var no_legal_move_loses = function (board, player, opponent) {
+				player = player || playing(board);
+				opponent = opponent || opposing(board);
+				
+				if (!board.has('.intersection.playable_'+player)) {
+					var p = player[0].toUpperCase();
+					var o = opponent[0].toUpperCase();
 					go.sgf.game_info['RE'] = o+'+1';
-					go.message('The game is over, '+go.sgf.game_info['P'+o]+' wins because ' + go.sgf.game_info['P'+p]+' has no valid move');
+					go.message('The game is over, '+go.sgf.game_info['P'+o]+' wins because ' + go.sgf.game_info['P'+p]+' has no playable move');
 				}
 				return board;
 			}
@@ -789,11 +821,11 @@
 				},
 				validations: {
 					no_passing_allowed: no_passing_allowed,
-					at_liberty_valid: at_liberty_valid,
-					killers_valid: killers_valid,
-					extend_group_valid: extend_group_valid,
-					simple_ko_invalid: simple_ko_invalid,
-					unslidable_invalid: unslidable_invalid
+					at_liberty_playable: at_liberty_playable,
+					killers_playable: killers_playable,
+					extend_group_playable: extend_group_playable,
+					simple_ko_unplayable: simple_ko_unplayable,
+					unslidable_unplayable: unslidable_unplayable
 				},
 				endings: {
 					two_passes: two_passes,
@@ -803,13 +835,13 @@
 					captures_game: captures_game
 				},
 				games: {
-					"Classic": '{"GM": 1, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Other Go Setups": '{"GM": 1, "setups": "other", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"Gonnect": '{"GM": 13, "setups": "pie", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid" ]}',
-					"One Eye Go": '{"GM": 11, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "extend_group_valid" ]}',
-					"Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_valid", "killers_valid", "extend_group_valid", "simple_ko_invalid", "unslidable_invalid" ]}',
+					"Classic": '{"GM": 1, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"Other Go Setups": '{"GM": 1, "setups": "other", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"Gonnect": '{"GM": 13, "setups": "pie", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"One Eye Go": '{"GM": 11, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "extend_group_playable" ]}',
+					"Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable", "unslidable_unplayable" ]}',
 				}
 			};
 		})();
@@ -822,9 +854,9 @@
 		var game_over = function(board) {
 			if (go.sgf.game_info['RE'] != undefined) {
 				board
-					.find('.intersection.valid')
+					.find('.intersection.playable_black,.intersection.playable_white')
 						.addClass('debug_game_over')
-						.removeClass('valid');
+						.removeClass('playable_black playable_white');
 			}
 		};
 		
@@ -844,10 +876,14 @@
 			var steps = $.merge(endings, validations);
 			steps.push(game_over);
 			history_free_validate = function (board) {
-				$.each(steps, function (i, step) {
-					board
-						.T(step);
-				});
+				var player = playing(board);
+				var opponent = opposing(board);
+				F.map(
+					function (validation_step) {
+						validation_step(board, player, opponent);
+					},
+					steps
+				);
 				return board;
 			}
 		};
