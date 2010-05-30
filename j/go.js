@@ -144,6 +144,10 @@
 
 		var switch_turns = switch_maker(board);
 		
+		var to_play = this_move.PL;
+		
+		var changed_class = to_play ? 'changed_by_' + to_play : '';
+		
 		board
 			.find('.latest')
 				.removeClass('latest');
@@ -152,7 +156,7 @@
 		if (play && play != '') {
 			board
 				.find('#' + play)
-					.addClass('black latest');
+					.addClass('black latest changed_by_black');
 			switch_turns();
 		}
 		else if (play == '') {
@@ -163,7 +167,7 @@
 			if (play && play != '') {
 				board
 					.find('#' + play)
-						.addClass('white latest');
+						.addClass('white latest changed_by_white');
 				switch_turns();
 			}
 			else if (play == '') {
@@ -175,20 +179,20 @@
 		if (placements) {
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-					.addClass('black' + (this_move != go.sgf.game_info ? ' latest' : ''));
+					.addClass('black changed_by_black' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
 		placements = this_move.AW;
 		if (placements) {
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-					.addClass('white' + (this_move != go.sgf.game_info ? ' latest' : ''));
+					.addClass('white changed_by_white' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
-		if (this_move.K) 
+		if (this_move.K && (this_move.W || this_move.B)) 
 			board
 				.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
-					.removeClass('white black');
+					.removeClass('white black')
+					.addClass(changed_class);
 					
-		var to_play = this_move.PL;
 		if (to_play)
 			board
 				.closest('.move')
@@ -247,6 +251,9 @@
 			switch_turns(was_playing);
 		}
 		else return; // not undoable
+		
+		var changed_class = to_play ? 'changed_by_' + to_play : '';
+		
 		var was_playing_index = was_playing[0].toUpperCase();
 		if (this_move != undefined) {
 			var position = this_move[was_playing_index];
@@ -255,13 +262,11 @@
 					board
 						.find('#' + position)
 							.removeClass('latest')
-							.removeClass(was_playing);
-					var m = this_move['C'] && this_move['C'].match(/killed: (..(?:,..)*)/);
-					if (m != undefined) {
-						board
-							.find($.map(m[1].split(','), '"#" + _'.lambda()).join(','))
-								.addClass(was_playing == 'black' ? 'white' : 'black');
-					}
+							.removeClass(was_playing)
+							.addClass(changed_class)
+							.end()
+						.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
+							.addClass((was_playing == 'black' ? 'white ' : 'black ') + changed_class);
 				}
 				var to_play_index = to_play[0].toUpperCase();
 				if (optional_previous_move != undefined) {

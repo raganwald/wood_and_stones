@@ -72,11 +72,23 @@
 			return (a_across < b_across || (a_across == b_across && a_down < b_down));
 		};
 		
-		var analyze = function(board, debug) {
+		var analyze = function(board, ids_to_analyze, debug) {
 			
-			if (board == undefined)
-				board = $('.move.play .board');
+			board = board || $('.move.play .board');
+			ids_to_analyze = ids_to_analyze || $.map(go.letters,
+				function (across) {
+					return $.map(go.letters,
+						function (down) { return across + down; }
+					);
+				}
+			);
+			debug = (debug == undefined ? false : debug);
 			
+			if (debug) {
+				console.log('debugging on');
+				console.log(ids_to_analyze);
+			}
+		
 			var adjacents = go.get_adjacents();
 			
 			// Class decorations:
@@ -91,7 +103,6 @@
 			//
 			// at_liberty: identifies an empty intersection with at least one liberty.
 			
-			debug = (debug == undefined ? false : debug);
 			if (typeof(board) == 'string')
 				board = $(board);
 			board
@@ -106,83 +117,82 @@
 							clazz.match(/debug_\w+/)
 						].join(' ');
 					})
-					.end()
+					.end();
+			$.each(ids_to_analyze, function (index, id) {
+				// expensive, one search per intersection!
+				var intersection = board.find('#' + id);
+				var m = intersection
+					.attr('class')
+						.match(/(black|white)/);
+				var colour = m ? m[1] : null;
+				if (colour) {
+
+					intersection
+						.data('group', intersection)
+						.addClass('group_' + id)
+						.addClass('group')
+						.data('liberties', []);
 					
-			// first pass, assemble groups
-			$.each(go.letters, function (i, across) {
-				$.each(go.letters, function (j, down) {
-					var id = across + down;
-					var intersection = board.find('#' + id);
-					if (intersection.is('.black,.white')) {
-						var colour = colour_of(intersection);
-
-						intersection
-							.data('group', intersection)
-							.addClass('group_' + id)
-							.addClass('group')
-							.data('liberties', []);
-							
-						board
-							.find(adjacents[id])
-								.filter(':not(.black):not(.white)')
-									.each(function (i, adj) {
-										adj = $(adj)
-										var adj_id = adj.attr('id');
-										var group = intersection.data('group');
-										if (debug) console.info(intersection.attr('id') + ' belongs to ' + group.attr('id'));
-										var liberties = group.data('liberties');
-										if (liberties == null) {
-											console.error('no liberties for group ' + group.attr('id') + ' of ' + intersection.attr('id'));
-										}
-										if (-1 == $.inArray(adj_id, liberties))
-											liberties.push(adj_id);
-									})
-									.end()
-								.filter('.black,.white')
-									.each(function (i, adj) {
-										adj = $(adj)
-										if (colour_of(adj) == colour && before(adj, intersection)) {
-											var adj_bt = adj.data('group');
-											var this_bt = intersection.data('group');
-										
-											if (adj_bt.attr('id') != this_bt.attr('id')) {
-												if (debug) console.info('merging group for ' + intersection.attr('id') + ' into group for ' + adj.attr('id'));
-												var from;
-												var to;
-												if (before(adj_bt, this_bt)) {
-													from = this_bt
-													to = adj_bt
-												}
-												else if (before(this_bt, adj_bt)) {
-													from = adj_bt
-													to = this_bt
-												}
-												// merge liberties
-		                    					if (debug) console.info('merging ' + from.attr('id') + ' into ' + to.attr('id'));
-
-												var from_liberties = from.data('liberties');
-												var to_liberties = to.data('liberties')
-												$.each(from_liberties, function (i, liberty) {
-													if ($.inArray(liberty, to_liberties) == -1)
-														to_liberties.push(liberty);
-												});
-										
-												from
-													.removeClass('group')
-													.data('liberties', null);
-										
-												if (debug) console.info('now ' + to_liberties.length + ' liberties for ' + to.attr('id'));
-											
-												board
-													.find('.group_' + from.attr('id'))
-														.removeClass('group_' + from.attr('id'))
-														.addClass('group_' + to.attr('id'))
-														.data('group', to);
+					board
+						.find(adjacents[id])
+							.filter(':not(.black):not(.white)')
+								.each(function (i, adj) {
+									adj = $(adj)
+									var adj_id = adj.attr('id');
+									var group = intersection.data('group');
+									if (debug) console.info(intersection.attr('id') + ' belongs to ' + group.attr('id'));
+									var liberties = group.data('liberties');
+									if (liberties == null) {
+										console.error('no liberties for group ' + group.attr('id') + ' of ' + intersection.attr('id'));
+									}
+									if (-1 == $.inArray(adj_id, liberties))
+										liberties.push(adj_id);
+								})
+								.end()
+							.filter('.black,.white')
+								.each(function (i, adj) {
+									adj = $(adj)
+									if (colour_of(adj) == colour && before(adj, intersection)) {
+										var adj_bt = adj.data('group');
+										var this_bt = intersection.data('group');
+								
+										if (adj_bt.attr('id') != this_bt.attr('id')) {
+											if (debug) console.info('merging group for ' + intersection.attr('id') + ' into group for ' + adj.attr('id'));
+											var from;
+											var to;
+											if (before(adj_bt, this_bt)) {
+												from = this_bt
+												to = adj_bt
 											}
+											else if (before(this_bt, adj_bt)) {
+												from = adj_bt
+												to = this_bt
+											}
+											// merge liberties
+	                    					if (debug) console.info('merging ' + from.attr('id') + ' into ' + to.attr('id'));
+
+											var from_liberties = from.data('liberties');
+											var to_liberties = to.data('liberties')
+											$.each(from_liberties, function (i, liberty) {
+												if ($.inArray(liberty, to_liberties) == -1)
+													to_liberties.push(liberty);
+											});
+								
+											from
+												.removeClass('group')
+												.data('liberties', null);
+								
+											if (debug) console.info('now ' + to_liberties.length + ' liberties for ' + to.attr('id'));
+									
+											board
+												.find('.group_' + from.attr('id'))
+													.removeClass('group_' + from.attr('id'))
+													.addClass('group_' + to.attr('id'))
+													.data('group', to);
 										}
-									});
-					}
-				});
+									}
+								});
+				}
 			});
 			
 			// second pass, update killed and atari
@@ -819,6 +829,9 @@
 						}
 					]
 				},
+				optimizations: {
+					reanalyze_all: reanalyze_all
+				}
 				validations: {
 					no_passing_allowed: no_passing_allowed,
 					at_liberty_playable: at_liberty_playable,
