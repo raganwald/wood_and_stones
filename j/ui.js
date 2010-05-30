@@ -37,8 +37,8 @@
 			
 			var really_pass = function () {
 				// cheatahead
-				$('.move.play .board .latest')
-					.removeClass('latest');
+				// $('.move.play .board .latest')
+				// 	.removeClass('latest');
 					
 				var annotation = {};
 				annotation[to_play[0].toUpperCase()] = '';
@@ -70,16 +70,16 @@
 		};
 		
 		var annotate = function (event_data, key) {
-			target = $(event_data.currentTarget);
+			target = $(event_data.target);
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
 			var killed_stones = $('.move.play .intersection.'+go.opponent()+'.last_liberty_is_'+target.attr('id'));
 			//cheatahead
-			$('.move.play .board .latest')
-				.removeClass('latest');
-			target
-				.addClass('latest ' + go.playing());
-			killed_stones.removeClass(go.opponent());
+			// $('.move.play .board .latest')
+			// 	.removeClass('latest');
+			// target
+			// 	.addClass('latest ' + go.playing());
+			// killed_stones.removeClass(go.opponent());
 			
 			var annotation = {};
 			annotation[key] = target.attr('id');
@@ -301,16 +301,17 @@
 				.bind('gesture_top', function(event) { jQT.goBack(); });
 				
 			$('.move.play:not(.swap) .board.play .valid')
-				.live('gesture_click', do_play);
+				.live('gesture_click', do_play); // do_play
 				
 			$('.move.play.swap .board.play .valid')
 				.live('gesture_click', do_reject_swap);
 				
+			$('.move.play .board.place .valid')
+				.live('gesture_click', do_place);
+				
 			$('.move.play.swap .board.play')
 				.live('gesture_circle', do_accept_swap);
 				
-			$('.move.play .board.place .valid')
-				.live('gesture_click', do_place);
 		};
 	})();
 	
