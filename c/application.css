@@ -16,9 +16,6 @@
 .in_progress:before {
   content: url(../i/in_progress.gif); }
 
-.toolbar h1 {
-  width: 100% !important; }
-
 .new_game ul li {
   position: relative !important; }
   .new_game ul li .label {

@@ -1,0 +1,311 @@
+.board.size19.zoomin {
+  width: 270px;
+  height: 270px; }
+  .board.size19.zoomin .row {
+    height: 30px;
+    width: 570px; }
+    .board.size19.zoomin .row img {
+      height: 30px;
+      width: 30px; }
+.board.size19.zoomout {
+  width: 570px;
+  height: 570px; }
+  .board.size19.zoomout .row {
+    height: 30px;
+    width: 570px; }
+    .board.size19.zoomout .row img {
+      height: 30px;
+      width: 30px; }
+
+.board.size17.zoomin {
+  width: 270px;
+  height: 270px; }
+  .board.size17.zoomin .row {
+    height: 30px;
+    width: 510px; }
+    .board.size17.zoomin .row img {
+      height: 30px;
+      width: 30px; }
+.board.size17.zoomout {
+  width: 510px;
+  height: 510px; }
+  .board.size17.zoomout .row {
+    height: 30px;
+    width: 510px; }
+    .board.size17.zoomout .row img {
+      height: 30px;
+      width: 30px; }
+
+.board.size15.zoomin {
+  width: 270px;
+  height: 270px; }
+  .board.size15.zoomin .row {
+    height: 30px;
+    width: 450px; }
+    .board.size15.zoomin .row img {
+      height: 30px;
+      width: 30px; }
+.board.size15.zoomout {
+  width: 450px;
+  height: 450px; }
+  .board.size15.zoomout .row {
+    height: 30px;
+    width: 450px; }
+    .board.size15.zoomout .row img {
+      height: 30px;
+      width: 30px; }
+
+.board.size13.zoomin {
+  width: 270px;
+  height: 270px; }
+  .board.size13.zoomin .row {
+    height: 30px;
+    width: 390px; }
+    .board.size13.zoomin .row img {
+      height: 30px;
+      width: 30px; }
+.board.size13.zoomout {
+  width: 390px;
+  height: 390px; }
+  .board.size13.zoomout .row {
+    height: 30px;
+    width: 390px; }
+    .board.size13.zoomout .row img {
+      height: 30px;
+      width: 30px; }
+
+.board.size11.zoomin {
+  width: 270px;
+  height: 270px; }
+  .board.size11.zoomin .row {
+    height: 30px;
+    width: 330px; }
+    .board.size11.zoomin .row img {
+      height: 30px;
+      width: 30px; }
+.board.size11.zoomout {
+  width: 330px;
+  height: 330px; }
+  .board.size11.zoomout .row {
+    height: 30px;
+    width: 330px; }
+    .board.size11.zoomout .row img {
+      height: 30px;
+      width: 30px; }
+
+.board.size9.zoomin {
+  width: 270px;
+  height: 270px; }
+  .board.size9.zoomin .row {
+    height: 30px;
+    width: 270px; }
+    .board.size9.zoomin .row img {
+      height: 30px;
+      width: 30px; }
+.board.size9.zoomout {
+  width: 270px;
+  height: 270px; }
+  .board.size9.zoomout .row {
+    height: 30px;
+    width: 270px; }
+    .board.size9.zoomout .row img {
+      height: 30px;
+      width: 30px; }
+
+.board {
+  overflow: hidden;
+  position: relative;
+  left: 50%;
+  margin-left: -285px;
+  margin-top: 10px; }
+  .board .dragger {
+    position: relative;
+    background: black; }
+  .board .intersection {
+    display: inline-block; }
+  .board .row:first-child .intersection:first-child.black {
+    background: url("../i/board/temporary/tile1nw.png"); }
+    .board .row:first-child .intersection:first-child.black.valid {
+      background: url("../i/board/temporary/tile1nwd.png") !important; }
+    .board .row:first-child .intersection:first-child.black.latest {
+      background: url("../i/board/temporary/tile1nwd.png") !important; }
+  .board .row:first-child .intersection:first-child.white {
+    background: url("../i/board/temporary/tile2nw.png"); }
+    .board .row:first-child .intersection:first-child.white.valid {
+      background: url("../i/board/temporary/tile2nwd.png") !important; }
+    .board .row:first-child .intersection:first-child.white.latest {
+      background: url("../i/board/temporary/tile2nwd.png") !important; }
+  .board .row:first-child .intersection:first-child:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0nw.png"); }
+  .board .row:first-child .intersection:not(:first-child):not(:last-child).black {
+    background: url("../i/board/temporary/tile1n.png"); }
+    .board .row:first-child .intersection:not(:first-child):not(:last-child).black.valid {
+      background: url("../i/board/temporary/tile1nd.png") !important; }
+    .board .row:first-child .intersection:not(:first-child):not(:last-child).black.latest {
+      background: url("../i/board/temporary/tile1nd.png") !important; }
+  .board .row:first-child .intersection:not(:first-child):not(:last-child).white {
+    background: url("../i/board/temporary/tile2n.png"); }
+    .board .row:first-child .intersection:not(:first-child):not(:last-child).white.valid {
+      background: url("../i/board/temporary/tile2nd.png") !important; }
+    .board .row:first-child .intersection:not(:first-child):not(:last-child).white.latest {
+      background: url("../i/board/temporary/tile2nd.png") !important; }
+  .board .row:first-child .intersection:not(:first-child):not(:last-child):not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0n.png"); }
+  .board .row:first-child .intersection:last-child.black {
+    background: url("../i/board/temporary/tile1ne.png"); }
+    .board .row:first-child .intersection:last-child.black.valid {
+      background: url("../i/board/temporary/tile1ned.png") !important; }
+    .board .row:first-child .intersection:last-child.black.latest {
+      background: url("../i/board/temporary/tile1ned.png") !important; }
+  .board .row:first-child .intersection:last-child.white {
+    background: url("../i/board/temporary/tile2ne.png"); }
+    .board .row:first-child .intersection:last-child.white.valid {
+      background: url("../i/board/temporary/tile2ned.png") !important; }
+    .board .row:first-child .intersection:last-child.white.latest {
+      background: url("../i/board/temporary/tile2ned.png") !important; }
+  .board .row:first-child .intersection:last-child:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0ne.png"); }
+  .board .row:not(:first-child):not(:last-child) .intersection:first-child.black {
+    background: url("../i/board/temporary/tile1w.png"); }
+    .board .row:not(:first-child):not(:last-child) .intersection:first-child.black.valid {
+      background: url("../i/board/temporary/tile1wd.png") !important; }
+    .board .row:not(:first-child):not(:last-child) .intersection:first-child.black.latest {
+      background: url("../i/board/temporary/tile1wd.png") !important; }
+  .board .row:not(:first-child):not(:last-child) .intersection:first-child.white {
+    background: url("../i/board/temporary/tile2w.png"); }
+    .board .row:not(:first-child):not(:last-child) .intersection:first-child.white.valid {
+      background: url("../i/board/temporary/tile2wd.png") !important; }
+    .board .row:not(:first-child):not(:last-child) .intersection:first-child.white.latest {
+      background: url("../i/board/temporary/tile2wd.png") !important; }
+  .board .row:not(:first-child):not(:last-child) .intersection:first-child:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0w.png"); }
+  .board .row:not(:first-child):not(:last-child) .intersection:not(:first-child):not(:last-child).black {
+    background: url("../i/board/temporary/tile1.png"); }
+    .board .row:not(:first-child):not(:last-child) .intersection:not(:first-child):not(:last-child).black.valid {
+      background: url("../i/board/temporary/tile1d.png") !important; }
+    .board .row:not(:first-child):not(:last-child) .intersection:not(:first-child):not(:last-child).black.latest {
+      background: url("../i/board/temporary/tile1d.png") !important; }
+  .board .row:not(:first-child):not(:last-child) .intersection:not(:first-child):not(:last-child).white {
+    background: url("../i/board/temporary/tile2.png"); }
+    .board .row:not(:first-child):not(:last-child) .intersection:not(:first-child):not(:last-child).white.valid {
+      background: url("../i/board/temporary/tile2d.png") !important; }
+    .board .row:not(:first-child):not(:last-child) .intersection:not(:first-child):not(:last-child).white.latest {
+      background: url("../i/board/temporary/tile2d.png") !important; }
+  .board .row:not(:first-child):not(:last-child) .intersection:last-child.black {
+    background: url("../i/board/temporary/tile1e.png"); }
+    .board .row:not(:first-child):not(:last-child) .intersection:last-child.black.valid {
+      background: url("../i/board/temporary/tile1ed.png") !important; }
+    .board .row:not(:first-child):not(:last-child) .intersection:last-child.black.latest {
+      background: url("../i/board/temporary/tile1ed.png") !important; }
+  .board .row:not(:first-child):not(:last-child) .intersection:last-child.white {
+    background: url("../i/board/temporary/tile2e.png"); }
+    .board .row:not(:first-child):not(:last-child) .intersection:last-child.white.valid {
+      background: url("../i/board/temporary/tile2ed.png") !important; }
+    .board .row:not(:first-child):not(:last-child) .intersection:last-child.white.latest {
+      background: url("../i/board/temporary/tile2ed.png") !important; }
+  .board .row:not(:first-child):not(:last-child) .intersection:last-child:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0e.png"); }
+  .board .row:last-child .intersection:first-child.black {
+    background: url("../i/board/temporary/tile1sw.png"); }
+    .board .row:last-child .intersection:first-child.black.valid {
+      background: url("../i/board/temporary/tile1swd.png") !important; }
+    .board .row:last-child .intersection:first-child.black.latest {
+      background: url("../i/board/temporary/tile1swd.png") !important; }
+  .board .row:last-child .intersection:first-child.white {
+    background: url("../i/board/temporary/tile2sw.png"); }
+    .board .row:last-child .intersection:first-child.white.valid {
+      background: url("../i/board/temporary/tile2swd.png") !important; }
+    .board .row:last-child .intersection:first-child.white.latest {
+      background: url("../i/board/temporary/tile2swd.png") !important; }
+  .board .row:last-child .intersection:first-child:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0sw.png"); }
+  .board .row:last-child .intersection:not(:first-child):not(:last-child).black {
+    background: url("../i/board/temporary/tile1s.png"); }
+    .board .row:last-child .intersection:not(:first-child):not(:last-child).black.valid {
+      background: url("../i/board/temporary/tile1sd.png") !important; }
+    .board .row:last-child .intersection:not(:first-child):not(:last-child).black.latest {
+      background: url("../i/board/temporary/tile1sd.png") !important; }
+  .board .row:last-child .intersection:not(:first-child):not(:last-child).white {
+    background: url("../i/board/temporary/tile2s.png"); }
+    .board .row:last-child .intersection:not(:first-child):not(:last-child).white.valid {
+      background: url("../i/board/temporary/tile2sd.png") !important; }
+    .board .row:last-child .intersection:not(:first-child):not(:last-child).white.latest {
+      background: url("../i/board/temporary/tile2sd.png") !important; }
+  .board .row:last-child .intersection:not(:first-child):not(:last-child):not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0s.png"); }
+  .board .row:last-child .intersection:last-child.black {
+    background: url("../i/board/temporary/tile1se.png"); }
+    .board .row:last-child .intersection:last-child.black.valid {
+      background: url("../i/board/temporary/tile1sed.png") !important; }
+    .board .row:last-child .intersection:last-child.black.latest {
+      background: url("../i/board/temporary/tile1sed.png") !important; }
+  .board .row:last-child .intersection:last-child.white {
+    background: url("../i/board/temporary/tile2se.png"); }
+    .board .row:last-child .intersection:last-child.white.valid {
+      background: url("../i/board/temporary/tile2sed.png") !important; }
+    .board .row:last-child .intersection:last-child.white.latest {
+      background: url("../i/board/temporary/tile2sed.png") !important; }
+  .board .row:last-child .intersection:last-child:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0se.png"); }
+  .board .row:last-child .star.black {
+    background: url("../i/board/temporary/tile1.png"); }
+    .board .row:last-child .star.black.valid {
+      background: url("../i/board/temporary/tile1d.png") !important; }
+    .board .row:last-child .star.black.latest {
+      background: url("../i/board/temporary/tile1d.png") !important; }
+  .board .row:last-child .star.white {
+    background: url("../i/board/temporary/tile2.png"); }
+    .board .row:last-child .star.white.valid {
+      background: url("../i/board/temporary/tile2d.png") !important; }
+    .board .row:last-child .star.white.latest {
+      background: url("../i/board/temporary/tile2d.png") !important; }
+  .board .row:last-child .star:not(.black):not(.white) {
+    background: url("../i/board/temporary/tile0c.png"); }
+  .board .row:last-child .star.valid {
+    BEFORE: URL("../i/board/temporary/tile0c.png"); }
+
+.board.size9 .row:nth-child(3) .intersection:not(.black):not(.white):nth-child(3), .board.size9 .row:nth-child(3) .intersection:not(.black):not(.white):nth-child(5), .board.size9 .row:nth-child(3) .intersection:not(.black):not(.white):nth-last-child(3), .board.size9 .row:nth-child(5) .intersection:not(.black):not(.white):nth-child(3), .board.size9 .row:nth-child(5) .intersection:not(.black):not(.white):nth-child(5), .board.size9 .row:nth-child(5) .intersection:not(.black):not(.white):nth-last-child(3), .board.size9 .row:nth-last-child(3) .intersection:not(.black):not(.white):nth-child(3), .board.size9 .row:nth-last-child(3) .intersection:not(.black):not(.white):nth-child(5), .board.size9 .row:nth-last-child(3) .intersection:not(.black):not(.white):nth-last-child(3) {
+  background: url("../i/board/temporary/tile0c.png"); }
+.board.size9 .row:nth-child(3) .intersection:not(.black):not(.white):not(:nth-child(3)):not(:nth-child(5)):not(:nth-last-child(3)):not(:first-child):not(:last-child), .board.size9 .row:nth-child(5) .intersection:not(.black):not(.white):not(:nth-child(3)):not(:nth-child(5)):not(:nth-last-child(3)):not(:first-child):not(:last-child), .board.size9 .row:nth-last-child(3) .intersection:not(.black):not(.white):not(:nth-child(3)):not(:nth-child(5)):not(:nth-last-child(3)):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size9 .row:not(:nth-child(3)):not(:nth-child(5)):not(:nth-last-child(3)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size11 .row:nth-child(3) .intersection:not(.black):not(.white):nth-child(3), .board.size11 .row:nth-child(3) .intersection:not(.black):not(.white):nth-child(6), .board.size11 .row:nth-child(3) .intersection:not(.black):not(.white):nth-last-child(3), .board.size11 .row:nth-child(6) .intersection:not(.black):not(.white):nth-child(3), .board.size11 .row:nth-child(6) .intersection:not(.black):not(.white):nth-child(6), .board.size11 .row:nth-child(6) .intersection:not(.black):not(.white):nth-last-child(3), .board.size11 .row:nth-last-child(3) .intersection:not(.black):not(.white):nth-child(3), .board.size11 .row:nth-last-child(3) .intersection:not(.black):not(.white):nth-child(6), .board.size11 .row:nth-last-child(3) .intersection:not(.black):not(.white):nth-last-child(3) {
+  background: url("../i/board/temporary/tile0c.png"); }
+.board.size11 .row:nth-child(3) .intersection:not(.black):not(.white):not(:nth-child(3)):not(:nth-child(6)):not(:nth-last-child(3)):not(:first-child):not(:last-child), .board.size11 .row:nth-child(6) .intersection:not(.black):not(.white):not(:nth-child(3)):not(:nth-child(6)):not(:nth-last-child(3)):not(:first-child):not(:last-child), .board.size11 .row:nth-last-child(3) .intersection:not(.black):not(.white):not(:nth-child(3)):not(:nth-child(6)):not(:nth-last-child(3)):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size11 .row:not(:nth-child(3)):not(:nth-child(6)):not(:nth-last-child(3)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size13 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size13 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(7), .board.size13 .row:nth-child(4) .intersection:not(.black):not(.white):nth-last-child(4), .board.size13 .row:nth-child(7) .intersection:not(.black):not(.white):nth-child(4), .board.size13 .row:nth-child(7) .intersection:not(.black):not(.white):nth-child(7), .board.size13 .row:nth-child(7) .intersection:not(.black):not(.white):nth-last-child(4), .board.size13 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size13 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(7), .board.size13 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-last-child(4) {
+  background: url("../i/board/temporary/tile0c.png"); }
+.board.size13 .row:nth-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(7)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size13 .row:nth-child(7) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(7)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size13 .row:nth-last-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(7)):not(:nth-last-child(4)):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size13 .row:not(:nth-child(4)):not(:nth-child(7)):not(:nth-last-child(4)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size15 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size15 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(8), .board.size15 .row:nth-child(4) .intersection:not(.black):not(.white):nth-last-child(4), .board.size15 .row:nth-child(8) .intersection:not(.black):not(.white):nth-child(4), .board.size15 .row:nth-child(8) .intersection:not(.black):not(.white):nth-child(8), .board.size15 .row:nth-child(8) .intersection:not(.black):not(.white):nth-last-child(4), .board.size15 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size15 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(8), .board.size15 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-last-child(4) {
+  background: url("../i/board/temporary/tile0c.png"); }
+.board.size15 .row:nth-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(8)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size15 .row:nth-child(8) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(8)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size15 .row:nth-last-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(8)):not(:nth-last-child(4)):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size15 .row:not(:nth-child(4)):not(:nth-child(8)):not(:nth-last-child(4)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size17 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size17 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(9), .board.size17 .row:nth-child(4) .intersection:not(.black):not(.white):nth-last-child(4), .board.size17 .row:nth-child(9) .intersection:not(.black):not(.white):nth-child(4), .board.size17 .row:nth-child(9) .intersection:not(.black):not(.white):nth-child(9), .board.size17 .row:nth-child(9) .intersection:not(.black):not(.white):nth-last-child(4), .board.size17 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size17 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(9), .board.size17 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-last-child(4) {
+  background: url("../i/board/temporary/tile0c.png"); }
+.board.size17 .row:nth-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(9)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size17 .row:nth-child(9) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(9)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size17 .row:nth-last-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(9)):not(:nth-last-child(4)):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size17 .row:not(:nth-child(4)):not(:nth-child(9)):not(:nth-last-child(4)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size19 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size19 .row:nth-child(4) .intersection:not(.black):not(.white):nth-child(10), .board.size19 .row:nth-child(4) .intersection:not(.black):not(.white):nth-last-child(4), .board.size19 .row:nth-child(10) .intersection:not(.black):not(.white):nth-child(4), .board.size19 .row:nth-child(10) .intersection:not(.black):not(.white):nth-child(10), .board.size19 .row:nth-child(10) .intersection:not(.black):not(.white):nth-last-child(4), .board.size19 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(4), .board.size19 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-child(10), .board.size19 .row:nth-last-child(4) .intersection:not(.black):not(.white):nth-last-child(4) {
+  background: url("../i/board/temporary/tile0c.png"); }
+.board.size19 .row:nth-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(10)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size19 .row:nth-child(10) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(10)):not(:nth-last-child(4)):not(:first-child):not(:last-child), .board.size19 .row:nth-last-child(4) .intersection:not(.black):not(.white):not(:nth-child(4)):not(:nth-child(10)):not(:nth-last-child(4)):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+.board.size19 .row:not(:nth-child(4)):not(:nth-child(10)):not(:nth-last-child(4)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
+  background: url("../i/board/temporary/tile0.png"); }
+
+.intersection.valid {
+  cursor: pointer; }
+
+.intersection {
+  -o-background-size: 100%;
+  -webkit-background-size: 100%;
+  -khtml-background-size: 100%;
+  -moz-background-size: 100%; }
