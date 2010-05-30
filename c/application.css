@@ -16,9 +16,8 @@
 .in_progress:before {
   content: url(../i/in_progress.gif); }
 
-.center {
-  margin-left: auto;
-  margin-right: auto; }
+.toolbar h1 {
+  width: 100% !important; }
 
 .new_game ul li {
   position: relative !important; }
