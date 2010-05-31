@@ -81,7 +81,7 @@
 					.K(function (row) {
 						$.each(go.letters, function (across_index, across_letter) {
 							$('<img/>')
-								.addClass('intersection')
+								.addClass('intersection playable_black playable_white')
 								.attr('id', across_letter + down_letter)
 								.attr('src', 'i/dot_clear.gif')
 								.appendTo(row);
