@@ -93,7 +93,7 @@
 		var incremental_analyzer = function (board, debug) {
 			var to_play = playing(board);
 			var last_played = opposite_colour_of(to_play);
-			if (debug == undefined) debug = true;
+			if (debug == undefined) debug = false;
 			var removed = board
 				.find('.changed:not(.black):not(.white)')
 					.removeClass(by_pattern(/debug_[^ ]+/))
@@ -538,7 +538,7 @@
 			};
 			
 			var simple_ko_unplayable = function (board, player, opponent, debug) {
-				if (debug == undefined) debug = false;
+				if ( m == undefined) debug = false;
 				
 				player = player || playing(board);
 				opponent = opponent || opposing(board);
