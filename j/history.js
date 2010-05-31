@@ -27,6 +27,7 @@
 		if (that_index == -1) 
 			return; // may be a fencepost error when dealing with the start position
 		else if (that_index == last_index) {
+			console.log('re-entering normal space');
 			that_page = $('.move.play');
 		}
 		else {
@@ -36,7 +37,7 @@
 				.append(
 					$('.move.history.this .board')
 						.children()
-							.clone(true)
+							.clone(false)
 				)
 				.data('index', that_index);
 			
@@ -72,7 +73,7 @@
 			.append(
 				$('.move.history.this .board')
 					.children()
-						.clone(true)
+						.clone(false)
 			)
 			.data('index', that_index);
 		
@@ -93,13 +94,18 @@
 	};
 	
 	var enter_history = function() {
+		$('.move.history.this .intersection.black')
+			.removeClass('black');
+		$('.move.history.this .intersection.white')
+			.removeClass('white');
+		$.each(['black', 'white'], function (i, colour) {
+			$('.move.history.this')
+				.find(
+					$.map($('.move.play .intersection.'+colour), '"#"+$(_).attr("id")'.lambda()).join(',')
+				)
+					.addClass(colour);
+		});
 		$('.move.history.this')
-			.empty()
-			.append(
-				$('.move.play')
-					.children()
-						.clone(true)
-			)
 			.find('.board')
 				.data('index', last_move_index())
 				.end();

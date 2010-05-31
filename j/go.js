@@ -84,7 +84,7 @@
 	
 	var postdoit = function(board, this_move) {
 		
-		if (board.closest('.move').is('.play')) {
+		if (board.closest('.move').is(':not(.history)')) {
 	
 			board
 				.K(go.referee.validate);

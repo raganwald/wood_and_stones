@@ -160,7 +160,8 @@
 					added
 						.removeClass('playable_black playable_white');
 					if (debug) console.log('added a '+added_colour+' stone at '+added_id);
-					var adjacent_to_added = $(their_adjacent_selector(added));
+					var adjacent_to_added = board
+						.find(their_adjacent_selector(added));
 					if (debug) console.log('adjacent ids: '+ids_of(adjacent_to_added).join(','));
 					var added_liberties = adjacent_to_added
 						.filter(':not(.black):not(.white)');
@@ -189,6 +190,7 @@
 						matriarch.data('liberties', liberties);
 						if (0 == liberties.length) {
 							console.error('this is where we implement killing stones in the referee');
+							console.error(board.closest('.move').attr('class'));
 						}
 						else if (1 == liberties.length) {
 							board
