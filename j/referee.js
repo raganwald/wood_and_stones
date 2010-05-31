@@ -13,7 +13,6 @@
 			}, optional_seed, arr);
 		};
 		
-		
 		// board
 		// 	.T(playing)
 		//
@@ -50,14 +49,18 @@
 		};
 		
 		var colour_of = function(intersection) {
-			if (intersection.hasClass('black'))
-				return 'black';
-			else if (intersection.hasClass('white'))
-				return 'white';
+			var m = intersection.attr('class').match(/(black|white)/);
+			if (m) return m[1];
 		};
 		
+		var opposite_colour_of = function (colour) {
+			return colour == 'black' ? 'white' : (
+				colour == 'white' ? 'black' : null
+			);
+		}
+		
 		var is_blank = function(intersection ) {
-			return !intersection.hasClass('black') && !intersection.hasClass('white');
+			return !colour_of(intersection);
 		};
 		
 		var before = function (a, b) {
@@ -72,7 +75,129 @@
 			return (a_across < b_across || (a_across == b_across && a_down < b_down));
 		};
 		
-		var analyze = function(board, ids_to_analyze, debug) {
+		var ids_of = function (selection) {
+			return $.map(selection, '$(_).attr("id")'.lambda());
+		}
+		
+		var incremental_analyzer = function (board, debug) {
+			var to_play = playing(board);
+			var last_played = opposite_colour_of(to_play);
+			if (debug == undefined) debug = true;
+			var removed = board
+				.find('.changed_by_'+last_played+':not(.black):not(.white)');
+			if (removed.size() > 0) {
+				console.error('Implement removals');
+			}
+			if (debug) console.info('.changed_by_'+last_played+'.'+last_played);
+			var added = board
+				.find('.changed_by_'+last_played+'.'+last_played);
+			if (added.size() > 0) {
+				var added_id = added.attr('id');
+				added
+					.removeClass('playable_black playable_white');
+				if (debug) console.log('added a '+last_played+' stone at '+added_id);
+				var adjacent_to_added = $(their_adjacent_selector(added));
+				if (debug) console.log(ids_of(adjacent_to_added));
+				var added_liberties = adjacent_to_added
+					.filter(':not(.black):not(.white)');
+				var ids_of_added_liberties = ids_of(added_liberties);
+				if (debug) console.log(ids_of_added_liberties);
+				var unfrendly_adjacents = adjacent_to_added
+					.find('.' + to_play);
+				var unfriendly_adjacent_group_selectors = unique(
+					$.map(
+						$.map(unfrendly_adjacents, '$(_).attr("class")'.lambda()),
+						function (clazz) {
+							var m = clazz.match(/group_(..)/);
+							if (m) return '#' + m[1];
+						}
+					)
+				);
+				$(unfriendly_adjacent_group_selectors.join(','))
+					.each(function (i, unfriendly_group_matriarch) {
+						var mater_id = unfriendly_group_matriarch.attr('id');
+						var liberties = unfriendly_group_matriarch.data('liberties');
+						if (!liberties) console.error('unexpected lack of liberties for an unfriendly group at '+mater_id);
+						var added_index = $.inArray(added_id, liberties);
+						if (added_index == -1) console.error('unexpectedly, '+added_id+' is not a liberty of '+mater_id);
+						liberties.splice(added_index,added_index);
+						if (0 == liberties.length) {
+							console.error('this is where we implement killing stones in the referee');
+						}
+						else if (1 == liberties.length) {
+							board
+								.find('group_'+mater_id)
+									.addClass('atari last_liberty_is_'+liberties[0])
+									.removeClass('playable_'+to_play);
+						}
+					});
+				var frendly_adjacents = adjacent_to_added
+					.find('.' + to_play);
+				var friendly_adjacent_group_selectors = unique(
+					$.map(
+						$.map(frendly_adjacents, '$(_).attr("class")'.lambda()),
+						function (clazz) {
+							var m = clazz.match(/group_(..)/);
+							if (m) return '#' + m[1];
+						}
+					)
+				);
+				if  (0 == friendly_adjacent_group_selectors.length) {
+					// create a new group
+					added
+						.addClass('group group_'+added_id + (1 == ids_of_added_liberties.length ? ' atari last_liberty_is_' + ids_of_added_liberties[0] : ''))
+						.data('liberties', ids_of_added_liberties);
+					if (0 == ids_of_added_liberties.length) {
+						console.info('suicide');
+					}
+				}
+				else if (1 == friendly_adjacent_group_selectors.length) {
+					// extend an existing group
+					var patriarch = $(friendly_adjacent_group_selectors[0]);
+					var pater_id = patriarch.attr('id'); // do a string selection?
+					var liberties = patriarch.data('liberties');
+					if (!liberties) console.error('unexpected lack of liberties for an friendly group at '+pater_id);
+					var added_index = $.inArray(added_id, liberties);
+					if (added_index == -1) console.error('unexpectedly, '+added_id+' is not a liberty of '+pater_id);
+					liberties.splice(added_index,added_index);
+					liberties = unique(liberties.concat(ids_of_added_liberties));
+					if (0 == liberties.length) {
+						console.info('patricide'); // allowed by some rule sets
+					}
+					else if (1 == liberties.length) {
+						board
+							.find('group_'+pater_id)
+								.addClass('atari last_liberty_is_'+liberties[0])
+								.removeClass('playable_'+last_played);
+					}
+					added
+						.addClass('group_'+pater_id);
+				}
+				else if (1 < friendly_adjacent_group_selectors.length) {
+					// merge two groups
+					console.error('implement merging groups');
+				}
+				added_liberties
+					.each(function (i, liberty) {
+						liberty = $(liberty);
+						if (debug) console.log(their_adjacent_selector(liberty));
+						if (board
+							.find(their_adjacent_selector(liberty))
+								.is(':not(.black):not(.white)')
+						) {
+							liberty
+								.addClass('playable_black playable_white');
+							}
+						else {
+							liberty
+								.removeClass('playable_black playable_white');
+						}
+					})
+			}
+			return board;	
+		};
+		
+		var naive_analyzer = function(board, ids_to_analyze, debug) {
 			
 			board = board || $('.move.play .board');
 			ids_to_analyze = ids_to_analyze || $.map(go.letters,
@@ -102,9 +227,11 @@
 			// liberty at xx.
 			//
 			// at_liberty: identifies an empty intersection with at least one liberty.
-			
-			if (typeof(board) == 'string')
-				board = $(board);
+			//
+			// broken: should only remove from ids_to_analyze! maye that whole thing should go
+			// or at least be moved to a 'partial analyzer'
+			//
+			if (typeof(board) == 'string') board = $(board);
 			board
 				.find('.intersection')
 					.data('group', null)
@@ -571,7 +698,7 @@
 						}
 					} while (
 						board
-							.T(analyze)
+							.T(naive_analyzer)
 							.has('.intersection.atari,.intersection.dead')
 								.size() > 0
 					)
@@ -829,9 +956,10 @@
 						}
 					]
 				},
-				optimizations: {
-					reanalyze_all: reanalyze_all
-				}
+				analyzers: {
+					naive_analyzer: naive_analyzer,
+					incremental_analyzer: incremental_analyzer
+				},
 				validations: {
 					no_passing_allowed: no_passing_allowed,
 					at_liberty_playable: at_liberty_playable,
@@ -848,7 +976,7 @@
 					captures_game: captures_game
 				},
 				games: {
-					"Classic": '{"GM": 1, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"Classic": '{"GM": 1, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
 					"Other Go Setups": '{"GM": 1, "setups": "other", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
 					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
 					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
@@ -863,6 +991,8 @@
 			console.error('should not run this default');
 			return board;
 		};
+		
+		var analyzer = naive_analyzer; // default
 			
 		var game_over = function(board) {
 			if (go.sgf.game_info['RE'] != undefined) {
@@ -888,6 +1018,7 @@
 			});
 			var steps = $.merge(endings, validations);
 			steps.push(game_over);
+			if (hash_of_strings.analyzer) analyzer = rules.analyzers[hash_of_strings.analyzer];
 			history_free_validate = function (board) {
 				var player = playing(board);
 				var opponent = opposing(board);
@@ -904,13 +1035,13 @@
 		// validate all legal moves
 		var validate = function (board) {
 			return board
-				.T(analyze)
+				.T(analyzer)
 				.T(history_free_validate);
 		};
 		
 		return {
 			set_rules: set_rules,
-			analyze: analyze,
+			analyzer: analyzer,
 			validate: validate,
 			rules: rules
 		};

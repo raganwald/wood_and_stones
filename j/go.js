@@ -152,6 +152,13 @@
 			.find('.latest')
 				.removeClass('latest');
 		
+		if (this_move.B != undefined || this_move.AB != undefined)
+			board
+				.removeClass('changed_by_black');
+		if (this_move.W != undefined || this_move.AW != undefined)
+			board
+				.removeClass('changed_by_white');
+		
 		var play = this_move.B;
 		if (play && play != '') {
 			board
