@@ -83,32 +83,36 @@
 	};
 	
 	var postdoit = function(board, this_move) {
+		
+		if (board.closest('.move').is('.play')) {
 	
-		board
-			.K(go.referee.validate);
+			board
+				.K(go.referee.validate);
 
-		if (!sgf.game_info.RE) {
-			board
-				.closest('.move')
-					.removeClass('re_black re_white re_draw');
-		}
-		else if ('B' == sgf.game_info.RE[0]) {
-			board
-				.closest('.move')
-					.removeClass('black white')
-					.addClass('re_black');
-		}
-		else if ('W' == sgf.game_info.RE[0]) {
-			board
-				.closest('.move')
-					.removeClass('black white')
-					.addClass('re_white');
-		}
-		else {
-			board
-				.closest('.move')
-					.removeClass('black white')
-					.addClass('re_draw');
+			if (!sgf.game_info.RE) {
+				board
+					.closest('.move')
+						.removeClass('re_black re_white re_draw');
+			}
+			else if ('B' == sgf.game_info.RE[0]) {
+				board
+					.closest('.move')
+						.removeClass('black white')
+						.addClass('re_black');
+			}
+			else if ('W' == sgf.game_info.RE[0]) {
+				board
+					.closest('.move')
+						.removeClass('black white')
+						.addClass('re_white');
+			}
+			else {
+				board
+					.closest('.move')
+						.removeClass('black white')
+						.addClass('re_draw');
+			}
+		
 		}
 		
 		return board;
@@ -266,7 +270,11 @@
 							.removeClass(was_playing)
 							.addClass('changed')
 							.end()
-						.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
+						.find(
+							$.map(
+								(this_move['K'] && this_move['K'].split(',')) || [], 
+								'"#" + _'.lambda()).join(',')
+						)
 							.addClass((was_playing == 'black' ? 'white changed' : 'black changed'));
 				}
 				var to_play_index = to_play[0].toUpperCase();

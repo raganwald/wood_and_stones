@@ -36,7 +36,7 @@
 				.append(
 					$('.move.history.this .board')
 						.children()
-							.clone(false)
+							.clone(true)
 				)
 				.data('index', that_index);
 			
@@ -72,7 +72,7 @@
 			.append(
 				$('.move.history.this .board')
 					.children()
-						.clone(false)
+						.clone(true)
 			)
 			.data('index', that_index);
 		
@@ -98,7 +98,7 @@
 			.append(
 				$('.move.play')
 					.children()
-						.clone(false)
+						.clone(true)
 			)
 			.find('.board')
 				.data('index', last_move_index())
