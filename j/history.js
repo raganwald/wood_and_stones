@@ -27,7 +27,6 @@
 		if (that_index == -1) 
 			return; // may be a fencepost error when dealing with the start position
 		else if (that_index == last_index) {
-			console.log('re-entering normal space');
 			that_page = $('.move.play');
 		}
 		else {
@@ -98,6 +97,8 @@
 			.removeClass('black');
 		$('.move.history.this .intersection.white')
 			.removeClass('white');
+		$('.move.history.this .intersection.last')
+			.removeClass('last');
 		$.each(['black', 'white'], function (i, colour) {
 			$('.move.history.this')
 				.find(

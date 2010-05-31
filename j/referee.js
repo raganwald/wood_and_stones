@@ -93,7 +93,7 @@
 		var incremental_analyzer = function (board, debug) {
 			var to_play = playing(board);
 			var last_played = opposite_colour_of(to_play);
-			if (debug == undefined) debug = false;
+			if (debug == undefined) debug = true;
 			var removed = board
 				.find('.changed:not(.black):not(.white)')
 					.removeClass(by_pattern(/debug_[^ ]+/))
@@ -101,7 +101,8 @@
 					.removeClass(by_pattern(/last_liberty_is_[^ ]+/))
 					.removeClass('playable_black playable_white atari group');
 			if (removed.size() > 0) {
-				var adjacents_to_removeds = $(their_adjacent_selector(removed));
+				var adjacents_to_removeds = board
+					.find(their_adjacent_selector(removed));
 				var adjacent_stones = adjacents_to_removeds
 					.filter('.black,.white');
 				var adjacent_stone_group_ids = unique(
@@ -224,15 +225,17 @@
 					else {
 						if (debug) console.log('extending an existing group');
 						var pater_id = friendly_adjacent_ids[0];
-						var patriarch = $('#'+pater_id);
+						var patriarch = board
+							.find('#'+pater_id);
 						var liberties = patriarch
 							.data('liberties');
 						if (!liberties) console.error('unexpected lack of liberties for an friendly group at '+pater_id);
 					
 						$.each(friendly_adjacent_ids.slice(1, friendly_adjacent_ids.length), function (i, mergee_id) {
 							if (debug) console.info('merging ' + mergee_id + ' into ' + pater_id);
-							var mergee_liberties = $('#'+mergee_id)
-								.data('liberties');
+							var mergee_liberties = board
+								.find('#'+mergee_id)
+									.data('liberties');
 							if (debug) console.info('adding liberties '+mergee_liberties.join(',') +' to '+liberties.join(','));
 							liberties = liberties.concat(mergee_liberties);
 							board
@@ -534,27 +537,37 @@
 						.end();
 			};
 			
-			var simple_ko_unplayable = function (board, player, opponent) {
+			var simple_ko_unplayable = function (board, player, opponent, debug) {
+				if (debug == undefined) debug = false;
+				
 				player = player || playing(board);
 				opponent = opponent || opposing(board);
+				
+				if (debug) console.log('player: '+player);
 				
 				var last_sgf_node = go.sgf.current[go.sgf.current.length - 1];
 				var last_id = last_sgf_node[opponent[0].toUpperCase()];
 				
 				if (last_id && last_id.length == 2 && board.has('#' + last_id)) {
+					if (debug) console.log(last_id + ' is the last id');
 					var killed = last_sgf_node['K'];
 					 if (killed) {
 						var a = killed.split(',');
 						if (a.length == 1) {
 							var captured_id = a[0];
-							var captured = $('#' + captured_id);
-							if (captured.size() == 1 && captured.is('playable_'+player)) {
+							var captured = board
+								.find('#' + captured_id);
+							if (debug) console.log(captured_id +'x'+captured.size()+ ' was captured: '+captured.attr('class'));
+							if (captured.size() == 1 && captured.is('.playable_'+player)) {
 								var recaptured = board
 									.find('.last_liberty_is_' + captured_id);
-								if (recaptured.size() == 1 && recaptured.attr('id') == last_id)
+								if (debug) console.log(captured_id + ' captures '+recaptured.size()+ ' stones');
+								if (recaptured.size() == 1 && recaptured.attr('id') == last_id) {
+									if (debug) console.log(captured_id + ' is unplayable due to ko');
 									captured
 										.removeClass('playable_'+player)
 										.addClass('debug_simple_ko_unplayable');
+								}
 							}
 						}
 					}
@@ -581,15 +594,17 @@
 				var home_group_intersections = board
 					.find(F.map('"." + _', home_group_classes).join(','));
 					
-				var slidables = $(their_adjacent_selector(home_group_intersections))
-					.add(home_intersections)
-						.filter(':not(.black):not(.white)');
+				var slidables = board
+					.find(their_adjacent_selector(home_group_intersections))
+						.add(home_intersections)
+							.filter(':not(.black):not(.white)');
 				do {
 					slidables = slidables
 						.addClass('temp_slidable')
 						.T(function (_) { 
-							return $(their_adjacent_selector(_)) 
-								.filter(':not(.black):not(.white):not(.temp_slidable)');
+							return board
+								.find(their_adjacent_selector(_)) 
+									.filter(':not(.black):not(.white):not(.temp_slidable)');
 						})
 				} while (slidables.size() > 0);
 				
