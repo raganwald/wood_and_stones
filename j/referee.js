@@ -93,17 +93,64 @@
 		var incremental_analyzer = function (board, debug) {
 			var to_play = playing(board);
 			var last_played = opposite_colour_of(to_play);
-			if (debug == undefined) debug = true;
+			if (debug == undefined) debug = false;
 			var removed = board
 				.find('.changed:not(.'+last_played+')')
-					.removeClass(by_pattern(/debug_[^ ]+/));
+					.removeClass(by_pattern(/debug_[^ ]+/))
+					.removeClass(by_pattern(/group_[^ ]+/))
+					.removeClass(by_pattern(/last_liberty_is_[^ ]+/))
+					.removeClass('playable_black playable_white atari group');
 			if (removed.size() > 0) {
-				console.error('TODO: removals');
+				var adjacents_to_removeds = $(their_adjacent_selector(removed));
+				var adjacent_stones = adjacents_to_removeds
+					.filter('.black,.white');
+				var adjacent_stone_group_ids = unique(
+					$.map(
+						$.map(adjacent_stones, '$(_).attr("class")'.lambda()),
+						function (clazz) {
+							var m = clazz.match(/group_(..)/);
+							if (m) return m[1];
+						}
+					)
+				);
+				if (debug) console.info(adjacent_stones.size() + ' adjacent_stones in pre-existing groups ' + adjacent_stone_group_ids.join(','))
+				// add liberties to groups
+				$.each(adjacent_stone_group_ids, function (i, uncle_id) {
+					var uncle = board
+						.find('#'+uncle_id);
+					var liberties = uncle.data('liberties');
+					var cousins = board
+						.find('.group_'+uncle_id);
+					var new_liberties = removed
+						.filter(their_adjacent_selector(cousins));
+					if (debug) console.info('potential new liberties for '+uncle_id+': '+their_adjacent_selector(cousins));
+					liberties = liberties.concat(ids_of(new_liberties));
+					liberties = unique(liberties);
+					uncle.data('liberties', liberties);
+					board
+						.find('.atari.group_'+uncle_id)
+							.removeClass(by_pattern(/last_liberty_is_../))
+							.removeClass('atari'); //TODO collapse into one call
+					if (0 == liberties.length) {
+						console.error('unexpectedly, removing stones has killed a group!?');
+					}
+					else if (1 == liberties.length) {
+						console.error('unexpectedly, removing stones has placed a group into atari!?');
+						if (debug) console.info('atari');
+						board
+							.find('group_'+uncle_id)
+								.addClass('atari last_liberty_is_'+liberties[0]);
+					}
+				})
+				adjacents_to_removeds
+					.filter(':not(.black):not(.white)')
+						.addClass('playable_black playable_white');
 			}
-			var added = board
-				.find('.changed.'+last_played)
-					.removeClass(by_pattern(/debug_[^ ]+/));
-			if (added.size() > 0) {
+			$.each(
+				board
+					.find('.changed.'+last_played)
+						.removeClass(by_pattern(/debug_[^ ]+/)), function (i, added) {
+				added = $(added);
 				var added_id = added.attr('id');
 				added
 					.removeClass('playable_black playable_white');
@@ -140,7 +187,7 @@
 					}
 					else if (1 == liberties.length) {
 						board
-							.find('group_'+mater_id)
+							.find('.group_'+mater_id)
 								.addClass('atari last_liberty_is_'+liberties[0])
 								.removeClass('playable_'+to_play);
 					}
@@ -209,7 +256,7 @@
 					else if (1 == liberties.length) {
 						if (debug) console.info('atari');
 						board
-							.find('group_'+pater_id)
+							.find('.group_'+pater_id)
 								.addClass('atari last_liberty_is_'+liberties[0]);
 					}
 				}
@@ -231,7 +278,7 @@
 								.removeClass('playable_black playable_white');
 						}
 					})
-			}
+			});
 			return board;	
 		};
 		
@@ -406,6 +453,7 @@
 					.removeClass('pass');
 			};
 			
+			// i think this goes away with incremental analysis
 			var at_liberty_playable = function (board, player, opponent) {
 				player = player || playing(board);
 				opponent = opponent || opposing(board);
@@ -413,6 +461,9 @@
 				return board
 					.find('.intersection.at_liberty:not(.white):not(.black)')
 						.addClass('playable_'+player+' debug_at_liberty_playable')
+						.end()
+					.find('.intersection.at_liberty:not(.white):not(.black)')
+						.addClass('playable_'+opponent+' debug_at_liberty_playable')
 						.end();
 			};
 			
@@ -436,6 +487,16 @@
 										.addClass('playable_'+player+' debug_killers_playable');
 						})
 						.end()
+					.find('.group.atari.' + player)
+						.each(function (i, el) {
+							el = $(el);
+							m = el.attr('class').match(/last_liberty_is_(..)/);
+							if (m)
+								board
+									.find('#' + m[1])
+										.addClass('playable_'+opponent+' debug_killers_playable');
+						})
+						.end();
 			};
 			
 			var extend_group_playable = function (board, player, opponent) {
@@ -452,6 +513,15 @@
 							if (board.find(adjacents[id]).is('.' + player + ':not(.atari)'))
 								el
 									.addClass('playable_'+player+' debug_extend_group_playable');
+						})
+						.end()
+					.find('.intersection:not(.playable_'+ opponent+'):not(.white):not(.black)')
+						.each(function (i, el) {
+							el = $(el);
+							var id = el.attr('id');
+							if (board.find(adjacents[id]).is('.' + opponent + ':not(.atari)'))
+								el
+									.addClass('playable_'+opponent+' debug_extend_group_playable');
 						})
 						.end();
 			};
@@ -484,6 +554,8 @@
 				return board
 			};
 			
+			// TODO: Figure out how this works with incremental analysis
+			// TODO: figure out how this works with parallel analysis
 			var unslidable_unplayable = function (board, player, opponent) {
 				player = player || playing(board);
 				opponent = opponent || opposing(board);
@@ -1015,7 +1087,7 @@
 				},
 				games: {
 					"Classic": '{"GM": 1, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
-					"Other Go Setups": '{"GM": 1, "setups": "other", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
+					"Other Go Setups": '{"GM": 1, "setups": "other", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
 					"Atari Go": '{"GM": 12, "setups": "classic", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
 					"White to Live": '{"GM": 14, "setups": "to_live", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
 					"Gonnect": '{"GM": 13, "setups": "pie", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_group_playable", "simple_ko_unplayable" ]}',
