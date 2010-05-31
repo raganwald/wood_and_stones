@@ -146,24 +146,20 @@
 		
 		var to_play = this_move.PL;
 		
-		var changed_class = to_play ? 'changed_by_' + to_play : '';
-		
 		board
 			.find('.latest')
 				.removeClass('latest');
 		
-		if (this_move.B != undefined || this_move.AB != undefined)
+		if (this_move.B != undefined || this_move.AB != undefined || this_move.W != undefined || this_move.AW != undefined)
 			board
-				.removeClass('changed_by_black');
-		if (this_move.W != undefined || this_move.AW != undefined)
-			board
-				.removeClass('changed_by_white');
+				.find('.changed')
+					.removeClass('changed');
 		
 		var play = this_move.B;
 		if (play && play != '') {
 			board
 				.find('#' + play)
-					.addClass('black latest changed_by_black');
+					.addClass('black latest changed');
 			switch_turns();
 		}
 		else if (play == '') {
@@ -174,7 +170,7 @@
 			if (play && play != '') {
 				board
 					.find('#' + play)
-						.addClass('white latest changed_by_white');
+						.addClass('white latest changed');
 				switch_turns();
 			}
 			else if (play == '') {
@@ -186,19 +182,19 @@
 		if (placements) {
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-					.addClass('black changed_by_black' + (this_move != go.sgf.game_info ? ' latest' : ''));
+					.addClass('black changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
 		placements = this_move.AW;
 		if (placements) {
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
-					.addClass('white changed_by_white' + (this_move != go.sgf.game_info ? ' latest' : ''));
+					.addClass('white changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
 		if (this_move.K && (this_move.W || this_move.B)) 
 			board
 				.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
 					.removeClass('white black')
-					.addClass(changed_class);
+					.addClass('changed');
 					
 		if (to_play)
 			board
@@ -259,8 +255,6 @@
 		}
 		else return; // not undoable
 		
-		var changed_class = to_play ? 'changed_by_' + to_play : '';
-		
 		var was_playing_index = was_playing[0].toUpperCase();
 		if (this_move != undefined) {
 			var position = this_move[was_playing_index];
@@ -270,10 +264,10 @@
 						.find('#' + position)
 							.removeClass('latest')
 							.removeClass(was_playing)
-							.addClass(changed_class)
+							.addClass('changed')
 							.end()
 						.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
-							.addClass((was_playing == 'black' ? 'white ' : 'black ') + changed_class);
+							.addClass((was_playing == 'black' ? 'white changed' : 'black changed'));
 				}
 				var to_play_index = to_play[0].toUpperCase();
 				if (optional_previous_move != undefined) {
