@@ -2,7 +2,7 @@
 // the exception of specific files otherwise licensed. Other licenses apply only to the files where
 // they appear.
 
-;(function ($, undefined) {
+;(function ($, F, undefined) {
 	
 	var validate = function (move) {
 		
@@ -47,19 +47,13 @@
 				var last_move = go.sgf.current[last_move_index];
 				var position = last_move[was_playing_index];
 				if (position != undefined && (position == '' || !$('.move.play .board').has('#' + position))) {
-					go.dialog
-						.text("End the game with a second consecutive pass?")
-						.dialog({
-							title: "End Game",
-							buttons: { 
-								"Pass": function() { 
-									really_pass();
-									$(this).dialog("close");
-								},
-								"No":   function() { $(this).dialog("close"); } 
-							}
-						})
-						.dialog('open');
+					go.dialog({
+						title: "End Game",
+						message: "End the game with a second consecutive pass?",
+						yes_button: "Pass",
+						no_button: "No",
+						yes_callback: really_pass
+					});
 				}
 				else really_pass();
 			}
@@ -247,19 +241,13 @@
 			$('.move.play:has(.zoomout)')
 				.live('gesture_open', 
 					function () {
-						go.dialog
-							.text("Start a new game from scratch?")
-							.dialog({
-								title: "New Game",
-								buttons: { 
-									"New Game": function() { 
-										$(this).dialog("close");
-										jQT.swapPages( $('.move.play'), $('#new'), 'dissolve');
-									},
-									"No":   function() { $(this).dialog("close"); } 
-								}
-							})
-							.dialog('open');
+						go.dialog({
+							title: "New Game",
+							message: "Start a new game from scratch?",
+							yes_button: "New",
+							yes_callback: function () { jQT.swapPages( $('.move.play'), $('#new'), 'dissolve'); }
+						});
+						return false;
 					}
 				);
 										
@@ -313,4 +301,4 @@
 	
 	go.on_document_ready(initialize_ui_support);
 	
-})(jQuery);
+})(jQuery, Functional);

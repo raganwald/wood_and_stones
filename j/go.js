@@ -2,40 +2,34 @@
 // the exception of specific files otherwise licensed. Other licenses apply only to the files where
 // they appear.
 
-;(function ($, undefined) {
+;(function ($, F, undefined) {
 	
 	var document_ready = function () {
-		go.dialog = $('<div></div>')
-			.dialog({
-				dialogClass: 'scrub accept message',
-				autoOpen: false,
-				height: 'auto',
-				title: 'Hey!',
-				open: function (event, ui) { 
-					go.dialog
-						.parent()
-							.detach()
-							.appendTo('body > .current'); 
-				}
-			})
-			.bind('gesture_scrub', function (event) {
-		        go.dialog.dialog("close");
-		        return false;
-			})
-			.bind('gesture_accept', function (event) {
-		        go.message('TODO: Implement accepting a dialog');
-		        return false;
+		go.dialog = function(options) {
+			options = $.extend(
+				{},
+				{
+					title: 'hey!',
+					yes_button: 'Ok',
+					no_button: 'Cancel',
+					yes_callback: F.I,
+					no_callback: F.I
+				},
+				(options || {})
+			);
+			if (!options.no_button) {
+				alert(options.message);
+				options.yes_callback();
+			}
+			else if (confirm(options.message))
+				options.yes_callback();
+			else options.no_callback();
+		};
+		go.message = function (say, optional_button_name) {
+			go.dialog({
+				message: say,
+				no_button: null
 			});
-		go.message = function (say) {
-			go.dialog
-				.text(say)
-				.dialog({
-					title: "Hey!!",
-					buttons: { 
-						"Ok": function() { $(this).dialog("close"); } 
-					}
-				})
-				.dialog('open');
 		};
 	};
 	
@@ -332,4 +326,4 @@
 	
      $(document).ready(function () { document_ready(); }); 
 	
-})(jQuery);
+})(jQuery, Functional);
