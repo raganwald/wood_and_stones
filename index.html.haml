@@ -3,7 +3,7 @@
 // they appear.
 
 !!!Strict
-%html{html_attrs('en')}
+%html{html_attrs('en').merge(:manifest=>"cache.manifest")}
   %head
   
     %title World of Go
@@ -38,7 +38,6 @@
     %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/history.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"j/load.images.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.ipad.customized.css";
