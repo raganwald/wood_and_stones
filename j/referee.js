@@ -352,9 +352,9 @@
 			debug = (debug == undefined ? false : debug);
 			
 			// if (debug) {
-				console.log('debugging on');
-				console.log(ids_to_analyze);
-			}
+			// 	console.log('debugging on');
+			// 	console.log(ids_to_analyze);
+			// }
 		
 			var adjacents = go.get_adjacents();
 			
