@@ -85,6 +85,25 @@ i/board/temporary/tile0.png
 
 # coming soon: other jQTouch images and themes
 
+i/ajax-loader-black.gif
+i/dot_clear.gif
+i/in_progress.gif
+
+i/themes/jqt/img/back_button.png
+i/themes/jqt/img/back_button_clicked.png
+i/themes/jqt/img/button.png
+i/themes/jqt/img/button_clicked.png
+i/themes/jqt/img/chevron.png
+i/themes/jqt/img/chevron_circle.png
+i/themes/jqt/img/grayButton.png
+i/themes/jqt/img/loading.gif
+i/themes/jqt/img/on_off.png
+i/themes/jqt/img/rowhead.png
+i/themes/jqt/img/toggle.png
+i/themes/jqt/img/toggleOn.png
+i/themes/jqt/img/toolbar.png
+i/themes/jqt/img/whiteButton.png
+
 # common JS
 
 j/jquery.timers-1.2.js 
