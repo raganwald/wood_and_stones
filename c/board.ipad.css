@@ -313,7 +313,10 @@
 .board.size19 .row:not(:nth-child(4)):not(:nth-child(10)):not(:nth-last-child(4)):not(:first-child):not(:last-child) .intersection:not(.black):not(.white):not(:first-child):not(:last-child) {
   background: url("../i/board/temporary/tile0.png"); }
 
-.intersection.playable_black, .intersection.playable_white {
+.move.play.black .intersection.playable_black {
+  cursor: pointer; }
+
+.move.play.white .intersection.playable_white {
   cursor: pointer; }
 
 .intersection {
