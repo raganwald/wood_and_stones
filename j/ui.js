@@ -221,9 +221,11 @@
 		};
 		
 		return function() {
+			$('.move.play')
+				.gesture(['click', 'circle', 'close']);
 			$('.move')
 				.gesture([
-					'bottom', 'close', 'click', 'hold', 'scale', 'left', 'right', 'circle', 'open',
+					'bottom', 'hold', 'scale', 'left', 'right', 'open',
 					{ scrub: function(target) {
 						return $(target)
 							.parents('body > *')

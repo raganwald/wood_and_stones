@@ -55,6 +55,8 @@
 			.each(game_specific_options)
 			.blur(game_specific_options)
 			.change(game_specific_options);
+		$('form.new_game #start')
+			.click(function () { $('form.new_game').submit(); return false; });
     	$('form.new_game').submit(function (e) {
 			go.sgf.game_info = {
 				FF: 4,
