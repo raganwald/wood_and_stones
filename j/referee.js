@@ -91,9 +91,9 @@
 		};
 		
 		var incremental_analyzer = function (board, debug) {
+			if (debug == undefined) debug = false;
 			var to_play = playing(board);
 			var last_played = opposite_colour_of(to_play);
-			if (debug == undefined) debug = false;
 			var removed = board
 				.find('.changed:not(.black):not(.white)')
 					.removeClass(by_pattern(/debug_[^ ]+/))
@@ -144,7 +144,10 @@
 						if (debug) console.info('atari');
 						board
 							.find('group_'+uncle_id)
-								.addClass('atari last_liberty_is_'+liberties[0]);
+								.addClass('atari last_liberty_is_'+liberties[0])
+								.end()
+							.find('#'+liberties[0])
+								.removeClass('playable_'+colour_of(uncle));
 					}
 				})
 				adjacents_to_removeds
@@ -182,7 +185,7 @@
 					if (debug) console.info('adjacent '+to_play+' groups '+unfriendly_adjacent_group_ids.join(','));
 					$.each(unfriendly_adjacent_group_ids, function (i, mater_id) {
 						var matriarch = board
-						 .find('#'+mater_id);
+							.find('#'+mater_id);
 						var liberties = matriarch.data('liberties');
 						if (!liberties) console.error('unexpected lack of liberties for an unfriendly group at '+mater_id);
 						var added_index = $.inArray(added_id, liberties);
@@ -197,7 +200,9 @@
 							board
 								.find('.group_'+mater_id)
 									.addClass('atari last_liberty_is_'+liberties[0])
-									.removeClass('playable_'+to_play);
+									.end()
+								.find('#'+liberties[0])
+									.removeClass('playable_'+colour_of(matriarch));
 						}
 					});
 					var frendly_adjacents = adjacent_to_added
@@ -216,10 +221,17 @@
 					if  (0 == friendly_adjacent_ids.length) {
 						if (debug) console.log('creating a new group');
 						added
-							.addClass('group group_'+added_id + (1 == ids_of_added_liberties.length ? ' atari last_liberty_is_' + ids_of_added_liberties[0] : ''))
+							.addClass('group group_'+added_id)
 							.data('liberties', ids_of_added_liberties);
 						if (0 == ids_of_added_liberties.length) {
 							console.info('suicide');
+						}
+						else if (1 == ids_of_added_liberties.length) {
+							added
+								.addClass('atari last_liberty_is_' + ids_of_added_liberties[0]);
+							board
+								.find('#'+ids_of_added_liberties[0])
+									.removeClass('playable_'+colour_of(added));
 						}
 					}
 					else {
@@ -267,7 +279,10 @@
 							if (debug) console.info('atari');
 							board
 								.find('.group_'+pater_id)
-									.addClass('atari last_liberty_is_'+liberties[0]);
+									.addClass('atari last_liberty_is_'+liberties[0])
+									.end()
+								.find('#'+liberties[0])
+									.removeClass('playable_'+colour_of(patriarch));
 						}
 					}
 					added_liberties
@@ -471,10 +486,10 @@
 				
 				return board
 					.find('.intersection.at_liberty:not(.white):not(.black)')
-						.addClass('playable_'+player+' debug_at_liberty_playable')
+						.addClass('playable_'+player+' debug_at_liberty_playable_'+player)
 						.end()
 					.find('.intersection.at_liberty:not(.white):not(.black)')
-						.addClass('playable_'+opponent+' debug_at_liberty_playable')
+						.addClass('playable_'+opponent+' debug_at_liberty_playable_'+opponent)
 						.end();
 			};
 			
@@ -495,7 +510,7 @@
 							if (m)
 								board
 									.find('#' + m[1])
-										.addClass('playable_'+player+' debug_killers_playable');
+										.addClass('playable_'+player+' debug_killers_playable_'+player);
 						})
 						.end()
 					.find('.group.atari.' + player)
@@ -505,7 +520,7 @@
 							if (m)
 								board
 									.find('#' + m[1])
-										.addClass('playable_'+opponent+' debug_killers_playable');
+										.addClass('playable_'+opponent+' debug_killers_playable_'+opponent);
 						})
 						.end();
 			};
@@ -523,7 +538,7 @@
 							var id = el.attr('id');
 							if (board.find(adjacents[id]).is('.' + player + ':not(.atari)'))
 								el
-									.addClass('playable_'+player+' debug_extend_playable_group');
+									.addClass('playable_'+player+' debug_extend_playable_group_'+player);
 						})
 						.end()
 					.find('.intersection:not(.playable_'+ opponent+'):not(.white):not(.black)')
@@ -532,7 +547,7 @@
 							var id = el.attr('id');
 							if (board.find(adjacents[id]).is('.' + opponent + ':not(.atari)'))
 								el
-									.addClass('playable_'+opponent+' debug_extend_playable_group');
+									.addClass('playable_'+opponent+' debug_extend_playable_group_'+opponent);
 						})
 						.end();
 			};
@@ -566,7 +581,7 @@
 									if (debug) console.log(captured_id + ' is unplayable due to ko');
 									captured
 										.removeClass('playable_'+player)
-										.addClass('debug_simple_ko_unplayable');
+										.addClass('debug_simple_ko_unplayable_'+player);
 								}
 							}
 						}
