@@ -16,6 +16,13 @@
 .in_progress:before {
   content: url(../i/in_progress.gif); }
 
+.profile #footer.toolbar {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg); }
+
+.landscape #footer.toolbar {
+  display: none; }
+
 .new_game ul li {
   position: relative !important; }
   .new_game ul li .label {

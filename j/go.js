@@ -62,13 +62,20 @@
 			// 	.text('.move.black:has(.board.play) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
 			// 	      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
 		$('style:last')
-			.text('.move.black:not(.swap):not(re_black):not(re_white):not(re_draw) .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
-			      '.move.white:not(.swap)  .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; } ' +
-			      '.move.black.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play/swap"; } '  +
-			      '.move.white.swap .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play/swap"; } ' +
-				  '.move.re_black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' wins"; } ' +
-				  '.move.re_white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' wins"; } ' +
-				  '.move.re_draw .toolbar span.playing:before{ content: "Game Ended"; }'
+			.text(
+				'.move.re_black .toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' wins"; } ' +
+				'.move.re_white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' wins"; } ' +
+				'.move.re_draw  .toolbar span.playing:before{ content: "Game Ended"; }' +
+				  
+				'.landscape .move.black:not(.swap):not(re_black):not(re_white):not(re_draw) #header.toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
+			    '.landscape .move.white:not(.swap)  #header.toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; } ' +
+			    '.landscape .move.black.swap #header.toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play/swap"; } '  +
+			    '.landscape .move.white.swap #header.toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play/swap"; } ' +
+			
+				'.profile   .move.black:not(.swap):not(re_black):not(re_white):not(re_draw) #header.toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play"; } ' +
+			    '.profile   .move.white:not(.swap)  #footer.toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; } ' +
+			    '.profile   .move.black.swap #header.toolbar span.playing:before{ content: "' + go.sgf.game_info.PB + ' to play/swap"; } '  +
+			    '.profile   .move.white.swap #footer.toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play/swap"; } '
 			);
 	};
 	

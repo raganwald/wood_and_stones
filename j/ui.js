@@ -233,13 +233,6 @@
 							}
 						}
 				])
-				.bind({
-					turn:  function (event, data) {
-						$('.board')
-							.removeClass('portrait landscape')
-							.addClass(data.orientation);
-					}
-				});
 			$('.move.play:has(.zoomout)')
 				.live('gesture_open', 
 					function () {

@@ -38,6 +38,7 @@
     %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/history.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/tooling.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.ipad.customized.css";
@@ -130,9 +131,13 @@
         .dragger
     
     .move.play
-      .toolbar 
+      #header.toolbar
         %h1
           %span.gravatar
           %span.playing
       .board.zoomout.scrub.pass.play
         .dragger
+      #footer.toolbar
+        %h1
+          %span.gravatar
+          %span.playing
