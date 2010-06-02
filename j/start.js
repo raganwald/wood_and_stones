@@ -60,7 +60,7 @@
 				.find('.board')
 					.removeClass('size9 size11 size13 size15 size17 size19')
 					.addClass('size' + go.sgf.game_info.SZ)
-					.find('.dragger')
+					.find('.intersections')
 						.empty();
 			$.each(go.letters, function (down_index, down_letter) {
 				$('<div></div>')
@@ -74,7 +74,7 @@
 								.appendTo(row);
 						});
 					})
-					.appendTo($('.move .board .dragger'));
+					.appendTo($('.move .board .intersections'));
 			});
 			var game_setup = $.parseJSON($('form.new_game #rules').val());
 			go.sgf.game_info.GM = game_setup.GM;

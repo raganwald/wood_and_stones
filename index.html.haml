@@ -43,6 +43,7 @@
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.ipad.customized.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/application.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/board.ipad.css";
+    %style{:type=>"text/css", :media=>"screen"} @import "c/bubbles.css";
     
     %style
     
@@ -116,19 +117,20 @@
         %h1
           %span.playing
       .board.zoomout.scrub
-        .dragger
+        .intersections
           
     .move.history.that
       .toolbar 
         %h1
       .board.zoomout.scrub
-        .dragger
+        .intersections
     
     .move.play
-      #header.toolbar
+      .head.toolbar
         %h1
-          %span.playing
       .board.zoomout.scrub.pass.play
-        .dragger
-      #footer.toolbar
+        / .head.message.triangle-right Head
+        .intersections
+        / .foot.message.triangle-right.top Foot
+      .foot.toolbar
         %h1

@@ -16,11 +16,11 @@
 .in_progress:before {
   content: url(../i/in_progress.gif); }
 
-.profile #footer.toolbar {
+.profile .foot.toolbar {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg); }
 
-.landscape #footer.toolbar {
+.landscape .foot.toolbar {
   display: none; }
 
 .new_game ul li {

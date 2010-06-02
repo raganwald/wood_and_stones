@@ -118,7 +118,7 @@
   left: 50%;
   margin-left: -135px;
   margin-top: 10px; }
-  .board .dragger {
+  .board .intersections {
     position: relative;
     background: black; }
   .board .intersection {
