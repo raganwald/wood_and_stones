@@ -229,14 +229,6 @@
 		};
 		
 		return function() {
-			$('body')
-				.bind({
-					turn:  function (event, data) {
-						$('body')
-							.removeClass('profile landscape')
-							.addClass(data.orientation);
-					}
-				});
 			$('.move.play')
 				.gesture(['click', 'circle', 'close']);
 			$('.move')
