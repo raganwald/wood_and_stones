@@ -29,11 +29,7 @@
     position: absolute;
     left: 10px; }
 .new_game .email {
-  height: 40px !important;
-  padding-left: 60px !important; }
-  .new_game .email img {
-    position: absolute;
-    left: 10px; }
+  height: 40px !important; }
 .new_game .size {
   padding-left: 70px !important; }
 .new_game .you_play {
@@ -49,8 +45,6 @@
 .new_game .rules {
   padding-left: 80px !important; }
 
-.move .toolbar .gravatar img {
-  vertical-align: middle; }
 .move .toolbar .button img {
   margin-top: 5px; }
 

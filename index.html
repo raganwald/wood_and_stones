@@ -8,10 +8,9 @@
     <meta content='black' name='apple-mobile-web-app-status-bar-style' />
     <meta content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0' name='viewport' />
     <!-- / their stuff -->
-    <script charset='utf-8' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jquery.1.4.2.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/jquery.timers-1.2.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/jqtouch.customized.js' type='text/javascript'></script>
-    <script charset='utf-8' src='j/jquery.gravatar.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/jquery.min.jquery.saveit.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/md5.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/to-function.js' type='text/javascript'></script>
@@ -69,9 +68,11 @@
       </div>
       <form class='new_game' id='form'>
         <ul class='edit rounded'>
-          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='black' name='black' placeholder="Black's name or email address" type='text' />
+          <li class='email'>
+            <input id='black' name='black' placeholder="Black's name" type='text' />
           </li>
-          <li class='email'><img class='label' src='/images/dot_clear.gif' /><input id='white' name='white' placeholder="White's name or email address" type='text' />
+          <li class='email'>
+            <input id='white' name='white' placeholder="White's name" type='text' />
           </li>
           <li class='rules'>
             <div class='label'>Game:</div>
@@ -117,7 +118,6 @@
     <div class='move history this'>
       <div class='toolbar'>
         <h1>
-          <span class='gravatar'></span>
           <span class='playing'></span>
         </h1>
       </div>
@@ -127,10 +127,7 @@
     </div>
     <div class='move history that'>
       <div class='toolbar'>
-        <h1>
-          <span class='gravatar'></span>
-          <span class='playing'></span>
-        </h1>
+        <h1></h1>
       </div>
       <div class='board zoomout scrub'>
         <div class='dragger'></div>
@@ -139,7 +136,6 @@
     <div class='move play'>
       <div class='toolbar' id='header'>
         <h1>
-          <span class='gravatar'></span>
           <span class='playing'></span>
         </h1>
       </div>
@@ -147,10 +143,7 @@
         <div class='dragger'></div>
       </div>
       <div class='toolbar' id='footer'>
-        <h1>
-          <span class='gravatar'></span>
-          <span class='playing'></span>
-        </h1>
+        <h1></h1>
       </div>
     </div>
   </body>

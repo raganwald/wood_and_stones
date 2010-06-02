@@ -13,10 +13,9 @@
       
     // their stuff
     
-    %script{:src=>"http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/jquery.1.4.2.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.timers-1.2.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/jqtouch.customized.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"j/jquery.gravatar.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.min.jquery.saveit.js", :type=>"text/javascript", :charset=>"utf-8"}
     
     %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
@@ -79,11 +78,9 @@
       %form#form.new_game
         %ul.edit.rounded
           %li.email
-            %img.label{:src=>'/images/dot_clear.gif'}>
-            %input#black{:name=>'black', :placeholder=>"Black's name or email address", :type=>'text'}/
+            %input#black{:name=>'black', :placeholder=>"Black's name", :type=>'text'}/
           %li.email
-            %img.label{:src=>'/images/dot_clear.gif'}>
-            %input#white{:name=>'white', :placeholder=>"White's name or email address", :type=>'text'}/
+            %input#white{:name=>'white', :placeholder=>"White's name", :type=>'text'}/
           %li.rules
             .label Game:
             %select#rules{:name=>'rules'}
@@ -117,7 +114,6 @@
     .move.history.this
       .toolbar 
         %h1
-          %span.gravatar
           %span.playing
       .board.zoomout.scrub
         .dragger
@@ -125,19 +121,14 @@
     .move.history.that
       .toolbar 
         %h1
-          %span.gravatar
-          %span.playing
       .board.zoomout.scrub
         .dragger
     
     .move.play
       #header.toolbar
         %h1
-          %span.gravatar
           %span.playing
       .board.zoomout.scrub.pass.play
         .dragger
       #footer.toolbar
         %h1
-          %span.gravatar
-          %span.playing

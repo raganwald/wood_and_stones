@@ -15,7 +15,7 @@ To start a new game, open [index.html][index]:
 
 ![Start][start]
 
-If you want, you can give nicknames or email addresses for each player. If you don't, you will be "Black" and "White" respectively. Email addresses are used to fetch gravatar images only, there is no email notification at this time.
+If you want, you can give nicknames for each player. If you don't, you will be "Black" and "White" respectively.
 
 Choose a board size, handicap, and game to play. "Classic Go" is exactly what you think it is. The other options are why I had the stones to call this "World of Go." Click "play" and you can start your game.
 
@@ -87,7 +87,7 @@ Note: The application does not attempt to score games that are won on the basis 
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
-This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins for things like gravatars and polling. I use my own [iGesture][igesture] for gestures like swipes and scrubs. I'm experimenting with [qtip](http://craigsworks.com/projects/qtip/ "qTip - The jQuery tooltip plugin  - Home") for displaying messages and having some trouble with it on iPhone, so we'll see how that goes.
+This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins, including my own [iGesture][igesture] for gestures like swipes and scrubs.
 
 **license terms**
 

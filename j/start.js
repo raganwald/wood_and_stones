@@ -4,20 +4,6 @@
 
 ;(function ($, undefined) {
 	
-	var assign_gravatar = function (event) {
-	    $(this)
-			.closest('.email')
-				.find('img')
-					.replaceWith($.gravatar($(this).val(), {
-				        // integer size: between 1 and 512, default 80 (in pixels)
-				        size: 40,
-				        // maximum rating (in order of raunchiness, least to most): g (default), pg, r, x
-				        rating: 'pg',
-				        // url to define a default image (can also be one of: identicon, monsterid, wavatar)
-				        image: 'monsterid'
-				    }));
-	};
-	
 	var game_specific_options = function	(event) {
 		var game_setup = $.parseJSON($('form.new_game #rules').val());
 		var setup_text = $('form.new_game #setup').val();
@@ -48,9 +34,6 @@
 	};
 	
 	var setup_new_game = function () {
-		$('form.new_game .email input')
-			.each(assign_gravatar)
-			.blur(assign_gravatar);
 		$('form.new_game .rules select')
 			.each(game_specific_options)
 			.blur(game_specific_options)
@@ -62,11 +45,13 @@
 				FF: 4,
 				SZ: $('form.new_game #dimension').val(),
 				AP: "World of Go",
-				PB: $('form.new_game #black').val() || 'Black' ,
-				PW: $('form.new_game #white').val() || 'White',
+				PH: $('form.new_game #black').val() || 'Black', // custom: 'player host'
+				PG: $('form.new_game #white').val() || 'White', // custom: 'player guest'
 				GR: $('form.new_game #rules option:selected').text(),
 				GS: $('form.new_game #setup option:selected').text()
 			};
+			go.sgf.game_info.PB = go.sgf.game_info.PH; // TODO: restore picking black or white
+			go.sgf.game_info.PW = go.sgf.game_info.PG;
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;
 			go.letters = go.letters.slice(0, go.sgf.game_info.SZ);

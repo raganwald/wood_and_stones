@@ -96,12 +96,20 @@
 			var player_name = go.sgf.game_info['P' + go.playing()[0].toUpperCase()];
 			
 			if (opponent_name.match(/white|black/i) || player_name.match(/white|black/i)) {
-				go.message("Since you've decided to swap, it's your opponent's turn to play " + go.playing());
+				if ($('body').is('landscape'))
+					go.message("Since you've decided to swap, it's your opponent's turn to play " + go.playing());
+					$.extend(go.sgf.game_info, {
+						PH: go.sgf.game_info.PW,
+						PG: go.sgf.game_info.PB
+					});
 			}
 			else {
-				go.message("Since you've decided to swap, " + opponent_name + " will play " + go.playing() + ' (this changes PB and PW.)');
-				go.sgf.game_info['P' + go.opponent()[0].toUpperCase()] = player_name;
-				go.sgf.game_info['P' + go.playing()[0].toUpperCase()] = opponent_name;
+				if ($('body').is('landscape'))
+					go.message("Since you've decided to swap, " + opponent_name + " will play " + go.playing() + ' (this changes PB and PW.)');
+				$.extend(go.sgf.game_info, {
+					PB: go.sgf.game_info.PG,
+					PW: go.sgf.game_info.PH
+				});
 			}
 			go.sgf.current.push({ C: player_name + " swaps places with " + opponent_name });
 			
@@ -221,6 +229,14 @@
 		};
 		
 		return function() {
+			$('body')
+				.bind({
+					turn:  function (event, data) {
+						$('body')
+							.removeClass('profile landscape')
+							.addClass(data.orientation);
+					}
+				});
 			$('.move.play')
 				.gesture(['click', 'circle', 'close']);
 			$('.move')
@@ -232,7 +248,7 @@
 								.find('.scrub');
 							}
 						}
-				])
+				]);
 			$('.move.play:has(.zoomout)')
 				.live('gesture_open', 
 					function () {
@@ -247,12 +263,7 @@
 				);
 										
 			$('.board')
-				.live('gesture_scale', do_scale)
-				.addClass(
-					window.orientation !== undefined 
-						? (Math.abs(window.orientation) == 90 ? 'landscape' : 'profile')
-						: (window.innerWidth < window.innerHeight ? 'profile' : 'landscape')
-				);
+				.live('gesture_scale', do_scale);
 				
 			$('.board.zoomout')
 				.live('gesture_hold', do_zoomin);
