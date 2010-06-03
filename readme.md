@@ -7,7 +7,7 @@ The sense of adventure in finding things out can be experienced in many differen
 
 So, here is "World of Go," a pass and play local web application that adjudicates a game of Go between two players. This is an ongoing work, with both feature design, UX design, and software design changing on an almost daily basis. That is a long-winded way of saying that IMHO the code is nearly complete crap. It is as if you picked up an architect's sketch pad and looked at a page to find it covered with scribbles and cross-outs.
 
-(This is written *specifically* for the iPhone/iPod Touch at this time. I also test it on OS X Safari. I have made no attempt to test it on any other OS or browser.)
+(This is written *specifically* for the iPad at this time. I also test it on OS X Safari. Updated stylesheets for the iPhone/iPod Touch are in the works. I have made no attempt to test it on any other OS or browser.)
 
 **help with playing**
 
@@ -23,7 +23,7 @@ Choose a board size, handicap, and game to play. "Classic Go" is exactly what yo
 
 In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), World of Go is an experiment with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping the screen or drawing simple symbols.
 
-When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you like your play, pass the phone to your opponent and it's their turn. If you don't like your play, "scrub" the board by swiping rapidly from left to right to left three or more times. It will be your turn again and you can tap a different intersection. You can undo multiple times if you want.
+When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you like your play, pass the iPad to your opponent and it's their turn. If you don't like your play, "scrub" the board by swiping rapidly from left to right to left three or more times. It will be your turn again and you can tap a different intersection. You can undo multiple times if you want.
 
 To pass, draw an "X" using three continuous strokes of your finger:
 
@@ -55,35 +55,49 @@ On multi-touch devices, you can also use the pinch gesture to zoom in or out.
 
 **world of go**
 
-The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv], including:
+The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options.
 
-* [One Eyed Go][oneeye]: In this game, suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
+* **Classic**: This is the standard game of Go with the standard options for setup: Either black plays first, or black is awarded a handicap of between two and nine stones and white plays first. Handicap stones are placed on the Hoshi points in the conventional manner. World of Go does not score the game but it will end the game after two consecutive passes.
+
+* **Free Placement**: This is also the standard rules for Go, however if black is granted a handicap, black plays the stones wherever he likes rather than having them placed on the standard Hoshi points. For example, if black is given a handicap of three stones, he will play the first three moves in a row and then white will play and the turns will alternate in the normal fashion for the remainder of the game.
+
+* **More Setups**: Once again the rules are the standard rules of Go, however the initial setup differs radically from tranditional Go. The options include:
+
+  * Pie Rule: Black plays a single stone first. White has two choices. If he plays a stone, the game continues normally. However, white can also *swap* places by drawing a circle on the board with his finger. The two players switch colours, and the player who was originally black is now white and the player who was originally white is now black. The effect of this rule is that Black does not wish to make too strong an opening play for fear that white will choose to swap. Likewise, black does not wish to make too weak a play either, so he should make a play that ideally is perfectly balanced.
+  * [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns. Wild Fuseki discourages extensive memorization of opening play sequences and encourages strong fundamental style. (Really Wild Fuseki is exactly the same thing, however twelve stones are placed for each player.)
+
+    ![Wild Fuseki][iwild] 
+
+  * [Influence Go][influence] gives each player opposing edges of the board. This game usually involves a fight to secure the center and establish a connection to your strong sides.
+
+    ![Influence Go][iinfluence]
+
+  * [Dots Go][dots] consists of stones on alternate intersections of the board. Games evolve very differently than standard Go.
+
+    ![Dots Go][idots]
+    
+  * Baduk is the Korean version of Go. There is a prescribed opening position, and the scoring is a little different from Japanese or Chinese go.
+  
+  * Ancient Chinese go players started each game with two stones each on corner Hoshi points.
+  
+* **White to Live**: Several variations on a theme of giving black an overwhelming advantage and white playing to make a safe group. Black wins by eliminating all of white's stones. The rules are standard, but each setup gives black a slightly different advantage.
+
+  * [Corner Go][corner] is a corner invasion exercise: Only one corner is available to White. Corner Go works well on small boards.
+
+    ![Corner Go][icorner]
+
+  * [Shape Go][shape] gives Black unkillable stones all the way around the board, and white has to try to make life with no corners or edges. Best on larger boards.
+
+    ![Shape Go][ibox]
+    
+  * The **Kill-all game** gives black a handicap of seventeen free placements. As usual, white's goal is to make life, black's goal is to destroy all of white's stones. Again, best on large boards.
+  
 * [Atari Go][atari]: This game uses normal rules, however the winner is the first to capture an opponent's stone. Obviously, there are no Kos or snapbacks. There are other positional implications.
+
 * [Gonnect][gonnect]: In this game, the winner is the first to connect either pair of opposite sides of the board with a single group.
+  
+* [One Eyed Go][oneeye]: In this game, suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
 
-Some of the games feature unique starting positions:
-
-[Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns.
-
-![Wild Fuseki][iwild]
-
-**White to Live**: Several variations on a theme of giving black an overwhelming advantage and white playing to make a safe group. Black wins by eliminating all of white's stones. [Corner Go][corner] is a corner invasion exercise: Only one corner is available to White.
-
-![Corner Go][icorner]
-
-[Shape Go][shape] gives Black unkillable stones on the first row and column all the way around the board, and white has to try to make life with no corners or edges. Probably best on larger boards.
-
-![Shape Go][ibox]
-
-**Unusual Setups**: A few other variations have standard rules and scoring, but different ways to set up the initial board. [Influence Go][influence] gives each player opposing edges of the board.
-
-![Influence Go][iinfluence]
-
-[Dots Go][dots] consists of stones on alternate intersections of the board.
-
-![Dots Go][idots]
-
-Note: The application does not attempt to score games that are won on the basis of territory, nor does it adjudicate games that end with two passes. It's up to you to decide who won and by how much.
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
