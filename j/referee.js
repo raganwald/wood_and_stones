@@ -744,11 +744,11 @@
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
 					if (go.sgf.current[ultimate_index]['K']) {
 						if (go.sgf.current[ultimate_index]['W']) {
-							go.message('White wins');
+							go.message(go.sgf.game_info.PW+' wins');
 							go.sgf.game_info['RE'] = 'W+1';
 						}
 						else if (go.sgf.current[ultimate_index]['B']) {
-							go.message('Black wins');
+							go.message(go.sgf.game_info.PB+' wins');
 							go.sgf.game_info['RE'] = 'B+1';
 						}
 						else console.error('confused about who actually won')
@@ -756,6 +756,61 @@
 				}
 				return board;
 			};
+			
+			// diagonals only works on square boards for now
+			var in_a_row = function(to_win) {
+				
+				var maximum_length = function (board, colour, across, down) {
+					return Math.max.apply( Math, 
+						$.map(
+							[[1,0], [0,1], [1,1], [1,-1]],
+							function (deltas) {
+								var d = function (distance) {
+									var new_across = across+(distance*deltas[0]);
+									var new_down = down+(distance*deltas[1]);
+									return new_across < 3 || new_across > (go.sgf.game_info.SZ - 2) ||
+										new_down < 3 || new_down > (go.sgf.game_info.SZ - 2) ||
+										board
+											.find('.row:nth-child('+new_down+') .intersection:nth-child('+new_across+')')
+												.is('.intersection::not(.'+colour+')');
+								};
+								return F.until(d, '_+1')(1) + Math.abs(F.until(d, '_-1')(-1) * -1) - 1;
+							}
+						)
+					);
+				};
+				
+				return function (board) {
+					if (go.sgf.current.length > 1) {
+						var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
+						var player;
+						var last_intersection;
+						var colour;
+						var id = go.sgf.current[ultimate_index]['W'] || go.sgf.current[ultimate_index]['B'];
+						if (go.sgf.current[ultimate_index]['W']) {
+							player = go.sgf.game_info.PW;
+							colour = 'white';
+						}
+						else if (go.sgf.current[ultimate_index]['B']) {
+							player = go.sgf.game_info.PB;
+							colour = 'black';
+						}
+						else return board;
+						var stone = board.find('#'+id);
+						if (stone.size() == 0) return board;
+						var across = $.inArray(id[0], go.letters) + 1; // nth-child math
+						var down = $.inArray(id[1], go.letters) + 1;
+						var longest = maximum_length(board, colour, across, down);
+						if (longest >= to_win)	{
+							go.sgf.game_info['RE'] = colour[0].toUpperCase()+'+'+longest;
+							go.message(player + ' wins by making a line of '+longest+' stones!');
+						}
+					}
+					return board;
+				};
+			};
+			
+			var seven_in_a_row = in_a_row(7,8);
 			
 			var connect_sides = function(board) {
 				left_groups = board
@@ -1157,15 +1212,17 @@
 					any_capture: any_capture,
 					connect_sides: connect_sides,
 					no_legal_move_loses: no_legal_move_loses,
-					captures_game: captures_game
+					captures_game: captures_game,
+					seven_in_a_row: in_a_row(7,7)
 				},
 				games: {
 					"Classic": '{"GM": 1, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"Free Placement": '{"GM": 1, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"More Setups": '{"GM": 1, "setups": "other", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
-					"Atari Go": '{"GM": 12, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"White to Live": '{"GM": 14, "setups": "to_live", "analyzer": "incremental_analyzer", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
+					"Atari Go": '{"GM": 12, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"Gonnect": '{"GM": 13, "setups": "pie", "analyzer": "incremental_analyzer", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
+					"Irensei": '{"GM": 15, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [19], "endings": ["seven_in_a_row", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"One Eye Go": '{"GM": 11, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "extend_playable_group" ]}' //,
 					// "Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable", "unslidable_unplayable" ]}',
 				}
