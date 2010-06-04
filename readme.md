@@ -5,14 +5,14 @@ Go is "an ancient oriental board game for two players that is noted for being ri
 
 The sense of adventure in finding things out can be experienced in many different ways. Learning to play less poorly is one way. Another is to write a game playing algorithm, something that has fascinated me since I wrote a [Maharajah and the Sepoys](http://en.wikipedia.org/wiki/Maharajah_and_the_Sepoys) playing game in BASIC back at St. Andrews' College in 1977. A third is to write a server that adjudicates play between two humans. This is clearly less difficult but still provides opportunities for creativity and expression, which is why it is a [favourite interview question](http://weblog.raganwald.com/2006/06/my-favourite-interview-question.html "My favourite interview question").
 
-So, here is "World of Go," a pass and play local web application that adjudicates a game of Go between two players. This is an ongoing work, with both feature design, UX design, and software design changing on an almost daily basis. That is a long-winded way of saying that IMHO the code is nearly complete crap. It is as if you picked up an architect's sketch pad and looked at a page to find it covered with scribbles and cross-outs.
+So, here is "[World of Go][index]," a pass and play local web application that adjudicates a game of Go between two players. This is an ongoing work, with both feature design, UX design, and software design changing on an almost daily basis. That is a long-winded way of saying that IMHO the code is nearly complete crap. It is as if you picked up an architect's sketch pad and looked at a page to find it covered with scribbles and cross-outs.
 
 > This is written *specifically* for the iPad at this time. I also test it on OS X Safari. Updated stylesheets for the iPhone/iPod Touch are in the works. I have made no attempt to test it on any other OS or browser. This is a pass-and-play application: It's for playing face-to-face with someone, not for playing the computer or playing with someone over the Internet ([Issue 250][igs]). It turns an iPad into a portable go board that knows something about legal moves, can set up pieces for you, and allows you to go back and review the game.
 
 help with playing
 ---
 
-To start a new game, open [index.html][index]:
+To start a new game, open [World of Go][index] using your iPad (it used to work just fine on iPhone, but I haven't gotten around to selecting the correct style sheet depending on whether you're on an iPhone or an iPad. [Issue 275][styles]!):
 
 ![Start][start]
 
@@ -156,3 +156,4 @@ are distributed with the Creative Commons Attribution 2.0 ShareAlike license. So
 [pie]: http://en.wikipedia.org/wiki/Pie_rule
 [irensei]: http://en.wikipedia.org/wiki/Irensei
 [igs]: http://github.com/raganwald/go/issues/#issue/250
+[styles]: http://github.com/raganwald/go/issues/#issue/275
