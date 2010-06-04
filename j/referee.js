@@ -100,7 +100,7 @@
 					.removeClass(by_pattern(/debug_[^ ]+/))
 					.removeClass(by_pattern(/group_[^ ]+/))
 					.removeClass(by_pattern(/last_liberty_is_[^ ]+/))
-					.removeClass('playable_black playable_white atari group');
+					.removeClass('playable_black playable_white atari group no_liberties');
 			if (removed.size() > 0) {
 				var adjacents_to_removeds = board
 					.find(their_adjacent_selector(removed));
@@ -151,13 +151,15 @@
 								.is(':not(.black):not(.white)')) {
 							board
 								.find('#'+liberties[0])
+									.addClass('no_liberties')
 									.removeClass('playable_'+colour_of(uncle));
 						}
 					}
 				})
 				adjacents_to_removeds
 					.filter(':not(.black):not(.white)')
-						.addClass('playable_black playable_white');
+						.addClass('playable_black playable_white')
+						.removeClass('no_liberties');
 			}
 			$.each(
 				$.map(['black', 'white'], function (colour) {
@@ -176,7 +178,7 @@
 						var added_id = added.attr('id');
 						added
 							.addClass(added_colour)
-							.removeClass('playable_black playable_white');
+							.removeClass('playable_black playable_white no_liberties');
 						// if (debug) console.log('added a '+added_colour+' stone at '+added_id);
 						var adjacent_to_added = board
 							.find(their_adjacent_selector(added));
@@ -220,7 +222,8 @@
 										.is(':not(.black):not(.white)')) {
 									board
 										.find('#'+liberties[0])
-											.removeClass('playable_'+hostile_to_added_colour);
+											.removeClass('playable_'+hostile_to_added_colour)
+											.addClass('no_liberties');
 								}
 							}
 						});
@@ -255,7 +258,8 @@
 										.is(':not(.black):not(.white)')) {
 									board
 										.find('#'+ids_of_added_liberties[0])
-											.removeClass('playable_'+added_colour);
+											.removeClass('playable_'+added_colour)
+											.addClass('no_liberties');
 								}
 							}
 						}
@@ -312,25 +316,29 @@
 										.is(':not(.black):not(.white)')) {
 									board
 										.find('#'+pater_liberties[0])
-											.removeClass('playable_'+added_colour);
+											.removeClass('playable_'+added_colour)
+											.addClass('no_liberties');
 								}
 							}
 						}
+						console.log(added_liberties);
 						added_liberties
 							.each(function (i, liberty) {
 								liberty = $(liberty);
-								// if (debug) console.log(their_adjacent_selector(liberty) + ' are liberties of '+liberty.attr('id'));
+							console.log(their_adjacent_selector(liberty) + ' are liberties of '+liberty.attr('id'));
 								if (board
 									.find(their_adjacent_selector(liberty))
 										.is(':not(.black):not(.white)')
 								) {
-									// if (debug) console.log(liberty.attr('id') + ' has a liberty and is therefore playable');
+									console.log(liberty.attr('id') + ' has a liberty and is therefore playable');
 									liberty
-										.addClass('playable_black playable_white');
+										.addClass('playable_black playable_white')
+										.removeClass('no_liberties');
 									}
 								else {
-									// if (debug) console.log(liberty.attr('id') + ' has no liberties and is therefore unplayable');
+									console.log(liberty.attr('id') + ' has no liberties and is therefore unplayable');
 									liberty
+										.addClass('no_liberties')
 										.removeClass('playable_black playable_white');
 								}
 							})
@@ -760,29 +768,50 @@
 				}
 				return board;
 			}
+				
+			var maximum_length = function (board, colour, across, down) {
+				return Math.max.apply( Math, 
+					$.map(
+						[[1,0], [0,1], [1,1], [1,-1]],
+						function (deltas) {
+							var d = function (distance) {
+								var new_across = across+(distance*deltas[0]);
+								var new_down = down+(distance*deltas[1]);
+								return new_across < 3 || new_across > (go.sgf.game_info.SZ - 2) ||
+									new_down < 3 || new_down > (go.sgf.game_info.SZ - 2) ||
+									board
+										.find('.row:nth-child('+new_down+') .intersection:nth-child('+new_across+')')
+											.is('.intersection::not(.'+colour+')');
+							};
+							return F.until(d, '_+1')(1) + Math.abs(F.until(d, '_-1')(-1) * -1) - 1;
+						}
+					)
+				);
+			};
+			
+			// could be a tad iffy... rethink all of these static add-ons
+			var suicide_for_seven = function(board) {
+				board
+					.find('.no_liberties.playable_white,.no_liberties.playable_black')
+						.removeClass('playable_black playable_white')
+						.end()
+					.find('.no_liberties:not(.black):not(.white)')
+						.each(function(i, el) {
+							var intersection = $(el);
+							var id = intersection.attr('id');
+							var across = $.inArray(id[0], go.letters) + 1; // nth-child math
+							var down = $.inArray(id[1], go.letters) + 1;
+							var max = maximum_length(board, playing(board), across, down);
+							console.log(id+' would create ' +max+' in a row');
+							if (max >= 7)
+								intersection
+									.addClass('playable_'+playing(board));
+						});
+				return board;
+			};
 			
 			// diagonals only works on square boards for now
-			var seven_in_a_row = function(board) {
-				
-				var maximum_length = function (board, colour, across, down) {
-					return Math.max.apply( Math, 
-						$.map(
-							[[1,0], [0,1], [1,1], [1,-1]],
-							function (deltas) {
-								var d = function (distance) {
-									var new_across = across+(distance*deltas[0]);
-									var new_down = down+(distance*deltas[1]);
-									return new_across < 3 || new_across > (go.sgf.game_info.SZ - 2) ||
-										new_down < 3 || new_down > (go.sgf.game_info.SZ - 2) ||
-										board
-											.find('.row:nth-child('+new_down+') .intersection:nth-child('+new_across+')')
-												.is('.intersection::not(.'+colour+')');
-								};
-								return F.until(d, '_+1')(1) + Math.abs(F.until(d, '_-1')(-1) * -1) - 1;
-							}
-						)
-					);
-				};
+			var seven_in_a_row_wins = function(board) {
 				
 				if (go.sgf.current.length > 1) {
 					var ultimate_index = go.sgf.floor(go.sgf.current.length - 1);
@@ -1281,6 +1310,7 @@
 					killers_playable: killers_playable,
 					extend_playable_group: extend_playable_group,
 					simple_ko_unplayable: simple_ko_unplayable,
+					suicide_for_seven: suicide_for_seven,
 					unslidable_unplayable: unslidable_unplayable
 				},
 				endings: {
@@ -1290,7 +1320,7 @@
 					no_legal_move_loses: no_legal_move_loses,
 					captures_game: captures_game,
 					capture_five: capture_n(5),
-					seven_in_a_row: seven_in_a_row
+					seven_in_a_row_wins: seven_in_a_row_wins
 				},
 				games: {
 					"Classic": '{"GM": 1, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
@@ -1299,7 +1329,7 @@
 					"White to Live": '{"GM": 14, "setups": "to_live", "analyzer": "incremental_analyzer", "sizes": [9,11,13,17,19], "endings": ["two_passes", "no_whites"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"Atari Go": '{"GM": 12, "setups": "atari", "analyzer": "incremental_analyzer", "sizes": [9], "endings": ["two_passes", "any_capture"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"Capture Five": '{"GM": 12, "setups": "capture_five", "analyzer": "incremental_analyzer", "sizes": [9, 11, 13], "endings": ["two_passes", "capture_five"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
-					"Irensei": '{"GM": 15, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [19], "endings": ["seven_in_a_row", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
+					"Irensei": '{"GM": 15, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [19], "endings": ["seven_in_a_row_wins", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "suicide_for_seven", "simple_ko_unplayable" ]}',
 					"Gonnect": '{"GM": 13, "setups": "pie", "analyzer": "incremental_analyzer", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"One Eye Go": '{"GM": 11, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "extend_playable_group" ]}' //,
 					// "Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable", "unslidable_unplayable" ]}',
