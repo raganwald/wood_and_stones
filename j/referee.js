@@ -1305,13 +1305,15 @@
 					incremental_analyzer: incremental_analyzer
 				},
 				validations: {
-					no_passing_allowed: no_passing_allowed,
+					// validations for vacant intersections
 					at_liberty_playable: at_liberty_playable,
 					killers_playable: killers_playable,
 					extend_playable_group: extend_playable_group,
 					simple_ko_unplayable: simple_ko_unplayable,
 					suicide_for_seven: suicide_for_seven,
-					unslidable_unplayable: unslidable_unplayable
+					unslidable_unplayable: unslidable_unplayable,
+					// other validations
+					no_passing_allowed: no_passing_allowed
 				},
 				endings: {
 					two_passes: two_passes,
