@@ -1,7 +1,7 @@
 world of go
 ===
 
-Go is "an ancient oriental board game for two players that is noted for being rich in strategy despite its simple rules." [I tried to learn Go](http://github.com/raganwald/homoiconic/blob/master/2009-10-20/high_anxiety.md#readme "High Anxiety") recently, and it was a rich and rewarding personal experience to struggle with my inability to play at even a novice level. I received a lot of feedback about that post, including a nice comment from Dave Peck, who pointed me to his weekend project, [Dave Peck's Go](http://github.com/davepeck/appengine-go "[Dave Peck's Go]").
+Go is "an ancient oriental board game for two players that is noted for being rich in strategy despite its simple rules." [I tried to learn Go](http://github.com/raganwald/homoiconic/blob/master/2009-10-20/high_anxiety.md#readme "High Anxiety") recently, and it was a rich and rewarding personal experience to struggle with my inability to play at even a novice level. I received a lot of [great feedback][hn] about that post, including a nice comment from Dave Peck, who pointed me to his weekend project, [Dave Peck's Go](http://github.com/davepeck/appengine-go "[Dave Peck's Go]").
 
 The sense of adventure in finding things out can be experienced in many different ways. Learning to play less poorly is one way. Another is to write a game playing algorithm, something that has fascinated me since I wrote a [Maharajah and the Sepoys](http://en.wikipedia.org/wiki/Maharajah_and_the_Sepoys) playing game in BASIC back at St. Andrews' College in 1977. A third is to write a server that adjudicates play between two humans. This is clearly less difficult but still provides opportunities for creativity and expression, which is why it is a [favourite interview question](http://weblog.raganwald.com/2006/06/my-favourite-interview-question.html "My favourite interview question").
 
@@ -157,3 +157,4 @@ are distributed with the Creative Commons Attribution 2.0 ShareAlike license. So
 [irensei]: http://en.wikipedia.org/wiki/Irensei
 [igs]: http://github.com/raganwald/go/issues/#issue/250
 [styles]: http://github.com/raganwald/go/issues/#issue/275
+[hn]: http://news.ycombinator.com/item?id=904765
