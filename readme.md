@@ -9,7 +9,8 @@ So, here is "World of Go," a pass and play local web application that adjudicate
 
 > This is written *specifically* for the iPad at this time. I also test it on OS X Safari. Updated stylesheets for the iPhone/iPod Touch are in the works. I have made no attempt to test it on any other OS or browser. This is a pass-and-play application: It's for playing face-to-face with someone, not for playing the computer or playing with someone over the Internet ([Issue 250][igs]). It turns an iPad into a portable go board that knows something about legal moves, can set up pieces for you, and allows you to go back and review the game.
 
-**help with playing**
+help with playing
+---
 
 To start a new game, open [index.html][index]:
 
@@ -53,7 +54,8 @@ With larger boards, it can be a challenge to tap the correct stone location on a
 
 On multi-touch devices, you can also use the pinch gesture to zoom in or out.
 
-**games with standard rules and victory conditions**
+games with standard rules and victory conditions
+---
 
 The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options. The most 'normal' games to the Go player are those that have the exact same rules and victory conditions, namely territory plus captures. They differ only in how the board is set up at the beginning of play.
 
@@ -81,7 +83,8 @@ The application is specifically written to support other games, most of which ar
   
 * [Classical Chinese Opening][classical] go players started each game with two stones each on corner Hoshi points, leading to fighting. Classical Chinese rules were also different, however choosing this option starts a standard game of Go with the Classical Chinese Opening.
 
-**games where white is trying to live**
+games where white is trying to live
+---
   
 Some games have standard rules but different victory conditions. A number of these games share the common theme of a struggle for white to survive against crushing odds. In these games, white wins if he can create life. Black wins the moment there are no white stones on the board.
 
@@ -94,6 +97,9 @@ Some games have standard rules but different victory conditions. A number of the
     ![Shape Go][ibox]
     
 * In the [Kill-all][killall] game, black is given a large number of free placements and white simply tries to survive. An even game is thought to be seventeen placements on a 19x19 board, however you can choose more or fewer to establish a handicap. You may also choose a smaller board and fewer placements.
+
+other games with non-standard victory conditions
+---
   
 * [Atari Go][atari] uses normal rules on a 9x9 board, however the winner is the first to capture an opponent's stone. There is a progression of teaching setups given with the student playing black. The final setup, Cross-cutting, should lead to successive draws. When a student can always draw in this situation, they can move up to Capture Five.
 
@@ -101,13 +107,15 @@ Some games have standard rules but different victory conditions. A number of the
 
 * [Irensei][irensei] is a game with standard Go rules, however captures and territory are irrelevant to scoring. The winner is the first player to make an unbroken line of seven stones in a row, although a line with stones within two intersections of the edge does not count. Black plays first, and to counter this advantage there is a special rule that black loses if he makes a line of eight or more stones. White can make a line of any length.
 
-**games with slightly different rules**
+games with slightly different rules
+---
 
 * In [Gonnect][gonnect], the winner is the first to connect either pair of opposite sides of the board with a single group *or* a player loses when he has no legal move available. *Passing is not allowed*. This difference from normal Go is crucial, as it prevents a deadlock where neither player can connect: each player must eventually fill in their territory until they are vulnerable to capture or have no legal moves available.
 
 * In [One Eyed Go][oneeye], suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
 
-**code confessions, a/k/a estimating the WTFs per LOC**
+code confessions, a/k/a estimating the WTFs per LOC
+---
 
 This is my first [jQuery](http://jquery.com/ "jQuery: The Write Less, Do More, JavaScript Library") project, and it shows. I'm also using [jQTouch](http://www.jqtouch.com/), although I'm using less and less of it as I get more comfortable with Mobile Safari. I've picked up a few other jQuery plugins, including my own [iGesture][igesture] for gestures like swipes and scrubs.
 
