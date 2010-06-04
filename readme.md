@@ -55,7 +55,7 @@ On multi-touch devices, you can also use the pinch gesture to zoom in or out.
 
 **games with standard rules and victory conditions**
 
-The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options. The most 'normal' games to the Go player are those that hav ethe exact same rules and victory conditions, namely territory plus captures. They differ only in how the board is set up at the beginning of play.
+The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options. The most 'normal' games to the Go player are those that have the exact same rules and victory conditions, namely territory plus captures. They differ only in how the board is set up at the beginning of play.
 
 **Classic**: This is the standard game of Go with the standard options for setup: Either black plays first, or black is awarded a handicap of between two and nine stones and white plays first. Handicap stones are placed on the Hoshi points in the conventional manner. World of Go does not score the game but it will end the game after two consecutive passes.
 
@@ -65,7 +65,7 @@ The application is specifically written to support other games, most of which ar
 
 * [Pie Rule][pie]: Black plays a single stone first. White has two choices. If he plays a stone, the game continues normally. However, white can also *swap* places by drawing a circle on the board with his finger. The two players switch colours, and the player who was originally black is now white and the player who was originally white is now black. The effect of this rule is that Black does not wish to make too strong an opening play for fear that white will choose to swap. Likewise, black does not wish to make too weak a play either, so he should make a play that ideally is perfectly balanced.
 
-* [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns. Wild Fuseki discourages extensive memorization of opening play sequences and encourages strong fundamental style. (Really Wild Fuseki is exactly the same thing, however twelve stones are placed for each player.)
+* [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns. Wild Fuseki discourages extensive memorization of opening play sequences and encourages strong fundamental style. (*Really Wild Fuseki* is exactly the same thing, however *twelve* stones are placed for each player.)
 
     ![Wild Fuseki][iwild] 
 
@@ -103,7 +103,7 @@ Some games have standard rules but different victory conditions. A number of the
 
 **games with slightly different rules**
 
-* In [Gonnect][gonnect], the winner is the first to connect either pair of opposite sides of the board with a single group *or* a player loses when he has no legal move available. *Passing is not allowed*. This difference from normal Go are crucial, as it prevents a deadlock where neither player can connect: each player must eventually fill in their territory until they are vulnerable to capture or have no legal moves available.
+* In [Gonnect][gonnect], the winner is the first to connect either pair of opposite sides of the board with a single group *or* a player loses when he has no legal move available. *Passing is not allowed*. This difference from normal Go is crucial, as it prevents a deadlock where neither player can connect: each player must eventually fill in their territory until they are vulnerable to capture or have no legal moves available.
 
 * In [One Eyed Go][oneeye], suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
 
