@@ -53,51 +53,59 @@ With larger boards, it can be a challenge to tap the correct stone location on a
 
 On multi-touch devices, you can also use the pinch gesture to zoom in or out.
 
-**world of go**
+**games with standard rules and victory conditions**
 
-The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options.
+The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options. The most 'normal' games to the Go player are those that hav ethe exact same rules and victory conditions, namely territory plus captures. They differ only in how the board is set up at the beginning of play.
 
-* **Classic**: This is the standard game of Go with the standard options for setup: Either black plays first, or black is awarded a handicap of between two and nine stones and white plays first. Handicap stones are placed on the Hoshi points in the conventional manner. World of Go does not score the game but it will end the game after two consecutive passes.
+**Classic**: This is the standard game of Go with the standard options for setup: Either black plays first, or black is awarded a handicap of between two and nine stones and white plays first. Handicap stones are placed on the Hoshi points in the conventional manner. World of Go does not score the game but it will end the game after two consecutive passes.
 
-* **Free Placement**: This is also the standard rules for Go, however if black is granted a handicap, black plays the stones wherever he likes rather than having them placed on the standard Hoshi points. For example, if black is given a handicap of three stones, he will play the first three moves in a row and then white will play and the turns will alternate in the normal fashion for the remainder of the game.
+**Free Placement**: This is also the standard rules for Go, however if black is granted a handicap, black plays the stones wherever he likes rather than having them placed on the standard Hoshi points. For example, if black is given a handicap of three stones, he will play the first three moves in a row and then white will play and the turns will alternate in the normal fashion for the remainder of the game.
 
-* **More Setups**: Once again the rules are the standard rules of Go, however the initial setup differs radically from tranditional Go. The options include:
+**More Setups**: Once again the rules are the standard rules of Go, however the initial setup differs radically from tranditional Go. The options include:
 
-  * Pie Rule: Black plays a single stone first. White has two choices. If he plays a stone, the game continues normally. However, white can also *swap* places by drawing a circle on the board with his finger. The two players switch colours, and the player who was originally black is now white and the player who was originally white is now black. The effect of this rule is that Black does not wish to make too strong an opening play for fear that white will choose to swap. Likewise, black does not wish to make too weak a play either, so he should make a play that ideally is perfectly balanced.
-  * [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns. Wild Fuseki discourages extensive memorization of opening play sequences and encourages strong fundamental style. (Really Wild Fuseki is exactly the same thing, however twelve stones are placed for each player.)
+* [Pie Rule][pie]: Black plays a single stone first. White has two choices. If he plays a stone, the game continues normally. However, white can also *swap* places by drawing a circle on the board with his finger. The two players switch colours, and the player who was originally black is now white and the player who was originally white is now black. The effect of this rule is that Black does not wish to make too strong an opening play for fear that white will choose to swap. Likewise, black does not wish to make too weak a play either, so he should make a play that ideally is perfectly balanced.
+
+* [Wild Fuskeki][wild]: This is a standard game, however the first three moves are randomly chosen for each player. Black can have up to six randomly placed handicap stones. Initial positions will never include dead stones, ataris, or stones placed in either of the two edge rows or columns. Wild Fuseki discourages extensive memorization of opening play sequences and encourages strong fundamental style. (Really Wild Fuseki is exactly the same thing, however twelve stones are placed for each player.)
 
     ![Wild Fuseki][iwild] 
 
-  * [Influence Go][influence] gives each player opposing edges of the board. This game usually involves a fight to secure the center and establish a connection to your strong sides.
+* [Influence Go][influence] gives each player opposing edges of the board. This game usually involves a fight to secure the center and establish a connection to your strong sides.
 
     ![Influence Go][iinfluence]
 
-  * [Dots Go][dots] consists of stones on alternate intersections of the board. Games evolve very differently than standard Go.
+* [Dots Go][dots] consists of stones on alternate intersections of the board. Games evolve very differently than standard Go.
 
     ![Dots Go][idots]
     
-  * Baduk is the Korean version of Go. There is a prescribed opening position, and the scoring is a little different from Japanese or Chinese go.
+* [Sunjang Baduk][baduk] is an archaic Korean version of Go. There is a prescribed opening position, and the scoring is a little different from Japanese or Chinese go. Even if you don't care to play with different scoring, you might find games with the Sunjang Baduk opening setup a refreshing change of pace.
   
-  * Ancient Chinese go players started each game with two stones each on corner Hoshi points.
-  
-* **White to Live**: Several variations on a theme of giving black an overwhelming advantage and white playing to make a safe group. Black wins by eliminating all of white's stones. The rules are standard, but each setup gives black a slightly different advantage.
+* [Classical Chinese Opening][classical] go players started each game with two stones each on corner Hoshi points, leading to fighting. Classical Chinese rules were also different, however choosing this option starts a standard game of Go with the Classical Chinese Opening.
 
-  * [Corner Go][corner] is a corner invasion exercise: Only one corner is available to White. Corner Go works well on small boards.
+**games where white is trying to live**
+  
+Some games have standard rules but different victory conditions. A number of these games share the common theme of a struggle for white to survive against crushing odds. In these games, white wins if he can create life. Black wins the moment there are no white stones on the board.
+
+* [Corner Go][corner] is a corner invasion exercise: Only one corner is available to White. Corner Go works well on small boards.
 
     ![Corner Go][icorner]
 
-  * [Shape Go][shape] gives Black unkillable stones all the way around the board, and white has to try to make life with no corners or edges. Best on larger boards.
+* [Shape Go][shape] gives Black unkillable stones all the way around the board, and white has to try to make life with no corners or edges. Best on larger boards.
 
     ![Shape Go][ibox]
     
-  * The **Kill-all game** gives black a handicap of seventeen free placements. As usual, white's goal is to make life, black's goal is to destroy all of white's stones. Again, best on large boards.
+* In the [Kill-all][killall] game, black is given a large number of free placements and white simply tries to survive. An even game is thought to be seventeen placements on a 19x19 board, however you can choose more or fewer to establish a handicap. You may also choose a smaller board and fewer placements.
   
-* [Atari Go][atari]: This game uses normal rules, however the winner is the first to capture an opponent's stone. Obviously, there are no Kos or snapbacks. There are other positional implications.
+* [Atari Go][atari] uses normal rules on a 9x9 board, however the winner is the first to capture an opponent's stone. There is a progression of teaching setups given with the student playing black. The final setup, Cross-cutting, should lead to successive draws. When a student can always draw in this situation, they can move up to Capture Five.
 
-* [Gonnect][gonnect]: In this game, the winner is the first to connect either pair of opposite sides of the board with a single group.
-  
-* [One Eyed Go][oneeye]: In this game, suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
+* *Capture Five* uses normal rules on a small board, however the winner is the first to capture five stones. This introduces the idea of sacrifice into the game. It is a natural progression from Atari Go.
 
+* [Irensei][irensei] is a game with standard Go rules, however captures and territory are irrelevant to scoring. The winner is the first player to make an unbroken line of seven stones in a row, although a line with stones within two intersections of the edge does not count. Black plays first, and to counter this advantage there is a special rule that black loses if he makes a line of eight or more stones. White can make a line of any length.
+
+**games with slightly different rules**
+
+* In [Gonnect][gonnect], the winner is the first to connect either pair of opposite sides of the board with a single group *or* a player loses when he has no legal move available. *Passing is not allowed*. This difference from normal Go are crucial, as it prevents a deadlock where neither player can connect: each player must eventually fill in their territory until they are vulnerable to capture or have no legal moves available.
+
+* In [One Eyed Go][oneeye], suicide is never allowed, even if your play would otherwise capture stones. One consequence of this simplification of the rules is that a single eye is enough to make a group safe.
 
 **code confessions, a/k/a estimating the WTFs per LOC**
 
@@ -134,3 +142,8 @@ are distributed with the Creative Commons Attribution 2.0 ShareAlike license. So
 [info]: http://raganwald.github.com/go/i/about/info.png
 [bottom]: http://raganwald.github.com/go/i/about/bottom.png
 [top]: http://raganwald.github.com/go/i/about/top.png
+[baduk]: http://senseis.xmp.net/?SunjangBaduk
+[classical]: http://senseis.xmp.net/?ChineseClassicalOpening
+[killall]: http://senseis.xmp.net/?KillAllGame
+[pie]: http://en.wikipedia.org/wiki/Pie_rule
+[irensei]: http://en.wikipedia.org/wiki/Irensei
