@@ -12,7 +12,8 @@ $zoom_in_size: $large
   &.zoomin
     margin-left: -0.5 * $zoom_in_cells * $zoom_in_size
     width:  $zoom_in_size * $zoom_in_cells
-    height:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_in_size
       width:  $zoom_in_size * $full_cells
@@ -21,8 +22,9 @@ $zoom_in_size: $large
         width:  $zoom_in_size
   &.zoomout
     margin-left: -0.5 * $zoom_out_cells *$zoom_out_size
-    width:  $zoom_out_size * $full_cells
-    height:  $zoom_out_size * $full_cells
+    width:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_out_size
       width:  $zoom_out_size * $zoom_out_cells
@@ -38,7 +40,8 @@ $zoom_in_size: $large
   &.zoomin
     margin-left: -0.5 * $zoom_in_cells * $zoom_in_size
     width:  $zoom_in_size * $zoom_in_cells
-    height:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_in_size
       width:  $zoom_in_size * $full_cells
@@ -47,8 +50,9 @@ $zoom_in_size: $large
         width:  $zoom_in_size
   &.zoomout
     margin-left: -0.5 * $zoom_out_cells *$zoom_out_size
-    width:  $zoom_out_size * $full_cells
-    height:  $zoom_out_size * $full_cells
+    width:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_out_size
       width:  $zoom_out_size * $zoom_out_cells
@@ -64,7 +68,8 @@ $zoom_in_size: $large
   &.zoomin
     margin-left: -0.5 * $zoom_in_cells * $zoom_in_size
     width:  $zoom_in_size * $zoom_in_cells
-    height:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_in_size
       width:  $zoom_in_size * $full_cells
@@ -73,8 +78,9 @@ $zoom_in_size: $large
         width:  $zoom_in_size
   &.zoomout
     margin-left: -0.5 * $zoom_out_cells *$zoom_out_size
-    width:  $zoom_out_size * $full_cells
-    height:  $zoom_out_size * $full_cells
+    width:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_out_size
       width:  $zoom_out_size * $zoom_out_cells
@@ -90,7 +96,8 @@ $zoom_in_size: $large
   &.zoomin
     margin-left: -0.5 * $zoom_in_cells * $zoom_in_size
     width:  $zoom_in_size * $zoom_in_cells
-    height:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_in_size
       width:  $zoom_in_size * $full_cells
@@ -99,8 +106,9 @@ $zoom_in_size: $large
         width:  $zoom_in_size
   &.zoomout
     margin-left: -0.5 * $zoom_out_cells *$zoom_out_size
-    width:  $zoom_out_size * $full_cells
-    height:  $zoom_out_size * $full_cells
+    width:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_out_size
       width:  $zoom_out_size * $zoom_out_cells
@@ -116,7 +124,8 @@ $zoom_in_size: $large
   &.zoomin
     margin-left: -0.5 * $zoom_in_cells * $zoom_in_size
     width:  $zoom_in_size * $zoom_in_cells
-    height:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_in_size
       width:  $zoom_in_size * $full_cells
@@ -125,8 +134,9 @@ $zoom_in_size: $large
         width:  $zoom_in_size
   &.zoomout
     margin-left: -0.5 * $zoom_out_cells *$zoom_out_size
-    width:  $zoom_out_size * $full_cells
-    height:  $zoom_out_size * $full_cells
+    width:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_out_size
       width:  $zoom_out_size * $zoom_out_cells
@@ -142,7 +152,8 @@ $zoom_in_size: $large
   &.zoomin
     margin-left: -0.5 * $zoom_in_cells * $zoom_in_size
     width:  $zoom_in_size * $zoom_in_cells
-    height:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_in_size
       width:  $zoom_in_size * $full_cells
@@ -151,8 +162,9 @@ $zoom_in_size: $large
         width:  $zoom_in_size
   &.zoomout
     margin-left: -0.5 * $zoom_out_cells *$zoom_out_size
-    width:  $zoom_out_size * $full_cells
-    height:  $zoom_out_size * $full_cells
+    width:  $zoom_in_size * $zoom_in_cells
+    .intersections
+      height:  $zoom_in_size * $zoom_in_cells
     .row
       height:  $zoom_out_size
       width:  $zoom_out_size * $zoom_out_cells
@@ -164,9 +176,6 @@ $zoom_in_size: $large
   overflow: hidden
   position: relative
   left: 50%
-  :margin
-    :top 25px
-    bottom: 25px
   .intersections
     position: relative
     background: black

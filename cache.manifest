@@ -113,7 +113,6 @@ i/themes/jqt/img/whiteButton.png
 j/jquery.1.4.2.js
 j/jquery.timers-1.2.js 
 j/jqtouch.customized.js
-j/jquery.min.jquery.saveit.js
 j/md5.js
 j/to-function.js
 j/functional.js
@@ -125,4 +124,3 @@ j/dragscrollable.js
 
 c/jqtouch.css
 c/jqtouch.ipad.customized.css
-c/bubbles.css

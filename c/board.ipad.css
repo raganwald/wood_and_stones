@@ -1,7 +1,8 @@
 .board.size19.zoomin {
   margin-left: -270px;
-  width: 540px;
-  height: 540px; }
+  width: 540px; }
+  .board.size19.zoomin .intersections {
+    height: 540px; }
   .board.size19.zoomin .row {
     height: 45px;
     width: 855px; }
@@ -10,8 +11,9 @@
       width: 45px; }
 .board.size19.zoomout {
   margin-left: -285px;
-  width: 570px;
-  height: 570px; }
+  width: 540px; }
+  .board.size19.zoomout .intersections {
+    height: 540px; }
   .board.size19.zoomout .row {
     height: 30px;
     width: 570px; }
@@ -21,8 +23,9 @@
 
 .board.size17.zoomin {
   margin-left: -382.5px;
-  width: 765px;
-  height: 765px; }
+  width: 765px; }
+  .board.size17.zoomin .intersections {
+    height: 765px; }
   .board.size17.zoomin .row {
     height: 45px;
     width: 765px; }
@@ -31,8 +34,9 @@
       width: 45px; }
 .board.size17.zoomout {
   margin-left: -382.5px;
-  width: 765px;
-  height: 765px; }
+  width: 765px; }
+  .board.size17.zoomout .intersections {
+    height: 765px; }
   .board.size17.zoomout .row {
     height: 45px;
     width: 765px; }
@@ -42,8 +46,9 @@
 
 .board.size15.zoomin {
   margin-left: -337.5px;
-  width: 675px;
-  height: 675px; }
+  width: 675px; }
+  .board.size15.zoomin .intersections {
+    height: 675px; }
   .board.size15.zoomin .row {
     height: 45px;
     width: 675px; }
@@ -52,8 +57,9 @@
       width: 45px; }
 .board.size15.zoomout {
   margin-left: -337.5px;
-  width: 675px;
-  height: 675px; }
+  width: 675px; }
+  .board.size15.zoomout .intersections {
+    height: 675px; }
   .board.size15.zoomout .row {
     height: 45px;
     width: 675px; }
@@ -63,8 +69,9 @@
 
 .board.size13.zoomin {
   margin-left: -292.5px;
-  width: 585px;
-  height: 585px; }
+  width: 585px; }
+  .board.size13.zoomin .intersections {
+    height: 585px; }
   .board.size13.zoomin .row {
     height: 45px;
     width: 585px; }
@@ -73,8 +80,9 @@
       width: 45px; }
 .board.size13.zoomout {
   margin-left: -292.5px;
-  width: 585px;
-  height: 585px; }
+  width: 585px; }
+  .board.size13.zoomout .intersections {
+    height: 585px; }
   .board.size13.zoomout .row {
     height: 45px;
     width: 585px; }
@@ -84,8 +92,9 @@
 
 .board.size11.zoomin {
   margin-left: -247.5px;
-  width: 495px;
-  height: 495px; }
+  width: 495px; }
+  .board.size11.zoomin .intersections {
+    height: 495px; }
   .board.size11.zoomin .row {
     height: 45px;
     width: 495px; }
@@ -94,8 +103,9 @@
       width: 45px; }
 .board.size11.zoomout {
   margin-left: -247.5px;
-  width: 495px;
-  height: 495px; }
+  width: 495px; }
+  .board.size11.zoomout .intersections {
+    height: 495px; }
   .board.size11.zoomout .row {
     height: 45px;
     width: 495px; }
@@ -105,8 +115,9 @@
 
 .board.size9.zoomin {
   margin-left: -202.5px;
-  width: 405px;
-  height: 405px; }
+  width: 405px; }
+  .board.size9.zoomin .intersections {
+    height: 405px; }
   .board.size9.zoomin .row {
     height: 45px;
     width: 405px; }
@@ -115,8 +126,9 @@
       width: 45px; }
 .board.size9.zoomout {
   margin-left: -202.5px;
-  width: 405px;
-  height: 405px; }
+  width: 405px; }
+  .board.size9.zoomout .intersections {
+    height: 405px; }
   .board.size9.zoomout .row {
     height: 45px;
     width: 405px; }
@@ -127,9 +139,7 @@
 .board {
   overflow: hidden;
   position: relative;
-  left: 50%;
-  margin-top: 25px;
-  margin-bottom: 25px; }
+  left: 50%; }
   .board .intersections {
     position: relative;
     background: black; }

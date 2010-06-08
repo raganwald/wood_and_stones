@@ -43,9 +43,9 @@
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.ipad.customized.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/application.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/board.ipad.css";
-    %style{:type=>"text/css", :media=>"screen"} @import "c/bubbles.css";
     
-    %style
+    %style{:id=>'toolbar_titles'}
+    %style{:id=>'bubbles'}
     
     :javascript
       // (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
@@ -126,11 +126,17 @@
         .intersections
     
     .move.play
-      .head.toolbar
-        %h1
+      .head
+        .toolbar
+          %h1
       .board.zoomout.scrub.pass.play
-        / .head.message.triangle-right Head
+        .head
+          .message
+            .bubble Head
         .intersections
-        / .foot.message.triangle-right.top Foot
-      .foot.toolbar
-        %h1
+        .foot
+          .message
+            .bubble Foot
+      .foot
+        .toolbar
+          %h1

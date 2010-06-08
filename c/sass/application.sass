@@ -1,3 +1,7 @@
+$black: #000
+$white: #fff
+$lightgrey: #333
+
 .invisible
   :visibility hidden
 	
@@ -21,6 +25,76 @@
 .landscape
   .foot.toolbar
     display: none
+
+
+$messagewidth: 200px
+$bubblefrom: #f3961c
+$bubbleto: #f9d835
+    
+.head
+  .message
+    margin-left: -1 * $messagewidth
+
+.foot
+  .message
+    margin-left: 0
+  .bubble
+    /* NOTE: webkit gradient implementation is not as per spec
+    background: -webkit-gradient(linear, left top, left bottom, from($bubbleto), to($bubblefrom))
+    background: -moz-linear-gradient(top, $bubbleto, $bubblefrom)
+    background: -o-linear-gradient(top, $bubbleto, $bubblefrom)
+    background: linear-gradient(top, $bubbleto, $bubblefrom)
+    &:after
+      top: -30px
+      /* value = - border-top-width - border-bottom-width
+      right: 50px
+      /* controls horizontal position
+      bottom: auto
+      left: auto
+      border-color: transparent transparent $bubbleto
+    
+.message
+  width: $messagewidth
+  overflow: hidden
+  position: relative
+  left: 50%
+  .bubble
+    margin-bottom: 1em
+
+.bubble
+  /* #f3961c
+  /* #f9d835
+  position: relative
+  padding: 15px
+  margin: 1em 0 3em
+  color: $black
+  background: $bubbleto
+  /* default background for browsers without gradient support
+  /* css3
+  -moz-border-radius: 10px
+  -webkit-border-radius: 10px
+  border-radius: 10px
+  /* NOTE: webkit gradient implementation is not as per spec
+  background: -webkit-gradient(linear, left top, left bottom, from($bubblefrom), to($bubbleto))
+  background: -moz-linear-gradient(top, $bubblefrom, $bubbleto)
+  background: -o-linear-gradient(top, $bubblefrom, $bubbleto)
+  background: linear-gradient(top, $bubblefrom, $bubbleto)
+  &:after
+    content: "\00a0"
+    display: block
+    /* reduce the damage in FF3.0
+    position: absolute
+    z-index: -1
+    bottom: -30px
+    /* value = - border-top-width - border-bottom-width
+    left: 50px
+    /* controls horizontal position
+    width: 0
+    height: 0
+    border-width: 15px 15px
+    /* vary these values to change the angle of the vertex
+    border-style: solid
+    border-color: $bubbleto transparent transparent
   
 .new_game
   ul
@@ -52,9 +126,6 @@
       img
         :margin
           :top 5px
-
-.hey
-  :display none
 
 .progress 
   .ui-dialog-titlebar
