@@ -30,15 +30,21 @@
     <style media='screen' type='text/css'>@import "c/application.css";</style>
     <style media='screen' type='text/css'>@import "c/board.ipad.css";</style>
     <style id='toolbar_titles'></style>
+    <style id='bubbles'></style>
     <script type='text/javascript'>
       //<![CDATA[
         // (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
         // the exception of specific files otherwise licensed. Other licenses apply only to the files where
         // they appear.
         var jQT = new $.jQTouch({
-            icon: 'i/board/bowl/black.jpg',
+            icon: 'i/black_white.png',
             statusBar: 'black-translucent',
-            touchSelector: '.board .intersection, .board, .touch' 
+            touchSelector: '.board .intersection, .board, .touch',
+            preloadImages: [
+                'i/back_button_clicked.png',
+                'i/button_clicked.png',
+                'i/ajax-loader-black.gif'
+                ]
         });
         $(function(){
             jQT.addAnimation({
@@ -133,16 +139,13 @@
         </div>
       </div>
       <div class='board zoomout scrub pass play'>
-        <div class='head'>
-          <div class='message'>
-            <div class='bubble'>Head</div>
-          </div>
+        <div class='head bubble'>
+          <div class='guest'></div>
         </div>
         <div class='intersections'></div>
-        <div class='foot'>
-          <div class='message'>
-            <div class='bubble'>Foot</div>
-          </div>
+        <div class='foot bubble'>
+          <div class='black'>3</div>
+          <div class='white host'>5</div>
         </div>
       </div>
       <div class='foot'>

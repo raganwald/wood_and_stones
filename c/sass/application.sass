@@ -31,27 +31,24 @@ $messagewidth: 200px
 $bubblefrom: #f3961c
 $bubbleto: #f9d835
     
-.head
-  .message
-    margin-left: -1 * $messagewidth
+.head.bubble
+  margin-left: -1 * $messagewidth
 
-.foot
-  .message
-    margin-left: 0
-  .bubble
-    /* NOTE: webkit gradient implementation is not as per spec
-    background: -webkit-gradient(linear, left top, left bottom, from($bubbleto), to($bubblefrom))
-    background: -moz-linear-gradient(top, $bubbleto, $bubblefrom)
-    background: -o-linear-gradient(top, $bubbleto, $bubblefrom)
-    background: linear-gradient(top, $bubbleto, $bubblefrom)
-    &:after
-      top: -30px
-      /* value = - border-top-width - border-bottom-width
-      right: 50px
-      /* controls horizontal position
-      bottom: auto
-      left: auto
-      border-color: transparent transparent $bubbleto
+.foot.bubble
+  margin-left: 0
+  /* NOTE: webkit gradient implementation is not as per spec
+  background: -webkit-gradient(linear, left top, left bottom, from($bubbleto), to($bubblefrom))
+  background: -moz-linear-gradient(top, $bubbleto, $bubblefrom)
+  background: -o-linear-gradient(top, $bubbleto, $bubblefrom)
+  background: linear-gradient(top, $bubbleto, $bubblefrom)
+  &:after
+    top: -30px
+    /* value = - border-top-width - border-bottom-width
+    right: 50px
+    /* controls horizontal position
+    bottom: auto
+    left: auto
+    border-color: transparent transparent $bubbleto
     
 .message
   width: $messagewidth

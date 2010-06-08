@@ -377,3 +377,29 @@ $zoom_in_size: $large
   -webkit-background-size: 100%
   -khtml-background-size: 100%
   -moz-background-size: 100%
+  
+.board
+  .head
+    .guest
+      display: inline
+      left: 100%
+      margin-left: -100%
+  
+.landscape
+  .move.play
+    .board
+      .head
+        display: none
+      .foot
+        .black
+          display: inline
+          float: left
+          margin-left: 10px
+          &:before 
+            content: url("../i/simple-black.png")
+        .white
+          display: inline
+          float: right
+          margin-right: 10px
+          &:after 
+            content: url("../i/simple-white.png")

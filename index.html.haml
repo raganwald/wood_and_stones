@@ -16,7 +16,6 @@
     %script{:src=>"j/jquery.1.4.2.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.timers-1.2.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/jqtouch.customized.js", :type=>"text/javascript", :charset=>"utf-8"}
-    %script{:src=>"j/jquery.min.jquery.saveit.js", :type=>"text/javascript", :charset=>"utf-8"}
     
     %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
     
@@ -37,7 +36,6 @@
     %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/history.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"j/tooling.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.css";
     %style{:type=>"text/css", :media=>"screen"} @import "c/jqtouch.ipad.customized.css";
@@ -130,13 +128,12 @@
         .toolbar
           %h1
       .board.zoomout.scrub.pass.play
-        .head
-          .message
-            .bubble Head
+        .head.bubble
+          .guest
         .intersections
-        .foot
-          .message
-            .bubble Foot
+        .foot.bubble
+          .black 3
+          .white.host 5
       .foot
         .toolbar
           %h1

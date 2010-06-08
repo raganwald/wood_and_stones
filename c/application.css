@@ -23,18 +23,17 @@
 .landscape .foot.toolbar {
   display: none; }
 
-.head .message {
+.head.bubble {
   margin-left: -200px; }
 
-.foot .message {
-  margin-left: 0; }
-.foot .bubble {
+.foot.bubble {
+  margin-left: 0;
   /* NOTE: webkit gradient implementation is not as per spec */
   background: -webkit-gradient(linear, left top, left bottom, from(#f9d835), to(#f3961c));
   background: -moz-linear-gradient(top, #f9d835, #f3961c);
   background: -o-linear-gradient(top, #f9d835, #f3961c);
   background: linear-gradient(top, #f9d835, #f3961c); }
-  .foot .bubble:after {
+  .foot.bubble:after {
     top: -30px;
     /* value = - border-top-width - border-bottom-width */
     right: 50px;

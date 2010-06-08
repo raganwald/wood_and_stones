@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # This is a comment.
-# Cache manifest version 4
+# Cache manifest version 5
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -92,6 +92,8 @@ i/board/temporary/tile0.png
 i/ajax-loader-black.gif
 i/dot_clear.gif
 i/in_progress.gif
+i/simple-black.png
+i/simple-white.png
 
 i/themes/jqt/img/back_button.png
 i/themes/jqt/img/back_button_clicked.png

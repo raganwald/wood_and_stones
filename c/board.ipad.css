@@ -334,3 +334,23 @@
   -webkit-background-size: 100%;
   -khtml-background-size: 100%;
   -moz-background-size: 100%; }
+
+.board .head .guest {
+  display: inline;
+  left: 100%;
+  margin-left: -100%; }
+
+.landscape .move.play .board .head {
+  display: none; }
+.landscape .move.play .board .foot .black {
+  display: inline;
+  float: left;
+  margin-left: 10px; }
+  .landscape .move.play .board .foot .black:before {
+    content: url("../i/simple-black.png"); }
+.landscape .move.play .board .foot .white {
+  display: inline;
+  float: right;
+  margin-right: 10px; }
+  .landscape .move.play .board .foot .white:after {
+    content: url("../i/simple-white.png"); }
