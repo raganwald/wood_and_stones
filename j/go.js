@@ -253,9 +253,13 @@
 					.filter('.white')
 						.removeClass('white')
 						.K(function (whites) {
-							whites
-								.map(function () { return blank_stone.clone(); })
-									.appendTo(board.find('.white.captured'))
+							board
+								.find('.white.captured')
+									.each(function(i, captured) {
+										whites
+											.map(function () { return blank_stone.clone(); })
+												.appendTo($(captured));
+									})
 						})
 						.end()
 					.filter('.black')

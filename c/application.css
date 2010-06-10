@@ -16,7 +16,7 @@
 .in_progress:before {
   content: url(../i/in_progress.gif); }
 
-.profile .foot.toolbar {
+.profile .foot .toolbar {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg); }
 
