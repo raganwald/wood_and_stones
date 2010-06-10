@@ -23,67 +23,19 @@
 .landscape .foot.toolbar {
   display: none; }
 
-.head.bubble {
-  margin-left: -200px; }
+.head.triangle-right {
+  left: 25%;
+  margin-left: -12.5%;
+  width: 25%;
+  margin-bottom: 10px;
+  z-index: 1; }
 
-.foot.bubble {
-  margin-left: 0;
-  /* NOTE: webkit gradient implementation is not as per spec */
-  background: -webkit-gradient(linear, left top, left bottom, from(#f9d835), to(#f3961c));
-  background: -moz-linear-gradient(top, #f9d835, #f3961c);
-  background: -o-linear-gradient(top, #f9d835, #f3961c);
-  background: linear-gradient(top, #f9d835, #f3961c); }
-  .foot.bubble:after {
-    top: -30px;
-    /* value = - border-top-width - border-bottom-width */
-    right: 50px;
-    /* controls horizontal position */
-    bottom: auto;
-    left: auto;
-    border-color: transparent transparent #f9d835; }
-
-.message {
-  width: 200px;
-  overflow: hidden;
-  position: relative;
-  left: 50%; }
-  .message .bubble {
-    margin-bottom: 1em; }
-
-.bubble {
-  /* #f3961c */
-  /* #f9d835 */
-  position: relative;
-  padding: 15px;
-  margin: 1em 0 3em;
-  color: black;
-  background: #f9d835;
-  /* default background for browsers without gradient support */
-  /* css3 */
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  /* NOTE: webkit gradient implementation is not as per spec */
-  background: -webkit-gradient(linear, left top, left bottom, from(#f3961c), to(#f9d835));
-  background: -moz-linear-gradient(top, #f3961c, #f9d835);
-  background: -o-linear-gradient(top, #f3961c, #f9d835);
-  background: linear-gradient(top, #f3961c, #f9d835); }
-  .bubble:after {
-    content: "\00a0";
-    display: block;
-    /* reduce the damage in FF3.0 */
-    position: absolute;
-    z-index: -1;
-    bottom: -30px;
-    /* value = - border-top-width - border-bottom-width */
-    left: 50px;
-    /* controls horizontal position */
-    width: 0;
-    height: 0;
-    border-width: 15px 15px;
-    /* vary these values to change the angle of the vertex */
-    border-style: solid;
-    border-color: #f9d835 transparent transparent; }
+.foot.triangle-right {
+  left: 75%;
+  margin-left: -12.5%;
+  width: 25%;
+  z-index: 1;
+  margin-top: 10px; }
 
 .new_game ul li {
   position: relative !important; }
@@ -113,5 +65,14 @@
 .progress .ui-dialog-titlebar {
   display: none; }
 
-.iconButton {
-  float: right; }
+.board .captured img {
+  height: 30px;
+  width: 30px;
+  -o-background-size: 100%;
+  -webkit-background-size: 100%;
+  -khtml-background-size: 100%;
+  -moz-background-size: 100%; }
+.board .captured.black img {
+  background: url(../i/ghost-black.png); }
+.board .captured.white img {
+  background: url(../i/ghost-white.png); }

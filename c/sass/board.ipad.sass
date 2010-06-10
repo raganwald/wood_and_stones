@@ -384,22 +384,37 @@ $zoom_in_size: $large
       display: inline
       left: 100%
       margin-left: -100%
-  
+      
+$stonediameter: 30px
+
+.head,.foot
+  height: $stonediameter
+  padding: 5px 5px 5px 5px
+
+.profile
+  .move.play
+    .board
+      .head
+        .guest
+          display: inline
+          float: right
+          -webkit-transform: rotate(180deg)
+      .foot
+        .white
+          display: none
+        .black
+          display: inline
+          float: right
+
 .landscape
   .move.play
     .board
       .head
         display: none
       .foot
-        .black
-          display: inline
-          float: left
-          margin-left: 10px
-          &:before 
-            content: url("../i/simple-black.png")
         .white
           display: inline
+          float: left
+        .black
+          display: inline
           float: right
-          margin-right: 10px
-          &:after 
-            content: url("../i/simple-white.png")

@@ -192,6 +192,9 @@
 		console.error('implement me!');
 	}
 	
+	var blank_stone = $('<img/>')
+		.attr('src', 'i/dot_clear.gif');
+	
 	var doit = function (board, this_move) {
 		
 		board = predoit(board, this_move);
@@ -244,10 +247,29 @@
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 					.addClass('white changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
-		if (this_move.K && (this_move.W || this_move.B)) 
+		if (this_move.K && (this_move.W || this_move.B)) // TODO: figure out undo and stones!
 			board
 				.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
-					.removeClass('white black')
+					.filter('.white')
+						.removeClass('white')
+						.K(function (whites) {
+							whites
+								.map(function () { return blank_stone.clone(); })
+									.appendTo(board.find('.white.captured'))
+						})
+						.end()
+					.filter('.black')
+						.removeClass('black')
+						.K(function (blacks) {
+							board
+								.find('.black.captured')
+									.each(function(i, captured) {
+										blacks
+											.map(function () { return blank_stone.clone(); })
+												.appendTo($(captured));
+									})
+						})
+						.end()
 					.addClass('changed');
 					
 		if (to_play)

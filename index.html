@@ -29,6 +29,7 @@
     <style media='screen' type='text/css'>@import "c/jqtouch.ipad.customized.css";</style>
     <style media='screen' type='text/css'>@import "c/application.css";</style>
     <style media='screen' type='text/css'>@import "c/board.ipad.css";</style>
+    <style media='screen' type='text/css'>@import "c/bubbles.css";</style>
     <style id='toolbar_titles'></style>
     <style id='bubbles'></style>
     <script type='text/javascript'>
@@ -39,12 +40,7 @@
         var jQT = new $.jQTouch({
             icon: 'i/black_white.png',
             statusBar: 'black-translucent',
-            touchSelector: '.board .intersection, .board, .touch',
-            preloadImages: [
-                'i/back_button_clicked.png',
-                'i/button_clicked.png',
-                'i/ajax-loader-black.gif'
-                ]
+            touchSelector: '.board .intersection, .board, .touch'
         });
         $(function(){
             jQT.addAnimation({
@@ -139,13 +135,13 @@
         </div>
       </div>
       <div class='board zoomout scrub pass play'>
-        <div class='head bubble'>
-          <div class='guest'></div>
+        <div class='head triangle-right'>
+          <div class='guest black captured'></div>
         </div>
         <div class='intersections'></div>
-        <div class='foot bubble'>
-          <div class='black'>3</div>
-          <div class='white host'>5</div>
+        <div class='foot triangle-right top'>
+          <div class='black captured'></div>
+          <div class='white host captured'></div>
         </div>
       </div>
       <div class='foot'>
