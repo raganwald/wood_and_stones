@@ -344,15 +344,15 @@
   height: 30px;
   padding: 5px 5px 5px 5px; }
 
-.profile .move.play .board .head .guest {
+.profile .move.play .board .head .black {
   display: inline;
   float: right;
   -webkit-transform: rotate(180deg); }
 .profile .move.play .board .foot .white {
-  display: none; }
-.profile .move.play .board .foot .black {
   display: inline;
   float: right; }
+.profile .move.play .board .foot .black {
+  display: none; }
 
 .landscape .move.play .board .head {
   display: none; }

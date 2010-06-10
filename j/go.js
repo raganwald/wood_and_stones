@@ -253,25 +253,29 @@
 					.filter('.white')
 						.removeClass('white')
 						.K(function (whites) {
-							board
-								.find('.white.captured')
-									.each(function(i, captured) {
-										whites
-											.map(function () { return blank_stone.clone(); })
-												.appendTo($(captured));
-									})
+							var z = whites.size();
+							if (z > 0) {
+								var c = board.find('.white.captured:visible');
+								if (c.size() > 0) {
+									var n = parseInt(c.text());
+									c.text('' + (n ? n + z : z));
+								}
+								else board.find('.white.captured').text(z);
+							}
 						})
 						.end()
 					.filter('.black')
 						.removeClass('black')
 						.K(function (blacks) {
-							board
-								.find('.black.captured')
-									.each(function(i, captured) {
-										blacks
-											.map(function () { return blank_stone.clone(); })
-												.appendTo($(captured));
-									})
+							var z = blacks.size();
+							if (z > 0) {
+								var c = board.find('.black.captured:visible');
+								if (c.size() > 0) {
+									var n = parseInt(c.text());
+									c.text('' + (n ? n + z : z));
+								}
+								else board.find('.black.captured').text(z);
+							}
 						})
 						.end()
 					.addClass('changed');

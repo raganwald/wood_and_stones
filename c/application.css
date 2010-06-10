@@ -20,7 +20,7 @@
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg); }
 
-.landscape .foot.toolbar {
+.landscape .foot .toolbar {
   display: none; }
 
 .head.triangle-right {
@@ -65,14 +65,18 @@
 .progress .ui-dialog-titlebar {
   display: none; }
 
-.board .captured img {
+.board .head .captured, .board .foot .captured {
   height: 30px;
   width: 30px;
-  -o-background-size: 100%;
-  -webkit-background-size: 100%;
-  -khtml-background-size: 100%;
-  -moz-background-size: 100%; }
-.board .captured.black img {
-  background: url(../i/ghost-black.png); }
-.board .captured.white img {
-  background: url(../i/ghost-white.png); }
+  line-height: 30px;
+  text-align: center; }
+  .board .head .captured:empty, .board .foot .captured:empty {
+    background-color: transparent; }
+  .board .head .captured.black, .board .foot .captured.black {
+    color: white; }
+    .board .head .captured.black:not(:empty), .board .foot .captured.black:not(:empty) {
+      background: url(../i/ghost-black.png); }
+  .board .head .captured.white, .board .foot .captured.white {
+    color: black; }
+    .board .head .captured.white:not(:empty), .board .foot .captured.white:not(:empty) {
+      background: url(../i/ghost-white.png); }

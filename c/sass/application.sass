@@ -85,17 +85,19 @@ $separation_between_board_and_bubble: 10px
     :display none
 
 .board
-  .captured
-    img
+  .head,.foot
+    .captured
       height: 30px
       width: 30px
-      -o-background-size: 100%
-      -webkit-background-size: 100%
-      -khtml-background-size: 100%
-      -moz-background-size: 100%
-    &.black
-      img
-        background: url(../i/ghost-black.png)
-    &.white
-      img
-        background: url(../i/ghost-white.png)
+      line-height: 30px
+      text-align: center
+      &:empty
+        background-color: transparent
+      &.black
+        color: white
+        &:not(:empty)
+          background: url(../i/ghost-black.png)
+      &.white
+        color: black
+        &:not(:empty)
+          background: url(../i/ghost-white.png)
