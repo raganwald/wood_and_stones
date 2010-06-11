@@ -92,8 +92,8 @@ i/board/temporary/tile0.png
 i/ajax-loader-black.gif
 i/dot_clear.gif
 i/in_progress.gif
-i/simple-black.png
-i/simple-white.png
+i/ghost-black.png
+i/ghost-white.png
 
 i/themes/jqt/img/back_button.png
 i/themes/jqt/img/back_button_clicked.png
@@ -126,3 +126,17 @@ j/dragscrollable.js
 
 c/jqtouch.css
 c/jqtouch.ipad.customized.css
+
+# my JS
+
+j/adjacency.js
+j/go.js
+j/history.js
+j/referee.js
+j/start.js
+j/ui.js
+
+# my CSS
+
+c/application.css
+c/board.ipad.css
