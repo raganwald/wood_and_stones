@@ -116,6 +116,14 @@
 			$('.move.play')
 				.removeClass('swap');
 				
+			$('.play .guest.captured')
+				.removeClass('black')
+				.addClass('white');
+			
+			$('.board .host.captured')
+				.removeClass('white')
+				.addClass('black');
+				
 			go.set_titles();
 			return false;
 		};

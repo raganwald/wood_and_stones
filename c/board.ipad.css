@@ -344,21 +344,21 @@
   height: 30px;
   padding: 5px 5px 5px 5px; }
 
-.profile .move.play .board .head .black {
+.profile .move.play .board .head .guest {
   display: inline;
   float: right;
   -webkit-transform: rotate(180deg); }
-.profile .move.play .board .foot .white {
+.profile .move.play .board .foot .host {
   display: inline;
   float: right; }
-.profile .move.play .board .foot .black {
+.profile .move.play .board .foot .guest {
   display: none; }
 
-.landscape .move.play .board .head {
+.landscape .move.play .board .guest {
   display: none; }
-.landscape .move.play .board .foot .white {
+.landscape .move.play .board .foot .host {
   display: inline;
   float: left; }
-.landscape .move.play .board .foot .black {
+.landscape .move.play .board .foot .guest {
   display: inline;
   float: right; }
