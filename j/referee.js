@@ -321,22 +321,18 @@
 								}
 							}
 						}
-						console.log(added_liberties);
 						added_liberties
 							.each(function (i, liberty) {
 								liberty = $(liberty);
-							console.log(their_adjacent_selector(liberty) + ' are liberties of '+liberty.attr('id'));
 								if (board
 									.find(their_adjacent_selector(liberty))
 										.is(':not(.black):not(.white)')
 								) {
-									console.log(liberty.attr('id') + ' has a liberty and is therefore playable');
 									liberty
 										.addClass('playable_black playable_white')
 										.removeClass('no_liberties');
 									}
 								else {
-									console.log(liberty.attr('id') + ' has no liberties and is therefore unplayable');
 									liberty
 										.addClass('no_liberties')
 										.removeClass('playable_black playable_white');

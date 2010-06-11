@@ -191,8 +191,15 @@
 		return this_move;
 	}
 	
-	var pop = function () {
-		console.error('implement me!');
+	var pop = function (optional_board, optional_from, optional_to) {
+		optional_board = optional_board || $('.move.play .board');
+		optional_board = typeof(optional_board) == 'string' ? $(optional_board) : optional_board;
+		optional_from = optional_from || go.sgf.current.length - 1;
+		optional_to = optional_to || go.sgf.floor(go.sgf.current.length - 2);
+		
+		go.sgf.undoit(optional_board, go.sgf.current[optional_from], go.sgf.current[optional_to]);
+		
+		go.sgf.current.pop();
 	}
 	
 	var blank_stone = $('<img/>')
@@ -311,6 +318,28 @@
 				switch_turns();
 			}
 		}
+		
+		if (this_move.PB && this_move.PW || this_move.PH && this_move.PG) { // swap accepted or rejected
+			var new_names = {
+				PB: this_move.PB || go.sgf.game_info.PB,
+				PW: this_move.PW || go.sgf.game_info.PW,
+				PH: this_move.PH || go.sgf.game_info.PH,
+				PG: this_move.PG || go.sgf.game_info.PG
+			}
+			$.extend(go.sgf.game_info, new_names);
+			if (new_names.PH != new_names.PB && new_names.PG != new_names.PW) {
+				$('.play .guest.captured')
+					.removeClass('black')
+					.addClass('white');
+				$('.board .host.captured')
+					.removeClass('white')
+					.addClass('black');
+				go.set_titles();
+			}
+			$('.move.play')
+				.removeClass('swap');
+		}
+		
 		if (this_move.PL)
 			switch_turns(this_move.PL); // wins over all other considerations
 			
@@ -340,11 +369,44 @@
 			was_playing = 'white';
 			switch_turns(was_playing);
 		}
-		else return; // not undoable
 		
-		var was_playing_index = was_playing[0].toUpperCase();
-		if (this_move != undefined) {
-			var position = this_move[was_playing_index];
+		if (this_move.PB && this_move.PW || this_move.PH && this_move.PG) { 
+			console.log(this_move);
+			var new_names = {
+				PB: this_move.PB || go.sgf.game_info.PB,
+				PW: this_move.PW || go.sgf.game_info.PW,
+				PH: this_move.PH || go.sgf.game_info.PH,
+				PG: this_move.PG || go.sgf.game_info.PG
+			}
+			if (new_names.PH != new_names.PB && new_names.PG != new_names.PW) {
+				var old_names;
+				if (new_names.PB.match(/black/i) || new_names.PW.match(/white/i)) {
+					old_names = {
+						PH: new_names.PB,
+						PG: new_names.PW
+					}
+				}
+				else {
+					old_names = {
+						PB: new_names.PH,
+						PW: new_names.PG
+					}
+				}
+				$.extend(go.sgf.game_info, old_names);
+				$('.play .guest.captured')
+					.removeClass('white')
+					.addClass('black');
+				$('.board .host.captured')
+					.removeClass('black')
+					.addClass('white');
+				go.set_titles();
+			}
+			$('.move.play')
+				.addClass('swap');
+		}
+		
+		if (was_playing != undefined) {
+			var position = this_move[was_playing[0].toUpperCase()];
 			if (position != undefined) {
 				if (position) {
 					board
@@ -381,7 +443,7 @@
 							.find('#' + previous_position)
 								.addClass('latest');
 				}
-			// TODO: Deal with titles
+		
 			}
 		}
 			

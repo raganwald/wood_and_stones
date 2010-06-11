@@ -15,16 +15,7 @@
 	var initialize_ui_support = (function () {
 		
 		var do_undo = function (event) {
-			var to_play;
-			var was_playing;
-			
-			var this_index = go.sgf.current.length - 1;
-			var penultimate_index = go.sgf.floor(go.sgf.current.length - 2);
-			
-			go.sgf.undoit($('.move.play .board'), go.sgf.current[this_index], go.sgf.current[penultimate_index]);
-			
-			go.sgf.current.pop();
-			
+			go.sgf.pop();
 		};
 		
 		var do_pass = function() {
@@ -36,7 +27,6 @@
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			
 			var really_pass = function () {
-					
 				var annotation = {};
 				annotation[to_play[0].toUpperCase()] = '';
 				annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN']+ 1 : 1;
@@ -60,13 +50,14 @@
 			else really_pass();
 		};
 		
-		var annotate = function (event_data, key) {
+		var annotate = function (event_data, key, optional_extensions) {
+			optional_extensions = optional_extensions || {};
 			target = $(event_data.target);
 			if (!target.is('.intersection')) target = target.closest('.intersection');
 			if (target.is('.black,.white')) console.error(target.attr('id') + ' is already occupied');
 			var killed_stones = $('.move.play .intersection.'+go.opponent()+'.last_liberty_is_'+target.attr('id'));
 			
-			var annotation = {};
+			var annotation = optional_extensions;
 			annotation[key] = target.attr('id');
 			if (killed_stones.size() > 0) {
 				annotation['K'] = $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
@@ -76,18 +67,19 @@
 			go.sgf.push(annotation);
 		};
 		
-		var do_play = function (event_data) {
-			annotate(event_data, go.playing()[0].toUpperCase());
+		var do_play = function (event_data, optional_extensions) {
+			annotate(event_data, go.playing()[0].toUpperCase(), optional_extensions);
 			return false;
 		};
 		
 		var do_reject_swap = function (event_data) {
 			var opponent_name = go.sgf.game_info['P' + go.opponent()[0].toUpperCase()];
 			var player_name = go.sgf.game_info['P' + go.playing()[0].toUpperCase()];
-			$('.move.play')
-				.removeClass('swap');
-			do_play(event_data);
-			go.sgf.current[go.sgf.current.length - 1].C = player_name + " declines to swap places with " + opponent_name;
+			do_play(event_data, {
+				C: player_name + " declines to swap places with " + opponent_name,
+				PH: go.sgf.game_info.PH,
+				PG: go.sgf.game_info.PG
+			});
 			return false;
 		};
 		
@@ -95,36 +87,26 @@
 			var opponent_name = go.sgf.game_info['P' + go.opponent()[0].toUpperCase()];
 			var player_name = go.sgf.game_info['P' + go.playing()[0].toUpperCase()];
 			
+			var swap_move;
+			
 			if (opponent_name.match(/white|black/i) || player_name.match(/white|black/i)) {
 				if ($('body').is('landscape'))
 					go.message("Since you've decided to swap, it's your opponent's turn to play " + go.playing());
-					$.extend(go.sgf.game_info, {
-						PH: go.sgf.game_info.PW,
-						PG: go.sgf.game_info.PB
-					});
+				swap_move = {
+					PH: go.sgf.game_info.PW,
+					PG: go.sgf.game_info.PB
+				};
 			}
 			else {
 				if ($('body').is('landscape'))
-					go.message("Since you've decided to swap, " + opponent_name + " will play " + go.playing() + ' (this changes PB and PW.)');
-				$.extend(go.sgf.game_info, {
+					go.message("Since you've decided to swap, " + opponent_name + " will play " + go.playing());
+				swap_move = {
 					PB: go.sgf.game_info.PG,
 					PW: go.sgf.game_info.PH
-				});
+				};
 			}
-			go.sgf.current.push({ C: player_name + " swaps places with " + opponent_name });
-			
-			$('.move.play')
-				.removeClass('swap');
-				
-			$('.play .guest.captured')
-				.removeClass('black')
-				.addClass('white');
-			
-			$('.board .host.captured')
-				.removeClass('white')
-				.addClass('black');
-				
-			go.set_titles();
+			$.extend(swap_move, { C: player_name + " swaps places with " + opponent_name });
+			go.sgf.push(swap_move);
 			return false;
 		};
 		
