@@ -72,11 +72,9 @@
   text-align: center; }
   .board .head .captured:empty, .board .foot .captured:empty {
     background-color: transparent; }
-  .board .head .captured.black, .board .foot .captured.black {
-    color: white; }
-    .board .head .captured.black:not(:empty), .board .foot .captured.black:not(:empty) {
-      background: url(../i/ghost-black.png); }
-  .board .head .captured.white, .board .foot .captured.white {
-    color: black; }
-    .board .head .captured.white:not(:empty), .board .foot .captured.white:not(:empty) {
-      background: url(../i/ghost-white.png); }
+  .board .head .captured.black:not(:empty), .board .foot .captured.black:not(:empty) {
+    color: white;
+    background: url(../i/ghost-black.png); }
+  .board .head .captured.white:not(:empty), .board .foot .captured.white:not(:empty) {
+    color: black;
+    background: url(../i/ghost-white.png); }

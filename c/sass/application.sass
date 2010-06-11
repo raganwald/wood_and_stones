@@ -93,11 +93,9 @@ $separation_between_board_and_bubble: 10px
       text-align: center
       &:empty
         background-color: transparent
-      &.black
+      &.black:not(:empty)
         color: white
-        &:not(:empty)
-          background: url(../i/ghost-black.png)
-      &.white
+        background: url(../i/ghost-black.png)
+      &.white:not(:empty)
         color: black
-        &:not(:empty)
-          background: url(../i/ghost-white.png)
+        background: url(../i/ghost-white.png)

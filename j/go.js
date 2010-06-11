@@ -129,7 +129,10 @@
 	};
 	
 	var predoit = function (board, this_move) {
-		return board;
+		return board
+			.find('.intersection.changd')
+				.removeClass('changed')
+				.end();
 	};
 	
 	var postdoit = function(board, this_move) {
@@ -355,7 +358,20 @@
 								(this_move['K'] && this_move['K'].split(',')) || [], 
 								'"#" + _'.lambda()).join(',')
 						)
-							.addClass((was_playing == 'black' ? 'white changed' : 'black changed'));
+							.K(function (removed) {
+								var z = removed.size();
+								if (z > 0) {
+									var restore_colour = (was_playing == 'black' ? 'white' : 'black');
+									removed.addClass(restore_colour + ' changed');
+									var c = board.find('.'+restore_colour+'.captured:visible');
+									if (c.size() > 0) {
+										var n = parseInt(c.text());
+										c.text(n == z ? '' : '' + (n - z));
+									}
+									else console.error(restore_colour+' should have stones!');
+								}
+							})
+							.end();
 				}
 				var to_play_index = to_play[0].toUpperCase();
 				if (optional_previous_move != undefined) {
