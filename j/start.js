@@ -44,7 +44,7 @@
 			go.sgf.game_info = {
 				FF: 4,
 				SZ: $('form.new_game #dimension').val(),
-				AP: "World of Go",
+				AP: "Wood and Stone",
 				PH: $('form.new_game #black').val() || 'Black', // custom: 'player host'
 				PG: $('form.new_game #white').val() || 'White', // custom: 'player guest'
 				GR: $('form.new_game #rules option:selected').text(),
@@ -54,7 +54,7 @@
 			go.sgf.game_info.PW = go.sgf.game_info.PG;
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;
-			go.letters = go.letters.slice(0, go.sgf.game_info.SZ);
+			go.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, go.sgf.game_info.SZ);
 			$('.move')
 				.removeClass('black white')
 				.find('.board')
