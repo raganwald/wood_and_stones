@@ -55,7 +55,7 @@
 			go.sgf.root = [go.sgf.game_info];
 			go.sgf.current = go.sgf.root;
 			go.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, go.sgf.game_info.SZ);
-			$('.move')
+			$('.move.play')
 				.removeClass('black white')
 				.find('.board')
 					.removeClass('size9 size11 size13 size15 size17 size19')
@@ -74,7 +74,7 @@
 								.appendTo(row);
 						});
 					})
-					.appendTo($('.move .board .intersections'));
+					.appendTo($('.move.play .board .intersections'));
 			});
 			var game_setup = $.parseJSON($('form.new_game #rules').val());
 			go.sgf.game_info.GM = game_setup.GM;
