@@ -63,36 +63,36 @@
 			// 	      '.move.white .toolbar span.playing:before{ content: "' + go.sgf.game_info.PW + ' to play"; }'  );
 		$('style#toolbar_titles')
 			.text([
-				'.move.re_black .toolbar h1:before{ content: "' + go.sgf.game_info.PB + ' wins"; } ',
-				'.move.re_white .toolbar h1:before{ content: "' + go.sgf.game_info.PW + ' wins"; } ',
-				'.move.re_draw  .toolbar h1:before{ content: "Game Ended"; }',
+				'.move.play.re_black .toolbar h1:before{ content: "' + go.sgf.game_info.PB + ' wins"; } ',
+				'.move.play.re_white .toolbar h1:before{ content: "' + go.sgf.game_info.PW + ' wins"; } ',
+				'.move.play.re_draw  .toolbar h1:before{ content: "Game Ended"; }',
 				  
-				'.landscape .move.black:not(.swap):not(re_black):not(re_white):not(re_draw) .head .toolbar h1:before{ content: "' 
+				'.landscape .move.play.black:not(.swap):not(re_black):not(re_white):not(re_draw) .head .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PB.match(/black/i)  ? 'Black to play' : go.sgf.game_info.PB + ' to play black') + '"; } ',
-			    '.landscape .move.white:not(.swap)  .head .toolbar h1:before{ content: "' 
+			    '.landscape .move.play.white:not(.swap)  .head .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PW.match(/white/i)  ? 'White to play' : go.sgf.game_info.PW + ' to play white') + '"; } ',
-			    '.landscape .move.black.swap .head .toolbar h1:before{ content: "' 
+			    '.landscape .move.play.black.swap .head .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PB.match(/black/i)  ? 'Black to play or swap' : go.sgf.game_info.PB + ' to play black or swap') + '"; } ',
-			    '.landscape .move.white.swap .head .toolbar h1:before{ content: "'
+			    '.landscape .move.play.white.swap .head .toolbar h1:before{ content: "'
 					+ (go.sgf.game_info.PW.match(/white/i)  ? 'White to play or swap' : go.sgf.game_info.PW + ' to play white or swap') + '"; } '
 			].concat(
 				go.sgf.game_info.PB == go.sgf.game_info.PH ? [
-					'.profile   .move.black:not(.swap):not(re_black):not(re_white):not(re_draw) .head .toolbar h1:before{ content: "'
+					'.profile   .move.play.black:not(.swap):not(re_black):not(re_white):not(re_draw) .head .toolbar h1:before{ content: "'
 					+ (go.sgf.game_info.PB.match(/black/i)  ? 'Black to play' : go.sgf.game_info.PB + ' to play black') + '"; } ',
-				    '.profile   .move.white:not(.swap)  .foot .toolbar h1:before{ content: "'
+				    '.profile   .move.play.white:not(.swap)  .foot .toolbar h1:before{ content: "'
 					+ (go.sgf.game_info.PW.match(/white/i)  ? 'White to play' : go.sgf.game_info.PW + ' to play white') + '"; } ',
-				    '.profile   .move.black.swap .head .toolbar h1:before{ content: "' 
+				    '.profile   .move.play.black.swap .head .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PB.match(/black/i)  ? 'Black to play or swap' : go.sgf.game_info.PB + ' to play black or swap') + '"; } ',
-				    '.profile   .move.white.swap .foot .toolbar h1:before{ content: "'
+				    '.profile   .move.play.white.swap .foot .toolbar h1:before{ content: "'
 					+ (go.sgf.game_info.PW.match(/white/i)  ? 'White to play or swap' : go.sgf.game_info.PW + ' to play white or swap') + '"; } '
 				] : [
-					'.profile   .move.black:not(.swap):not(re_black):not(re_white):not(re_draw) .foot .toolbar h1:before{ content: "' 
+					'.profile   .move.play.black:not(.swap):not(re_black):not(re_white):not(re_draw) .foot .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PB.match(/black/i)  ? 'Black to play' : go.sgf.game_info.PB + ' to play black') + '"; } ',
-				    '.profile   .move.white:not(.swap)  .head .toolbar h1:before{ content: "' 
+				    '.profile   .move.play.white:not(.swap)  .head .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PW.match(/white/i)  ? 'White to play' : go.sgf.game_info.PW + ' to play white') + '"; } ',
-				    '.profile   .move.black.swap .foot .toolbar h1:before{ content: "' 
+				    '.profile   .move.play.black.swap .foot .toolbar h1:before{ content: "' 
 					+ (go.sgf.game_info.PB.match(/black/i)  ? 'Black to play or swap' : go.sgf.game_info.PB + ' to play black or swap') + '"; } ',
-				    '.profile   .move.white.swap .head .toolbar h1:before{ content: "'
+				    '.profile   .move.play.white.swap .head .toolbar h1:before{ content: "'
 					+ (go.sgf.game_info.PW.match(/white/i)  ? 'White to play or swap' : go.sgf.game_info.PW + ' to play white or swap') + '"; } '
 				]
 			).join(' '));
@@ -146,8 +146,10 @@
 				console.log(placed);
 				if (placed < go.sgf.game_info.HA) {
 					board
-						.removeClass(go.sgf.game_info.PI ? 'play swap' : 'play')
+						.removeClass('play')
 						.addClass('place')
+						.closest('.move')
+							.removeClass(go.sgf.game_info.PI ? 'swap' : '')
 						.end();
 					switch_maker(board)('black');
 					set_titles();
