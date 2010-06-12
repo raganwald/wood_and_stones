@@ -1131,10 +1131,6 @@
 					],
 					free: [
 						{
-							text: "Black plays first",
-							sgf: { PL: "black" }
-						},
-						{
 							text: "Two free stones",
 							sgf: { PL: "black", HA: 2 }
 						},
