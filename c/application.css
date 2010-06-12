@@ -78,3 +78,8 @@
   .board .head .captured.white:not(:empty), .board .foot .captured.white:not(:empty) {
     color: black;
     background: url(../i/ghost-white.png); }
+
+.move.play.black .intersection.playable_black {
+  cursor: url(../i/ghost-black.png), pointer; }
+.move.play.white .intersection.playable_white {
+  cursor: url(../i/ghost-white.png), pointer; }

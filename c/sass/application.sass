@@ -99,3 +99,12 @@ $separation_between_board_and_bubble: 10px
       &.white:not(:empty)
         color: black
         background: url(../i/ghost-white.png)
+
+    
+.move.play
+  &.black
+    .intersection.playable_black
+      cursor: url(../i/ghost-black.png), pointer
+  &.white
+    .intersection.playable_white
+      cursor: url(../i/ghost-white.png), pointer
