@@ -49,8 +49,8 @@
 		};
 		
 		var colour_of = function(intersection) {
-			var m = intersection.attr('class').match(/(black|white)/);
-			if (m) return m[1];
+			if (intersection.is('.black')) return 'black';
+			if (intersection.is('.white')) return 'white';
 		};
 		
 		var opposite_colour_of = function (colour) {
@@ -353,6 +353,104 @@
 			return board;	
 		};
 		
+		var game_of_life = (function () {
+			var a_char = 'a'.charCodeAt(0);
+			
+			var siblings = function(cell) {
+				var id = cell.attr('id');
+				var col = id.charCodeAt(0) - a_char; // slice is zero-based
+				var from_col = col > 0 ? col - 1 : col;
+				var to_col = col < (go.sgf.game_info.SZ - 2) ? col + 2 : col + 1;
+				return cell
+					.parent()
+						.prev()
+							.children()
+								.slice(from_col, to_col)
+									.add(cell.prev())
+										.add(cell.next())
+											.add(cell
+												.parent()
+													.next()
+														.children()
+															.slice(from_col, to_col));
+			};
+			
+			var nextize = function (cell, debug) {
+				debug = (debug == undefined ? false : debug);
+				var neighbours = $.map(
+					siblings(cell), 
+					function (sib) { return colour_of($(sib)); }
+				);
+				var this_colour = colour_of(cell);
+				if (debug) console.log(cell.attr('id') + ' has ' + neighbours.length + ' neighbours and it...');
+				if (this_colour) {
+					if (2 == neighbours.length || 3 == neighbours.length) {
+						if (debug) console.log('...lives!');
+						return cell
+							.addClass('next_'+this_colour);
+					}
+					else {
+						if (debug) console.log('...dies!');
+						return cell
+							.addClass('next_empty');
+					}
+				}
+				else if (3 != neighbours.length) {
+					if (debug) console.log('...stays dead!');
+					return cell
+						.addClass('next_empty');
+				}
+				else {
+					var black_neighbours = $.map(neighbours, '"black" == _ ? "black" : null'.lambda()).length
+					if (black_neighbours < 2) {
+						if (debug) console.log('...is born white!');
+						return cell
+							.addClass('next_white');
+					}
+					else {
+						if (debug) console.log('...is born black!');
+						return cell
+							.addClass('next_black');
+					}
+				}
+			};
+			
+			return function(board, debug) {
+				board = board || $('.move.play .board');
+				if (1 == go.sgf.current.length) return board;
+				debug = (debug == undefined ? false : debug);
+				return board
+					.find('.next_black,.next_white,.next_empty')
+						.removeClass('next_black next_white next_empty')
+						.end()
+					.find('.intersection.black,.intersection.white')
+						.each(function(i, el) {
+							$(el)
+								.K(nextize)
+								.T(siblings)
+									.filter(':not(.black):not(.white):not(.next_black),:not(.next_white),:not(.next_empty)')
+										.each(function(i, empty_sibling) {
+											nextize($(empty_sibling));
+										})
+						})
+						.end()
+					.find('.black.next_black,.white.next_white,.next_empty:not(.black):not(.white)')
+						.removeClass('next_black next_white next_empty')
+						.end()
+					.find('.next_empty')
+						.removeClass('black white next_empty')
+						.end()
+					.find('.next_white')
+						.removeClass('black next_white')
+						.addClass('white')
+						.end()
+					.find('.next_black')
+						.removeClass('white next_black')
+						.addClass('black')
+						.end();
+			};
+		})();
+		
 		var naive_analyzer = function(board, ids_to_analyze, debug) {
 			
 			board = board || $('.move.play .board');
@@ -535,6 +633,16 @@
 						.end()
 					.find('.intersection.at_liberty:not(.white):not(.black)')
 						.addClass('playable_'+opponent+' debug_at_liberty_play_able_'+opponent)
+						.end();
+			};
+			
+			var empty_playable = function(board) {
+				return board
+					.find('.intersection:not(.white):not(.black):not(.playable_black)')
+						.addClass('playable_black playable_white')
+						.end()
+					.find('.playable_black.black,.playable_white.white')
+						.removeClass('playable_black playable_white')
 						.end();
 			};
 			
@@ -1300,11 +1408,29 @@
 							text: "Nine free stones",
 							sgf: { PL: "black", HA: 9 }
 						}
+					],
+					life: [
+						{
+							text: "R-Pentomino",
+							sgf: {
+								PL: "black",
+								AB: 'ij,ji,jj,jk,ki'
+							}
+						},
+						{
+							text: "Glider",
+							sgf: {
+								PL: "black",
+								AB: 'ba,cb,ac,bc,cc'
+							}
+							
+						}
 					]
 				},
 				analyzers: {
 					naive_analyzer: naive_analyzer,
-					incremental_analyzer: incremental_analyzer
+					incremental_analyzer: incremental_analyzer,
+					game_of_life: game_of_life
 				},
 				validations: {
 					// validations for vacant intersections
@@ -1315,7 +1441,8 @@
 					suicide_for_seven: suicide_for_seven,
 					unslidable_unplayable: unslidable_unplayable,
 					// other validations
-					no_passing_allowed: no_passing_allowed
+					no_passing_allowed: no_passing_allowed,
+					empty_playable: empty_playable
 				},
 				endings: {
 					two_passes: two_passes,
@@ -1335,7 +1462,8 @@
 					"Capture Five": '{"GM": 12, "setups": "capture_five", "analyzer": "incremental_analyzer", "sizes": [9, 11, 13], "endings": ["two_passes", "capture_five"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
 					"Irensei": '{"GM": 15, "setups": "free", "analyzer": "incremental_analyzer", "sizes": [19], "endings": ["seven_in_a_row_wins", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "suicide_for_seven", "simple_ko_unplayable" ]}',
 					"Gonnect": '{"GM": 13, "setups": "pie", "analyzer": "incremental_analyzer", "sizes": [9,11,13], "endings": ["connect_sides", "no_legal_move_loses"], "validations": [ "no_passing_allowed", "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable" ]}',
-					"One Eye Go": '{"GM": 11, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "extend_playable_group" ]}' //,
+					"One Eye Go": '{"GM": 11, "setups": "classic", "analyzer": "incremental_analyzer", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "extend_playable_group" ]}',
+					"Game of Life": '{"GM": 16, "setups": "life", "analyzer": "game_of_life", "sizes": [19], "endings": ["two_passes"], "validations": [ "empty_playable" ]}' //,
 					// "Sliding Go": '{"GM": 15, "setups": "free", "sizes": [9,11,13,15,17,19], "endings": ["two_passes"], "validations": [ "at_liberty_playable", "killers_playable", "extend_playable_group", "simple_ko_unplayable", "unslidable_unplayable" ]}',
 				}
 			};

@@ -142,8 +142,7 @@
 					var that_move = go.sgf.current[i];
 					if (that_move.AB)
 						placed = placed + that_move.AB.split(',').length;
-				}		
-				console.log(placed);
+				}
 				if (placed < go.sgf.game_info.HA) {
 					board
 						.removeClass('play')
