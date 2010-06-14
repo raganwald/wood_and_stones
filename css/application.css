@@ -1,0 +1,85 @@
+.invisible {
+  visibility: hidden; }
+
+.slideback.in {
+  -webkit-animation-name: slideinfromleft; }
+
+.slideback.out {
+  -webkit-animation-name: slideouttoright; }
+
+.slideback.in.reverse {
+  -webkit-animation-name: slideouttoright; }
+
+.slideback.out.reverse {
+  -webkit-animation-name: slideinfromleft; }
+
+.in_progress:before {
+  content: url(../i/in_progress.gif); }
+
+.profile .foot .toolbar {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg); }
+
+.landscape .foot .toolbar {
+  display: none; }
+
+.head.triangle-right {
+  left: 25%;
+  margin-left: -12.5%;
+  width: 25%;
+  margin-bottom: 10px;
+  z-index: 1; }
+
+.foot.triangle-right {
+  left: 75%;
+  margin-left: -12.5%;
+  width: 25%;
+  z-index: 1;
+  margin-top: 10px; }
+
+.new_game ul li {
+  position: relative !important; }
+  .new_game ul li .label {
+    position: absolute;
+    left: 10px; }
+.new_game .email {
+  height: 40px !important; }
+.new_game .size {
+  padding-left: 70px !important; }
+.new_game .you_play {
+  padding-left: 100px !important; }
+  .new_game .you_play .toggle {
+    display: block;
+    position: relative;
+    float: right; }
+    .new_game .you_play .toggle input[type="checkbox"] {
+      background: white url(../i/black_white.png) 0 0 no-repeat !important; }
+.new_game .setup {
+  padding-left: 80px !important; }
+.new_game .rules {
+  padding-left: 80px !important; }
+
+.move .toolbar .button img {
+  margin-top: 5px; }
+
+.progress .ui-dialog-titlebar {
+  display: none; }
+
+.board .head .captured, .board .foot .captured {
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  text-align: center; }
+  .board .head .captured:empty, .board .foot .captured:empty {
+    background-color: transparent; }
+  .board .head .captured.black:not(:empty), .board .foot .captured.black:not(:empty) {
+    color: white;
+    background: url(../i/ghost-black.png); }
+  .board .head .captured.white:not(:empty), .board .foot .captured.white:not(:empty) {
+    color: black;
+    background: url(../i/ghost-white.png); }
+
+.move.play.black .intersection.playable_black {
+  cursor: url(../i/ghost-black.png), pointer; }
+.move.play.white .intersection.playable_white {
+  cursor: url(../i/ghost-white.png), pointer; }

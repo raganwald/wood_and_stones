@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # This is a comment.
-# Cache manifest version 5
+# Cache manifest version 7
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -110,6 +110,25 @@ i/themes/jqt/img/toggleOn.png
 i/themes/jqt/img/toolbar.png
 i/themes/jqt/img/whiteButton.png
 
+css/dark-hive/images/ui-anim_basic_16x16.gif
+css/dark-hive/images/ui-bg_flat_30_cccccc_40x100.png
+css/dark-hive/images/ui-bg_flat_50_5c5c5c_40x100.png
+css/dark-hive/images/ui-bg_glass_40_ffc73d_1x400.png
+css/dark-hive/images/ui-bg_highlight-hard_20_0972a5_1x100.png
+css/dark-hive/images/ui-bg_highlight-soft_33_003147_1x100.png
+css/dark-hive/images/ui-bg_highlight-soft_35_222222_1x100.png
+css/dark-hive/images/ui-bg_highlight-soft_44_444444_1x100.png
+css/dark-hive/images/ui-bg_highlight-soft_80_eeeeee_1x100.png
+css/dark-hive/images/ui-bg_loop_25_000000_21x21.png
+css/dark-hive/images/ui-icons_222222_256x240.png
+css/dark-hive/images/ui-icons_4b8e0b_256x240.png
+css/dark-hive/images/ui-icons_a83300_256x240.png
+css/dark-hive/images/ui-icons_cccccc_256x240.png
+css/dark-hive/images/ui-icons_ffffff_256x240.png
+
+css/fold/fold-sw.png
+css/fold/fold.png
+
 # common JS
 
 j/jquery.1.4.2.js
@@ -121,12 +140,16 @@ j/functional.js
 j/igesture.jquery.mobile_safari.js
 j/jquery.combinators.js
 j/dragscrollable.js
+j/fold.js
+j/jquery-ui-1.8.2.resizeable.min.js
 
 # common CSS
 
 css/jqtouch.min.css
+css/dark-hive/jquery-ui-1.8.2.custom.css
 css/jqtouch.ipad.customized.css
 css/bubbles.css
+css/fold/fold.css
 
 # my JS
 

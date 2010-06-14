@@ -1,0 +1,110 @@
+$black: #000
+$white: #fff
+$lightgrey: #333
+
+.invisible
+  :visibility hidden
+	
+.slideback.in
+  -webkit-animation-name: slideinfromleft
+.slideback.out
+  -webkit-animation-name: slideouttoright
+.slideback.in.reverse
+  -webkit-animation-name: slideouttoright
+.slideback.out.reverse
+  -webkit-animation-name: slideinfromleft
+
+.in_progress:before
+  content: url(../i/in_progress.gif)
+
+.profile
+  .foot
+    .toolbar
+      -webkit-transform: rotate(180deg)
+      -moz-transform: rotate(180deg)
+
+.landscape
+  .foot
+    .toolbar
+      display: none
+
+
+$messagewidth: 200px
+$bubblefrom: #f3961c
+$bubbleto: #f9d835
+
+$separation_between_board_and_bubble: 10px
+
+.head.triangle-right
+  left: 25%
+  margin-left: -12.5%
+  width: 25%
+  margin-bottom: $separation_between_board_and_bubble
+  z-index: 1
+
+.foot.triangle-right
+  left: 75%
+  margin-left: -12.5%
+  width: 25%
+  z-index: 1
+  margin-top: $separation_between_board_and_bubble
+  
+.new_game
+  ul
+    li
+      :position relative !important
+      .label
+        :position absolute  
+        :left 10px
+  .email
+    :height 40px       !important
+  .size
+    :padding-left 70px !important
+  .you_play
+    :padding-left 100px !important
+    .toggle
+      :display block
+      :position relative
+      :float right
+      input[type="checkbox"]
+        :background #fff url(../i/black_white.png) 0 0 no-repeat !important
+  .setup
+    :padding-left 80px !important
+  .rules
+    :padding-left 80px !important
+
+.move
+  .toolbar
+    .button
+      img
+        :margin
+          :top 5px
+
+.progress 
+  .ui-dialog-titlebar
+    :display none
+
+.board
+  .head,.foot
+    .captured
+      height: 30px
+      width: 30px
+      line-height: 30px
+      text-align: center
+      &:empty
+        background-color: transparent
+      &.black:not(:empty)
+        color: white
+        background: url(../i/ghost-black.png)
+      &.white:not(:empty)
+        color: black
+        background: url(../i/ghost-white.png)
+
+    
+.move.play
+  &.black
+    .intersection.playable_black
+      cursor: url(../i/ghost-black.png), pointer
+  &.white
+    .intersection.playable_white
+      cursor: url(../i/ghost-white.png), pointer

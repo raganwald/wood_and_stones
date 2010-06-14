@@ -9,8 +9,10 @@
     <meta content='user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0' name='viewport' />
     <!-- / their stuff -->
     <script charset='utf-8' src='j/jquery.1.4.2.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/jquery-ui-1.8.2.resizeable.min.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/jquery.timers-1.2.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/jqtouch.customized.js' type='text/javascript'></script>
+    <script charset='utf-8' src='j/fold.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/md5.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/to-function.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/functional.js' type='text/javascript'></script>
@@ -26,11 +28,13 @@
     <script charset='utf-8' src='j/ui.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/history.js' type='text/javascript'></script>
     <script charset='utf-8' src='j/text.js' type='text/javascript'></script>
-    <style media='screen' type='text/css'>@import "c/jqtouch.css";</style>
-    <style media='screen' type='text/css'>@import "c/jqtouch.ipad.customized.css";</style>
-    <style media='screen' type='text/css'>@import "c/application.css";</style>
-    <style media='screen' type='text/css'>@import "c/board.ipad.css";</style>
-    <style media='screen' type='text/css'>@import "c/bubbles.css";</style>
+    <style media='screen' type='text/css'>@import "css/jqtouch.min.css";</style>
+    <style media='screen' type='text/css'>@import "css/jqtouch.ipad.customized.css";</style>
+    <style media='screen' type='text/css'>@import "css/application.css";</style>
+    <style media='screen' type='text/css'>@import "css/board.ipad.css";</style>
+    <style media='screen' type='text/css'>@import "css/bubbles.css";</style>
+    <style media='screen' type='text/css'>@import "css/dark-hive/jquery-ui-1.8.2.custom.css";</style>
+    <style media='screen' type='text/css'>@import "css/fold/fold.css";</style>
     <style id='toolbar_titles'></style>
     <style id='bubbles'></style>
     <script type='text/javascript'>
@@ -43,11 +47,12 @@
             statusBar: 'black-translucent',
             touchSelector: '.board .intersection, .board, .touch'
         });
-        $(function(){
+        $(function () {
             jQT.addAnimation({
                 name: 'slideback',
                 selector: '.slideback'
             });
+            $('#info .behindthefold').fold();
         });
       //]]>
     </script>
@@ -110,6 +115,11 @@
           <span class='captured_blacks'></span>
         </li>
       </ul>
+      <h2>SGF</h2>
+      <ul class='rounded'>
+        <li class='sgf'>Some SGF I'm demonstrating</li>
+      </ul>
+      <div class='behindthefold'></div>
     </div>
     <div class='move history this'>
       <div class='toolbar'>
