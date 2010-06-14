@@ -124,8 +124,9 @@ j/dragscrollable.js
 
 # common CSS
 
-c/jqtouch.css
-c/jqtouch.ipad.customized.css
+css/jqtouch.min.css
+css/jqtouch.ipad.customized.css
+css/bubbles.css
 
 # my JS
 
@@ -139,5 +140,5 @@ j/text.js
 
 # my CSS
 
-c/application.css
-c/board.ipad.css
+css/application.css
+css/board.ipad.css
