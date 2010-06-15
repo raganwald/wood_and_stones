@@ -469,17 +469,9 @@
 		playing: playing,
 		opponent: opponent,
 		sgf: sgf,
-		set_titles: set_titles,
-		on_document_ready: function (new_document_ready) {
-			document_ready = (function (old_document_ready) {
-				return function () {
-					old_document_ready();
-					new_document_ready();
-				}
-			})(document_ready);
-		}
+		set_titles: set_titles
 	};
 	
-     $(document).ready(function () { document_ready(); }); 
+    $(function () { document_ready(); }); 
 	
 })(jQuery, Functional);

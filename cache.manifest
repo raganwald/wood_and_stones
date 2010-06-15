@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # This is a comment.
-# Cache manifest version 7
+# Cache manifest version 10
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -159,6 +159,7 @@ j/history.js
 j/referee.js
 j/start.js
 j/ui.js
+j/more_ui.js
 j/text.js
 
 # my CSS

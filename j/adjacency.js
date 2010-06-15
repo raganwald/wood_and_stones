@@ -1265,7 +1265,7 @@
 	    }
 	};
 		
-	go.on_document_ready(function () { 
+	$(function () { 
 		go.get_adjacents = function() {
 			return adjacents[go.sgf.game_info.SZ];
 		};

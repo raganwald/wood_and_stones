@@ -107,6 +107,6 @@
     	});
 	};
 	
-	go.on_document_ready(setup_new_game);
+	$(setup_new_game);
 	
 })(jQuery);

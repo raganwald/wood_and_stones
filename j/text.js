@@ -28,7 +28,7 @@
 		return '';
 	};
 	
-	go.on_document_ready(function() {
+	$(function() {
 		go.sgf.text = function(optional_text) {
 			if (optional_text) {
 				return from_text(optional_text);

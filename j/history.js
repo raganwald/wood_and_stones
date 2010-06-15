@@ -124,6 +124,6 @@
 			.live('gesture_right', backwards_in_history);
 	};
 	
-	go.on_document_ready(initialize_history_support);
+	$(initialize_history_support);
 	
 })(jQuery);

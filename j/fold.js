@@ -24,18 +24,20 @@
     var defaults = {
       directory: '.',         // The directory we're in
       side: 'left',           // change me to "right" if you want rightness
-      turnImage: '../css/fold/fold.png',  // The triangle-shaped fold image
+      turnImage: 'fold.png',  // The triangle-shaped fold image
       maxHeight: 400,         // The maximum height. Duh.
       startingWidth: 80,     // The height and width 
       startingHeight: 80,    // with which to start (these should probably be camelCase, d'oh.)
-      autoCurl: false         // If this is set to true, the fold will curl/uncurl on mouseover/mouseout.
+      autoCurl: false,       // If this is set to true, the fold will curl/uncurl on mouseover/mouseout.
+      drag: false,           // If this is set to true, the fold will curl/uncurl on drag.
+      click: true            // If this is set to true, the fold will curl/uncurl on clicks.
     };
 
     // Change turnImage if we're running the default image, and they've specified 'right'
-    if (options.side == 'right' && !options.turnImage) defaults.turnImage = '../css/fold/fold-sw.png';
+    if (options.side == 'right' && !options.turnImage) defaults.turnImage = 'fold-sw.png';
   
     // Merge options with the defaults
-    var options = $.extend(defaults, options);
+    var options = $.extend({}, defaults, options);
     
     // Set up the wrapper objects
     var turn_hideme = $('<div id="turn_hideme">');
@@ -59,15 +61,9 @@
     
     turn_wrapper = $('#turn_wrapper');
     turn_object = $('#turn_object');
+	  console.log(options);
 
-    if (!options.autoCurl) {
-      // Hit 'em with the drag-stick because it ain't gonna curl itself!
-      turn_object.resizable({ 
-        maxHeight: options.maxHeight, 
-        aspectRatio: true,
-        handles: options.side == 'left' ? 'se' : 'sw'
-      });
-    } else {
+    if (!!options.autoCurl) {
       // Thanks to @zzzrByte for this bit!
       turn_wrapper.hover(
         function(){
@@ -83,6 +79,26 @@
           });
         }
       );
+    }
+	else if (!!options.drag) {
+      // Hit 'em with the drag-stick because it ain't gonna curl itself!
+      turn_object.resizable({ 
+        maxHeight: options.maxHeight, 
+        aspectRatio: true,
+        handles: options.side == 'left' ? 'se' : 'sw'
+      });
+    } 
+	else if (!!options.click) {
+		var sizes = [ options.maxHeight, options.startingHeight ];
+		var cursor = 0;
+      turn_wrapper.bind('click tap',
+        function() {
+			turn_object.stop().animate({
+            	width: sizes[cursor],
+            	height: sizes[cursor]
+          	});
+			cursor = (cursor + 1) % 2;
+        });
     }
   };
 })(jQuery);

@@ -1530,7 +1530,7 @@
 	
 	})();
 	
-	go.on_document_ready(function () { 
+	$(function () { 
 		go.referee = referee; 
 		$.each(referee.rules.games, function (game, serialized_rules) {
 			$('<option></option>')

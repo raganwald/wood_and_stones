@@ -6,7 +6,7 @@
 %html{html_attrs('en').merge(:manifest=>"cache.manifest")}
   %head
   
-    %title World of Go
+    %title Wood and Stones
   
     %meta{:name=>"apple-mobile-web-app-status-bar-style", :content=>"black"}/
     %meta{:name=>"viewport", :content=>"user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"}/
@@ -37,6 +37,7 @@
     %script{:src=>"j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/more_ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/history.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/text.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
@@ -65,7 +66,6 @@
               name: 'slideback',
               selector: '.slideback'
           });
-          $('#info .behindthefold').fold();
       });
   %body
       
@@ -114,7 +114,46 @@
       %h2 SGF
       %ul.rounded
         %li.sgf Some SGF I'm demonstrating
-      .behindthefold
+      .behindthefold 
+        %pre
+          The Art of Poetry
+
+          To gaze at a river made of time and water
+          And remember Time is another river.
+          To know we stray like a river
+          and our faces vanish like water.
+
+          To feel that waking is another dream
+          that dreams of not dreaming and that the death
+          we fear in our bones is the death
+          that every night we call a dream.
+
+          To see in every day and year a symbol
+          of all the days of man and his years,
+          and convert the outrage of the years
+          into a music, a sound, and a symbol.
+
+          To see in death a dream, in the sunset
+          a golden sadness--such is poetry,
+          humble and immortal, poetry,
+          returning, like dawn and the sunset.
+
+          Sometimes at evening there's a face
+          that sees us from the deeps of a mirror.
+          Art must be that sort of mirror,
+          disclosing to each of us his face.
+
+          They say Ulysses, wearied of wonders,
+          wept with love on seeing Ithaca,
+          humble and green. Art is that Ithaca,
+          a green eternity, not wonders.
+
+          Art is endless like a river flowing,
+          passing, yet remaining, a mirror to the same
+          inconstant Heraclitus, who is the same
+          and yet another, like the river flowing. 
+
+          Jorge Luis Borges 
           
     .move.history.this
       .toolbar 

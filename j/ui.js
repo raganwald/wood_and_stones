@@ -290,6 +290,6 @@
 		};
 	})();
 	
-	go.on_document_ready(initialize_ui_support);
+	$(initialize_ui_support);
 	
 })(jQuery, Functional);
