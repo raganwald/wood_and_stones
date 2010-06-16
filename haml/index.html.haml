@@ -17,6 +17,7 @@
     %script{:src=>"j/jquery-ui-1.8.2.resizeable.min.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/jquery.timers-1.2.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/jqtouch.customized.js", :type=>"text/javascript", :charset=>"utf-8"}
+    %script{:src=>"j/jquery.saveit.min.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/fold.js", :type=>"text/javascript", :charset=>"utf-8"}
     
     %script{:src=>"j/md5.js", :type=>"text/javascript", :charset=>"utf-8"}
@@ -96,6 +97,7 @@
     #info
       .toolbar 
         %h1 Game Info
+    
       %h2 Players
       %ul.rounded.players
         %li.black
@@ -113,48 +115,8 @@
           %span.captured_blacks
       %h2 SGF
       %ul.rounded
-        %li.sgf Some SGF I'm demonstrating
-      .behindthefold 
-        %pre
-          The Art of Poetry
-
-          To gaze at a river made of time and water
-          And remember Time is another river.
-          To know we stray like a river
-          and our faces vanish like water.
-
-          To feel that waking is another dream
-          that dreams of not dreaming and that the death
-          we fear in our bones is the death
-          that every night we call a dream.
-
-          To see in every day and year a symbol
-          of all the days of man and his years,
-          and convert the outrage of the years
-          into a music, a sound, and a symbol.
-
-          To see in death a dream, in the sunset
-          a golden sadness--such is poetry,
-          humble and immortal, poetry,
-          returning, like dawn and the sunset.
-
-          Sometimes at evening there's a face
-          that sees us from the deeps of a mirror.
-          Art must be that sort of mirror,
-          disclosing to each of us his face.
-
-          They say Ulysses, wearied of wonders,
-          wept with love on seeing Ithaca,
-          humble and green. Art is that Ithaca,
-          a green eternity, not wonders.
-
-          Art is endless like a river flowing,
-          passing, yet remaining, a mirror to the same
-          inconstant Heraclitus, who is the same
-          and yet another, like the river flowing. 
-
-          Jorge Luis Borges 
-          
+        %li.sgf
+        
     .move.history.this
       .toolbar 
         %h1

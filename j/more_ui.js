@@ -4,6 +4,7 @@
 
 ;(function ($, F, undefined) {
 	$(function() {
-		$('#info .behindthefold').fold({side: 'right', directory: './css/fold'});
+		$('.play .behindthefold')
+			.fold({side: 'right', directory: './css/fold', maxHeight: document.width});
 	});
 })(jQuery, Functional);

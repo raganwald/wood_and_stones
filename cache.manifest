@@ -142,6 +142,7 @@ j/jquery.combinators.js
 j/dragscrollable.js
 j/fold.js
 j/jquery-ui-1.8.2.resizeable.min.js
+j/jquery.saveit.min.js
 
 # common CSS
 

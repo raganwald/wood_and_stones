@@ -61,8 +61,6 @@
     
     turn_wrapper = $('#turn_wrapper');
     turn_object = $('#turn_object');
-	  console.log(options);
-
     if (!!options.autoCurl) {
       // Thanks to @zzzrByte for this bit!
       turn_wrapper.hover(
