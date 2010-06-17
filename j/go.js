@@ -168,6 +168,18 @@
 				if (this_move.PL)
 					switch_maker(board)(this_move.PL); // wins over all other considerations
 				}
+				
+				if (board.closest('.move').is('.play')) {
+					$('body #info .sgf')
+						.text(go.sgf.text())
+						.saveit({
+						    key: 'raganwald.github.com.go.sgf',
+						    def: 'nothing saved!',
+						    errorfunc: function(){
+						        alert('Not cool. Get a new browser');
+						    }
+						});
+				}
 		
 			}
 		
@@ -269,6 +281,7 @@
 				.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
 					.filter('.white')
 						.removeClass('white')
+						.addClass('changed was_white')
 						.K(function (whites) {
 							var z = whites.size();
 							if (z > 0) {
@@ -283,6 +296,7 @@
 						.end()
 					.filter('.black')
 						.removeClass('black')
+						.addClass('changed was_black')
 						.K(function (blacks) {
 							var z = blacks.size();
 							if (z > 0) {
@@ -294,8 +308,8 @@
 								else board.find('.black.captured').text(z);
 							}
 						})
-						.end()
-					.addClass('changed');
+						.end();
+					
 					
 		if (to_play)
 			board
@@ -419,12 +433,12 @@
 				.find(this_move.B || this_move.AB ? F.map('"#" + _', (this_move.B || this_move.AB || '').split(',')).join(',') : '')
 					.removeClass('latest')
 					.removeClass('black')
-					.addClass('changed')
+					.addClass('changed was_black')
 					.end()
 				.find(this_move.W || this_move.AW ? F.map('"#" + _', (this_move.W || this_move.AW || '').split(',')).join(',') : '')
 					.removeClass('latest')
 					.removeClass('white')
-					.addClass('changed')
+					.addClass('changed was_white')
 					.end();
 		}
 		

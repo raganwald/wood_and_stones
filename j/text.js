@@ -23,9 +23,46 @@
 		}, go.sgf.current.slice(1, go.sgf.current.length)).join('') + ')';
 	};
 	
-	var from_text = function(text) {
-		console.error('Implement me');
-		return '';
+	var from_text = function(sgf) {
+		if (sgf && '(' == sgf[0] && ')' == sgf[sgf.length - 1]) {
+			// Jamie Zawinsky has something to say about this:
+			//go.sgf.current = []
+			$.each(
+				$.map(
+					sgf
+						.slice(1, sgf.length - 1)
+							.replace(/\n/g,'')
+								.split(';'),
+					function(move_str) {
+						if ('' != move_str) {
+							var m;
+							var object = {};
+							do {
+							 	m = move_str.match(/^([A-Z][A-Z]?\[.+\](?=[A-Z]))*([A-Z][A-Z]?\[.+\])$/);
+								if (m && m.length > 2) {
+									move_str = m[1];
+									var line = m[2];
+									if (line) {
+										var mm = line.match(/^([A-Z][A-Z]?)(\[.+\])$/);
+										var key = mm[1];
+										var values = mm[2].split('][');
+										if (values.length > 1) {
+											object[key] = values;
+										}
+										else object[key] = parseInt(mm[2]) || mm[2];
+									}
+								}
+							} while (move_str.length > 3);
+							return object;
+						}
+					}
+				),
+				// go.sgf.push
+				function (a_move) {
+					console.log(a_move);
+				}
+			);
+		}
 	};
 	
 	$(function() {

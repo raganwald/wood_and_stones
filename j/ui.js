@@ -213,10 +213,10 @@
 					.end()
 				.find('.captured_whites')
 					.text(whites == 0 ? 'no stones' : (whites == 1 ? 'one stone' : '' + whites + ' stones'))
-					.end()
-				.find('.sgf')
-					.text(go.sgf.text())
 					.end();
+				// .find('.sgf')
+				// 	.text(go.sgf.text())
+				// 	.end()
 			jQT.goTo($('#info'), 'slideup.reverse');
 			return false;
 		};

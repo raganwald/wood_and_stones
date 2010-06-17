@@ -33,6 +33,22 @@
 		);
 	};
 	
+	var loadit = function() {
+		$('body #info .sgf')
+			.loadit({
+			    key: 'raganwald.github.com.go.sgf',
+			    def: 'nothing saved!',
+			    errorfunc: function(){
+			        alert('Not cool. Get a new browser');
+			    }
+			})
+			.K(function(el) {
+				// not generic, specific to what we are saving
+				var sgf = $(el).text();
+
+			});
+	};
+	
 	var setup_new_game = function () {
 		$('form.new_game .rules select')
 			.each(game_specific_options)
@@ -52,8 +68,7 @@
 			};
 			go.sgf.game_info.PB = go.sgf.game_info.PH; // TODO: restore picking black or white
 			go.sgf.game_info.PW = go.sgf.game_info.PG;
-			go.sgf.root = [go.sgf.game_info];
-			go.sgf.current = go.sgf.root;
+			go.sgf.current = [go.sgf.game_info];
 			go.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, go.sgf.game_info.SZ);
 			$('.move.play')
 				.removeClass('black white')
