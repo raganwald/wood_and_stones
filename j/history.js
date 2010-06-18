@@ -68,6 +68,7 @@
 		var that_index = go.sgf.floor(this_index - 1);
 		
 		$('.move.history.that .board')
+			.addClass('size'+go.sgf.game_info.SZ)
 			.empty()
 			.append(
 				$('.move.history.this .board')
@@ -93,23 +94,18 @@
 	};
 	
 	var enter_history = function() {
-		$('.move.history.this .intersection.black')
-			.removeClass('black');
-		$('.move.history.this .intersection.white')
-			.removeClass('white');
-		$('.move.history.this .intersection.last')
-			.removeClass('last');
-		$.each(['black', 'white'], function (i, colour) {
-			$('.move.history.this')
-				.find(
-					$.map($('.move.play .intersection.'+colour), '"#"+$(_).attr("id")'.lambda()).join(',')
-				)
-					.addClass(colour);
-		});
 		$('.move.history.this')
 			.find('.board')
+				.addClass('size'+go.sgf.game_info.SZ)
+				.empty()
 				.data('index', last_move_index())
-				.end();
+				.append(
+					$('.move.play .board')
+						.children()
+							.clone(false)
+				)
+				.find('.intersection')
+					.removeClass('playable_black playable_white');
 		if (last_move_index() >= 0) {
 			jQT.swapPages($('.move.play'), $('.move.history.this'), '');
 			backwards_in_history();
