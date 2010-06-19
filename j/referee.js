@@ -28,14 +28,6 @@
 			return board.closest('.move').is('.black') ? 'white' : 'black';
 		};
 		
-		// usage:
-		//
-		// board
-		//   .find(...)
-		//      .T(their_adjacent_selector)
-		//
-		// Nota bene: $.map integrates flattening, F.map does not.
-		// F.map has string lambdas built it, $.map does not
 		var their_adjacent_selector = function(selection) {
 			var adjacents = go.get_adjacents();
 			return F.reduce(function (unique_arr, arr_to_concat) {
@@ -59,8 +51,9 @@
 			);
 		}
 		
-		var is_blank = function(intersection ) {
-			return !colour_of(intersection);
+		var is_empty = function(intersection ) {
+			return intersection
+				.is(':not(.black):not(.white)');
 		};
 		
 		var by_pattern = function (r) {
@@ -90,6 +83,27 @@
 			return F.map('"#"+', ids).join(','); 
 		};
 		
+		// Thrushes
+		
+		var adjacent = function(optional_board, intersections) {
+			if (intersections == undefined) {
+				intersections = optional_board;
+				optional_board = intersections.first().closest('.board');
+			}
+			return optional_board
+				.find(their_adjacent_selector(intersections));
+		};
+		
+		var empties = function (intersections) {
+			return intersections
+				.filter('.intersection:not(.black):not(.white)');
+		};
+		
+		var coloureds = function (intersections) {
+			return intersections
+				.filter('.intersection.black,.white');
+		};
+		
 		var incremental_analyzer = (function () {
 		
 			var add_stones = function (board, colour_and_stones) {
@@ -109,7 +123,7 @@
 						.find(their_adjacent_selector(added));
 					// if (debug) console.log('adjacent ids: '+ids_of(adjacent_to_added).join(','));
 					var added_liberties = adjacent_to_added
-						.filter(':not(.black):not(.white)');
+						.T(empties);
 					var ids_of_added_liberties = ids_of(added_liberties);
 					// if (debug) console.log('ids_of_added_liberties '+ids_of_added_liberties);
 					// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
@@ -146,7 +160,7 @@
 									.addClass('atari last_liberty_is_'+liberties[0]);
 							if (!board
 								.find(adjacents[liberties[0]])
-									.is(':not(.black):not(.white)')) {
+									.T(is_empty)) {
 								board
 									.find('#'+liberties[0])
 										.removeClass('playable_'+hostile_to_added_colour)
@@ -182,7 +196,7 @@
 								.addClass('atari last_liberty_is_' + ids_of_added_liberties[0]);
 							if (!board
 								.find(adjacents[ids_of_added_liberties[0]])
-									.is(':not(.black):not(.white)')) {
+									.T(is_empty)) {
 								board
 									.find('#'+ids_of_added_liberties[0])
 										.removeClass('playable_'+added_colour)
@@ -240,7 +254,7 @@
 									.addClass('atari last_liberty_is_'+pater_liberties[0]);
 							if (!board
 								.find(adjacents[pater_liberties[0]])
-									.is(':not(.black):not(.white)')) {
+									.T(is_empty)) {
 								board
 									.find('#'+pater_liberties[0])
 										.removeClass('playable_'+added_colour)
@@ -253,7 +267,7 @@
 							liberty = $(liberty);
 							if (board
 								.find(their_adjacent_selector(liberty))
-									.is(':not(.black):not(.white)')
+									.T(is_empty)
 							) {
 								liberty
 									.addClass('playable_black playable_white')
@@ -314,7 +328,7 @@
 				
 					// anything empty beside a removed intersection is playable
 					adjacents_to_removeds
-						.filter(':not(.black):not(.white)')
+						.T(empties)
 							.addClass('playable_black playable_white')
 							.removeClass('no_liberties');
 							
@@ -376,7 +390,7 @@
 										.addClass('atari last_liberty_is_'+liberties[0]);
 								if (!board
 									.find(adjacents[liberties[0]])
-										.is(':not(.black):not(.white)')) {
+										.T(is_empty)) {
 									board
 										.find('#'+liberties[0])
 											.addClass('no_liberties')
@@ -601,11 +615,9 @@
 						.data('group', intersection)
 						.addClass('group_' + id)
 						.addClass('group')
-						.data('liberties', []);
-					
-					board
-						.find(adjacents[id])
-							.filter(':not(.black):not(.white)')
+						.data('liberties', [])
+						.T(adjacent)
+							.T(empties)
 								.each(function (i, adj) {
 									adj = $(adj)
 									var adj_id = adj.attr('id');
@@ -619,7 +631,7 @@
 										liberties.push(adj_id);
 								})
 								.end()
-							.filter('.black,.white')
+							.T(coloureds)
 								.each(function (i, adj) {
 									adj = $(adj)
 									if (colour_of(adj) == colour && before(adj, intersection)) {
@@ -689,12 +701,9 @@
 			// third pass, liberties for empty intersections
 			board
 				.find('.intersection:not(.black):not(.white)')
-					.each(function (i, intersection) {
-						intersection = $(intersection);
-						if (0 != board
-							.find(adjacents[intersection.attr('id')])
-								.filter('.intersection:not(.black):not(.white)')
-									.size())
+					.each(function (i, el) {
+						intersection = $(el);
+						if (0 != intersection.T(adjacent).T(empties).size())
 							intersection.addClass('at_liberty');
 					})
 					.end();
@@ -854,7 +863,7 @@
 				var slidables = board
 					.find(their_adjacent_selector(home_group_intersections))
 						.add(home_intersections)
-							.filter(':not(.black):not(.white)');
+							.T(empties);
 				do {
 					slidables = slidables
 						.addClass('temp_slidable')
@@ -863,6 +872,17 @@
 								.find(their_adjacent_selector(_)) 
 									.filter(':not(.black):not(.white):not(.temp_slidable)');
 						})
+				} while (slidables.size() > 0);
+
+				var slidables = home_group_intersections
+					.T(adjacent)
+						.add(home_intersections)
+							.T(empties);
+				do {
+					slidables = slidables
+						.addClass('temp_slidable')
+						.T(adjacent)
+							.filter(':not(.black):not(.white):not(.temp_slidable)');
 				} while (slidables.size() > 0);
 				
 				return board
@@ -1172,7 +1192,7 @@
 						}
 					} while (
 						board
-							.T(naive_analyzer)
+							.K(naive_analyzer)
 							.has('.intersection.atari,.intersection.dead')
 								.size() > 0
 					)
@@ -1604,8 +1624,8 @@
 		// validate all legal moves
 		var validate = function (board) {
 			return board
-				.T(analyzer)
-				.T(history_free_validate);
+				.K(analyzer)
+				.K(history_free_validate);
 		};
 		
 		return {

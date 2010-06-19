@@ -226,6 +226,18 @@
 	
 	var doit = function (board, this_move) {
 		
+		var update_captured_display = function (colour, stones) {
+			var z = stones.size();
+			if (z > 0) {
+				var c = board.find('.'+colour+'.captured:visible');
+				if (c.size() > 0) {
+					var n = parseInt(c.text());
+					c.text('' + (n ? n + z : z));
+				}
+				else board.find('.'+colour+'.captured').text(z);
+			}
+		};
+		
 		board = predoit(board, this_move);
 
 		var switch_turns = switch_maker(board);
@@ -282,34 +294,13 @@
 					.filter('.white')
 						.removeClass('white')
 						.addClass('changed was_white')
-						.K(function (whites) {
-							var z = whites.size();
-							if (z > 0) {
-								var c = board.find('.white.captured:visible');
-								if (c.size() > 0) {
-									var n = parseInt(c.text());
-									c.text('' + (n ? n + z : z));
-								}
-								else board.find('.white.captured').text(z);
-							}
-						})
+						.K(update_captured_display.curry('white'))
 						.end()
 					.filter('.black')
 						.removeClass('black')
 						.addClass('changed was_black')
-						.K(function (blacks) {
-							var z = blacks.size();
-							if (z > 0) {
-								var c = board.find('.black.captured:visible');
-								if (c.size() > 0) {
-									var n = parseInt(c.text());
-									c.text('' + (n ? n + z : z));
-								}
-								else board.find('.black.captured').text(z);
-							}
-						})
+						.K(update_captured_display.curry('black'))
 						.end();
-					
 					
 		if (to_play)
 			board
