@@ -15,7 +15,11 @@
 	var initialize_ui_support = (function () {
 		
 		var do_undo = function (event) {
-			go.sgf.pop();
+			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
+			var move_number = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN'] : 0;
+			if (move_number > 0)
+				go.sgf.pop();
+			else go.message("It is not possible to undo the setup. Start a new game instead with a '+'.");
 		};
 		
 		var do_pass = function() {
