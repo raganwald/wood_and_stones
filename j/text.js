@@ -8,7 +8,7 @@
 			'SZ['+go.sgf.game_info.SZ+']\n\n';
 		for (key in go.sgf.game_info) {
 			if (go.sgf.game_info.hasOwnProperty(key) && 'FF' != key && 'GM' != key && 'SZ' != key) {
-				info = info + key + F.map('"["+_+"]"', go.sgf.game_info[key].split(',')).join('') + '\n';
+				info = info + key + F.map('"["+_+"]"', ('' + go.sgf.game_info[key]).split(',')).join('') + '\n';
 			}
 		}
 		return '(' + info + F.map(function (move) {
