@@ -167,21 +167,21 @@
 		
 				if (this_move.PL)
 					switch_maker(board)(this_move.PL); // wins over all other considerations
-				}
-				
-				if (board.closest('.move').is('.play')) {
-					$('body #info .sgf')
-						.text(go.sgf.text())
-						.saveit({
-						    key: 'raganwald.github.com.go.sgf',
-						    def: 'nothing saved!',
-						    errorfunc: function(){
-						        alert('Not cool. Get a new browser');
-						    }
-						});
-				}
-		
 			}
+				
+			if (board.closest('.move').is('.play')) {
+				$('body #info .sgf')
+					.text(go.sgf.text())
+					// .saveit({
+					//     key: 'raganwald.github.com.go.sgf',
+					//     def: 'nothing saved!',
+					//     errorfunc: function(){
+					//         alert('Not cool. Get a new browser');
+					//     }
+					// });
+			}
+	
+		}
 		
 		return board;
 	};
