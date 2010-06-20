@@ -162,6 +162,8 @@ j/start.js
 j/ui.js
 j/more_ui.js
 j/text.js
+j/zobrist.js
+j/orientation_hack.js
 
 # my CSS
 
