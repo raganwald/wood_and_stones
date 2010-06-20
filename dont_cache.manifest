@@ -164,6 +164,7 @@ j/more_ui.js
 j/text.js
 j/zobrist.js
 j/orientation_hack.js
+j/persistence.js
 
 # my CSS
 

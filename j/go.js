@@ -171,14 +171,7 @@
 				
 			if (board.closest('.move').is('.play')) {
 				$('body #info .sgf')
-					.text(go.sgf.text())
-					// .saveit({
-					//     key: 'raganwald.github.com.go.sgf',
-					//     def: 'nothing saved!',
-					//     errorfunc: function(){
-					//         alert('Not cool. Get a new browser');
-					//     }
-					// });
+					.text(go.sgf.persistence(go.sgf.text()));
 			}
 	
 		}
@@ -239,6 +232,50 @@
 		};
 		
 		board = predoit(board, this_move);
+		
+		if (this_move.SZ) {
+		
+			go.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, this_move.SZ);
+			board
+				.closest('.move')
+					.removeClass('black white')
+					.end()
+				.removeClass('size9 size11 size13 size15 size17 size19')
+				.addClass('size' + this_move.SZ)
+				.find('.intersections')
+					.empty();
+			$.each(go.letters, function (down_index, down_letter) {
+				$('<div></div>')
+					.addClass('row')
+					.K(function (row) {
+						$.each(go.letters, function (across_index, across_letter) {
+							$('<img/>')
+								.addClass('intersection playable_black playable_white')
+								.attr('id', across_letter + down_letter)
+								.attr('src', 'i/dot_clear.gif')
+								.appendTo(row);
+						});
+					})
+					.appendTo(board.find('.intersections'));
+			});
+		}
+		
+		if (this_move.PB)
+			$('#info')
+				.find('.players .black')
+					.text(this_move.PB);
+		if (this_move.PW)
+			$('#info')
+				.find('.players .white')
+					.text(this_move.PW);
+		if (this_move.GR)
+			$('#info')
+				.find('h1')
+					.text(this_move.GR);
+		if (this_move.GS)
+			$('#info')
+				.find('.game .setup')
+					.text(this_move.GS);
 
 		var switch_turns = switch_maker(board);
 		
@@ -278,12 +315,14 @@
 		
 		var placements = this_move.AB;
 		if (placements) {
+			console.log(placements);
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 					.addClass('black changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
 		placements = this_move.AW;
 		if (placements) {
+			console.log(placements);
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 					.addClass('white changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
@@ -322,12 +361,14 @@
 				board.find('.host.captured')
 					.removeClass('white')
 					.addClass('black');
-				go.set_titles();
 			}
 			if (go.sgf.game_info.PI)
 				board.closest('.move')
 					.removeClass('swap');
 		}
+		
+		if (this_move.PB || this_move.PW || this_move.PH || this_move.PG)
+			go.set_titles();
 			
 		return postdoit(board, this_move);
 	};

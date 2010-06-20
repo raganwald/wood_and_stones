@@ -69,31 +69,12 @@
 			go.sgf.game_info.PB = go.sgf.game_info.PH; // TODO: restore picking black or white
 			go.sgf.game_info.PW = go.sgf.game_info.PG;
 			go.sgf.current = [go.sgf.game_info];
-			go.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, go.sgf.game_info.SZ);
-			$('.move.play')
-				.removeClass('black white')
-				.find('.board')
-					.removeClass('size9 size11 size13 size15 size17 size19')
-					.addClass('size' + go.sgf.game_info.SZ)
-					.find('.intersections')
-						.empty();
-			$.each(go.letters, function (down_index, down_letter) {
-				$('<div></div>')
-					.addClass('row')
-					.K(function (row) {
-						$.each(go.letters, function (across_index, across_letter) {
-							$('<img/>')
-								.addClass('intersection playable_black playable_white')
-								.attr('id', across_letter + down_letter)
-								.attr('src', 'i/dot_clear.gif')
-								.appendTo(row);
-						});
-					})
-					.appendTo($('.move.play .board .intersections'));
-			});
 			var game_setup = $.parseJSON($('form.new_game #rules').val());
 			go.sgf.game_info.GM = game_setup.GM;
+			
+			//TODO: get this into sgf
 			go.referee.set_rules(game_setup);
+			
 			var setup_text = $('form.new_game #setup').val();
 			var setup;
 			$.each(go.referee.rules.setups[game_setup.setups], function (i, each_setup) {
@@ -101,22 +82,11 @@
 					setup = each_setup;
 			});
 			$.extend(go.sgf.game_info, setup.sgf);
-			if (setup.setup) setup.setup();
+			if (setup.setup) {
+				go.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'].slice(0, go.sgf.game_info.SZ);
+				setup.setup();
+			}
 			go.sgf.doit($('.move.play .board'), go.sgf.game_info);
-			$('#info')
-				.find('.players .black')
-					.text(go.sgf.game_info.PB)
-					.end()
-				.find('.players .white')
-					.text(go.sgf.game_info.PW)
-					.end()
-				.find('h1')
-					.text(go.sgf.game_info.GR)
-					.end()
-				.find('.game .setup')
-					.text(go.sgf.game_info.GS)
-					.end();
-			go.set_titles();
 			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
     	});

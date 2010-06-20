@@ -26,14 +26,14 @@
 	var from_text = function(sgf) {
 		if (sgf && '(' == sgf[0] && ')' == sgf[sgf.length - 1]) {
 			// Jamie Zawinsky has something to say about this:
-			//go.sgf.current = []
+			go.sgf.current = []
 			$.each(
 				$.map(
 					sgf
 						.slice(1, sgf.length - 1)
 							.replace(/\n/g,'')
 								.split(';'),
-					function(move_str) {
+					function (move_str) {
 						if ('' != move_str) {
 							var m;
 							var object = {};
@@ -45,21 +45,23 @@
 									if (line) {
 										var mm = line.match(/^([A-Z][A-Z]?)(\[.+\])$/);
 										var key = mm[1];
-										var values = mm[2].split('][');
+										var values = mm[2].slice(1,-1).split('][');
 										if (values.length > 1) {
-											object[key] = values;
+											object[key] = values.join(',');
 										}
-										else object[key] = parseInt(mm[2]) || mm[2];
+										else object[key] = parseInt(values[0]) || values[0];
 									}
 								}
-							} while (move_str.length > 3);
+							} while (move_str && move_str.length > 3);
 							return object;
 						}
 					}
 				),
 				// go.sgf.push
-				function (a_move) {
-					console.log(a_move);
+				function (i, a_move) {
+					if (i == 0)
+						go.sgf.game_info = a_move;
+					go.sgf.push(a_move);
 				}
 			);
 		}
