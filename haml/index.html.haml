@@ -36,7 +36,6 @@
     %script{:src=>"j/go.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/adjacency.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/referee.js", :type=>"text/javascript", :charset=>"utf-8"} 
-    %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/more_ui.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/history.js", :type=>"text/javascript", :charset=>"utf-8"} 
@@ -44,6 +43,7 @@
     %script{:src=>"j/zobrist.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/orientation_hack.js", :type=>"text/javascript", :charset=>"utf-8"} 
     %script{:src=>"j/persistence.js", :type=>"text/javascript", :charset=>"utf-8"} 
+    %script{:src=>"j/start.js", :type=>"text/javascript", :charset=>"utf-8"} 
     
     %style{:type=>"text/css", :media=>"screen"} @import "css/jqtouch.min.css";
     %style{:type=>"text/css", :media=>"screen"} @import "css/jqtouch.ipad.customized.css";
@@ -70,6 +70,12 @@
               name: 'slideback',
               selector: '.slideback'
           });
+      		var sgf_text = go.sgf.persistence();
+      		if (sgf_text && sgf_text.indexOf('RE[') < 0) { // cheesy check for end of game
+      			go.sgf.text(sgf_text);
+      			jQT.swapPages($('#new'), $('.move.play'));
+      		}
+      		
       });
   %body
       

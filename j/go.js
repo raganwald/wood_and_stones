@@ -4,35 +4,6 @@
 
 ;(function ($, F, undefined) {
 	
-	var document_ready = function () {
-		go.dialog = function(options) {
-			options = $.extend(
-				{},
-				{
-					title: 'hey!',
-					yes_button: 'Ok',
-					no_button: 'Cancel',
-					yes_callback: F.I,
-					no_callback: F.I
-				},
-				(options || {})
-			);
-			if (!options.no_button) {
-				alert(options.message);
-				options.yes_callback();
-			}
-			else if (confirm(options.message))
-				options.yes_callback();
-			else options.no_callback();
-		};
-		go.message = function (say, optional_button_name) {
-			go.dialog({
-				message: say,
-				no_button: null
-			});
-		};
-	};
-	
 	var playing = function (optional_board) {
 		var move = optional_board ? optional_board.closest('.move') : $('.move.play');
 		return move.is('.black') ? 'black' : (
@@ -519,9 +490,33 @@
 		playing: playing,
 		opponent: opponent,
 		sgf: sgf,
-		set_titles: set_titles
+		set_titles: set_titles,
+		dialog: function(options) {
+			options = $.extend(
+				{},
+				{
+					title: 'hey!',
+					yes_button: 'Ok',
+					no_button: 'Cancel',
+					yes_callback: F.I,
+					no_callback: F.I
+				},
+				(options || {})
+			);
+			if (!options.no_button) {
+				alert(options.message);
+				options.yes_callback();
+			}
+			else if (confirm(options.message))
+				options.yes_callback();
+			else options.no_callback();
+		},
+		message: function (say, optional_button_name) {
+			go.dialog({
+				message: say,
+				no_button: null
+			});
+		}
 	};
-	
-    $(function () { document_ready(); }); 
 	
 })(jQuery, Functional);

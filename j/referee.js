@@ -985,7 +985,7 @@
 			}
 			
 			var no_whites = function (board) {
-				if (!board.has('.white')) {
+				if (board.find('.intersection.white').size() > 0) {
 					go.sgf.game_info['RE'] = 'B+1';
 					go.message('Black wins by eliminating all whites!');
 				}
