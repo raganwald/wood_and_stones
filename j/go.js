@@ -260,6 +260,10 @@
 			});
 		}
 		
+		if (this_move.GM) {
+			go.referee.set_rules(this_move.GM);
+		}
+		
 		if (this_move.PB)
 			$('#info')
 				.find('.players .black')

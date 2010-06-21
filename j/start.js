@@ -4,7 +4,7 @@
 
 ;(function ($, undefined) {
 	
-	var game_specific_options = function	(event) {
+	var game_specific_options = function (event) {
 		var game_setup = $.parseJSON($('form.new_game #rules').val());
 		var setup_text = $('form.new_game #setup').val();
 		$('form.new_game #setup')
@@ -33,22 +33,6 @@
 		);
 	};
 	
-	var loadit = function() {
-		$('body #info .sgf')
-			.loadit({
-			    key: 'raganwald.github.com.go.sgf',
-			    def: 'nothing saved!',
-			    errorfunc: function(){
-			        alert('Not cool. Get a new browser');
-			    }
-			})
-			.K(function(el) {
-				// not generic, specific to what we are saving
-				var sgf = $(el).text();
-
-			});
-	};
-	
 	var setup_new_game = function () {
 		$('form.new_game .rules select')
 			.each(game_specific_options)
@@ -71,10 +55,6 @@
 			go.sgf.current = [go.sgf.game_info];
 			var game_setup = $.parseJSON($('form.new_game #rules').val());
 			go.sgf.game_info.GM = game_setup.GM;
-			
-			//TODO: get this into sgf
-			go.referee.set_rules(game_setup);
-			
 			var setup_text = $('form.new_game #setup').val();
 			var setup;
 			$.each(go.referee.rules.setups[game_setup.setups], function (i, each_setup) {
