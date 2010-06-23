@@ -139,6 +139,7 @@ j/to-function.js
 j/functional.js
 j/igesture.jquery.mobile_safari.js
 j/jquery.combinators.js
+j/jquery.predicates.js
 j/dragscrollable.js
 j/fold.js
 j/jquery-ui-1.8.2.resizeable.min.js
