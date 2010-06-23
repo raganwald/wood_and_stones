@@ -16,7 +16,7 @@
 				.appendTo($('form.new_game #setup'));
 			}
 		);
-		if ($('form.new_game #setup').has('option:text('+setup_text+')').size() > 0)
+		if ($('form.new_game #setup').has('option:text('+setup_text+')').exists())
 			$('form.new_game #setup')
 				.val(setup_text);
 		else if (setup_text)

@@ -194,7 +194,7 @@
 			var z = stones.size();
 			if (z > 0) {
 				var c = board.find('.'+colour+'.captured:visible');
-				if (c.size() > 0) {
+				if (c.exists()) {
 					var n = parseInt(c.text());
 					c.text('' + (n ? n + z : z));
 				}
@@ -424,12 +424,12 @@
 						'"#" + _'.lambda()).join(',')
 				)
 					.K(function (removed) {
-						var z = removed.size();
+						var z = removed.length;
 						if (z > 0) {
 							var restore_colour = (was_playing == 'black' ? 'white' : 'black');
 							removed.addClass(restore_colour + ' changed');
 							var c = board.find('.'+restore_colour+'.captured:visible');
-							if (c.size() > 0) {
+							if (c.exists()) {
 								var n = parseInt(c.text());
 								c.text(n == z ? '' : '' + (n - z));
 							}

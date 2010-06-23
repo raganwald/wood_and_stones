@@ -110,7 +110,7 @@
 				var adjacents = go.get_adjacents();
 				var added_colour = colour_and_stones.colour;
 				var hostile_to_added_colour = opposite_colour_of(added_colour); 
-				// if (debug) console.info(colour_and_stones.stones.size() + ' ' + added_colour + ' stones');
+				// if (debug) console.info(colour_and_stones.stones.length + ' ' + added_colour + ' stones');
 				$.each(colour_and_stones.stones, function (i, added) {
 					// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
 					added = $(added);
@@ -309,7 +309,7 @@
 						.removeClass(by_pattern(/last_liberty_is_[^ ]+/))
 						.removeClass('playable_black playable_white atari group no_liberties');
 					
-				if (removed.size() > 0) {
+				if (removed.exists()) {
 				
 					// shortcut assumption: all removed stones are of the same group and colour
 					var removed_colour = removed.is('.was_white') ? 'white' : (removed.is('.was_black') ? 'black' : null);
@@ -337,7 +337,7 @@
 					var adjacent_unfriendlies = adjacents_to_removeds
 						.filter('.'+opposite_colour_of(removed_colour));
 					
-					if (adjacent_unfriendlies.size() > 0) {
+					if (adjacent_unfriendlies.exists()) {
 					
 						console.log('this is the unfriendly removal case');
 					
@@ -349,17 +349,17 @@
 						var adjacent_stone_group_ids = unique(adjacent_class_ids);
 						// console.log('PRE_EXISTINGadjacent_class_ids: ' + adjacent_class_ids.join(','));
 				
-						if (removed.size() == 1 && adjacents_to_removeds.size() > adjacent_unfriendlies.size() || removed.size() > 2)
+						if (removed.length == 1 && adjacents_to_removeds.length > adjacent_unfriendlies.length || removed.length > 2)
 							removed
 								.addClass('playable_black playable_white');
-						if (removed.size() == 1 && adjacent_unfriendlies.filter('.black').size() > 0)
+						if (removed.length == 1 && adjacent_unfriendlies.is('.black'))
 							removed
 								.addClass('playable_black');
-						if (removed.size() == 1 && adjacent_unfriendlies.filter('.white').size() > 0)
+						if (removed.length == 1 && adjacent_unfriendlies.is('.white'))
 							removed
 								.addClass('playable_white');
 				
-						// console.info(adjacent_unfriendlies.size() + ' adjacent_unfriendlies in pre-existing groups ' + adjacent_stone_group_ids.join(','))
+						// console.info(adjacent_unfriendlies.length + ' adjacent_unfriendlies in pre-existing groups ' + adjacent_stone_group_ids.join(','))
 						// add liberties to groups
 						$.each(adjacent_stone_group_ids, function (i, uncle_id) {
 							var uncle = board
@@ -406,7 +406,7 @@
 					var adjacent_friendlies = adjacents_to_removeds
 						.filter('.'+removed_colour);
 				
-					if (0 < adjacent_friendlies.size()) {
+					if (adjacent_friendlies.exists()) {
 					
 						// they should all belong to the same group, let's find it.
 						// console.log('adjacent_unfriendlies: ' + F.map('$(_).attr("id")', adjacent_unfriendlies).join(','));
@@ -703,7 +703,7 @@
 				.find('.intersection:not(.black):not(.white)')
 					.each(function (i, el) {
 						intersection = $(el);
-						if (0 != intersection.T(adjacent).T(empties).size())
+						if (intersection.T(adjacent).T(empties).exists())
 							intersection.addClass('at_liberty');
 					})
 					.end();
@@ -823,12 +823,12 @@
 							var captured_id = a[0];
 							var captured = board
 								.find('#' + captured_id);
-							// if (debug) console.log(captured_id +'x'+captured.size()+ ' was captured: '+captured.attr('class'));
-							if (captured.size() == 1 && captured.is('.playable_'+player)) {
+							// if (debug) console.log(captured_id +'x'+captured.length+ ' was captured: '+captured.attr('class'));
+							if (captured.length == 1 && captured.is('.playable_'+player)) {
 								var recaptured = board
 									.find('.last_liberty_is_' + captured_id);
-								// if (debug) console.log(captured_id + ' captures '+recaptured.size()+ ' stones');
-								if (recaptured.size() == 1 && recaptured.attr('id') == last_id) {
+								// if (debug) console.log(captured_id + ' captures '+recaptured.length+ ' stones');
+								if (recaptured.length == 1 && recaptured.attr('id') == last_id) {
 									// if (debug) console.log(captured_id + ' is unplayable due to ko');
 									captured
 										.removeClass('playable_'+player)
@@ -872,7 +872,7 @@
 								.find(their_adjacent_selector(_)) 
 									.filter(':not(.black):not(.white):not(.temp_slidable)');
 						})
-				} while (slidables.size() > 0);
+				} while (slidables.exists());
 
 				var slidables = home_group_intersections
 					.T(adjacent)
@@ -883,7 +883,7 @@
 						.addClass('temp_slidable')
 						.T(adjacent)
 							.filter(':not(.black):not(.white):not(.temp_slidable)');
-				} while (slidables.size() > 0);
+				} while (slidables.exists());
 				
 				return board
 					.find('.playable_'+player+':not(.temp_slidable)')
@@ -985,7 +985,7 @@
 			}
 			
 			var no_whites = function (board) {
-				if (board.find('.intersection.white').size() > 0) {
+				if (board.has('.intersection.white')) {
 					go.sgf.game_info['RE'] = 'B+1';
 					go.message('Black wins by eliminating all whites!');
 				}
@@ -1052,7 +1052,7 @@
 					}
 					else return board;
 					var stone = board.find('#'+id);
-					if (stone.size() == 0) return board;
+					if (!stone.exists()) return board;
 					var across = $.inArray(id[0], go.letters) + 1; // nth-child math
 					var down = $.inArray(id[1], go.letters) + 1;
 					var longest = maximum_length(board, colour, across, down);
@@ -1194,7 +1194,7 @@
 						board
 							.K(naive_analyzer)
 							.has('.intersection.atari,.intersection.dead')
-								.size() > 0
+								.exists()
 					)
 			
 					if (black_stones > 0)

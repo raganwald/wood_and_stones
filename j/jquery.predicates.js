@@ -24,17 +24,27 @@ THE SOFTWARE.
 
 
 ;(function ($) {
-	$.fn.K = function (fn) {
-		fn = typeof(Functional) != 'undefined' ? Functional.lambda(fn) : fn;
-		fn(this);
+	$.fn.exists = function () {
+		return !!(this.length);
+	};
+	$.fn.exist = $.fn.exists;
+	$.fn.ergo = function (fn, optional_converse_fn) {
+		if (this.length) {
+			fn = typeof(Functional) != 'undefined' ? Functional.lambda(fn) : fn;
+			fn(this);
+		}
+		else if (optional_converse_fn) {
+			optional_converse_fn = typeof(Functional) != 'undefined' ? Functional.lambda(optional_converse_fn) : optional_converse_fn;
+			optional_converse_fn(this);
+		}
 		return this;
 	};
-	if (typeof($.fn.tap) == 'undefined')
-		$.fn.tap = $.fn.K;
-	$.fn.T = function (fn) {
-		fn = typeof(Functional) != 'undefined' ? Functional.lambda(fn) : fn;
-		return fn(this);
+	$.fn.provided = function (predicate_fn, consequent_fn) {
+		predicate_fn = typeof(Functional) != 'undefined' ? Functional.lambda(predicate_fn) : predicate_fn;
+		if (predicate_fn(this)) {
+			consequent_fn = typeof(Functional) != 'undefined' ? Functional.lambda(consequent_fn) : consequent_fn;
+			consequent_fn(this);
+		}
+		return this;
 	};
-	if (typeof($.fn.into) == 'undefined')
-		$.fn.into = $.fn.T;
 })(jQuery);
