@@ -233,6 +233,9 @@
 		
 		if (this_move.GM) {
 			go.referee.set_rules(this_move.GM);
+			board
+				.find('.white.captured,.black.captured')
+					.text('');
 		}
 		
 		if (this_move.PB)
