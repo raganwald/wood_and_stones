@@ -13,13 +13,6 @@
 			}, optional_seed, arr);
 		};
 		
-		// board
-		// 	.T(playing)
-		//
-		// or
-		//
-		// playing(board)
-		//
 		var playing = function(board) {
 			return board.closest('.move').is('.white') ? 'white' : 'black';
 		};
@@ -319,12 +312,8 @@
 					}
 					else console.error('no colour');
 				
-					console.log(removed_colour);
-				
 					var adjacents_to_removeds = board
 						.find(their_adjacent_selector(removed));
-				
-					console.log(F.map('$(_).attr("id")', adjacents_to_removeds));
 				
 					// anything empty beside a removed intersection is playable
 					adjacents_to_removeds
@@ -338,8 +327,6 @@
 						.filter('.'+opposite_colour_of(removed_colour));
 					
 					if (adjacent_unfriendlies.exists()) {
-					
-						console.log('this is the unfriendly removal case');
 					
 						// console.log('adjacent_unfriendlies: ' + F.map('$(_).attr("id")', adjacent_unfriendlies).join(','));
 						var adjacent_classes = $.map(adjacent_unfriendlies, '$(_).attr("class")'.lambda());
@@ -423,7 +410,6 @@
 						else if (1 < adjacent_class_ids.length) 
 							console.error("Adjacent friendlies have groups "+adjacent_class_ids.join(','));
 						else {
-							console.info("This is the friendly removal case for group " + adjacent_class_ids[0]);
 							board
 								.find('#'+adjacent_class_ids[0])
 									.removeData()

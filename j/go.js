@@ -190,18 +190,6 @@
 	
 	var doit = function (board, this_move) {
 		
-		var update_captured_display = function (colour, stones) {
-			var z = stones.size();
-			if (z > 0) {
-				var c = board.find('.'+colour+'.captured:visible');
-				if (c.exists()) {
-					var n = parseInt(c.text());
-					c.text('' + (n ? n + z : z));
-				}
-				else board.find('.'+colour+'.captured').text(z);
-			}
-		};
-		
 		board = predoit(board, this_move);
 		
 		if (this_move.SZ) {
@@ -293,31 +281,47 @@
 		
 		var placements = this_move.AB;
 		if (placements) {
-			console.log(placements);
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 					.addClass('black changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
 		placements = this_move.AW;
 		if (placements) {
-			console.log(placements);
 			board
 				.find($.map(placements.split(','), "'#' + _".lambda()).join(','))
 					.addClass('white changed' + (this_move != go.sgf.game_info ? ' latest' : ''));
 		}
-		if (this_move.K && (this_move.W || this_move.B)) // TODO: figure out undo and stones!
+		
+		if (this_move.K && (this_move.W || this_move.B)) {
+		
+			var update_captured_display = function (colour, stones) {
+				if (stones.exists()) {
+					var c = board.find('.'+colour+'.captured');
+					var z = stones.size();
+					if (c.exists()) {
+						var n = parseInt(c.first().text());
+						c.text('' + (n ? n + z : z));
+					}
+					else board.find('.'+colour+'.captured').text(z);
+				}
+			};
+		
 			board
-				.find($.map(this_move['K'].split(','), '"#" + _'.lambda()).join(','))
-					.filter('.white')
-						.removeClass('white')
-						.addClass('changed was_white')
-						.K(update_captured_display.curry('white'))
-						.end()
-					.filter('.black')
-						.removeClass('black')
-						.addClass('changed was_black')
-						.K(update_captured_display.curry('black'))
-						.end();
+				.find($.map(this_move.K.split(','), '"#" + _'.lambda()).join(','))
+					.T(function (captured_stones) {
+						$.map(['black', 'white'], function (captured_colour) {
+							captured_stones
+								.filter('.'+captured_colour)
+									.ergo(function (captured_of_one_colour) {
+										captured_of_one_colour
+											.K(update_captured_display.curry(captured_colour))
+											.removeClass(captured_colour)
+											.addClass('changed was_'+captured_colour);
+									})
+									.end();
+						});
+					});
+		}
 					
 		if (to_play)
 			board
@@ -423,7 +427,7 @@
 			board
 				.find(
 					$.map(
-						(this_move['K'] && this_move['K'].split(',')) || [], 
+						(this_move.K && this_move.K.split(',')) || [], 
 						'"#" + _'.lambda()).join(',')
 				)
 					.K(function (removed) {
