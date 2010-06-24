@@ -70,6 +70,20 @@
 			jQT.swapPages($('#new'), $('.move.play'));
       		return false;
     	});
+
+   		var sgf_text = go.sgf.persistence();
+   		if (sgf_text && sgf_text.indexOf('RE[') < 0) { // cheesy check for end of game
+     		go.dialog({
+				title: "Reload Gamle",
+				message: "You have a saved game. Continue playing it?",
+				yes_button: "Continue",
+				no_button: "No",
+				yes_callback: function () {
+		   			go.sgf.text(sgf_text);
+		   			jQT.swapPages($('#new'), $('.move.play'));
+				}
+			});
+   		}
 	};
 	
 	$(setup_new_game);

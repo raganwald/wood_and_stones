@@ -25,6 +25,9 @@
     %script{:src=>"j/to-function.js", :type=>"text/javascript", :charset=>"utf-8"}
     %script{:src=>"j/functional.js", :type=>"text/javascript", :charset=>"utf-8"}
     
+    
+    %script{:src=>"j/load_jqtouch.js", :type=>"text/javascript", :charset=>"utf-8"}
+    
     // my open stuff
     
     %script{:src=>"j/igesture.jquery.mobile_safari.js", :type=>"text/javascript", :charset=>"utf-8"}
@@ -57,27 +60,6 @@
     %style{:id=>'toolbar_titles'}
     %style{:id=>'bubbles'}
     
-    :javascript
-      // (c) 2010 Reg Braithwaite. All rights to the entirety of the program and its parts are reserved with 
-      // the exception of specific files otherwise licensed. Other licenses apply only to the files where
-      // they appear.
-      var jQT = new $.jQTouch({
-          icon: 'i/icon.png',
-          statusBar: 'black-translucent',
-          touchSelector: '.board .intersection, .board, .touch'
-      });
-      $(function () {
-          jQT.addAnimation({
-              name: 'slideback',
-              selector: '.slideback'
-          });
-      		var sgf_text = go.sgf.persistence();
-      		if (sgf_text && sgf_text.indexOf('RE[') < 0) { // cheesy check for end of game
-      			go.sgf.text(sgf_text);
-      			jQT.swapPages($('#new'), $('.move.play'));
-      		}
-      		
-      });
   %body
       
     %div#useful_stuff

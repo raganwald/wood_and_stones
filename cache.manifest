@@ -155,6 +155,7 @@ css/fold/fold.css
 
 # my JS
 
+j/load_jqtouch.js
 j/adjacency.js
 j/go.js
 j/history.js
