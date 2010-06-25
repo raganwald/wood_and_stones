@@ -104,21 +104,16 @@
 				var added_colour = colour_and_stones.colour;
 				var hostile_to_added_colour = opposite_colour_of(added_colour);
 				$.each(colour_and_stones.stones, function (i, added) {
-					// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
 					added = $(added);
 					var added_id = added.attr('id');
 					added
 						.addClass(added_colour)
 						.removeClass('playable_black playable_white no_liberties');
-					// console.log('added a '+added_colour+' stone at '+added_id);
-					var adjacent_to_added = board
-						.find(their_adjacent_selector(added));
-					// if (debug) console.log('adjacent ids: '+ids_of(adjacent_to_added).join(','));
+					var adjacent_to_added = added
+						.T(adjacent);
 					var added_liberties = adjacent_to_added
 						.T(empties);
 					var ids_of_added_liberties = ids_of(added_liberties);
-					// if (debug) console.log('ids_of_added_liberties '+ids_of_added_liberties);
-					// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
 					var unfrendly_adjacents = adjacent_to_added
 						.filter('.' + hostile_to_added_colour);
 					var unfriendly_adjacent_group_ids = unique(
@@ -130,7 +125,6 @@
 							}
 						)
 					);
-					// console.info('adjacent '+hostile_to_added_colour+' groups '+unfriendly_adjacent_group_ids.join(','));
 					$.each(unfriendly_adjacent_group_ids, function (i, mater_id) {
 						var matriarch = board
 							.find('#'+mater_id);

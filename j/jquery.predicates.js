@@ -24,8 +24,9 @@ THE SOFTWARE.
 
 
 ;(function ($) {
-	var jq_fn = jq_fn,
-		aps = Array.prototype.slice,
+	var jq_fn = $.fn,
+		aps = Array.prototype.slice;
+		
 	jq_fn.exists = function () {
 		return !!(this.length);
 	};
