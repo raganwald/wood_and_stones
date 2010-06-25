@@ -31,6 +31,10 @@ THE SOFTWARE.
 		return !!(this.length);
 	};
 	jq_fn.exist = jq_fn.exists;
+	jq_fn.do_not_exist = function () {
+		return !(this.length);
+	};
+	jq_fn.does_not_exist = jq_fn.do_not_exist;
 	jq_fn.provided = function (fn) {
 		fn = typeof Functional != 'undefined' ? Functional.lambda( fn ) : fn;
 		return fn.apply( this, [this].concat(aps.call( arguments, 1 )) ) ? this.filter('*') : this.filter('not(*)');

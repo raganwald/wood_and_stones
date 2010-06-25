@@ -100,7 +100,6 @@
 		var incremental_analyzer = (function () {
 		
 			var add_stones = function (board, colour_and_stones) {
-				var adjacents = go.get_adjacents();
 				var added_colour = colour_and_stones.colour;
 				var hostile_to_added_colour = opposite_colour_of(added_colour);
 				$.each(colour_and_stones.stones, function (i, added) {
@@ -143,15 +142,12 @@
 						else if (1 == liberties.length) {
 							board
 								.find('.group_'+mater_id)
-									.addClass('atari last_liberty_is_'+liberties[0]);
-							if (!board
-								.find(adjacents[liberties[0]])
-									.T(is_empty)) {
-								board
-									.find('#'+liberties[0])
+									.addClass('atari last_liberty_is_'+liberties[0])
+									.end()
+								.find('#'+liberties[0])
+									.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
 										.removeClass('playable_'+hostile_to_added_colour)
 										.addClass('no_liberties');
-							}
 						}
 					});
 					var frendly_adjacents = adjacent_to_added
@@ -166,110 +162,77 @@
 							}
 						)
 					);
-					// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
-					// if (debug) console.log('adjacent '+added_colour+'s '+friendly_adjacent_ids.join(','));
 					if  (0 == friendly_adjacent_ids.length) {
-						// if (debug) console.log('creating a new group');
 						added
 							.addClass('group group_'+added_id)
 							.data('liberties', ids_of_added_liberties);
-						// if (debug) console.log('its liberties '+added.data('liberties'));
 						if (0 == ids_of_added_liberties.length) {
 							console.info('suicide');
 						}
 						else if (1 == ids_of_added_liberties.length) {
 							added
-								.addClass('atari last_liberty_is_' + ids_of_added_liberties[0]);
-							if (!board
-								.find(adjacents[ids_of_added_liberties[0]])
-									.T(is_empty)) {
-								board
-									.find('#'+ids_of_added_liberties[0])
-										.removeClass('playable_'+added_colour)
+								.addClass('atari last_liberty_is_' + ids_of_added_liberties[0])
+								.find('#'+ids_of_added_liberties[0])
+									.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
+										.removeClass('playable_'+hostile_to_added_colouradded_colour)
 										.addClass('no_liberties');
-							}
 						}
 					}
 					else {
-						// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
-						// if (debug) console.log('extending an existing group at ');
 						var pater_id = friendly_adjacent_ids[0];
-						// if (debug) console.log('extending an existing group at '+pater_id);
 						var patriarch = board
 							.find('#'+pater_id);
 						var pater_liberties = patriarch
 							.data('liberties');
 						if (!pater_liberties) console.error('unexpected lack of liberties for an friendly group at '+pater_id);
-						// if (debug) console.info(pater_id+'\'s liberties are '+pater_liberties);
 						$.each(friendly_adjacent_ids.slice(1, friendly_adjacent_ids.length), function (i, mergee_id) {
-							// if (debug) console.info('merging ' + mergee_id + ' into ' + pater_id);
 							var mergee_liberties = board
 								.find('#'+mergee_id)
 									.data('liberties');
-							// if (debug) console.info('adding liberties '+mergee_liberties.join(',') +' to '+pater_liberties.join(','));
 							pater_liberties = pater_liberties.concat(mergee_liberties);
 							board
 								.find('.group_'+mergee_id)
 									.addClass('group_'+pater_id)
 									.removeClass('group group_'+mergee_id);
 						});
-						// if (debug) console.info('after merges, '+pater_id+'\'s liberties are now '+pater_liberties);
 						pater_liberties = unique(pater_liberties.concat(ids_of_added_liberties));
-						// if (debug) console.info('after adding added liberties, '+pater_id+'\'s liberties are uniquely '+pater_liberties);
 						var added_index = $.inArray(added_id, pater_liberties);
 						if (added_index == -1) console.error('unexpectedly, '+added_id+' is not a liberty of '+pater_id);
 						pater_liberties.splice(added_index,1);
-						// if (debug) console.info('after splicing out the added stone, '+pater_id+'\'s liberties are uniquely '+pater_liberties);
 						patriarch
 							.data('liberties', pater_liberties);
-						// if (debug) console.info(pater_id+'\'s liberties are then '+patriarch.data('liberties'));
-						// if (debug) console.log('adding '+added_id+' to '+pater_id);
 						added
 							.addClass('group_'+pater_id);
 						board
 							.find('.atari.group_'+pater_id)
 								.removeClass(by_pattern(/last_liberty_is_../))
 								.removeClass('atari'); //TODO collapse into one call
-						if (0 == pater_liberties.length) {
-							// if (debug) console.info('patricide'); // allowed by some rule sets
-						}
-						else if (1 == pater_liberties.length) {
-							// if (debug) console.info('atari');
+						if (1 == pater_liberties.length) {
 							board
 								.find('.group_'+pater_id)
-									.addClass('atari last_liberty_is_'+pater_liberties[0]);
-							if (!board
-								.find(adjacents[pater_liberties[0]])
-									.T(is_empty)) {
-								board
-									.find('#'+pater_liberties[0])
+									.addClass('atari last_liberty_is_'+pater_liberties[0])
+									.end()
+								.find('#'+pater_liberties[0])
+									.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
 										.removeClass('playable_'+added_colour)
 										.addClass('no_liberties');
-							}
 						}
 					}
 					added_liberties
 						.each(function (i, liberty) { 
-							liberty = $(liberty);
-							if (board
-								.find(their_adjacent_selector(liberty))
-									.T(is_empty)
-							) {
-								liberty
+							$(liberty)
+								.provided(function (liberty) { return liberty.T(adjacent).T(empties).exist(); })
 									.addClass('playable_black playable_white')
-									.removeClass('no_liberties');
-								}
-							else {
-								liberty
+									.removeClass('no_liberties')
+									.end()
+								.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
 									.addClass('no_liberties')
 									.removeClass('playable_black playable_white');
-							}
 						})
 				})
 			};
 		
-			return function (board, debug) {
-				// if (debug == undefined) debug = true;
+			return function (board) {
 				var adjacents = go.get_adjacents();
 				var to_play = playing(board);
 				var last_played = opposite_colour_of(to_play);
@@ -461,33 +424,27 @@
 					function (sib) { return colour_of($(sib)); }
 				);
 				var this_colour = colour_of(cell);
-				if (debug) console.log(cell.attr('id') + ' has ' + neighbours.length + ' neighbours and it...');
 				if (this_colour) {
 					if (2 == neighbours.length || 3 == neighbours.length) {
-						if (debug) console.log('...lives!');
 						return cell
 							.addClass('next_'+this_colour);
 					}
 					else {
-						if (debug) console.log('...dies!');
 						return cell
 							.addClass('next_empty');
 					}
 				}
 				else if (3 != neighbours.length) {
-					if (debug) console.log('...stays dead!');
 					return cell
 						.addClass('next_empty');
 				}
 				else {
 					var black_neighbours = $.map(neighbours, '"black" == _ ? "black" : null'.lambda()).length
 					if (black_neighbours < 2) {
-						if (debug) console.log('...is born white!');
 						return cell
 							.addClass('next_white');
 					}
 					else {
-						if (debug) console.log('...is born black!');
 						return cell
 							.addClass('next_black');
 					}
@@ -531,7 +488,7 @@
 		})();
 		
 		// used for certain analyses such as the random points generator
-		var naive_analyzer = function(board, ids_to_analyze, debug) {
+		var naive_analyzer = function(board, ids_to_analyze) {
 			
 			board = board || $('.move.play .board');
 			ids_to_analyze = ids_to_analyze || $.map(go.letters,
@@ -541,13 +498,7 @@
 					);
 				}
 			);
-			debug = (debug == undefined ? false : debug);
 			
-			// if (debug) {
-			// 	console.log('debugging on');
-			// 	console.log(ids_to_analyze);
-			// }
-		
 			var adjacents = go.get_adjacents();
 			
 			// Class decorations:
@@ -599,7 +550,6 @@
 									adj = $(adj)
 									var adj_id = adj.attr('id');
 									var group = intersection.data('group');
-									// if (debug) console.info(intersection.attr('id') + ' belongs to ' + group.attr('id'));
 									var liberties = group.data('liberties');
 									if (liberties == null) {
 										console.error('no liberties for group ' + group.attr('id') + ' of ' + intersection.attr('id'));
@@ -616,7 +566,6 @@
 										var this_bt = intersection.data('group');
 								
 										if (adj_bt.attr('id') != this_bt.attr('id')) {
-											// if (debug) console.info('merging group for ' + intersection.attr('id') + ' into group for ' + adj.attr('id'));
 											var from;
 											var to;
 											if (before(adj_bt, this_bt)) {
@@ -628,9 +577,7 @@
 												to = this_bt
 											}
 											// merge liberties
-	                    					// if (debug) console.info('merging ' + from.attr('id') + ' into ' + to.attr('id'));
-
-											var from_liberties = from.data('liberties');
+	                    					var from_liberties = from.data('liberties');
 											var to_liberties = to.data('liberties')
 											$.each(from_liberties, function (i, liberty) {
 												if ($.inArray(liberty, to_liberties) == -1)
@@ -641,8 +588,6 @@
 												.removeClass('group')
 												.data('liberties', null);
 								
-											// if (debug) console.info('now ' + to_liberties.length + ' liberties for ' + to.attr('id'));
-									
 											board
 												.find('.group_' + from.attr('id'))
 													.removeClass('group_' + from.attr('id'))
@@ -780,19 +725,14 @@
 						.end();
 			};
 			
-			var simple_ko_unplayable = function (board, player, opponent, debug) {
-				// if (debug == undefined) debug = false;
-				
+			var simple_ko_unplayable = function (board, player, opponent) {
 				player = player || playing(board);
 				opponent = opponent || opposing(board);
-				
-				// if (debug) console.log('player: '+player);
 				
 				var last_sgf_node = go.sgf.current[go.sgf.current.length - 1];
 				var last_id = last_sgf_node[opponent[0].toUpperCase()];
 				
 				if (last_id && last_id.length == 2 && board.has('#' + last_id)) {
-					// if (debug) console.log(last_id + ' is the last id');
 					var killed = last_sgf_node['K'];
 					 if (killed) {
 						var a = killed.split(',');
@@ -800,13 +740,10 @@
 							var captured_id = a[0];
 							var captured = board
 								.find('#' + captured_id);
-							// if (debug) console.log(captured_id +'x'+captured.length+ ' was captured: '+captured.attr('class'));
 							if (captured.length == 1 && captured.is('.playable_'+player)) {
 								var recaptured = board
 									.find('.last_liberty_is_' + captured_id);
-								// if (debug) console.log(captured_id + ' captures '+recaptured.length+ ' stones');
 								if (recaptured.length == 1 && recaptured.attr('id') == last_id) {
-									// if (debug) console.log(captured_id + ' is unplayable due to ko');
 									captured
 										.removeClass('playable_'+player)
 										.addClass('add_'+player);
