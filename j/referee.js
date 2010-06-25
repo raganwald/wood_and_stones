@@ -102,8 +102,7 @@
 			var add_stones = function (board, colour_and_stones) {
 				var adjacents = go.get_adjacents();
 				var added_colour = colour_and_stones.colour;
-				var hostile_to_added_colour = opposite_colour_of(added_colour); 
-				// if (debug) console.info(colour_and_stones.stones.length + ' ' + added_colour + ' stones');
+				var hostile_to_added_colour = opposite_colour_of(added_colour);
 				$.each(colour_and_stones.stones, function (i, added) {
 					// if (debug && board.find('#aa').data('liberties')) console.info('aa\'s liberties are '+ board.find('#aa').data('liberties').join(','));
 					added = $(added);
@@ -346,8 +345,6 @@
 							removed
 								.addClass('playable_white');
 				
-						// console.info(adjacent_unfriendlies.length + ' adjacent_unfriendlies in pre-existing groups ' + adjacent_stone_group_ids.join(','))
-						// add liberties to groups
 						$.each(adjacent_stone_group_ids, function (i, uncle_id) {
 							var uncle = board
 								.find('#'+uncle_id);
