@@ -76,9 +76,9 @@
 			return F.map('"#"+', ids).join(','); 
 		};
 		
-		// Thrushes
+		// Thrush Helpers
 		
-		var adjacent = function(optional_board, intersections) {
+		var its_adjacents = function(optional_board, intersections) {
 			if (intersections == undefined) {
 				intersections = optional_board;
 				optional_board = intersections.first().closest('.board');
@@ -87,15 +87,19 @@
 				.find(their_adjacent_selector(intersections));
 		};
 		
-		var empties = function (intersections) {
+		var its_empties = function (intersections) {
 			return intersections
 				.filter('.intersection:not(.black):not(.white)');
 		};
 		
-		var coloureds = function (intersections) {
+		var its_stones = function (intersections) {
 			return intersections
 				.filter('.intersection.black,.white');
 		};
+		
+		var has_liberties = F.compose('.exists()', its_empties, its_adjacents);
+		
+		var doesnt_have_liberties = F.compose('.do_not_exist()', its_empties, its_adjacents);
 		
 		var incremental_analyzer = (function () {
 		
@@ -109,9 +113,9 @@
 						.addClass(added_colour)
 						.removeClass('playable_black playable_white no_liberties');
 					var adjacent_to_added = added
-						.T(adjacent);
+						.T(its_adjacents);
 					var added_liberties = adjacent_to_added
-						.T(empties);
+						.T(its_empties);
 					var ids_of_added_liberties = ids_of(added_liberties);
 					var unfrendly_adjacents = adjacent_to_added
 						.filter('.' + hostile_to_added_colour);
@@ -145,7 +149,7 @@
 									.addClass('atari last_liberty_is_'+liberties[0])
 									.end()
 								.find('#'+liberties[0])
-									.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
+									.when(doesnt_have_liberties)
 										.removeClass('playable_'+hostile_to_added_colour)
 										.addClass('no_liberties');
 						}
@@ -173,8 +177,8 @@
 							added
 								.addClass('atari last_liberty_is_' + ids_of_added_liberties[0])
 								.find('#'+ids_of_added_liberties[0])
-									.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
-										.removeClass('playable_'+hostile_to_added_colouradded_colour)
+									.when(doesnt_have_liberties)
+										.removeClass('playable_'+added_colour)
 										.addClass('no_liberties');
 						}
 					}
@@ -213,7 +217,7 @@
 									.addClass('atari last_liberty_is_'+pater_liberties[0])
 									.end()
 								.find('#'+pater_liberties[0])
-									.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
+									.when(doesnt_have_liberties)
 										.removeClass('playable_'+added_colour)
 										.addClass('no_liberties');
 						}
@@ -221,11 +225,11 @@
 					added_liberties
 						.each(function (i, liberty) { 
 							$(liberty)
-								.provided(function (liberty) { return liberty.T(adjacent).T(empties).exist(); })
+								.when(has_liberties)
 									.addClass('playable_black playable_white')
 									.removeClass('no_liberties')
 									.end()
-								.provided(function (liberty) { return liberty.T(adjacent).T(empties).do_not_exist(); })
+								.when(doesnt_have_liberties)
 									.addClass('no_liberties')
 									.removeClass('playable_black playable_white');
 						})
@@ -273,7 +277,7 @@
 				
 					// anything empty beside a removed intersection is playable
 					adjacents_to_removeds
-						.T(empties)
+						.T(its_empties)
 							.addClass('playable_black playable_white')
 							.removeClass('no_liberties');
 							
@@ -328,15 +332,12 @@
 								console.error('unexpectedly, removing stones has placed '+ uncle_id+' into atari with one liberty at '+liberties[0]);
 								board
 									.find('group_'+uncle_id)
-										.addClass('atari last_liberty_is_'+liberties[0]);
-								if (!board
-									.find(adjacents[liberties[0]])
-										.T(is_empty)) {
-									board
-										.find('#'+liberties[0])
+										.addClass('atari last_liberty_is_'+liberties[0])
+										.end()
+									.find('#'+liberties[0])
+										.when(doesnt_have_liberties)
 											.addClass('no_liberties')
 											.removeClass('playable_'+colour_of(uncle));
-								}
 							}
 						});
 				
@@ -544,8 +545,8 @@
 						.addClass('group_' + id)
 						.addClass('group')
 						.data('liberties', [])
-						.T(adjacent)
-							.T(empties)
+						.T(its_adjacents)
+							.T(its_empties)
 								.each(function (i, adj) {
 									adj = $(adj)
 									var adj_id = adj.attr('id');
@@ -558,7 +559,7 @@
 										liberties.push(adj_id);
 								})
 								.end()
-							.T(coloureds)
+							.T(its_stones)
 								.each(function (i, adj) {
 									adj = $(adj)
 									if (colour_of(adj) == colour && before(adj, intersection)) {
@@ -624,9 +625,9 @@
 			board
 				.find('.intersection:not(.black):not(.white)')
 					.each(function (i, el) {
-						intersection = $(el);
-						if (intersection.T(adjacent).T(empties).exists())
-							intersection.addClass('at_liberty');
+						$(el)
+						 	.when(has_liberties)
+								.addClass('at_liberty');
 					})
 					.end();
 					
@@ -777,7 +778,7 @@
 				var slidables = board
 					.find(their_adjacent_selector(home_group_intersections))
 						.add(home_intersections)
-							.T(empties);
+							.T(its_empties);
 				do {
 					slidables = slidables
 						.addClass('temp_slidable')
@@ -789,13 +790,13 @@
 				} while (slidables.exists());
 
 				var slidables = home_group_intersections
-					.T(adjacent)
+					.T(its_adjacents)
 						.add(home_intersections)
-							.T(empties);
+							.T(its_empties);
 				do {
 					slidables = slidables
 						.addClass('temp_slidable')
-						.T(adjacent)
+						.T(its_adjacents)
 							.filter(':not(.black):not(.white):not(.temp_slidable)');
 				} while (slidables.exists());
 				
@@ -939,7 +940,6 @@
 							var across = $.inArray(id[0], go.letters) + 1; // nth-child math
 							var down = $.inArray(id[1], go.letters) + 1;
 							var max = maximum_length(board, playing(board), across, down);
-							console.log(id+' would create ' +max+' in a row');
 							if (max >= 7)
 								intersection
 									.addClass('playable_'+playing(board));
