@@ -28,7 +28,7 @@
 				},
 				[],
 				F.map(function (_) { 
-					return adjacents[$(_).attr("id")].split(',')
+					return adjacents[_.id].split(',')
 				}, selection)
 			).join(',');
 		};
@@ -69,7 +69,7 @@
 		};
 		
 		var ids_of = function (selection) {
-			return $.map(selection, '$(_).attr("id")'.lambda());
+			return $.map(selection, '.id'.lambda());
 		}
 		
 		var ids_to_selector = function (ids) { 
@@ -288,14 +288,10 @@
 					
 					if (adjacent_unfriendlies.exists()) {
 					
-						// console.log('adjacent_unfriendlies: ' + F.map('$(_).attr("id")', adjacent_unfriendlies).join(','));
 						var adjacent_classes = $.map(adjacent_unfriendlies, '$(_).attr("class")'.lambda());
-						// console.log('PRE_EXISTINGadjacent_classes: ' + adjacent_classes.join(','));
 						var adjacent_class_ids = $.map(adjacent_classes, '_.match(/group_(..)/) && _.match(/group_(..)/)[1]'.lambda());
-						// console.log('PRE_EXISTINGadjacent_class_ids: ' + adjacent_class_ids.join(','));
 						var adjacent_stone_group_ids = unique(adjacent_class_ids);
-						// console.log('PRE_EXISTINGadjacent_class_ids: ' + adjacent_class_ids.join(','));
-				
+						
 						if (removed.length == 1 && adjacents_to_removeds.length > adjacent_unfriendlies.length || removed.length > 2)
 							removed
 								.addClass('playable_black playable_white');
@@ -642,30 +638,6 @@
 				return board
 					.removeClass('pass');
 			};
-			
-			// i think this goes away with incremental analysis
-			// var at_liberty_playable = function (board, player, opponent) {
-			// 	player = player || playing(board);
-			// 	opponent = opponent || opposing(board);
-			// 	
-			// 	return board
-			// 		.find('.intersection.at_liberty:not(.white):not(.black)')
-			// 			.addClass('playable_'+player+' remove_'+player)
-			// 			.end()
-			// 		.find('.intersection.at_liberty:not(.white):not(.black)')
-			// 			.addClass('playable_'+opponent+' remove_'+opponent)
-			// 			.end();
-			// };
-			
-			// var empty_playable = function(board) {
-			// 	return board
-			// 		.find('.intersection:not(.white):not(.black):not(.playable_black)')
-			// 			.addClass('playable_black playable_white')
-			// 			.end()
-			// 		.find('.playable_black.black,.playable_white.white')
-			// 			.removeClass('playable_black playable_white')
-			// 			.end();
-			// };
 			
 			// this is the rule that permits suicide in Go, so removing this
 			// rule prohibits suicide!

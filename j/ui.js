@@ -64,7 +64,7 @@
 			var annotation = optional_extensions;
 			annotation[key] = target.attr('id');
 			if (killed_stones.size() > 0) {
-				annotation['K'] = $.map(killed_stones, 'x -> $(x).attr("id")'.lambda()).join(',');
+				annotation['K'] = $.map(killed_stones, '.id'.lambda()).join(',');
 			}
 			var last_move_index = go.sgf.floor(go.sgf.current.length - 1);
 			annotation['MN'] = (last_move_index >= 0 && go.sgf.current[last_move_index]['MN']) ? go.sgf.current[last_move_index]['MN'] + 1 : 1;

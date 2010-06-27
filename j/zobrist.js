@@ -738,7 +738,7 @@
 		return F.reduce(function (outerhashval, colour) {
 			return F.reduce(function (innerhashval, id) {
 				return hashes[colour][id] ^ innerhashval;
-			}, outerhashval, F.map('$(_).attr("id")', selection.filter('.'+colour)))
+			}, outerhashval, F.map('.id', selection.filter('.'+colour)))
 		}, 0, ['black', 'white']);
 	};
 	
