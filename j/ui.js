@@ -265,13 +265,19 @@
 			$('.move.play .board:not(.pass):not(:has(.playable_black.black,.playable_white.white))')
 				.live('gesture_close', function () {go.message("Sorry, the rules prohibit passing at this time");});
 				
+			$('.button.help')
+				.live('click tap', function () { jQT.goTo($('#help'), 'slideup.reverse'); });
+			$('.button.info')
+				.live('click tap', function () { jQT.goTo($('#info'), 'slideup.reverse'); });
+				
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo)
 				.live('gesture_bottom', show_play_info);
 				
-			$('#info')
-				.gesture(['top'])
-				.bind('gesture_top', function(event) { jQT.goBack(); });
+			$('#info,#help')
+				.gesture(['top', 'scrub'])
+				.bind('gesture_top', function(event) { jQT.goBack(); })
+				.bind('gesture_scrub', function(event) { jQT.goBack(); });
 				
 			$('.move.play.black:not(.swap) .board.play .playable_black')
 				.live('gesture_click', do_play);

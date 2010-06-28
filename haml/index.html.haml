@@ -88,6 +88,7 @@
         
     #info
       .toolbar 
+        %a.back.button Play
         %h1 Game Info
     
       %h2 Players
@@ -108,6 +109,12 @@
       %h2 SGF
       %ul.rounded
         %li.sgf
+          
+    #help
+      .toolbar
+        %a.back.button Play
+        %h1 Help
+      .info This is a help screen
         
     .move.history.this
       .toolbar 
@@ -125,8 +132,8 @@
     .move.play
       .head
         .toolbar
-          img#new_game{:src=>'i/dot_clear.gif'}
           %h1
+          %a.button.help Help
       .board.zoomout.scrub.pass.play
         .head 
           .guest.black.captured
