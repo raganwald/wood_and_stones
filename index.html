@@ -54,17 +54,20 @@
     <div class='current' id='new'>
       <div class='toolbar'>
         <h1>Start</h1>
+        <a class='button help'>Help</a>
       </div>
       <form class='new_game' id='form'>
         <ul class='edit rounded'>
+          <h2>The Players</h2>
           <li class='email'>
             <input id='black' name='black' placeholder="Black's name" type='text' />
           </li>
           <li class='email'>
             <input id='white' name='white' placeholder="White's name" type='text' />
           </li>
+          <h2>The Game</h2>
           <li class='rules'>
-            <div class='label'>Game:</div>
+            <div class='label'>Rules:</div>
             <select id='rules' name='rules'></select>
           </li>
           <li class='size'>
@@ -81,6 +84,7 @@
     </div>
     <div id='info'>
       <div class='toolbar'>
+        <a class='back button'>Play</a>
         <h1>Game Info</h1>
       </div>
       <h2>Players</h2>
@@ -108,12 +112,430 @@
         <li class='sgf'></li>
       </ul>
     </div>
-    <div id='help'>
+    <div class='help' id='help'>
       <div class='toolbar'>
-        <a class='back button'>Play</a>
+        <a class='back button'>Resume</a>
         <h1>Help</h1>
       </div>
-      <div class='info'>This is a help screen</div>
+      <ul class='rounded'>
+        <li class='arrow'>
+          <a href='#help_new_game'>Starting a new game</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_resume_game'>Resuming a game</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_play_game'>Playing a game</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_end_game'>Ending a game</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_review_game'>Reviewing a game</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec feugiat magna nec elit venenatis ultrices. Donec quis lorem urna, sit amet ultricies nulla. Etiam egestas vestibulum tincidunt. Sed laoreet luctus magna. Nullam gravida tincidunt ipsum, eget tincidunt justo imperdiet sit amet. Donec eros lectus, vestibulum quis faucibus quis, tincidunt vitae eros. Nam fermentum tortor sit amet dolor eleifend id volutpat diam venenatis. Mauris dapibus semper justo, id tristique orci dignissim a. Mauris at sem dolor, a volutpat urna. Proin rutrum felis a erat fringilla nec dapibus diam fermentum. -->
+    <div class='help' id='help_new_game'>
+      <div class='toolbar'>
+        <a class='back button'>Help</a>
+        <h1>Starting a new game</h1>
+      </div>
+      <h2>Introduction</h2>
+      <ul class='plastic'>
+        <li>
+          You can start a new game at any time by drawing a "+" with your finger on the screen.
+          You will be presented with the new game form where you can select your options.
+        </li>
+      </ul>
+      <h1>The Players</h1>
+      <ul class='plastic'>
+        <li>
+          First, you
+          enter the names of the players. You can leave these blank if you like, in which case they
+          will be known as "Black" and "White."
+        </li>
+      </ul>
+      <h2>Next</h2>
+      <ul class='rounded'>
+        <li class='forward'>
+          <a href='#help_new_game_game_options'>Game Options</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options'>
+      <div class='toolbar'>
+        <a class='back button'>Starting a Game</a>
+        <h1>Game Options</h1>
+      </div>
+      <h2>Rules</h2>
+      <ul class='plastic'>
+        <li>
+          You pick the rules first. There are lots of games for two players featuring black and white
+          stones on a lattice of intersections, and "Wood and Stones" lets you play lots of them with
+          a friend.
+        </li>
+      </ul>
+      <h2>Size</h2>
+      <ul class='plastic'>
+        <li>
+          Depending on the rules you choose, you may be offered a choice of board size from 9x9 up to 19x19.
+          As a rough guide, larger boards offer more complex and subtle opportunities for play.
+        </li>
+      </ul>
+      <h2>Setups</h2>
+      <ul class='plastic'>
+        <li>
+          Depending on the rules you choose, you may be offered a choice of ways to set the board up
+          for the game. In some cases, these are fixed positions for one or more stones. These fixed
+          positions might be handicaps for Black or they might be initial setups that wildly affect
+          the character of the game.
+        </li>
+        <li>
+          In some cases, these are opportunities for Black to have free placements before the game begins.
+          Unlike fixed handicaps, free placements provide Black with an opportunity to dictate the style of
+          play.
+        </li>
+        <li>
+          A few setups place stones randomly on the board. This helps to break games free from stereotypical
+          opening play and rewards intuition over memorization.
+        </li>
+      </ul>
+      <h2>Next</h2>
+      <ul class='rounded'>
+        <li class='forward'>
+          <a href='#help_new_game_game_options_rules'>The Rules</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules'>
+      <div class='toolbar'>
+        <a class='back button'>Game Options</a>
+        <h1>The Rules</h1>
+      </div>
+      <ul class='rounded'>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_standard'>Classic, Free Placement, More Setups</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_wtl'>White to Live</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_atari'>Atari Go and Capture Five</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_irensei'>Irensei</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_gonnect'>Gonnect</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_one_eye'>One Eye Go</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_standard'>
+      <div class='toolbar'>
+        <a class='back button'>The Rules</a>
+        <h1>Classic, Free Placement, More Setups</h1>
+      </div>
+      <h2>Description</h2>
+      <ul class='plastic'>
+        <li>
+          The "Classic," "Free Placement," and "More Setups" rules are all the commonly played rules of Go.
+          They differ only in the setups available. Only the most recently played move is considered for Ko.
+          Suicide is not allowed, however if a placement would capture one or more stones, it need not have
+          liberties. Wood and Stones does not score games, so it is up o the players how to count the territories.
+        </li>
+      </ul>
+      <h2>Classic Setups</h2>
+      <ul class='plastic'>
+        <li>
+          The Classic setups are the traditional handicap options: Either Black plays first, or Black receives
+          a handicap of two to nine stones and white plays first. Handicap stones are placed on the Hoshi
+          points in the proscribed manner.
+        </li>
+      </ul>
+      <h2>Free Placement Setups</h2>
+      <ul class='plastic'>
+        <li>
+          The Free Placement setups also offer Black the choice of playing first or receiving
+          a handicap of two to nine stones and white playing first. However, instead of the handicap stones
+          being placed on the Hoshi points, Black places them as he pleases. In effect, Back receives free
+          turns at the beginning of the game.
+        </li>
+      </ul>
+      <h2>Next</h2>
+      <ul class='rounded'>
+        <li class='forward'>
+          <a href='#help_new_game_game_options_rules_more_setups'>More Setups</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_more_setups'>
+      <div class='toolbar'>
+        <a class='back button'>Classic, Free Placement, More Setups</a>
+        <h1>More Setups</h1>
+      </div>
+      <h2>Description</h2>
+      <ul class='plastic'>
+        <li>
+          There are a number of variations of Go that use the exact same rules of play and scoring
+          but use special setups. Some&#8212like Wild Fuseki&#8212produce subtly different games.
+          Others&#8212like Dots or Influence&#8212are dramatically unique playing experiences.
+        </li>
+      </ul>
+      <h2>Pie Rule</h2>
+      <ul class='plastic'>
+        <li>
+          "Pie Rule" is a variation where Black places a single stone anywhere on the board, and White
+          may either place a stone or pass. If White places a stone, the game continues as usual. If
+          White passes, the players swap colours and the player who was originally Black now is White
+          and places a white stone on the board. Pie Rule provides Black with a disincentive to play
+          too well or too poorly on the first turn, thus creating a very balanced game.
+        </li>
+      </ul>
+      <h2>Wild and Really Wild Fuseki</h2>
+      <ul class='plastic'>
+        <li>
+          "Wild Fuseki" is a variation where the first three stones for each player are randomly selected,
+          with the proviso that no stones are placed within two rows of any edge, no illegal position
+          is created, and no stones are placed in atari. Really Wild Fuseki places the first twelve
+          stones for each player. The effect of Wild Fuskeki is to reward intuition over memorization of
+          opening patterns.
+        </li>
+      </ul>
+      <h2>Next</h2>
+      <ul class='rounded'>
+        <li class='forward'>
+          <a href='#help_new_game_game_options_rules_influence'>Influence Go</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_influence'>
+      <div class='toolbar'>
+        <a class='back button'>More Setups</a>
+        <h1>Influence Go</h1>
+      </div>
+      <h2>Influence Go</h2>
+      <ul class='plastic'>
+        <li>
+          <img src='i/about/influence.png' />
+          Influence Go gives each player opposing edges of the board. This game usually involves a fight
+          to secure the center and establish a connection to your strong sides.
+        </li>
+      </ul>
+      <h2>Next</h2>
+      <ul class='rounded'>
+        <li class='forward'>
+          <a href='#help_new_game_game_options_rules_sbc'>Dots, Sunjang Baduk and Classical Chinese</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_sbc'>
+      <div class='toolbar'>
+        <a class='back button'>Influence Go</a>
+        <h1>Dots, Sunjang Baduk and Classical Chinese</h1>
+      </div>
+      <h2>Dots</h2>
+      <ul class='plastic'>
+        <li>
+          <img src='i/about/dots.png' />
+          Dots Go consists of stones on alternate intersections of the board. Games evolve very differently
+          than standard Go.
+        </li>
+      </ul>
+      <h2>Sunjang Baduk</h2>
+      <ul class='plastic'>
+        <li>
+          Sunjang Baduk is an archaic Korean version of Go. There is a prescribed opening position,
+          and the scoring is a little different from Japanese or Chinese go. Even if you don't
+          care to play with different scoring, you might find games with the Sunjang Baduk opening
+          setup a refreshing change of pace.
+        </li>
+      </ul>
+      <h2>Classical Chinese</h2>
+      <ul class='plastic'>
+        <li>
+          Classical Chinese Opening go players started each game with two stones each on corner Hoshi
+          points, leading to fighting. Classical Chinese rules were also different, however choosing
+          this option starts a standard game of Go with the Classical Chinese Opening.
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_wtl'>
+      <div class='toolbar'>
+        <a class='back button'>The Rules</a>
+        <h1>White to Live</h1>
+      </div>
+      <h2>Description</h2>
+      <ul class='plastic'>
+        <li>
+          The "White to Live" games all use the standard Go rules for play, however their objective is
+          different. In each game, Black is given an overwhelming advantage and White is hard-pressed
+          to survive. White wins if he can make life, i.e. create a safe group with two eyes. Black
+          wins instantly if he can remove all the white stones from the board. There are several different
+          setups.
+        </li>
+      </ul>
+      <h2>Corner Go Setup</h2>
+      <ul class='plastic'>
+        <li>
+          <img src='i/about/corner.png' />
+          Corner Go is a corner invasion exercise: Only one corner is available to White. Corner Go works
+          well on small boards.
+        </li>
+      </ul>
+      <h2>Next</h2>
+      <ul class='rounded'>
+        <li class='forward'>
+          <a href='#help_new_game_game_options_rules_sgfp'>Shape Go and Free Placements</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_sgfp'>
+      <div class='toolbar'>
+        <a class='back button'>White to Live</a>
+        <h1>Shape Go and Free Placements</h1>
+      </div>
+      <h2>Shape Go Setup</h2>
+      <ul class='plastic'>
+        <li>
+          <img src='i/about/box.png' />
+          Shape Go gives Black a line of stones all the way around the board, and White has to try to make
+          life with no corners or edges. Best on large boards.
+        </li>
+      </ul>
+      <h2>Free Placements</h2>
+      <ul class='plastic'>
+        <li>
+          You can also play where Black is given a large number of free placements and White simply tries to
+          survive. An even game is thought to be seventeen placements on a 19x19 board, however you can
+          choose more or fewer to establish a handicap. You may also choose a smaller board and fewer placements.
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_atari'>
+      <div class='toolbar'>
+        <a class='back button'>The Rules</a>
+        <h1>Atari Go and Capture Five</h1>
+      </div>
+      <h2>Description</h2>
+      <ul class='plastic'>
+        <li>
+          "Atari Go" and "Capture Five" are games that follow the standard rules of Go but have unique victory
+          conditions. In Atari Go, the first player to capture any of the opponent's stones is the winner. In
+          Capture Five, the first player to capture five of the opponent's stones is the winner. With careful,
+          defensive play by both sides a draw is possible. Atari Go usually teaching exercises, with
+          each setup teaching a particular aspect of offensive play. The student plays black and the teacher
+          plays white.
+        </li>
+      </ul>
+      <h2>Atari Go Setups</h2>
+      <ul class='rounded'>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_atari_ladders'>Learn about ladders</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_atari_nets'>Learn about nets</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_atari_beat'>Beat the Teacher</a>
+        </li>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_atari_cross'>Cross-cutting</a>
+        </li>
+      </ul>
+      <h2>Capture Five Setup</h2>
+      <ul class='rounded'>
+        <li class='arrow'>
+          <a href='#help_new_game_game_options_rules_capture_five'>Cross-cutting</a>
+        </li>
+      </ul>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_atari_ladders'>
+      <div class='toolbar'>
+        <a class='back button'>Atari Go and Capture Five</a>
+        <h1>Learn about ladders</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_atari_nets'>
+      <div class='toolbar'>
+        <a class='back button'>Atari Go and Capture Five</a>
+        <h1>Learn about nets</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_atari_beat'>
+      <div class='toolbar'>
+        <a class='back button'>Atari Go and Capture Five</a>
+        <h1>Beat the Teacher</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_atari_cross'>
+      <div class='toolbar'>
+        <a class='back button'>Atari Go and Capture Five</a>
+        <h1>Cross-cutting</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_capture_five'>
+      <div class='toolbar'>
+        <a class='back button'>Atari Go and Capture Five</a>
+        <h1>Capture Five</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_irensei'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Dolor</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_gonnect'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Dolor</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_new_game_game_options_rules_one_eye'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Dolor</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_resume_game'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Resuming a game</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help help' id='help_play_game'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Playing a game</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_end_game'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Ending a game</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
+    </div>
+    <div class='help' id='help_review_game'>
+      <div class='toolbar'>
+        <a class='back button'>Back</a>
+        <h1>Reviewing a game</h1>
+      </div>
+      <div class='info'>Lorem Ipsum</div>
     </div>
     <div class='move history this'>
       <div class='toolbar'>

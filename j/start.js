@@ -86,6 +86,15 @@
    		}
 	};
 	
-	$(setup_new_game);
+	var window_size_hack = function() {
+		if (window.innerWidth <= window.innerHeight)
+			window.resizeTo(768,1024);
+		else window.resizeTo(1024,768);
+	};
+	
+	$(function () {
+		setup_new_game();
+		window_size_hack();
+	});
 	
 })(jQuery);

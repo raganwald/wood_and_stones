@@ -83,3 +83,11 @@
   cursor: url(../i/ghost-black.png), pointer; }
 .move.play.white .intersection.playable_white {
   cursor: url(../i/ghost-white.png), pointer; }
+
+.help ul li img {
+  display: block !important;
+  margin: !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important; }

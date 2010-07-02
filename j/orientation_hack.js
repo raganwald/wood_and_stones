@@ -6,6 +6,9 @@
 				.removeClass('profile landscape')
 				.addClass(orientation)
 				.trigger('turn', {orientation: orientation});
+			if ('profile' == orientation)
+				window.resizeTo(768,1024);
+			else window.resizeTo(1024,768);
 		};
 	});
 })();
