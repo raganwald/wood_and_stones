@@ -266,7 +266,7 @@
 				.live('gesture_close', function () {go.message("Sorry, the rules prohibit passing at this time");});
 				
 			$('.button.help')
-				.live('click tap', function () { jQT.goTo($('#help'), 'slideup.reverse'); });
+				.live('click tap', function () { jQT.goTo($('#help'), 'slide'); });
 			$('.button.info')
 				.live('click tap', function () { jQT.goTo($('#info'), 'slideup.reverse'); });
 				

@@ -247,7 +247,7 @@ ul.form li {
       border-top: 0; }
 ul li input[type="text"], ul li input[type="password"] {
   color: #777777;
-  background: transparent /* url(../.png) */;
+  background: transparent url(../.png);
   border: 0;
   font: normal 17px Helvetica;
   padding: 0;
@@ -257,7 +257,7 @@ ul li input[type="text"], ul li input[type="password"] {
   -webkit-appearance: textarea; }
 ul li textarea, ul li select {
   color: #777777;
-  background: transparent /* url(../.png) */;
+  background: transparent url(../.png);
   border: 0;
   font: normal 17px Helvetica;
   padding: 0;
