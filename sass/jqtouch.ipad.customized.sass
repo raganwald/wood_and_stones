@@ -331,8 +331,10 @@ ul
     overflow: hidden
     padding-bottom: 3px
     -webkit-box-shadow: none
-    li
+    li:not(.forward):not(.resume_play)
       background: #4c4d4e
+      background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142))
+    li
       border: 1px solid #333
       font-size: 14px
       text-align: center
@@ -343,7 +345,6 @@ ul
       display: block
       padding: 11px 10px 14px 10px
       -webkit-box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 3px
-      background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4c4d4e), to(#404142))
       + li
         float: right
       a

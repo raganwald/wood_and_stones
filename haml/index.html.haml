@@ -113,6 +113,21 @@
       %ul.rounded
         %li.sgf
           
+    #splash.help.current
+      .toolbar
+        %h1 What is Wood and Stones?
+      %ul.rounded
+        %p
+          Welcome to Wood and Stones, a web page that turns your iPad into a Goban, 
+          a board used for playing a
+          game of Go with another human player. Wood and Stones can also be used to
+          play related games like Irensei.
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Play
+        %li.forward
+          %a{:href=>'#help'} More Help
+          
     #help.help
       .toolbar
         %a.back.button Back
@@ -123,21 +138,9 @@
           %a{:href=>'#help_what_is_this'} What is Wood and Stones?
         %li.arrow
           %a{:href=>'#help_how_do_i'} How do I...
-          
-    #help_splash.help.current
-      .toolbar
-        %h1 What is Wood and Stones?
       %ul.rounded
-        %p
-          Welcome to Wood and Stones, a web page that turns your iPad into a Goban, 
-          a board used for playing a
-          game of Go with another human player. Wood and Stones can also be used to
-          play related games like Irensei.
-      %ul.individual
-        %li
-          %a{:href=>'#new'} Play a New Game
-        %li.forward
-          %a{:href=>'#help'} More Help
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_what_is_this.help
       .toolbar
@@ -149,6 +152,9 @@
           Wood and Stones turns your iPad into a Goban, a board used for playing a
           game of Go with another human player. Wood and Stones can also be used to
           play related games like Irensei.
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_how_do_i.help
       .toolbar
@@ -166,6 +172,9 @@
           %a{:href=>'#help_review_game'} See what moves have already been played?
         %li.arrow
           %a{:href=>'#help_resume_game'} Save my game and play it later?
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
     
     / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec feugiat magna nec elit venenatis ultrices. Donec quis lorem urna, sit amet ultricies nulla. Etiam egestas vestibulum tincidunt. Sed laoreet luctus magna. Nullam gravida tincidunt ipsum, eget tincidunt justo imperdiet sit amet. Donec eros lectus, vestibulum quis faucibus quis, tincidunt vitae eros. Nam fermentum tortor sit amet dolor eleifend id volutpat diam venenatis. Mauris dapibus semper justo, id tristique orci dignissim a. Mauris at sem dolor, a volutpat urna. Proin rutrum felis a erat fringilla nec dapibus diam fermentum.
         
@@ -186,9 +195,11 @@
           enter the names of the players. You can leave these blank if you like, in which case they
           will be known as "Black" and "White."
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options'} Game Options
+          %a{:href=>'#help_new_game_game_options'} Read about Game Options
     
     #help_new_game_game_options.help
       .toolbar
@@ -221,9 +232,11 @@
           A few setups place stones randomly on the board. This helps to break games free from stereotypical
           opening play and rewards intuition over memorization.
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules'} The Rules
+          %a{:href=>'#help_new_game_game_options_rules'} Read about The Rules
           
     #help_new_game_game_options_rules.help    
       .toolbar
@@ -243,6 +256,9 @@
           %a{:href=>'#help_new_game_game_options_rules_gonnect'} Gonnect
         %li.arrow
           %a{:href=>'#help_new_game_game_options_rules_one_eye'} One Eye Go
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_new_game_game_options_rules_standard.help    
       .toolbar
@@ -270,9 +286,11 @@
           being placed on the Hoshi points, Black places them as he pleases. In effect, Back receives free
           turns at the beginning of the game. 
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_more_setups'} More Setups
+          %a{:href=>'#help_new_game_game_options_rules_more_setups'} Read about More Setups
           
     #help_new_game_game_options_rules_more_setups.help
       .toolbar
@@ -302,9 +320,13 @@
           stones for each player. The effect of Wild Fuskeki is to reward intuition over memorization of
           opening patterns.
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_influence'} Influence Go
+          %a{:href=>'#help_new_game_game_options_rules_influence'} Read about Influence Go
           
     #help_new_game_game_options_rules_influence.help
       .toolbar
@@ -318,9 +340,11 @@
           Influence Go gives each player opposing edges of the board. This game usually involves a fight 
           to secure the center and establish a connection to your strong sides.
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_sbc'} Dots, Sunjang Baduk and Classical Chinese
+          %a{:href=>'#help_new_game_game_options_rules_sbc'} Read about more setups
           
     #help_new_game_game_options_rules_sbc.help
       .toolbar
@@ -346,6 +370,9 @@
           Classical Chinese Opening go players started each game with two stones each on corner Hoshi 
           points, leading to fighting. Classical Chinese rules were also different, however choosing 
           this option starts a standard game of Go with the Classical Chinese Opening.
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_new_game_game_options_rules_wtl.help
       .toolbar
@@ -367,9 +394,11 @@
           Corner Go is a corner invasion exercise: Only one corner is available to White. Corner Go works 
           well on small boards.
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_sgfp'} Shape Go and Free Placements
+          %a{:href=>'#help_new_game_game_options_rules_sgfp'} Read about Shape Go and Free Placements
           
     #help_new_game_game_options_rules_sgfp.help
       .toolbar
@@ -388,6 +417,9 @@
           You can also play where Black is given a large number of free placements and White simply tries to 
           survive. An even game is thought to be seventeen placements on a 19x19 board, however you can 
           choose more or fewer to establish a handicap. You may also choose a smaller board and fewer placements.
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_new_game_game_options_rules_atari.help
       .toolbar
@@ -402,9 +434,11 @@
           teaching exercises. When the student has progressed to playing the last exercise competently, he can
           move on to play "Capture Five," a game where the objective is to be the first to capture five or more stones.
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_atari_ladders'} Learn about ladders
+          %a{:href=>'#help_new_game_game_options_rules_atari_ladders'} Read about Learn about ladders
           
           
     #help_new_game_game_options_rules_atari_ladders.help
@@ -420,9 +454,11 @@
           Atari Go's "Learn about ladders" sets up a classic "ladder" for Black. As soon as Black learns how to force White
           to surrender a stone, progress to "Learn about nets:"
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_atari_nets'} Learn about nets
+          %a{:href=>'#help_new_game_game_options_rules_atari_nets'} Read about Learn about nets
           
     #help_new_game_game_options_rules_atari_nets.help
       .toolbar
@@ -437,9 +473,11 @@
           Atari Go's "Learn about nets" sets up a classic "net" for Black. As soon as Black learns how to force White
           to surrender a stone, progress to "Beat the Teacher:"
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_atari_beat'} Beat the Teacher
+          %a{:href=>'#help_new_game_game_options_rules_atari_beat'} Read about Beat the Teacher
           
     #help_new_game_game_options_rules_atari_beat.help
       .toolbar
@@ -455,9 +493,11 @@
           different opportunities to dictate the shape of play. Black should continue to play this
           variation until a stone can be captured no matter what line of defence White attempts.
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_atari_cross'} Cross-cutting
+          %a{:href=>'#help_new_game_game_options_rules_atari_cross'} Read about Cross-cutting
           
     #help_new_game_game_options_rules_atari_cross.help
       .toolbar
@@ -473,9 +513,11 @@
           games. Mistakes by either player will lead to a loss. Continue to play "Cross-cutting" until
           draws are commonplace, then progress to "Capture Five."
       %h2 Next
-      %ul.rounded
+      %ul.individual
+        %li.resume_play
+          %a.flip.resume_play Resume Play
         %li.forward
-          %a{:href=>'#help_new_game_game_options_rules_capture_five'} Capture Five
+          %a{:href=>'#help_new_game_game_options_rules_capture_five'} Read about Capture Five
           
     #help_new_game_game_options_rules_capture_five.help
       .toolbar
@@ -495,6 +537,9 @@
           %img{:src=>'i/about/cross.png'}
         %p
           Capture Five uses the same balanced setup as "Cross-cutting."
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
       
     #help_new_game_game_options_rules_irensei.help
       .toolbar
@@ -509,6 +554,9 @@
           a row, although a line with stones within two intersections of the edge does not count. 
           Black plays first, and to counter this advantage there is a special rule that black 
           loses if he makes a line of eight or more stones. White can make a line of any length.
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_new_game_game_options_rules_gonnect.help
       .toolbar
@@ -522,6 +570,9 @@
           allowed. This difference from normal Go is crucial, as it prevents a deadlock where neither 
           player can connect: each player must eventually fill in their territory until they are 
           vulnerable to capture or have no legal moves available.
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
           
     #help_new_game_game_options_rules_one_eye.help
       .toolbar
@@ -534,6 +585,9 @@
           One Eyed Go is just like classic Go, however suicide is never allowed, even if your play 
           would otherwise capture stones. One consequence of this simplification of the rules is 
           that a single eye is enough to make a group safe.
+      %ul.rounded
+        %li.resume_play
+          %a.flip.resume_play Resume Play
       
     #help_resume_game.help
       .toolbar
@@ -576,11 +630,11 @@
       .board.zoomout
         .intersections
     
-    .move.play
+    .move.play#play
       .head
         .toolbar
           %h1
-          %a.button.help Help
+          %a.button.flip{:href=>'#help'} Help
       .board.zoomout.scrub.pass.play
         .head 
           .guest.black.captured

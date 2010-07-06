@@ -202,6 +202,11 @@
 			return false;
 		};
 		
+		var do_resume_play = function(event, data) {
+			jQT.goTo((go.last_move_number() ? $('#play') : $('#new')), 'flip');
+			return false;
+		};
+		
 		var show_play_info = function (event) {
 			var whites = 0;
 			var blacks = 0;
@@ -265,10 +270,10 @@
 			$('.move.play .board:not(.pass):not(:has(.playable_black.black,.playable_white.white))')
 				.live('gesture_close', function () {go.message("Sorry, the rules prohibit passing at this time");});
 				
-			$('.button.help')
-				.live('click tap', function () { jQT.goTo($('#help'), 'slide'); });
 			$('.button.info')
 				.live('click tap', function () { jQT.goTo($('#info'), 'slideup.reverse'); });
+			$('.button.resume_play,a.resume_play')
+				.bind('click tap', do_resume_play);
 				
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo)

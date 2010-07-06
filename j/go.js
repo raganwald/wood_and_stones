@@ -169,7 +169,7 @@
 		go.sgf.current.push(this_move);
 		doit($(optional_board), this_move);
 		return this_move;
-	}
+	};
 	
 	var pop = function (optional_board, optional_from, optional_to) {
 		optional_board = optional_board || $('.move.play .board');
@@ -183,7 +183,15 @@
 		go.sgf.current.pop();
 		
 		go.sgf.undoit(optional_board, from, to);
-	}
+	};
+	
+	var last_move_number = function() {
+		if (go.sgf.current) {
+			var index = floor(go.sgf.current.length - 1);
+			if (index)
+				return go.sgf.current[index].MN;
+		}
+	};
 	
 	var blank_stone = $('<img/>')
 		.attr('src', 'i/dot_clear.gif');
@@ -523,7 +531,8 @@
 				message: say,
 				no_button: null
 			});
-		}
+		},
+		last_move_number: last_move_number
 	};
 	
 })(jQuery, Functional);
