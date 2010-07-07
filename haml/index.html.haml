@@ -116,6 +116,7 @@
     #splash.help.current
       .toolbar
         %h1 What is Wood and Stones?
+        %a.button.flip{:href=>'#help'} Help
       %ul.rounded
         %p
           Welcome to Wood and Stones, a web page that turns your iPad into a Goban, 
@@ -123,10 +124,10 @@
           game of Go with another human player. Wood and Stones can also be used to
           play related games like Irensei.
       %ul.individual
-        %li.help_index
-          %a.flip.resume_play Play
         %li.forward
-          %a{:href=>'#help'} More Help
+          %a{:href=>'#new'} New Game
+        %li.resume_play
+          %a.resume_play Resume Play
           
     #help.help
       .toolbar

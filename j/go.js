@@ -188,8 +188,9 @@
 	var last_move_number = function() {
 		if (go.sgf.current) {
 			var index = floor(go.sgf.current.length - 1);
-			if (index)
+			if (index && index > 0) {
 				return go.sgf.current[index].MN;
+			}
 		}
 	};
 	
