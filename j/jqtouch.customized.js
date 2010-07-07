@@ -192,9 +192,28 @@
                 dumbLoopStart();
             });
         }
+
+		function distanceBack(to) {
+			if (hist.length > 1) {
+                var numberOfPages = Math.min(parseInt(to || 1, 10), hist.length-1);
+
+                // Search through the history for an ID
+                if( isNaN(numberOfPages) && typeof(to) === "string" && to != '#' ) {
+                    for( var i=1, length=hist.length; i < length; i++ ) {
+                        if( '#' + hist[i].id === to ) {
+                            numberOfPages = i;
+                            break;
+                        }
+                    }
+                }
+
+				if ('number' == typeof(numberOfPages))
+					return numberOfPages;
+			}
+		}
         
         // PUBLIC FUNCTIONS
-        function goBack(to, animation) {
+        function oldGoBack(to, animation) {
             // Init the param
             if (hist.length > 1) {
                 var numberOfPages = Math.min(parseInt(to || 1, 10), hist.length-1);
@@ -259,6 +278,14 @@
                 return false;
             }
         }
+		function goBack(to, animation) {
+			if ('string' == typeof(to)) {
+				var by_how_much = distanceBack(to);
+				if (by_how_much)
+					return oldGoBack(by_how_much, animation);
+				else return goTo(to, animation);
+			}
+		}
         function getOrientation() {
             return orientation;
         }

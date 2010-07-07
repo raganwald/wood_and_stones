@@ -207,6 +207,11 @@
 			return false;
 		};
 		
+		var do_help_index = function(event, data) {
+			jQT.goBack('#help');
+			return false;
+		};
+		
 		var show_play_info = function (event) {
 			var whites = 0;
 			var blacks = 0;
@@ -274,6 +279,8 @@
 				.live('click tap', function () { jQT.goTo($('#info'), 'slideup.reverse'); });
 			$('.button.resume_play,a.resume_play')
 				.bind('click tap', do_resume_play);
+			$('.button.help_index,a.help_index')
+				.bind('click tap', do_help_index);
 				
 			$('.move.play .board')
 				.live('gesture_scrub', do_undo)
