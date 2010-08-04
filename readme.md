@@ -129,10 +129,10 @@ All of the images used in the main game board are modified versions of files Dav
 are distributed with the Creative Commons Attribution 2.0 ShareAlike license. Some other images were hand-drawn by Dave Peck, who put them under the Creative Commons Attribution ShareAlike 2.0 license: http://creativecommons.org/licenses/by-sa/2.0/
 
 [igesture]: http://github.com/raganwald/iGesture
-[index]: http://raganwald.github.com/go/index.html
-[start]: http://raganwald.github.com/go/i/about/start.png
-[white_to_play]: http://raganwald.github.com/go/i/about/white_to_play.png
-[pass]: http://raganwald.github.com/go/i/about/pass.png
+[index]: http://raganwald.github.com/wood_and_stones/index.html
+[start]: http://raganwald.github.com/wood_and_stones/i/about/start.png
+[white_to_play]: http://raganwald.github.com/wood_and_stones/i/about/white_to_play.png
+[pass]: http://raganwald.github.com/wood_and_stones/i/about/pass.png
 [oneeye]: http://senseis.xmp.net/?OneEyedGo
 [atari]: http://senseis.xmp.net/?AtariGo
 [gonnect]: http://senseis.xmp.net/?Gonnect
@@ -142,19 +142,19 @@ are distributed with the Creative Commons Attribution 2.0 ShareAlike license. So
 [shape]: http://senseis.xmp.net/?ShapeGameSolid
 [influence]: http://senseis.xmp.net/?InfluenceGo
 [dots]: http://senseis.xmp.net/?DotsGo
-[ibox]: http://raganwald.github.com/go/i/about/box.png
-[idots]: http://raganwald.github.com/go/i/about/dots.png
-[iinfluence]: http://raganwald.github.com/go/i/about/influence.png
-[icorner]: http://raganwald.github.com/go/i/about/corner.png
-[iwild]: http://raganwald.github.com/go/i/about/wild.png
-[info]: http://raganwald.github.com/go/i/about/info.png
-[bottom]: http://raganwald.github.com/go/i/about/bottom.png
-[top]: http://raganwald.github.com/go/i/about/top.png
+[ibox]: http://raganwald.github.com/wood_and_stones/i/about/box.png
+[idots]: http://raganwald.github.com/wood_and_stones/i/about/dots.png
+[iinfluence]: http://raganwald.github.com/wood_and_stones/i/about/influence.png
+[icorner]: http://raganwald.github.com/wood_and_stones/i/about/corner.png
+[iwild]: http://raganwald.github.com/wood_and_stones/i/about/wild.png
+[info]: http://raganwald.github.com/wood_and_stones/i/about/info.png
+[bottom]: http://raganwald.github.com/wood_and_stones/i/about/bottom.png
+[top]: http://raganwald.github.com/wood_and_stones/i/about/top.png
 [baduk]: http://senseis.xmp.net/?SunjangBaduk
 [classical]: http://senseis.xmp.net/?ChineseClassicalOpening
 [killall]: http://senseis.xmp.net/?KillAllGame
 [pie]: http://en.wikipedia.org/wiki/Pie_rule
 [irensei]: http://en.wikipedia.org/wiki/Irensei
-[igs]: http://github.com/raganwald/go/issues/#issue/250
-[styles]: http://github.com/raganwald/go/issues/#issue/275
+[igs]: http://github.com/raganwald/wood_and_stones/issues/#issue/250
+[styles]: http://github.com/raganwald/wood_and_stones/issues/#issue/275
 [hn]: http://news.ycombinator.com/item?id=904765
