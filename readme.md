@@ -1,28 +1,28 @@
-world of go
+Wood & Stones
 ===
 
 Go is "an ancient oriental board game for two players that is noted for being rich in strategy despite its simple rules." [I tried to learn Go](http://github.com/raganwald/homoiconic/blob/master/2009-10-20/high_anxiety.md#readme "High Anxiety") recently, and it was a rich and rewarding personal experience to struggle with my inability to play at even a novice level. I received a lot of [great feedback][hn] about that post, including a nice comment from Dave Peck, who pointed me to his weekend project, [Dave Peck's Go](http://github.com/davepeck/appengine-go "[Dave Peck's Go]").
 
 The sense of adventure in finding things out can be experienced in many different ways. Learning to play less poorly is one way. Another is to write a game playing algorithm, something that has fascinated me since I wrote a [Maharajah and the Sepoys](http://en.wikipedia.org/wiki/Maharajah_and_the_Sepoys) playing game in BASIC back at St. Andrews' College in 1977. A third is to write a server that adjudicates play between two humans. This is clearly less difficult but still provides opportunities for creativity and expression, which is why it is a [favourite interview question](http://weblog.raganwald.com/2006/06/my-favourite-interview-question.html "My favourite interview question").
 
-So, here is "[World of Go][index]," a pass and play local web application that adjudicates a game of Go between two players. This is an ongoing work, with both feature design, UX design, and software design changing on an almost daily basis. That is a long-winded way of saying that IMHO the code is nearly complete crap. It is as if you picked up an architect's sketch pad and looked at a page to find it covered with scribbles and cross-outs.
+So, here is "[Wood & Stones][index]," a pass and play local web application that adjudicates a game of Go between two players. This is an ongoing work, with both feature design, UX design, and software design changing on an almost daily basis. That is a long-winded way of saying that IMHO the code is nearly complete crap. It is as if you picked up an architect's sketch pad and looked at a page to find it covered with scribbles and cross-outs.
 
 > This is written *specifically* for the iPad at this time. I also test it on OS X Safari. Updated stylesheets for the iPhone/iPod Touch are in the works. I have made no attempt to test it on any other OS or browser. This is a pass-and-play application: It's for playing face-to-face with someone, not for playing the computer or playing with someone over the Internet ([Issue 250][igs]). It turns an iPad into a portable go board that knows something about legal moves, can set up pieces for you, and allows you to go back and review the game.
 
 help with playing
 ---
 
-To start a new game, open [World of Go][index] using your iPad (it used to work just fine on iPhone, but I haven't gotten around to selecting the correct style sheet depending on whether you're on an iPhone or an iPad. [Issue 275][styles]!):
+To start a new game, open [Wood & Stones][index] using your iPad (it used to work just fine on iPhone, but I haven't gotten around to selecting the correct style sheet depending on whether you're on an iPhone or an iPad. [Issue 275][styles]!):
 
 ![Start][start]
 
 If you want, you can give nicknames for each player. If you don't, you will be "Black" and "White" respectively. 
 
-Choose game to play, a board size, and setup. "Classic Go" is exactly what you think it is. The other options are why I had the stones to call this "World of Go." Click "play" and you can start your game.
+Choose game to play, a board size, and setup. "Classic Go" is exactly what you think it is. The other options are why I had the stones to call this "Wood & Stones." Click "play" and you can start your game.
 
 ![White to Play][white_to_play]
 
-In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), World of Go is an experiment with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping the screen or drawing simple symbols.
+In direct violation of [The Design of Everyday Things](http://www.amazon.com/gp/product/0465067107?ie=UTF8&amp;tag=raganwald001-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0465067107 "Amazon.com: The Design of Everyday Things (9780465067107): Donald A. Norman: Books"), Wood & Stones is an experiment with *removing* the visible affordances in the User Interface. I am trying to make as much as possible work with gestures like swiping the screen or drawing simple symbols.
 
 When it's your turn to play, tap the intersection where you wish to play a stone. If your play kills any of your opponent's stones, they will fade from sight. If you like your play, pass the iPad to your opponent and it's their turn. If you don't like your play, "scrub" the board by swiping rapidly from left to right to left three or more times. It will be your turn again and you can tap a different intersection. You can undo multiple times if you want.
 
@@ -59,7 +59,7 @@ games with standard rules and victory conditions
 
 The application is specifically written to support other games, most of which are documented on [Sensei's Go Variant Page][sgv]. Each game offers a variety of setup options. The most 'normal' games to the Go player are those that have the exact same rules and victory conditions, namely territory plus captures. They differ only in how the board is set up at the beginning of play.
 
-**Classic**: This is the standard game of Go with the standard options for setup: Either black plays first, or black is awarded a handicap of between two and nine stones and white plays first. Handicap stones are placed on the Hoshi points in the conventional manner. World of Go does not score the game but it will end the game after two consecutive passes.
+**Classic**: This is the standard game of Go with the standard options for setup: Either black plays first, or black is awarded a handicap of between two and nine stones and white plays first. Handicap stones are placed on the Hoshi points in the conventional manner. Wood & Stones does not score the game but it will end the game after two consecutive passes.
 
 **Free Placement**: This is also the standard rules for Go, however if black is granted a handicap, black plays the stones wherever he likes rather than having them placed on the standard Hoshi points. For example, if black is given a handicap of three stones, he will play the first three moves in a row and then white will play and the turns will alternate in the normal fashion for the remainder of the game.
 
